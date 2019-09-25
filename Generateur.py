@@ -18,7 +18,7 @@ class Generateur:
         self.modeGeneration = modeGeneration
     def generation(self):
         if self.modeGeneration=="Profondeur":
-            self.generation_en_profondeur()
+            return self.generation_en_profondeur()
         else:
             print("mode de génération choisi incompatible")
     def generation_en_profondeur(self):
@@ -62,10 +62,10 @@ class Generateur:
                 
                 self.casser_mur(direction_mur,position_x,position_y)
 
-                position_x,position_y = self.nouvelles_coords(position_x,position_y,direction_mur)
+                new_x,new_y = self.nouvelles_coords(position_x,position_y,direction_mur)
                 
                 #on ajoute les nouvelles coordonnées de la case au stack
-                stack.append([position_x,position_y])
+                stack.append([new_x,new_y])
             else:
                 #on revient encore en arrière
                 stack.pop()
@@ -108,7 +108,7 @@ class Generateur:
     def voisins_case(self,x,y):
         voisins=[]
         #on élimine les voisins aux extrémitées
-        if y-1>0:
+        if y-1>=0:
             voisins.append(self.matrice_cases[x][y-1])
         else:
             voisins.append(None)
@@ -120,7 +120,7 @@ class Generateur:
             voisins.append(self.matrice_cases[x][y+1])
         else:
             voisins.append(None)
-        if x-1>0:
+        if x-1>=0:
             voisins.append(self.matrice_cases[x-1][y])
         else:
             voisins.append(None)

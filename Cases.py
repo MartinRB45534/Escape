@@ -39,6 +39,12 @@ class Case:
     def casser_mur(self,direction):
         self.murs[direction].set_etat(MUR_VIDE)
 
+    def mur_plein(self,direction):
+        mur_plein=False
+        if self.murs[direction].get_etat()==MUR_PLEIN:
+            mur_plein=True
+        return mur_plein
+
     def get_murs(self):
         return self.murs
 

@@ -11,15 +11,17 @@ MUR_VIDE=0
 MUR_PLEIN=1
 
 class Resolveur:
-    def __init__(self,matrice_cases,largeur,hauteur,modeResolution="Profondeur"):
+    def __init__(self,matrice_cases,largeur,hauteur,arrivee_x,arrivee_y,modeResolution="Profondeur"):
         self.largeur = largeur
         self.hauteur = hauteur
+        self.arrivee_x = arrivee_x
+        self.arrivee_y = arrivee_y
         self.matrice_cases = matrice_cases
         self.modeResolution = modeResolution
         self.cases_visitees=[[False for i in range(hauteur)]for i in range(largeur)]
-    def generation(self):
+    def resolution(self):
         if self.modeResolution=="Profondeur":
-            self.resolution_en_profondeur()
+            return self.resolution_en_profondeur()
         else:
             print("mode de résolution choisi incompatible")
     def resolution_en_profondeur(self):
@@ -39,54 +41,57 @@ class Resolveur:
         position_y=depart_y
         #le stack est une liste de positions
         stack=[[depart_x,depart_y]]
-    
 
-        while len(stack)!=0 :
+        self.cases_visitees[depart_x][depart_y]=True
+        
+        #schéma boucle
+        #récupérer les positions utilisables
+                #si on as des positions utilisables
+
+                #trouver la nouvelle position
+                #aller à la nouvelle position
+                #marquer la position
+
+                #sinon revenir en arrière
+
+        solution=False
+        
+        while len(stack)!=0 and (position_x!=self.arrivee_x or position_y!=self.arrivee_y):
             #on récupère les coords de la ou l'on es cad la dernière case dans le stack
             position_x=stack[len(stack)-1][0]
             position_y=stack[len(stack)-1][1]
             #print(position_x,position_y)
+            #on récupère les positions utilisables
             self.matrice_cases[position_x][position_y].set_Couleur((0,0,255))
             
-            voisins = self.voisins_case(position_x,position_y)
+            voisins,positions_voisins = self.voisins_case(position_x,position_y)
             
-            murs_generables = self.murs_utilisables(voisins)
+            directions_explorables = self.directions_utilisables(voisins,positions_voisins,position_x,position_y)
 
-            if len(murs_generables)>0:
+            if len(directions_explorables)>0:
                 
                 #randrange est exclusif
-                num_mur=random.randrange(0,len(murs_generables))
+                num_direction=random.randrange(0,len(directions_explorables))
                 
-                #direction du mur à casser
-                direction_mur=murs_generables[num_mur]
+                #direction ou l'on va
+                direction=directions_explorables[num_direction]
 
-                
-                self.casser_mur(direction_mur,position_x,position_y)
+                new_x,new_y = self.nouvelles_coords(position_x,position_y,direction)
 
-                position_x,position_y = self.nouvelles_coords(position_x,position_y,direction_mur)
+                self.cases_visitees[new_x][new_y]=True
                 
                 #on ajoute les nouvelles coordonnées de la case au stack
-                stack.append([position_x,position_y])
+                stack.append([new_x,new_y])
             else:
+                self.matrice_cases[position_x][position_y].set_Couleur((255,0,0))
                 #on revient encore en arrière
                 stack.pop()
                 #print(position_x,position_y,len(stack))
 
-                
-        return self.matrice_cases
+        if position_x==self.arrivee_x and position_y == self.arrivee_y:
+            solution=True
 
-    def casser_mur(self,direction,position_x,position_y):
-        #on casse les murs de la case et de la case d'en face
-        self.matrice_cases[position_x][position_y].casser_mur(direction)
-        
-        if direction==HAUT:
-            self.matrice_cases[position_x][position_y-1].casser_mur(BAS)
-        elif direction==DROITE:
-            self.matrice_cases[position_x+1][position_y].casser_mur(GAUCHE)
-        elif direction==BAS:
-            self.matrice_cases[position_x][position_y+1].casser_mur(HAUT)
-        elif direction==GAUCHE:
-            self.matrice_cases[position_x-1][position_y].casser_mur(DROITE)
+        return solution
         
     def nouvelles_coords(self,x,y,direction):
         if direction == HAUT:
@@ -98,31 +103,62 @@ class Resolveur:
         elif direction == GAUCHE:
             x-=1
         return x,y
-    def murs_utilisables(self,voisins):
-        murs_utilisables=[]
+    def directions_utilisables(self,voisins,positions_voisins,position_x,position_y):
+        directions_utilisables=[]
 
         for i in range(0,len(voisins)):
-            if voisins[i]!=None and voisins[i].nb_murs_pleins()==4:
-                murs_utilisables.append(i)
-        return murs_utilisables
+            if voisins[i]!=None:
+                voisin_x=positions_voisins[i][0]
+                voisin_y=positions_voisins[i][1]
+
+                #on vérifie si la case n'as pas été explorée et si l'on peut passer
+                if not(self.cases_visitees[voisin_x][voisin_y]) and not(self.matrice_cases[position_x][position_y].mur_plein(i)):
+                    directions_utilisables.append(i)
+        return directions_utilisables
+
+    def direction_opposee(self,direction):
+        direction_opposee=0
         
+        if direction == HAUT:
+            direction_opposee=BAS
+        elif direction == DROITE:
+            direction_opposee=GAUCHE
+        elif direction == BAS:
+            direction_opposee=HAUT
+        elif direction == GAUCHE:
+            direction_opposee=DROITE
+            
+        return direction_opposee
     def voisins_case(self,x,y):
         voisins=[]
+        positions_voisins=[]
         #on élimine les voisins aux extrémitées
-        if y-1>0:
+        if y-1>=0:
             voisins.append(self.matrice_cases[x][y-1])
+            positions_voisins.append([x,y-1])
         else:
             voisins.append(None)
+            positions_voisins.append(None)
+            
         if x+1<self.largeur:
             voisins.append(self.matrice_cases[x+1][y])
+            positions_voisins.append([x+1,y])
         else:
             voisins.append(None)
+            positions_voisins.append(None)
+            
         if y+1<self.hauteur:
             voisins.append(self.matrice_cases[x][y+1])
+            positions_voisins.append([x,y+1])
         else:
             voisins.append(None)
-        if x-1>0:
+            positions_voisins.append(None)
+            
+        if x-1>=0:
             voisins.append(self.matrice_cases[x-1][y])
+            positions_voisins.append([x-1,y])
         else:
             voisins.append(None)
-        return voisins
+            positions_voisins.append(None)
+            
+        return voisins,positions_voisins
