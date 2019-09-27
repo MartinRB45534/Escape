@@ -1,11 +1,10 @@
 import pygame
-import Labyrinthe
-import Joueur
-import Constantes
+from Labyrinthe import *
+from Joueur import *
+from Constantes import *
 
 pygame.init()
-
-lab=Labyrinthe.Labyrinthe(Constantes.CASES_X,Constantes.CASES_Y,Constantes.LARGEUR_CASE,Constantes.LARGEUR_MUR)
+lab=Labyrinthe.Labyrinthe(CASES_X,CASES_Y,CASES_X-1,CASES_Y-1,LARGEUR_CASE,LARGEUR_MUR)
 lab.generation()
 #lab.resolution(Constantes.CASES_X-1,Constantes.CASES_Y-1)
 
@@ -14,7 +13,10 @@ screen = pygame.display.set_mode((601,601))
 screen.fill((125,125,125))
 run=True
 
-joueur=Joueur.Joueur()
+joueur=Joueur()
+
+font = pygame.font.SysFont(None, 72)
+textWin = font.render("Vous avez gagné!! \(^o^)/", True, (128, 0, 0))
 
 lab.dessine_toi(screen,0,0)
 joueur.dessine_toi(screen)
@@ -42,10 +44,16 @@ while run:
         move = joueur.va_vers_la_droite(lab)
     if keys[pygame.K_LEFT]:
         move = joueur.va_vers_la_gauche(lab)
+    
     #si on détecte un mouvement on redessine l'écran
     if move:
         lab.dessine_toi(screen,0,0)
         joueur.dessine_toi(screen)
+    
+    if lab.as_gagner(joueur.get_position()):
+        screen.fill((255,255,255))
+        screen.blit(textWin,(0,0))
+        run=False
     pygame.display.update()
 pygame.quit()
 #zoli seeds
