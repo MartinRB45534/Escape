@@ -49,10 +49,12 @@ class Labyrinthe:
         
         return win
     
-    def dessine_toi(self,screen,joueur_x,joueur_y):
+    def dessine_toi(self,screen,position_joueur):
+        joueur_x = position_joueur[0]
+        joueur_y = position_joueur[1]
         for x in range(0,self.largeur):
             for y in range(0,self.hauteur):
-                self.matrice_cases[x][y].dessine_toi(screen,x*(self.tailleCase+self.tailleMur),y*(self.tailleCase+self.tailleMur))
+                self.matrice_cases[x][y].dessine_toi(screen,(x-joueur_x)*(self.tailleCase+self.tailleMur) + FENETRE_X//2,(y-joueur_y)*(self.tailleCase+self.tailleMur) + FENETRE_Y//2)
     def resolution(self,arrivee_x,arrivee_y):
         resol = Resolveur(self.matrice_cases,self.largeur,self.hauteur,arrivee_x,arrivee_y)
         solution=resol.resolution()

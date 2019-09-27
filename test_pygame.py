@@ -4,12 +4,12 @@ from Joueur import *
 from Constantes import *
 
 pygame.init()
-lab=Labyrinthe.Labyrinthe(CASES_X,CASES_Y,CASES_X-1,CASES_Y-1,LARGEUR_CASE,LARGEUR_MUR)
+lab=Labyrinthe(CASES_X,CASES_Y,CASES_X-1,CASES_Y-1,LARGEUR_CASE,LARGEUR_MUR)
 lab.generation()
-#lab.resolution(Constantes.CASES_X-1,Constantes.CASES_Y-1)
+lab.resolution(CASES_X-1,CASES_Y-1)
 
 pygame.display.set_caption("test")
-screen = pygame.display.set_mode((601,601))
+screen = pygame.display.set_mode((FENETRE_X,FENETRE_Y))
 screen.fill((125,125,125))
 run=True
 
@@ -18,7 +18,7 @@ joueur=Joueur()
 font = pygame.font.SysFont(None, 72)
 textWin = font.render("Vous avez gagné!! \(^o^)/", True, (128, 0, 0))
 
-lab.dessine_toi(screen,0,0)
+lab.dessine_toi(screen,joueur.position)
 joueur.dessine_toi(screen)
 
 #objet qui permet de gérer le temps en pygame
@@ -47,7 +47,8 @@ while run:
     
     #si on détecte un mouvement on redessine l'écran
     if move:
-        lab.dessine_toi(screen,0,0)
+        screen.fill((125,125,125))
+        lab.dessine_toi(screen,joueur.position)
         joueur.dessine_toi(screen)
     
     if lab.as_gagner(joueur.get_position()):
