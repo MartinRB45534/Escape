@@ -1,5 +1,5 @@
-import Labyrinthe
-import Constantes
+from Labyrinthe import *
+from Constantes import *
 import pygame
 
 class Joueur:
@@ -61,7 +61,7 @@ class Joueur:
         coordonnées = self.position
 
     def dessine_toi(self,screen):
-        pygame.draw.rect(screen, pygame.Color(0,255,0), (self.position[0]*(Constantes.LARGEUR_CASE+Constantes.LARGEUR_MUR)+2*Constantes.LARGEUR_MUR,self.position[1]*(Constantes.LARGEUR_CASE+Constantes.LARGEUR_MUR)+2*Constantes.LARGEUR_MUR,Constantes.LARGEUR_CASE-2*Constantes.LARGEUR_MUR,Constantes.LARGEUR_CASE-2*Constantes.LARGEUR_MUR))
+        pygame.draw.rect(screen, pygame.Color(0,255,0),(FENETRE_X//2 + 2 ,FENETRE_Y//2 + 2 ,LARGEUR_CASE-2*LARGEUR_MUR,LARGEUR_CASE-2*LARGEUR_MUR))
 
     def get_position(self):
         return self.position
