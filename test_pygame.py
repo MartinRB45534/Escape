@@ -18,20 +18,31 @@ joueur=Joueur.Joueur()
 
 lab.dessine_toi(screen,0,0)
 joueur.dessine_toi(screen)
+
+#objet qui permet de gérer le temps en pygame
+clock = pygame.time.Clock()
 while run:
-    #si l'utilisateur décide de mettre fin au programme on sort de la boucle
+    #on cadence à 30 frames/sec
+    clock.tick(15)
+
     move = False
+    #si l'utilisateur décide de mettre fin au programme on sort de la boucle
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
             run=False
-        if event.type==pygame.KEYDOWN and event.key==pygame.K_UP:
-            move = joueur.va_vers_le_haut(lab)
-        if event.type==pygame.KEYDOWN and event.key==pygame.K_DOWN:
-            move = joueur.va_vers_le_bas(lab)
-        if event.type==pygame.KEYDOWN and event.key==pygame.K_RIGHT:
-            move = joueur.va_vers_la_droite(lab)
-        if event.type==pygame.KEYDOWN and event.key==pygame.K_LEFT:
-            move = joueur.va_vers_la_gauche(lab)
+
+    #on récupère toutes les touches préssés sous forme de booléens
+    keys=pygame.key.get_pressed()
+
+    if keys[pygame.K_UP]:
+        move = joueur.va_vers_le_haut(lab)
+    elif keys[pygame.K_DOWN]:
+        move = joueur.va_vers_le_bas(lab)
+    elif keys[pygame.K_RIGHT]:
+        move = joueur.va_vers_la_droite(lab)
+    if keys[pygame.K_LEFT]:
+        move = joueur.va_vers_la_gauche(lab)
+    #si on détecte un mouvement on redessine l'écran
     if move:
         lab.dessine_toi(screen,0,0)
         joueur.dessine_toi(screen)
