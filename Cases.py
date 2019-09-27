@@ -1,13 +1,6 @@
 import Murs
 import pygame
-#constantes
-HAUT=0
-DROITE=1
-BAS=2
-GAUCHE=3
-
-MUR_VIDE=0
-MUR_PLEIN=1
+from Constantes import *
 
 class Case:
     def __init__(self,tailleCase,tailleMur,couleur=(255,255,255)):

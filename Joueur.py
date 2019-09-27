@@ -62,4 +62,6 @@ class Joueur:
 
     def dessine_toi(self,screen):
         pygame.draw.rect(screen, pygame.Color(0,255,0), (self.position[0]*(Constantes.LARGEUR_CASE+Constantes.LARGEUR_MUR)+2*Constantes.LARGEUR_MUR,self.position[1]*(Constantes.LARGEUR_CASE+Constantes.LARGEUR_MUR)+2*Constantes.LARGEUR_MUR,Constantes.LARGEUR_CASE-2*Constantes.LARGEUR_MUR,Constantes.LARGEUR_CASE-2*Constantes.LARGEUR_MUR))
-        
+
+    def get_position(self):
+        return self.position
