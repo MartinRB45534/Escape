@@ -60,8 +60,8 @@ class Joueur:
 
         coordonnées = self.position
 
-    def dessine_toi(self,screen):
-        pygame.draw.rect(screen, pygame.Color(0,255,0),(FENETRE_X//2 + 2 ,FENETRE_Y//2 + 2 ,LARGEUR_CASE-2*LARGEUR_MUR,LARGEUR_CASE-2*LARGEUR_MUR))
+    def dessine_toi(self,screen,decalage):
+        pygame.draw.rect(screen, pygame.Color(0,255,0),((decalage[0])*(LARGEUR_CASE+LARGEUR_MUR)+2,(decalage[1])*(LARGEUR_CASE+LARGEUR_MUR)+2,LARGEUR_CASE-2*LARGEUR_MUR,LARGEUR_CASE-2*LARGEUR_MUR))
 
     def get_position(self):
         return self.position

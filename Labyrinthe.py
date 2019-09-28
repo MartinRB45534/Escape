@@ -49,12 +49,24 @@ class Labyrinthe:
         
         return win
     
-    def dessine_toi(self,screen,position_joueur):
+    def dessine_toi(self,screen,position_joueur,position_screen,largeur,hauteur):
         joueur_x = position_joueur[0]
         joueur_y = position_joueur[1]
-        for x in range(0,self.largeur):
-            for y in range(0,self.hauteur):
-                self.matrice_cases[x][y].dessine_toi(screen,(x-joueur_x)*(self.tailleCase+self.tailleMur) + FENETRE_X//2,(y-joueur_y)*(self.tailleCase+self.tailleMur) + FENETRE_Y//2)
+
+        position_x=position_screen[0]
+        position_y=position_screen[1]
+
+        for x in range(joueur_x-largeur//2,joueur_x+largeur//2):
+            for y in range(joueur_y-hauteur//2,joueur_y+hauteur//2):
+
+                if (x<0 or x>=self.largeur) or (y<0 or y>=self.hauteur):
+                    pygame.draw.rect(screen,(0,0,0),(position_x,position_y,self.tailleCase+self.tailleMur,self.tailleCase+self.tailleMur))
+                else:
+                    self.matrice_cases[x][y].dessine_toi(screen,position_x,position_y)
+                position_y+=self.tailleCase+self.tailleMur
+            position_y=position_screen[1]
+            position_x+=self.tailleCase+self.tailleMur
+            
     def resolution(self,arrivee_x,arrivee_y):
         resol = Resolveur(self.matrice_cases,self.largeur,self.hauteur,arrivee_x,arrivee_y)
         solution=resol.resolution()
