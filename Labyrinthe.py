@@ -19,6 +19,13 @@ class Labyrinthe:
         self.tailleMur = tailleMur
 
     def generation(self):
+        """
+        Fonction qui génère la mztrice du labyrinthe
+            Entrées:
+                rien
+            Sorties:
+                rien
+        """
         #ini du tableau de case (4 murs pleins)
         #génération en profondeur via l'objet generateur
         gene=Generateur.Generateur(self.matrice_cases,self.largeur,self.hauteur)
@@ -26,6 +33,15 @@ class Labyrinthe:
         #on change la couleur de la case d'arrivée
         self.matrice_cases[self.arrivee_x][self.arrivee_y].set_Couleur((30,144,255))
     def peut_passer(self,coord,sens):
+        """
+        Fonction qui valide et applique ou non le mouvement du joueur
+        Entrées:
+            -coordonnnées  actuelles du joueur
+            -direction vers laquelle le joueur veut se diriger
+        Sorties:
+            -un booléen qui indique si le joueur est passé ou pas
+            -les nouvelles coordonnées du joueur
+        """
         newcoord = coord
         case = self.matrice_cases[coord[0]][coord[1]]
         passe = True
@@ -42,6 +58,14 @@ class Labyrinthe:
         return passe, newcoord
 
     def as_gagner(self,coords):
+        """
+        Fonction qui indique si le joueur à gagner ou non
+        Entrées:
+            les coordonnées du joueur
+        Sorties:
+            un booléen qui indique si le joueur a gagné ou non
+        """
+
         win=False
 
         if coords[0]==self.arrivee_x and coords[1]==self.arrivee_y:
@@ -50,6 +74,19 @@ class Labyrinthe:
         return win
     
     def dessine_toi(self,screen,position_joueur,position_screen,largeur,hauteur):
+
+        """
+        Fonction qui dessine le labyrinthe sur l'écran
+        Entrées:
+            l'écran, la surface sur laquelle on dessine(objet pygame)
+            la position du joueur
+            la position que l'on prend pour 0,0 sur l'écran (ex: un décalage de 20px sur la droite se traduit par (x+20,y))
+            la largeur en cases
+            la hauteur en cases
+        Sorties:
+            Rien
+        """
+
         joueur_x = position_joueur[0]
         joueur_y = position_joueur[1]
 
@@ -75,6 +112,13 @@ class Labyrinthe:
             position_x+=self.tailleCase+self.tailleMur
             
     def resolution(self,arrivee_x,arrivee_y):
+        """
+        Fonction qui résoud le labyrinthe
+        Entrées:
+            coordonnées de l'arrivée
+        Sorties:
+            Rien
+        """
         resol = Resolveur(self.matrice_cases,self.largeur,self.hauteur,arrivee_x,arrivee_y)
         solution=resol.resolution()
         

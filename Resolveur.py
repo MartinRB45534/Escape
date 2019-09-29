@@ -20,11 +20,21 @@ class Resolveur:
         self.modeResolution = modeResolution
         self.cases_visitees=[[False for i in range(hauteur)]for i in range(largeur)]
     def resolution(self):
+        """
+        Fonction qui résoud la matrice
+        Entrée:Rien
+        Sorties: un booléen indiquant si la matrice est résolvable
+        """
         if self.modeResolution=="Profondeur":
             return self.resolution_en_profondeur()
         else:
             print("mode de résolution choisi incompatible")
     def resolution_en_profondeur(self):
+        """
+        Fonction qui résoud la matrice avec la méthode du parcours en profondeur
+        Entrées:Rien
+        Sorties:un booléen indiquant si la matrice est résolvable
+        """
         rdm=random.randrange (1,10**18,1)
 
         #on définit la seed de notre solutionneur
@@ -94,6 +104,14 @@ class Resolveur:
         return solution
         
     def nouvelles_coords(self,x,y,direction):
+        """
+        Fonction qui calcul les nouvelles coordonnées du résolveur
+        Entrées:
+            les coordonnées du résolveur
+            la direction ou le résolveur va
+        Sorties:
+            les nouvelles coordonnées résolveur
+        """
         if direction == HAUT:
             y-=1
         elif direction == DROITE:
@@ -104,6 +122,13 @@ class Resolveur:
             x-=1
         return x,y
     def directions_utilisables(self,voisins,positions_voisins,position_x,position_y):
+        """
+        Fonction qui prend en entrées:
+            les voisins de la case
+            les positions des voisins
+            la position de la case
+        et qui renvoie les directions ou l'on peut passer
+        """
         directions_utilisables=[]
 
         for i in range(0,len(voisins)):
@@ -117,6 +142,9 @@ class Resolveur:
         return directions_utilisables
 
     def direction_opposee(self,direction):
+        """
+        Fonction qui renvoie la direction opposée à celle en entrée
+        """
         direction_opposee=0
         
         if direction == HAUT:
@@ -130,6 +158,12 @@ class Resolveur:
             
         return direction_opposee
     def voisins_case(self,x,y):
+        """
+        Fonction qui prend en entrée:
+            les coordonnées de la case
+        et qui renvoie les voisins de la case
+        ainsi que leurs coordonnées
+        """
         voisins=[]
         positions_voisins=[]
         #on élimine les voisins aux extrémitées

@@ -12,6 +12,9 @@ class Case:
     def nb_murs_non_vides(self):
         pass
     def nb_murs_pleins(self):
+        """
+        Fonction qui renvoie le nombre de murs pleins dans la case
+        """
         pleins=0
 
         for mur in self.murs:
@@ -20,6 +23,12 @@ class Case:
         
         return pleins
     def dessine_toi(self,screen,x,y):
+        """
+        Fonction qui dessine l'objet
+        Entrées:
+            l'écran, la surface sur laquelle on dessine(objet pygame)
+            la position de la case
+        """
         pygame.draw.rect(screen,self.couleur,(x+self.tailleMur,y+self.tailleMur,self.tailleCase,self.tailleCase))
         #on dessine les murs vides en premiers pour éviter les bugs graphiques
         for i in range(0,len(self.murs)):
@@ -30,9 +39,15 @@ class Case:
             if self.murs[i].get_etat()!=MUR_VIDE:
                 self.murs[i].dessine_toi(screen,x,y,self.tailleCase,i)
     def casser_mur(self,direction):
+        """
+        Fonction qui casse le mur dans la direction indiquée
+        """
         self.murs[direction].set_etat(MUR_VIDE)
 
     def mur_plein(self,direction):
+        """
+        Fonction qui indique si le mur indiquée par la direction est plein ou non
+        """
         mur_plein=False
         if self.murs[direction].get_etat()==MUR_PLEIN:
             mur_plein=True
