@@ -56,8 +56,15 @@ class Labyrinthe:
         position_x=position_screen[0]
         position_y=position_screen[1]
 
-        for x in range(joueur_x-largeur//2,joueur_x+largeur//2):
-            for y in range(joueur_y-hauteur//2,joueur_y+hauteur//2):
+        min_x=joueur_x-largeur//2
+        max_x=joueur_x+largeur-largeur//2
+
+        min_y=joueur_y-hauteur//2
+        max_y=joueur_y+hauteur-hauteur//2
+
+
+        for x in range(min_x,max_x):
+            for y in range(min_y,max_y):
 
                 if (x<0 or x>=self.largeur) or (y<0 or y>=self.hauteur):
                     pygame.draw.rect(screen,(0,0,0),(position_x,position_y,self.tailleCase+self.tailleMur,self.tailleCase+self.tailleMur))
