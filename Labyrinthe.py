@@ -5,7 +5,7 @@ from Resolveur import *
 
 
 class Labyrinthe:
-    def __init__(self,largeur,hauteur,arrivee_x,arrivee_y,tailleCase=20,tailleMur=1):
+    def __init__(self,largeur,hauteur,arrivee_x,arrivee_y,tailleCase=20,tailleMur=1,poids=[1,1,1,1]):
         self.largeur = largeur
         self.hauteur = hauteur
 
@@ -17,6 +17,8 @@ class Labyrinthe:
         #paramètre graphiques
         self.tailleCase = tailleCase
         self.tailleMur = tailleMur
+        #poids servants à la génération du labyrinthe
+        self.poids=poids
 
     def generation(self):
         """
@@ -28,7 +30,7 @@ class Labyrinthe:
         """
         #ini du tableau de case (4 murs pleins)
         #génération en profondeur via l'objet generateur
-        gene=Generateur.Generateur(self.matrice_cases,self.largeur,self.hauteur)
+        gene=Generateur.Generateur(self.matrice_cases,self.largeur,self.hauteur,self.poids)
         self.matrice_cases=gene.generation()
         #on change la couleur de la case d'arrivée
         self.matrice_cases[self.arrivee_x][self.arrivee_y].set_Couleur((30,144,255))

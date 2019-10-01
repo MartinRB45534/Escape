@@ -4,7 +4,10 @@ from Joueur import *
 from Constantes import *
 
 pygame.init()
-lab=Labyrinthe(CASES_X,CASES_Y,CASES_X-1,CASES_Y-1,LARGEUR_CASE,LARGEUR_MUR)
+#poids permettants de manipuler l'aléatoire
+poids=[1,1000000000000,1,1000000000000]
+
+lab=Labyrinthe(CASES_X,CASES_Y,CASES_X-1,CASES_Y-1,LARGEUR_CASE,LARGEUR_MUR,poids)
 lab.generation()
 lab.resolution(CASES_X-1,CASES_Y-1)
 

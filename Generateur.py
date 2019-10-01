@@ -11,11 +11,12 @@ MUR_VIDE=0
 MUR_PLEIN=1
 
 class Generateur:
-    def __init__(self,matrice_cases,largeur,hauteur,modeGeneration="Profondeur"):
+    def __init__(self,matrice_cases,largeur,hauteur,poids,modeGeneration="Profondeur"):
         self.largeur = largeur
         self.hauteur = hauteur
         self.matrice_cases = matrice_cases
         self.modeGeneration = modeGeneration
+        self.poids=poids
     def generation(self):
         """
         Fonction qui permet de générer une matrice conformément au paramètres
@@ -64,7 +65,7 @@ class Generateur:
             if len(murs_generables)>0:
                 
                 #randrange est exclusif
-                num_mur=random.randrange(0,len(murs_generables))
+                num_mur=self.randomPoids(murs_generables)
                 
                 #direction du mur à casser
                 direction_mur=murs_generables[num_mur]
@@ -160,7 +161,33 @@ class Generateur:
         else:
             voisins.append(None)
         return voisins
+    def randomPoids(self,murs_utilisables):
+        """
+        Fonction qui prend en entrée:
+            les murs utilisables par la fonction
+        et qui renvoie le numéro d'un mur générée avec un alétoire modifié
+        """
 
+        nbrandom=0
+        res=-1
+        
+        poids_selectionnees=[]
+        poids_total=0
+
+        for i in range (0,len(murs_utilisables)):
+            poids_selectionnees+=[poids_total+self.poids[murs_utilisables[i]]]
+            poids_total+=self.poids[murs_utilisables[i]]
+
+        nbrandom=random.randrange(0,poids_total)
+
+        i=0
+
+        while i<len(poids_selectionnees) and res==-1:
+            if nbrandom < poids_selectionnees[i]:
+                res=i
+            i+=1
+        return res
+        
 
 #gen = Generateur([],0,0)
 #gen.generation()
