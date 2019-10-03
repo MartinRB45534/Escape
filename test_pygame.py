@@ -2,12 +2,16 @@ import pygame
 from Labyrinthe import *
 from Joueur import *
 from Constantes import *
+from Patern import *
 
 pygame.init()
 #poids permettants de manipuler l'aléatoire
-poids=[1,1000000000000,1,1000000000000]
+poids=[2,2,2,2]
+#salles
+salles=[Patern(10,10,LARGEUR_CASE,LARGEUR_MUR)]
 
-lab=Labyrinthe(CASES_X,CASES_Y,CASES_X-1,CASES_Y-1,LARGEUR_CASE,LARGEUR_MUR,poids)
+
+lab=Labyrinthe(CASES_X,CASES_Y,CASES_X-1,CASES_Y-1,LARGEUR_CASE,LARGEUR_MUR,poids,salles)
 lab.generation()
 lab.resolution(CASES_X-1,CASES_Y-1)
 

@@ -5,7 +5,7 @@ from Resolveur import *
 
 
 class Labyrinthe:
-    def __init__(self,largeur,hauteur,arrivee_x,arrivee_y,tailleCase=20,tailleMur=1,poids=[1,1,1,1]):
+    def __init__(self,largeur,hauteur,arrivee_x,arrivee_y,tailleCase=20,tailleMur=1,poids=[1,1,1,1],patterns=None):
         self.largeur = largeur
         self.hauteur = hauteur
 
@@ -19,6 +19,8 @@ class Labyrinthe:
         self.tailleMur = tailleMur
         #poids servants à la génération du labyrinthe
         self.poids=poids
+
+        self.patterns=patterns
 
     def generation(self):
         """
@@ -34,6 +36,10 @@ class Labyrinthe:
         self.matrice_cases=gene.generation()
         #on change la couleur de la case d'arrivée
         self.matrice_cases[self.arrivee_x][self.arrivee_y].set_Couleur((30,144,255))
+
+        if self.patterns != None:
+            self.patterns[0].generation()
+            self.matrice_cases=self.patterns[0].copie(10,10,self.matrice_cases)
     def peut_passer(self,coord,sens):
         """
         Fonction qui valide et applique ou non le mouvement du joueur

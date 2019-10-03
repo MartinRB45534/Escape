@@ -43,6 +43,11 @@ class Case:
         Fonction qui casse le mur dans la direction indiquée
         """
         self.murs[direction].set_etat(MUR_VIDE)
+    def construire_mur(self,direction):
+        """
+        Fonction qui construit le mur dans la direction indiquée
+        """
+        self.murs[direction].set_etat(MUR_PLEIN)
 
     def mur_plein(self,direction):
         """
