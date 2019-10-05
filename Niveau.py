@@ -3,6 +3,7 @@ from Labyrinthe import *
 from Joueur import *
 from Constantes import *
 from Patern import *
+from Monstres import *
 
 class Niveau:
     def __init__(self,difficulté,mode_affichage):
@@ -62,6 +63,7 @@ class Niveau:
         self.screen.fill((0,0,0))
 
         self.joueur=Joueur()
+        self.monstres=[Monstre([10,10],10,10)]
 
         font = pygame.font.SysFont(None, 72)
         self.textWin = font.render("Vous avez gagné!! \(^o^)/", True, (128, 0, 0))
@@ -74,13 +76,13 @@ class Niveau:
 
     def run(self):
         run=True
-        self.lab.dessine_toi(self.screen,self.joueur.position,self.position_screen,self.zoom_largeur,self.zoom_hauteur,self.mode_affichage)
+        self.lab.dessine_toi(self.screen,self.joueur.position,self.monstres,self.position_screen,self.zoom_largeur,self.zoom_hauteur,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR)
         self.joueur.dessine_toi(self.screen,(self.zoom_largeur//2,self.zoom_hauteur//2),self.LARGEUR_CASE,self.LARGEUR_MUR,self.position_screen)
 
         #objet qui permet de gérer le temps en pygame
         clock = pygame.time.Clock()
         while run:
-            #on cadence à 30 frames/sec
+            #on cadence à 15 frames/sec
             clock.tick(15)
 
             move = False
@@ -93,9 +95,9 @@ class Niveau:
                     self.zoom_largeur = event.w//(self.LARGEUR_CASE + self.LARGEUR_MUR)
                     self.zoom_hauteur = event.h//(self.LARGEUR_CASE + self.LARGEUR_MUR)
                     self.screen.fill((0,0,0))
-                    self.lab.dessine_toi(self.screen,self.joueur.position,self.position_screen,self.zoom_largeur,self.zoom_hauteur,self.mode_affichage)
+                    self.lab.dessine_toi(self.screen,self.joueur.position,self.monstres,self.position_screen,self.zoom_largeur,self.zoom_hauteur,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR)
                     self.joueur.dessine_toi(self.screen,(self.zoom_largeur//2,self.zoom_hauteur//2),self.LARGEUR_CASE,self.LARGEUR_MUR,self.position_screen)
-
+                    
             #on récupère toutes les touches préssés sous forme de booléens
             keys=pygame.key.get_pressed()
 
@@ -111,7 +113,7 @@ class Niveau:
             #si on détecte un mouvement on redessine l'écran
             if move:
                 self.screen.fill((0,0,0))
-                self.lab.dessine_toi(self.screen,self.joueur.position,self.position_screen,self.zoom_largeur,self.zoom_hauteur,self.mode_affichage)
+                self.lab.dessine_toi(self.screen,self.joueur.position,self.monstres,self.position_screen,self.zoom_largeur,self.zoom_hauteur,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR)
                 self.joueur.dessine_toi(self.screen,(self.zoom_largeur//2,self.zoom_hauteur//2),self.LARGEUR_CASE,self.LARGEUR_MUR,self.position_screen)
 
             if self.lab.as_gagner(self.joueur.get_position()):
