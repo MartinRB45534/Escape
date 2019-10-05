@@ -2,9 +2,16 @@ import pygame
 from Labyrinthe import *
 from Joueur import *
 from Constantes import *
+from Patern import *
 
 pygame.init()
-lab=Labyrinthe(CASES_X,CASES_Y,CASES_X-1,CASES_Y-1,LARGEUR_CASE,LARGEUR_MUR)
+#poids permettants de manipuler l'aléatoire
+poids=[2,2,2,2]
+#salles
+salles=[Patern(10,10,LARGEUR_CASE,LARGEUR_MUR)]
+
+
+lab=Labyrinthe(CASES_X,CASES_Y,CASES_X-1,CASES_Y-1,LARGEUR_CASE,LARGEUR_MUR,poids,salles)
 lab.generation()
 lab.resolution(CASES_X-1,CASES_Y-1)
 
@@ -19,11 +26,13 @@ font = pygame.font.SysFont(None, 72)
 textWin = font.render("Vous avez gagné!! \(^o^)/", True, (128, 0, 0))
 
 #varaibles correspondants a la largeur et la hauteur du zoom
-zoom_largeur=6
-zoom_hauteur=6
+zoom_largeur=11
+zoom_hauteur=11
 
-lab.dessine_toi(screen,joueur.position,(0,0),zoom_largeur,zoom_hauteur)
-joueur.dessine_toi(screen,(zoom_largeur//2,zoom_hauteur//2))
+position_screen=(100,100)
+
+lab.dessine_toi(screen,joueur.position,position_screen,zoom_largeur,zoom_hauteur)
+joueur.dessine_toi(screen,(zoom_largeur//2,zoom_hauteur//2),position_screen)
 
 #objet qui permet de gérer le temps en pygame
 clock = pygame.time.Clock()
@@ -52,8 +61,8 @@ while run:
     #si on détecte un mouvement on redessine l'écran
     if move:
         screen.fill((125,125,125))
-        lab.dessine_toi(screen,joueur.position,(0,0),7,7)
-        joueur.dessine_toi(screen,(zoom_largeur//2,zoom_hauteur//2))
+        lab.dessine_toi(screen,joueur.position,position_screen,zoom_largeur,zoom_hauteur)
+        joueur.dessine_toi(screen,(zoom_largeur//2,zoom_hauteur//2),position_screen)
     
     if lab.as_gagner(joueur.get_position()):
         screen.fill((255,255,255))
