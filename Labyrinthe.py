@@ -2,6 +2,7 @@ import Generateur
 from Cases import *
 from Constantes import *
 from Resolveur import *
+from Lumiere import *
 
 
 class Labyrinthe:
@@ -39,7 +40,7 @@ class Labyrinthe:
 
         if self.patterns != None:
             self.patterns[0].generation()
-            self.matrice_cases=self.patterns[0].copie(10,10,self.matrice_cases)
+            self.matrice_cases=self.patterns[0].copie((self.largeur-self.patterns[0].largeur)//2,(self.hauteur-self.patterns[0].hauteur)//2,self.matrice_cases)
     def peut_passer(self,coord,sens):
         """
         Fonction qui valide et applique ou non le mouvement du joueur
@@ -81,7 +82,7 @@ class Labyrinthe:
         
         return win
     
-    def dessine_toi(self,screen,position_joueur,position_screen,largeur,hauteur):
+    def dessine_toi(self,screen,position_joueur,position_screen,largeur,hauteur,mode_affichage):
 
         """
         Fonction qui dessine le labyrinthe sur l'écran
@@ -91,34 +92,62 @@ class Labyrinthe:
             la position que l'on prend pour 0,0 sur l'écran (ex: un décalage de 20px sur la droite se traduit par (x+20,y))
             la largeur en cases
             la hauteur en cases
+            le mode d'affichage
         Sorties:
             Rien
         """
 
+        if mode_affichage == voir_tout :
+            joueur_x = position_joueur[0]
+            joueur_y = position_joueur[1]
+
+            position_x=position_screen[0]
+            position_y=position_screen[1]
+
+            min_x=joueur_x-largeur//2
+            max_x=joueur_x+largeur-largeur//2
+
+            min_y=joueur_y-hauteur//2
+            max_y=joueur_y+hauteur-hauteur//2
+
+
+            for x in range(min_x,max_x):
+                for y in range(min_y,max_y):
+
+                    if (x<0 or x>=self.largeur) or (y<0 or y>=self.hauteur):
+                        pass
+                    else:
+                        self.matrice_cases[x][y].dessine_toi(screen,position_x,position_y)
+                    position_y+=self.tailleCase+self.tailleMur
+                position_y=position_screen[1]
+                position_x+=self.tailleCase+self.tailleMur
+
+        elif mode_affichage == parcours_en_profondeur :
+            pass
+        elif mode_affichage == aveugle :
+            self.dessine_case(screen,position_joueur,position_screen,largeur,hauteur,position_joueur)
+            lumiere_droite = Lumiere(position_joueur,DROITE,self)
+            lumiere_gauche = Lumiere(position_joueur,GAUCHE,self)
+            lumiere_haut = Lumiere(position_joueur,HAUT,self)
+            lumiere_bas = Lumiere(position_joueur,BAS,self)
+
+            lumiere_droite.avance(screen,position_joueur,position_screen,largeur,hauteur)
+            lumiere_gauche.avance(screen,position_joueur,position_screen,largeur,hauteur)
+            lumiere_haut.avance(screen,position_joueur,position_screen,largeur,hauteur)
+            lumiere_bas.avance(screen,position_joueur,position_screen,largeur,hauteur)
+
+    def dessine_case(self,screen,position_joueur,position_screen,largeur,hauteur,position):
         joueur_x = position_joueur[0]
         joueur_y = position_joueur[1]
 
-        position_x=position_screen[0]
-        position_y=position_screen[1]
+        position_x  =position_screen[0]
+        position_y = position_screen[1]
 
-        min_x=joueur_x-largeur//2
-        max_x=joueur_x+largeur-largeur//2
+        x = position[0]
+        y = position[1]
 
-        min_y=joueur_y-hauteur//2
-        max_y=joueur_y+hauteur-hauteur//2
-
-
-        for x in range(min_x,max_x):
-            for y in range(min_y,max_y):
-
-                if (x<0 or x>=self.largeur) or (y<0 or y>=self.hauteur):
-                    pygame.draw.rect(screen,(0,0,0),(position_x,position_y,self.tailleCase+self.tailleMur,self.tailleCase+self.tailleMur))
-                else:
-                    self.matrice_cases[x][y].dessine_toi(screen,position_x,position_y)
-                position_y+=self.tailleCase+self.tailleMur
-            position_y=position_screen[1]
-            position_x+=self.tailleCase+self.tailleMur
-            
+        self.matrice_cases[x][y].dessine_toi(screen,(x-joueur_x+largeur//2)*(self.tailleCase+self.tailleMur),(y-joueur_y+hauteur//2)*(self.tailleCase+self.tailleMur))
+           
     def resolution(self,arrivee_x,arrivee_y):
         """
         Fonction qui résoud le labyrinthe
