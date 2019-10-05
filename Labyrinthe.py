@@ -40,7 +40,7 @@ class Labyrinthe:
 
         if self.patterns != None:
             self.patterns[0].generation()
-            self.matrice_cases=self.patterns[0].copie(10,10,self.matrice_cases)
+            self.matrice_cases=self.patterns[0].copie((self.largeur-self.patterns[0].largeur)//2,(self.hauteur-self.patterns[0].hauteur)//2,self.matrice_cases)
     def peut_passer(self,coord,sens):
         """
         Fonction qui valide et applique ou non le mouvement du joueur
