@@ -29,7 +29,7 @@ class Case:
             l'écran, la surface sur laquelle on dessine(objet pygame)
             la position de la case
         """
-        pygame.draw.rect(screen,self.couleur,(x+self.tailleMur,y+self.tailleMur,self.tailleCase,self.tailleCase))
+        pygame.draw.rect(screen,self.couleur,(x,y,self.tailleCase,self.tailleCase))
         #on dessine les murs vides en premiers pour éviter les bugs graphiques
         for i in range(0,len(self.murs)):
             if self.murs[i].get_etat()==MUR_VIDE:
