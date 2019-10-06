@@ -46,15 +46,17 @@ class Niveau:
             self.CASES_Y = 1000
             res = False
             self.salles=[Patern(1,1,self.LARGEUR_CASE,self.LARGEUR_MUR)]
-
+        
         pygame.init()
         #poids permettants de manipuler l'aléatoire
         self.poids=[2,6,2,1]
-
-
+        
+        #salle pour exp monstres
+        self.salles.append(Patern(20,20,self.LARGEUR_CASE,self.LARGEUR_MUR))
 
         self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.CASES_X-1,self.CASES_Y-1,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
         self.lab.generation()
+
         if res :
             self.lab.resolution(self.CASES_X-1,self.CASES_Y-1)
 
@@ -62,13 +64,15 @@ class Niveau:
         self.screen = pygame.display.set_mode((FENETRE_X,FENETRE_Y),pygame.RESIZABLE)
         self.screen.fill((0,0,0))
 
+        #entitées
         self.joueur=Joueur()
-        self.monstres=[Monstre([10,10],10,10)]
+        self.monstres=[Slime([10,10],10,10)]
 
+        #texte de fin
         font = pygame.font.SysFont(None, 72)
         self.textWin = font.render("Vous avez gagné!! \(^o^)/", True, (128, 0, 0))
 
-        #varaibles correspondants a la largeur et la hauteur du zoom
+        #variables correspondants a la largeur et la hauteur du zoom
         self.zoom_largeur=11
         self.zoom_hauteur=11
 
@@ -76,16 +80,22 @@ class Niveau:
 
     def run(self):
         run=True
-        self.lab.dessine_toi(self.screen,self.joueur.position,self.monstres,self.position_screen,self.zoom_largeur,self.zoom_hauteur,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR)
-        self.joueur.dessine_toi(self.screen,(self.zoom_largeur//2,self.zoom_hauteur//2),self.LARGEUR_CASE,self.LARGEUR_MUR,self.position_screen)
-
+        self.redraw()
         #objet qui permet de gérer le temps en pygame
         clock = pygame.time.Clock()
+        #nb de frames que le joueur doit attendre entre chaque action
+        cooldown_joueur=3
+        compteur_j=0
+        #nb de frames que les monstres doivent attendre entre chaque action
+        cooldown_monstres=3
+        compteur_m=0
+        
         while run:
-            #on cadence à 15 frames/sec
-            clock.tick(15)
+            #on cadence à 60 frames/sec
+            clock.tick(60)
 
-            move = False
+            move_j = False
+            move_m=False
             #si l'utilisateur décide de mettre fin au programme on sort de la boucle
             for event in pygame.event.get():
                 if event.type==pygame.QUIT:
@@ -94,27 +104,41 @@ class Niveau:
                 if event.type == pygame.VIDEORESIZE:
                     self.zoom_largeur = event.w//(self.LARGEUR_CASE + self.LARGEUR_MUR)
                     self.zoom_hauteur = event.h//(self.LARGEUR_CASE + self.LARGEUR_MUR)
-                    self.screen.fill((0,0,0))
-                    self.lab.dessine_toi(self.screen,self.joueur.position,self.monstres,self.position_screen,self.zoom_largeur,self.zoom_hauteur,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR)
-                    self.joueur.dessine_toi(self.screen,(self.zoom_largeur//2,self.zoom_hauteur//2),self.LARGEUR_CASE,self.LARGEUR_MUR,self.position_screen)
-                    
-            #on récupère toutes les touches préssés sous forme de booléens
-            keys=pygame.key.get_pressed()
+                    self.redraw()
 
-            if keys[pygame.K_UP]:
-                move = self.joueur.va_vers_le_haut(self.lab)
-            elif keys[pygame.K_DOWN]:
-                move = self.joueur.va_vers_le_bas(self.lab)
-            elif keys[pygame.K_RIGHT]:
-                move = self.joueur.va_vers_la_droite(self.lab)
-            if keys[pygame.K_LEFT]:
-                move = self.joueur.va_vers_la_gauche(self.lab)
+            if compteur_j==0:
+                compteur_j=cooldown_joueur
+                #on récupère toutes les touches préssés sous forme de booléens
+                keys=pygame.key.get_pressed()
+
+                if keys[pygame.K_UP]:
+                    move_j = self.joueur.va_vers_le_haut(self.lab)
+                elif keys[pygame.K_DOWN]:
+                    move_j = self.joueur.va_vers_le_bas(self.lab)
+                elif keys[pygame.K_RIGHT]:
+                    move_j = self.joueur.va_vers_la_droite(self.lab)
+                if keys[pygame.K_LEFT]:
+                    move_j = self.joueur.va_vers_la_gauche(self.lab)
+            else:
+                compteur_j-=1
+
+            if compteur_m==0:
+                compteur_m=cooldown_monstres
+
+                for monstre in self.monstres:
+                    vue_monstre,position_vue=self.lab.construire_vue(monstre.getPosition(),monstre.getLargeurVue(),monstre.getHauteurVue())
+                    direction_voulue=monstre.decision(position_vue,vue_monstre,self.joueur.get_position())
+                    if direction_voulue!=None:
+                        passe,newcoord=self.lab.peut_passer(monstre.getPosition(),direction_voulue)
+                        if passe:
+                            monstre.setPosition(newcoord)
+                            move_m=True
+            else:
+                compteur_m-=1
 
             #si on détecte un mouvement on redessine l'écran
-            if move:
-                self.screen.fill((0,0,0))
-                self.lab.dessine_toi(self.screen,self.joueur.position,self.monstres,self.position_screen,self.zoom_largeur,self.zoom_hauteur,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR)
-                self.joueur.dessine_toi(self.screen,(self.zoom_largeur//2,self.zoom_hauteur//2),self.LARGEUR_CASE,self.LARGEUR_MUR,self.position_screen)
+            if move_j or move_m:
+                self.redraw()
 
             if self.lab.as_gagner(self.joueur.get_position()):
                 self.screen.fill((255,255,255))
@@ -122,6 +146,11 @@ class Niveau:
                 run=False
             pygame.display.update()
         pygame.quit()
-#zoli seeds
-#249080474072083266
-#249080474072083266
+    def redraw(self):
+        """
+        Fonction qui redessine l'entièreté de l'écran
+        """
+        self.screen.fill((0,0,0))
+        self.lab.dessine_toi(self.screen,self.joueur.position,self.monstres,self.position_screen,self.zoom_largeur,self.zoom_hauteur,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR)
+        self.joueur.dessine_toi(self.screen,(self.zoom_largeur//2,self.zoom_hauteur//2),self.LARGEUR_CASE,self.LARGEUR_MUR,self.position_screen)
+            

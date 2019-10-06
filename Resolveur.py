@@ -23,25 +23,29 @@ class Resolveur:
         self.matrice_cases = matrice_cases
         self.modeResolution = modeResolution
         self.cases_visitees=[[False for i in range(hauteur)]for i in range(largeur)]
-    def resolution(self,get_chemin=False):
+    def resolution(self,get_chemin=False,afficher_chemin=True,afficher_seed=False):
         """
         Fonction qui résoud la matrice
         Entrée:
-            Un booléen indiquant si l'on veut le chemin ou pas 
+            Un booléen indiquant si l'on veut le chemin ou pas
+            Un booléen indiquant si l'on veut afficher le chemin ou pas
+            Un booléen indiquant si l'on veut afficher la seed ou non
         Sorties:
             un booléen indiquant si la matrice est résolvable
             OU
             le chemin par lequel l'algo est arrivé
         """
         if self.modeResolution=="Profondeur":
-            return self.resolution_en_profondeur(get_chemin)
+            return self.resolution_en_profondeur(get_chemin,afficher_chemin,afficher_seed)
         else:
             print("mode de résolution choisi incompatible")
-    def resolution_en_profondeur(self,get_chemin):
+    def resolution_en_profondeur(self,get_chemin,afficher_chemin,afficher_seed):
         """
         Fonction qui résoud la matrice avec la méthode du parcours en profondeur
         Entrées:
             Un booléen indiquant si l'on veut le chemin ou pas 
+            Un booléen indiquant si l'on veut afficher le chemin ou pas
+            Un booléen indiquant si l'on veut afficher la seed ou non
         Sorties:
             un booléen indiquant si la matrice est résolvable
             OU
@@ -51,8 +55,8 @@ class Resolveur:
 
         #on définit la seed de notre solutionneur
         #cela permet d'avoir le meme résultat
-
-        print("seed",rdm)
+        if afficher_seed:
+            print("seed",rdm)
         #random.seed(498965033146031877)
         random.seed(rdm)
         depart_x=self.depart_x
@@ -84,7 +88,8 @@ class Resolveur:
             position_y=stack[len(stack)-1][1]
             #print(position_x,position_y)
             #on récupère les positions utilisables
-            self.matrice_cases[position_x][position_y].set_Couleur((0,0,255))
+            if afficher_chemin:
+                self.matrice_cases[position_x][position_y].set_Couleur((0,0,255))
             
             voisins,positions_voisins = self.voisins_case(position_x,position_y)
             
@@ -105,7 +110,8 @@ class Resolveur:
                 #on ajoute les nouvelles coordonnées de la case au stack
                 stack.append([new_x,new_y])
             else:
-                self.matrice_cases[position_x][position_y].set_Couleur((255,0,0))
+                if afficher_chemin:
+                    self.matrice_cases[position_x][position_y].set_Couleur((255,0,0))
                 #on revient encore en arrière
                 stack.pop()
                 #print(position_x,position_y,len(stack))

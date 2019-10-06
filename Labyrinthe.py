@@ -41,15 +41,19 @@ class Labyrinthe:
         if self.patterns != None:
             self.patterns[0].generation()
             self.matrice_cases=self.patterns[0].copie((self.largeur-self.patterns[0].largeur)//2,(self.hauteur-self.patterns[0].hauteur)//2,self.matrice_cases)
+
+            self.patterns[1].generation()
+            self.matrice_cases=self.patterns[1].copie(0,0,self.matrice_cases)
+
     def peut_passer(self,coord,sens):
         """
-        Fonction qui valide et applique ou non le mouvement du joueur
+        Fonction qui valide et applique ou non le mouvement de l'entitée
         Entrées:
-            -coordonnnées  actuelles du joueur
-            -direction vers laquelle le joueur veut se diriger
+            -coordonnnées  actuelles de l'entitée
+            -direction vers laquelle l'entitée veut se diriger
         Sorties:
-            -un booléen qui indique si le joueur est passé ou pas
-            -les nouvelles coordonnées du joueur
+            -un booléen qui indique si l'entitée est passé ou pas
+            -les nouvelles coordonnées de l'entitée
         """
         newcoord = coord
         case = self.matrice_cases[coord[0]][coord[1]]
@@ -165,6 +169,7 @@ class Labyrinthe:
             la hauteur de la vue
         Sortie:
             la vue correspondante
+            les coordonnées de la vue dans le labyrinthe
         """
 
         vue=[]
@@ -184,7 +189,7 @@ class Labyrinthe:
                 else:
                     colonne.append(self.matrice_cases[x][y])
             vue.append(colonne)
-        return vue  
+        return vue,[min_x,min_y] 
 
     def resolution(self,arrivee_x,arrivee_y):
         """
