@@ -11,40 +11,56 @@ MUR_VIDE=0
 MUR_PLEIN=1
 
 class Resolveur:
-    def __init__(self,matrice_cases,largeur,hauteur,arrivee_x,arrivee_y,modeResolution="Profondeur"):
+    def __init__(self,matrice_cases,largeur,hauteur,arrivee_x,arrivee_y,depart_x=0,depart_y=0,modeResolution="Profondeur"):
         self.largeur = largeur
         self.hauteur = hauteur
         self.arrivee_x = arrivee_x
         self.arrivee_y = arrivee_y
+
+        self.depart_x=depart_x
+        self.depart_y=depart_y
+        
         self.matrice_cases = matrice_cases
         self.modeResolution = modeResolution
         self.cases_visitees=[[False for i in range(hauteur)]for i in range(largeur)]
-    def resolution(self):
+    def resolution(self,get_chemin=False,afficher_chemin=True,afficher_seed=False):
         """
         Fonction qui résoud la matrice
-        Entrée:Rien
-        Sorties: un booléen indiquant si la matrice est résolvable
+        Entrée:
+            Un booléen indiquant si l'on veut le chemin ou pas
+            Un booléen indiquant si l'on veut afficher le chemin ou pas
+            Un booléen indiquant si l'on veut afficher la seed ou non
+        Sorties:
+            un booléen indiquant si la matrice est résolvable
+            OU
+            le chemin par lequel l'algo est arrivé
         """
         if self.modeResolution=="Profondeur":
-            return self.resolution_en_profondeur()
+            return self.resolution_en_profondeur(get_chemin,afficher_chemin,afficher_seed)
         else:
             print("mode de résolution choisi incompatible")
-    def resolution_en_profondeur(self):
+    def resolution_en_profondeur(self,get_chemin,afficher_chemin,afficher_seed):
         """
         Fonction qui résoud la matrice avec la méthode du parcours en profondeur
-        Entrées:Rien
-        Sorties:un booléen indiquant si la matrice est résolvable
+        Entrées:
+            Un booléen indiquant si l'on veut le chemin ou pas 
+            Un booléen indiquant si l'on veut afficher le chemin ou pas
+            Un booléen indiquant si l'on veut afficher la seed ou non
+        Sorties:
+            un booléen indiquant si la matrice est résolvable
+            OU
+            le chemin par lequel l'algo est arrivé
         """
         rdm=random.randrange (1,10**18,1)
 
         #on définit la seed de notre solutionneur
         #cela permet d'avoir le meme résultat
-
-        print("seed",rdm)
+        if afficher_seed:
+            print("seed",rdm)
         #random.seed(498965033146031877)
         random.seed(rdm)
-        depart_x=0
-        depart_y=0
+        depart_x=self.depart_x
+        depart_y=self.depart_y
 
         #position dans la matrice
         position_x=depart_x
@@ -64,7 +80,7 @@ class Resolveur:
 
                 #sinon revenir en arrière
 
-        solution=False
+        solution=None
         
         while len(stack)!=0 and (position_x!=self.arrivee_x or position_y!=self.arrivee_y):
             #on récupère les coords de la ou l'on es cad la dernière case dans le stack
@@ -72,7 +88,8 @@ class Resolveur:
             position_y=stack[len(stack)-1][1]
             #print(position_x,position_y)
             #on récupère les positions utilisables
-            self.matrice_cases[position_x][position_y].set_Couleur((0,0,255))
+            if afficher_chemin:
+                self.matrice_cases[position_x][position_y].set_Couleur((0,0,255))
             
             voisins,positions_voisins = self.voisins_case(position_x,position_y)
             
@@ -93,14 +110,20 @@ class Resolveur:
                 #on ajoute les nouvelles coordonnées de la case au stack
                 stack.append([new_x,new_y])
             else:
-                self.matrice_cases[position_x][position_y].set_Couleur((255,0,0))
+                if afficher_chemin:
+                    self.matrice_cases[position_x][position_y].set_Couleur((255,0,0))
                 #on revient encore en arrière
                 stack.pop()
                 #print(position_x,position_y,len(stack))
 
         if position_x==self.arrivee_x and position_y == self.arrivee_y:
-            solution=True
-
+            if get_chemin:
+                solution=stack
+            else:
+                solution=True
+        else:
+            solution=False
+        
         return solution
         
     def nouvelles_coords(self,x,y,direction):

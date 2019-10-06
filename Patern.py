@@ -39,7 +39,7 @@ class Patern:
         et casse les murs qui empêches la navigation dans le labyrinthe
         """
         bords=[]
-        bords=self.case_bord(x,y)
+        bords=self.case_bord(x,y,len(matrice_lab),len(matrice_lab[0]))
         
         if len(bords)!=0:
             for i in range(0,len(bords)):
@@ -73,13 +73,14 @@ class Patern:
             
         elif direction==GAUCHE and x>0:
             mur=matrice_lab[x-1][y].get_mur_droit()
-
+            
         return mur
     
-    def case_bord(self,x,y):
+    def case_bord(self,x,y,largeur_lab,hauteur_lab):
         """
         Fonction qui prend en entrée:
             les coordonnées de la case
+            la largeur et la hauteur du labyrinthe
             et qui renvoie la/les direction/s des bords
         """
         bords=[]
@@ -88,13 +89,13 @@ class Patern:
         if x!=0:
             bords+=[GAUCHE]
             
-        if x!=(self.largeur-1):
+        if x!=(largeur_lab-1):
             bords+=[DROITE]
 
         if y!=0:
             bords+=[HAUT]
             
-        if y!=(self.hauteur-1):
+        if y!=(hauteur_lab-1):
             bords+=[BAS]
 
         return bords

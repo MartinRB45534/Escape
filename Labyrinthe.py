@@ -41,15 +41,19 @@ class Labyrinthe:
         if self.patterns != None:
             self.patterns[0].generation()
             self.matrice_cases=self.patterns[0].copie((self.largeur-self.patterns[0].largeur)//2,(self.hauteur-self.patterns[0].hauteur)//2,self.matrice_cases)
+
+            self.patterns[1].generation()
+            self.matrice_cases=self.patterns[1].copie(0,0,self.matrice_cases)
+
     def peut_passer(self,coord,sens):
         """
-        Fonction qui valide et applique ou non le mouvement du joueur
+        Fonction qui valide et applique ou non le mouvement de l'entitée
         Entrées:
-            -coordonnnées  actuelles du joueur
-            -direction vers laquelle le joueur veut se diriger
+            -coordonnnées  actuelles de l'entitée
+            -direction vers laquelle l'entitée veut se diriger
         Sorties:
-            -un booléen qui indique si le joueur est passé ou pas
-            -les nouvelles coordonnées du joueur
+            -un booléen qui indique si l'entitée est passé ou pas
+            -les nouvelles coordonnées de l'entitée
         """
         newcoord = coord
         case = self.matrice_cases[coord[0]][coord[1]]
@@ -82,17 +86,20 @@ class Labyrinthe:
         
         return win
     
-    def dessine_toi(self,screen,position_joueur,position_screen,largeur,hauteur,mode_affichage):
+    def dessine_toi(self,screen,position_joueur,entitees,position_screen,largeur,hauteur,mode_affichage,LARGEUR_CASE,LARGEUR_MUR):
 
         """
         Fonction qui dessine le labyrinthe sur l'écran
         Entrées:
             l'écran, la surface sur laquelle on dessine(objet pygame)
             la position du joueur
+            les entitées autres que le joueur a dessiner (ex les monstres)
             la position que l'on prend pour 0,0 sur l'écran (ex: un décalage de 20px sur la droite se traduit par (x+20,y))
             la largeur en cases
             la hauteur en cases
             le mode d'affichage
+            la largueur des cases
+            la largeur des murs
         Sorties:
             Rien
         """
@@ -114,18 +121,23 @@ class Labyrinthe:
             for x in range(min_x,max_x):
                 for y in range(min_y,max_y):
 
-                    if (x<0 or x>=self.largeur) or (y<0 or y>=self.hauteur):
-                        pass
-                    else:
+                    if not((x<0 or x>=self.largeur) or (y<0 or y>=self.hauteur)):
                         self.matrice_cases[x][y].dessine_toi(screen,position_x,position_y)
                     position_y+=self.tailleCase+self.tailleMur
                 position_y=position_screen[1]
                 position_x+=self.tailleCase+self.tailleMur
+            
+            for entitee in entitees:
+                x=entitee.getPosition()[0]
+                y=entitee.getPosition()[1]
+                if (x>=min_x and x<=max_x) and (y>=min_y and y<=max_y):
+                    entitee.dessine_toi(screen,[largeur//2+x-joueur_x,hauteur//2+y-joueur_y],LARGEUR_CASE,LARGEUR_MUR,position_screen)
 
         elif mode_affichage == parcours_en_profondeur :
             pass
         elif mode_affichage == aveugle :
             self.dessine_case(screen,position_joueur,position_screen,largeur,hauteur,position_joueur)
+
             lumiere_droite = Lumiere(position_joueur,DROITE,self)
             lumiere_gauche = Lumiere(position_joueur,GAUCHE,self)
             lumiere_haut = Lumiere(position_joueur,HAUT,self)
@@ -147,7 +159,38 @@ class Labyrinthe:
         y = position[1]
 
         self.matrice_cases[x][y].dessine_toi(screen,(x-joueur_x+largeur//2)*(self.tailleCase+self.tailleMur),(y-joueur_y+hauteur//2)*(self.tailleCase+self.tailleMur))
-           
+
+    def construire_vue(self,position_monstre,largeur,hauteur):
+        """
+        Fonction qui construit la vue disponible à un monstre
+        Entrées:
+            la position du monstre
+            la largeur de la vue
+            la hauteur de la vue
+        Sortie:
+            la vue correspondante
+            les coordonnées de la vue dans le labyrinthe
+        """
+
+        vue=[]
+
+        min_x=position_monstre[0]-largeur//2
+        max_x=position_monstre[0]+largeur-largeur//2
+
+        min_y=position_monstre[1]-hauteur//2
+        max_y=position_monstre[1]+hauteur-hauteur//2
+
+
+        for x in range(min_x,max_x):
+            colonne=[]
+            for y in range(min_y,max_y):
+                if (x<0 or x>=self.largeur) or (y<0 or y>=self.hauteur):
+                    colonne.append(None)
+                else:
+                    colonne.append(self.matrice_cases[x][y])
+            vue.append(colonne)
+        return vue,[min_x,min_y] 
+
     def resolution(self,arrivee_x,arrivee_y):
         """
         Fonction qui résoud le labyrinthe
