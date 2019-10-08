@@ -191,7 +191,7 @@ class Labyrinthe:
             vue.append(colonne)
         return vue,[min_x,min_y] 
 
-    def resolution(self,arrivee_x,arrivee_y):
+    def resolution(self,arrivee_x,arrivee_y,depart_x=0,depart_y=0,mode="Profondeur"):
         """
         Fonction qui résoud le labyrinthe
         Entrées:
@@ -199,8 +199,7 @@ class Labyrinthe:
         Sorties:
             Rien
         """
-        resol = Resolveur(self.matrice_cases,self.largeur,self.hauteur,arrivee_x,arrivee_y)
+        resol = Resolveur(self.matrice_cases,self.largeur,self.hauteur,arrivee_x,arrivee_y,depart_x,depart_y,mode)
         solution=resol.resolution()
-        
 #lab = Labyrinthe(5,5)
 #lab.dessine_toi(0,0,0)

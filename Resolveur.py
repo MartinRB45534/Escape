@@ -37,6 +37,8 @@ class Resolveur:
         """
         if self.modeResolution=="Profondeur":
             return self.resolution_en_profondeur(get_chemin,afficher_chemin,afficher_seed)
+        elif self.modeResolution=="Largeur":
+            return self.resolution_en_largeur(get_chemin,afficher_chemin)
         else:
             print("mode de résolution choisi incompatible")
     def resolution_en_profondeur(self,get_chemin,afficher_chemin,afficher_seed):
@@ -124,6 +126,80 @@ class Resolveur:
         else:
             solution=False
         
+        return solution
+
+    def resolution_en_largeur(self,get_chemin,afficher_chemin):
+        """
+        Fonction qui résoud la matrice avec la méthode du parcours en largeur
+        Entrées:
+            Un booléen indiquant si l'on veut le chemin ou pas 
+            Un booléen indiquant si l'on veut afficher le chemin ou pas
+            Un booléen indiquant si l'on veut afficher la seed ou non
+        Sorties:
+            un booléen indiquant si la matrice est résolvable
+            OU
+            le chemin par lequel l'algo est arrivé
+        """
+        depart_x=self.depart_x
+        depart_y=self.depart_y
+
+        #position dans la matrice
+        position_x=depart_x
+        position_y=depart_y
+        #la queue est une liste de positions
+        queue=[[depart_x,depart_y]]
+        chemins=[Chemin([],0,depart_x,depart_y)]
+
+        chemin_courant=chemins[0]
+
+        self.cases_visitees[depart_x][depart_y]=True
+
+        #schéma boucle
+        #traiter elt
+            #enlever position dans queue
+            #ajouter les positions explorables à la queue
+        #obtenir elt suivant
+            #récuperer premier elt queue
+        
+        while len(queue)!=0 and (position_x!=self.arrivee_x or position_y!=self.arrivee_y):
+            #enlever position dans queue
+            queue.pop(0)
+            chemins.pop(0)
+            
+            #on affiche le chemin
+            if afficher_chemin:
+                self.matrice_cases[position_x][position_y].set_Couleur((255,0,0))
+            #trouver les positions explorables
+            voisins,positions_voisins=self.voisins_case(position_x,position_y)
+
+            directions_explorables = self.directions_utilisables(voisins,positions_voisins,position_x,position_y)
+
+            for direction in directions_explorables:
+                queue.append(positions_voisins[direction])
+                new_chemin=Chemin(chemin_courant.getChemin(),chemin_courant.getPoids(),positions_voisins[direction][0],positions_voisins[direction][1])
+                chemins.append(new_chemin)
+                
+                #on marque la case comme visitée
+                self.cases_visitees[positions_voisins[direction][0]][positions_voisins[direction][1]]=True
+
+            #obtenir elt suivant
+            position_x=queue[0][0]
+            position_y=queue[0][1]
+
+
+            chemin_courant=chemins[0]
+            
+        if afficher_chemin:
+            for i in chemins[0].getChemin():
+                self.matrice_cases[i[0]][i[1]].set_Couleur((0,0,255))
+
+        solution=None
+        if get_chemin:
+            solution=chemins[0].getChemin()
+        else:
+            solution= (position_x==self.arrivee_x and position_y==self.arrivee_y)
+
+            
         return solution
         
     def nouvelles_coords(self,x,y,direction):
@@ -219,3 +295,20 @@ class Resolveur:
             positions_voisins.append(None)
             
         return voisins,positions_voisins
+    
+class Chemin():
+    def __init__(self,chemin_precedent,poids_precedent,position_x,position_y):
+        #print("init chemin precedent: "+str(chemin_precedent)+" position suivante "+str(position_x)+" "+str(position_y))
+        #if chemin_precedent!=None:
+        self.chemin=chemin_precedent
+        self.chemin.append([position_x,position_y])
+        #print(self.chemin)
+        #else:
+        #    self.chemin=[[position_x,position_y]]
+        self.poids=poids_precedent+1
+
+    def getChemin(self):
+        new_chemin=[self.chemin[i]for i in range(0,len(self.chemin))]
+        return new_chemin
+    def getPoids(self):
+        return self.poids
