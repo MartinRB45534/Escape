@@ -17,8 +17,8 @@ class Niveau:
             self.LARGEUR_MUR = 5
 
         if difficulté == BEGINNER :
-            self.CASES_X = 20
-            self.CASES_Y = 20
+            self.CASES_X = 5
+            self.CASES_Y = 5
             res = True
             self.salles=[Patern(10,10,self.LARGEUR_CASE,self.LARGEUR_MUR)]
         elif difficulté == EASY :
@@ -52,13 +52,13 @@ class Niveau:
         self.poids=[2,6,2,1]
         
         #salle pour exp monstres
-        self.salles.append(Patern(20,20,self.LARGEUR_CASE,self.LARGEUR_MUR))
+        self.salles.append(Patern(10,10,self.LARGEUR_CASE,self.LARGEUR_MUR))
 
         self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.CASES_X-1,self.CASES_Y-1,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
         self.lab.generation()
 
         if res :
-            self.lab.resolution(self.CASES_X-1,self.CASES_Y-1)
+            self.lab.resolution(self.CASES_X-1,self.CASES_Y-1,0,0,"Largeur")
 
         pygame.display.set_caption("test")
         self.screen = pygame.display.set_mode((FENETRE_X,FENETRE_Y),pygame.RESIZABLE)
@@ -66,7 +66,7 @@ class Niveau:
 
         #entitées
         self.joueur=Joueur()
-        self.monstres=[Slime([10,10],10,10)]
+        self.monstres=[Slime([10,10],20,20)]
 
         #texte de fin
         font = pygame.font.SysFont(None, 72)
@@ -87,7 +87,7 @@ class Niveau:
         cooldown_joueur=3
         compteur_j=0
         #nb de frames que les monstres doivent attendre entre chaque action
-        cooldown_monstres=3
+        cooldown_monstres=20
         compteur_m=0
         
         while run:

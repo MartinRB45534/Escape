@@ -1,5 +1,6 @@
 from Cases import *
 from Resolveur import *
+from math import sqrt
 
 class Monstre:
     def __init__(self,position,largeur_vue,hauteur_vue,couleur=(255,0,0)):
@@ -94,12 +95,12 @@ class Monstre:
         """
         direction_voulue=None
         #on initialise le résolveut pour qu'il nous trouve la prochaine position
-        resolveur= Resolveur(vue,len(vue),len(vue[0]),position_joueur[0]-position_lab[0],position_joueur[1]-position_lab[1],self.position[0]-position_lab[0],self.position[1]-position_lab[1])
+        resolveur= Resolveur(vue,len(vue),len(vue[0]),position_joueur[0]-position_lab[0],position_joueur[1]-position_lab[1],self.position[0]-position_lab[0],self.position[1]-position_lab[1],"Largeur")
         chemin=resolveur.resolution(True,False)
         #on renvoie la prochaine action a effectuer
         position_suivante=None
         if chemin!=None:
-            if len(chemin)>1:
+            if len(chemin)>2:
                 position_suivante=chemin[1]
                 direction_voulue=self.direction_suivante(chemin[0],chemin[1])
                 
@@ -115,11 +116,11 @@ class Monstre:
         """
         direction=None
 
-        if position_actuelle[1]<position_voulue[1]:
+        if position_actuelle[1]>position_voulue[1]:
             direction=HAUT
         elif position_actuelle[0]<position_voulue[0]:
             direction=DROITE
-        elif position_actuelle[1]>position_voulue[1]:
+        elif position_actuelle[1]<position_voulue[1]:
             direction=BAS
         else:
             direction=GAUCHE
