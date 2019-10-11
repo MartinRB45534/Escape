@@ -52,7 +52,7 @@ class Niveau:
         self.poids=[2,6,2,1]
         
         #salle pour exp monstres
-        self.salles.append(Patern(10,10,self.LARGEUR_CASE,self.LARGEUR_MUR))
+        self.salles.append(Patern(10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[8,9]]))
 
         self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.CASES_X-1,self.CASES_Y-1,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
         self.lab.generation()

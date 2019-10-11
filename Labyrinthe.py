@@ -33,17 +33,10 @@ class Labyrinthe:
         """
         #ini du tableau de case (4 murs pleins)
         #génération en profondeur via l'objet generateur
-        gene=Generateur.Generateur(self.matrice_cases,self.largeur,self.hauteur,self.poids)
+        gene=Generateur.Generateur(self.matrice_cases,self.largeur,self.hauteur,self.poids,self.patterns)
         self.matrice_cases=gene.generation()
         #on change la couleur de la case d'arrivée
         self.matrice_cases[self.arrivee_x][self.arrivee_y].set_Couleur((30,144,255))
-
-        if self.patterns != None:
-            self.patterns[0].generation()
-            self.matrice_cases=self.patterns[0].copie((self.largeur-self.patterns[0].largeur)//2,(self.hauteur-self.patterns[0].hauteur)//2,self.matrice_cases)
-
-            self.patterns[1].generation()
-            self.matrice_cases=self.patterns[1].copie(0,0,self.matrice_cases)
 
     def peut_passer(self,coord,sens):
         """
