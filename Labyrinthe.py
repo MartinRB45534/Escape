@@ -13,7 +13,7 @@ class Labyrinthe:
         self.arrivee_x=arrivee_x
         self.arrivee_y=arrivee_y
         
-        self.matrice_cases = [[Case(tailleCase,tailleMur) for i in range(hauteur)]for i in range(largeur)]
+        self.matrice_cases = [[Case(tailleCase,tailleMur) for i in range(hauteur)]for j in range(largeur)]
 
         #paramètre graphiques
         self.tailleCase = tailleCase
@@ -25,7 +25,7 @@ class Labyrinthe:
 
     def generation(self):
         """
-        Fonction qui génère la mztrice du labyrinthe
+        Fonction qui génère la mzarice du labyrinthe
             Entrées:
                 rien
             Sorties:
@@ -199,7 +199,13 @@ class Labyrinthe:
         Sorties:
             Rien
         """
+        print(mode)
         resol = Resolveur(self.matrice_cases,self.largeur,self.hauteur,arrivee_x,arrivee_y,depart_x,depart_y,mode)
         solution=resol.resolution()
+
+    def getMatrice_cases(self):
+        new_mat = [[self.matrice_cases[j][i] for i in range(self.hauteur)]for j in range(self.largeur)]
+        return new_mat
+
 #lab = Labyrinthe(5,5)
 #lab.dessine_toi(0,0,0)

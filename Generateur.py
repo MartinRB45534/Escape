@@ -37,9 +37,8 @@ class Generateur:
 
         #on définit la seed de notre générateur
         #cela permet d'avoir le meme résultat
-
+        rdm=851353618387733257
         print("seed",rdm)
-        #random.seed(498965033146031877)
         random.seed(rdm)
         depart_x=0
         depart_y=0
