@@ -127,7 +127,36 @@ class Labyrinthe:
                     entitee.dessine_toi(screen,[largeur//2+x-joueur_x,hauteur//2+y-joueur_y],LARGEUR_CASE,LARGEUR_MUR,position_screen)
 
         elif mode_affichage == parcours_en_profondeur :
-            pass
+            joueur_x = position_joueur[0]
+            joueur_y = position_joueur[1]
+
+            position_x=position_screen[0]
+            position_y=position_screen[1]
+
+            min_x=joueur_x-largeur//2
+            max_x=joueur_x+largeur-largeur//2
+
+            min_y=joueur_y-hauteur//2
+            max_y=joueur_y+hauteur-hauteur//2
+
+            vue, position_vue = self.construire_vue(position_joueur,largeur,hauteur)
+            
+            for x in range(min_x,max_x):
+                for y in range(min_y,max_y):
+                    if not((x<0 or x>=self.largeur) or (y<0 or y>=self.hauteur)):
+                        resolveur = Resolveur(vue,largeur,hauteur,x-position_vue[0],y-position_vue[1],joueur_x-position_vue[0],joueur_y-position_vue[1],"Profondeur")
+                        if resolveur.resolution(False,False,False) :
+                            self.matrice_cases[x][y].dessine_toi(screen,position_x,position_y)
+                    position_y+=self.tailleCase+self.tailleMur
+                position_y=position_screen[1]
+                position_x+=self.tailleCase+self.tailleMur
+            
+            for entitee in entitees:
+                x=entitee.getPosition()[0]
+                y=entitee.getPosition()[1]
+                if (x>=min_x and x<=max_x) and (y>=min_y and y<=max_y):
+                    entitee.dessine_toi(screen,[largeur//2+x-joueur_x,hauteur//2+y-joueur_y],LARGEUR_CASE,LARGEUR_MUR,position_screen)
+                    
         elif mode_affichage == aveugle :
             self.dessine_case(screen,position_joueur,position_screen,largeur,hauteur,position_joueur)
 
@@ -153,11 +182,11 @@ class Labyrinthe:
 
         self.matrice_cases[x][y].dessine_toi(screen,(x-joueur_x+largeur//2)*(self.tailleCase+self.tailleMur),(y-joueur_y+hauteur//2)*(self.tailleCase+self.tailleMur))
 
-    def construire_vue(self,position_monstre,largeur,hauteur):
+    def construire_vue(self,position,largeur,hauteur):
         """
-        Fonction qui construit la vue disponible à un monstre
+        Fonction qui construit la vue disponible à un monstre ou au joueur
         Entrées:
-            la position du monstre
+            la position du monstre ou du joueur
             la largeur de la vue
             la hauteur de la vue
         Sortie:
@@ -167,11 +196,11 @@ class Labyrinthe:
 
         vue=[]
 
-        min_x=position_monstre[0]-largeur//2
-        max_x=position_monstre[0]+largeur-largeur//2
+        min_x=position[0]-largeur//2
+        max_x=position[0]+largeur-largeur//2
 
-        min_y=position_monstre[1]-hauteur//2
-        max_y=position_monstre[1]+hauteur-hauteur//2
+        min_y=position[1]-hauteur//2
+        max_y=position[1]+hauteur-hauteur//2
 
 
         for x in range(min_x,max_x):
