@@ -52,7 +52,7 @@ class Niveau:
         self.poids=[2,6,2,1]
         
         #salle pour exp monstres
-        self.salles.append(Patern(10,10,self.LARGEUR_CASE,self.LARGEUR_MUR))
+        self.salles.append(Patern(10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[8,9]]))
 
         self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.CASES_X-1,self.CASES_Y-1,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
         self.lab.generation()
@@ -66,7 +66,7 @@ class Niveau:
 
         #entitées
         self.joueur=Joueur()
-        self.monstres=[Slime([10,10],20,20)]
+        self.monstres=[Runner([59,59],20,20,self.CASES_X-1,self.CASES_Y-1)]
 
         #texte de fin
         font = pygame.font.SysFont(None, 72)
@@ -126,13 +126,15 @@ class Niveau:
                 compteur_m=cooldown_monstres
 
                 for monstre in self.monstres:
-                    vue_monstre,position_vue=self.lab.construire_vue(monstre.getPosition(),monstre.getLargeurVue(),monstre.getHauteurVue())
-                    direction_voulue=monstre.decision(position_vue,vue_monstre,self.joueur.get_position())
+                    #vue_monstre,position_vue=self.lab.construire_vue(monstre.getPosition(),monstre.getLargeurVue(),monstre.getHauteurVue())
+                    #direction_voulue=monstre.decision(position_vue,vue_monstre,self.joueur.get_position())
+                    direction_voulue=monstre.decision([0,0],self.lab.getMatrice_cases(),self.joueur.get_position())
                     if direction_voulue!=None:
                         passe,newcoord=self.lab.peut_passer(monstre.getPosition(),direction_voulue)
                         if passe:
                             monstre.setPosition(newcoord)
                             move_m=True
+                            
             else:
                 compteur_m-=1
 

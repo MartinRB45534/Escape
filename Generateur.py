@@ -11,22 +11,47 @@ MUR_VIDE=0
 MUR_PLEIN=1
 
 class Generateur:
-    def __init__(self,matrice_cases,largeur,hauteur,poids,modeGeneration="Profondeur"):
+    def __init__(self,matrice_cases,largeur,hauteur,poids,paterns,modeGeneration="Profondeur"):
         self.largeur = largeur
         self.hauteur = hauteur
         self.matrice_cases = matrice_cases
         self.modeGeneration = modeGeneration
         self.poids=poids
+        self.paterns=paterns
     def generation(self):
         """
         Fonction qui permet de générer une matrice conformément au paramètres
+        et au paterns
         Entrées:Rien
         Sorties:une matrice de cases générée
         """
+        matrice=None
+        
+        self.pre_gene_paterns()
         if self.modeGeneration=="Profondeur":
-            return self.generation_en_profondeur()
+            matrice= self.generation_en_profondeur()
         else:
             print("mode de génération choisi incompatible")
+
+        self.post_gene_paterns()
+        
+        return matrice
+    def pre_gene_paterns(self):
+        """
+        Fonction qui pregenere les paterns
+        """
+        if self.paterns != None:
+            self.paterns[0].pre_generation((self.largeur-self.paterns[0].largeur)//2,(self.hauteur-self.paterns[0].hauteur)//2,self.matrice_cases)
+            self.paterns[1].pre_generation(0,0,self.matrice_cases)
+
+    def post_gene_paterns(self):
+        """
+        Fonction qui postgenere les paterns
+        """
+        if self.paterns != None:
+            self.paterns[0].post_generation((self.largeur-self.paterns[0].largeur)//2,(self.hauteur-self.paterns[0].hauteur)//2,self.matrice_cases)
+            self.paterns[1].post_generation(0,0,self.matrice_cases)
+
     def generation_en_profondeur(self):
         """
         Fonction qui génère la matrice avec la méthode du parcours en profondeur
@@ -37,12 +62,11 @@ class Generateur:
 
         #on définit la seed de notre générateur
         #cela permet d'avoir le meme résultat
-
-        print("seed",rdm)
-        #random.seed(498965033146031877)
+        rdm=851353618387733257
+        print("seed ",rdm)
         random.seed(rdm)
-        depart_x=0
-        depart_y=0
+        depart_x=1
+        depart_y=1
 
         #position dans la matrice
         position_x=depart_x

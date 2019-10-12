@@ -150,6 +150,7 @@ class Resolveur:
         queue=[[depart_x,depart_y]]
         chemins=[Chemin([],0,depart_x,depart_y)]
 
+
         chemin_courant=chemins[0]
 
         self.cases_visitees[depart_x][depart_y]=True
@@ -162,6 +163,7 @@ class Resolveur:
             #récuperer premier elt queue
         
         while len(queue)!=0 and (position_x!=self.arrivee_x or position_y!=self.arrivee_y):
+
             #enlever position dans queue
             queue.pop(0)
             chemins.pop(0)
@@ -181,20 +183,21 @@ class Resolveur:
                 
                 #on marque la case comme visitée
                 self.cases_visitees[positions_voisins[direction][0]][positions_voisins[direction][1]]=True
-
+            
+            chemin_courant=chemins[0]
             #obtenir elt suivant
             position_x=queue[0][0]
             position_y=queue[0][1]
 
+            #print(chemin_courant.getChemin())
 
-            chemin_courant=chemins[0]
-            
-        if afficher_chemin:
+                
+        if afficher_chemin and len(chemins)>0:
             for i in chemins[0].getChemin():
                 self.matrice_cases[i[0]][i[1]].set_Couleur((0,0,255))
 
         solution=None
-        if get_chemin:
+        if get_chemin and (position_x==self.arrivee_x and position_y==self.arrivee_y):
             solution=chemins[0].getChemin()
         else:
             solution= (position_x==self.arrivee_x and position_y==self.arrivee_y)

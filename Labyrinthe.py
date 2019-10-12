@@ -13,7 +13,7 @@ class Labyrinthe:
         self.arrivee_x=arrivee_x
         self.arrivee_y=arrivee_y
         
-        self.matrice_cases = [[Case(tailleCase,tailleMur) for i in range(hauteur)]for i in range(largeur)]
+        self.matrice_cases = [[Case(tailleCase,tailleMur) for i in range(hauteur)]for j in range(largeur)]
 
         #paramètre graphiques
         self.tailleCase = tailleCase
@@ -25,7 +25,7 @@ class Labyrinthe:
 
     def generation(self):
         """
-        Fonction qui génère la mztrice du labyrinthe
+        Fonction qui génère la mzarice du labyrinthe
             Entrées:
                 rien
             Sorties:
@@ -33,17 +33,10 @@ class Labyrinthe:
         """
         #ini du tableau de case (4 murs pleins)
         #génération en profondeur via l'objet generateur
-        gene=Generateur.Generateur(self.matrice_cases,self.largeur,self.hauteur,self.poids)
+        gene=Generateur.Generateur(self.matrice_cases,self.largeur,self.hauteur,self.poids,self.patterns)
         self.matrice_cases=gene.generation()
         #on change la couleur de la case d'arrivée
         self.matrice_cases[self.arrivee_x][self.arrivee_y].set_Couleur((30,144,255))
-
-        if self.patterns != None:
-            self.patterns[0].generation()
-            self.matrice_cases=self.patterns[0].copie((self.largeur-self.patterns[0].largeur)//2,(self.hauteur-self.patterns[0].hauteur)//2,self.matrice_cases)
-
-            self.patterns[1].generation()
-            self.matrice_cases=self.patterns[1].copie(0,0,self.matrice_cases)
 
     def peut_passer(self,coord,sens):
         """
@@ -199,7 +192,13 @@ class Labyrinthe:
         Sorties:
             Rien
         """
+        print(mode)
         resol = Resolveur(self.matrice_cases,self.largeur,self.hauteur,arrivee_x,arrivee_y,depart_x,depart_y,mode)
         solution=resol.resolution()
+
+    def getMatrice_cases(self):
+        new_mat = [[self.matrice_cases[j][i] for i in range(self.hauteur)]for j in range(self.largeur)]
+        return new_mat
+
 #lab = Labyrinthe(5,5)
 #lab.dessine_toi(0,0,0)
