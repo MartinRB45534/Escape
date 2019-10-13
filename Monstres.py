@@ -236,7 +236,10 @@ class Fatti(Monstre):
         return None
 
 class Runner(Monstre):
-    def __init__(self,position,largeur_vue,hauteur_vue,fin_lab_x,fin_lab_y,couleur=(255,0,0)):
+    def __init__(self,lab,largeur_lab,hauteur_lab,position,largeur_vue,hauteur_vue,fin_lab_x,fin_lab_y,couleur=(255,0,0)):
+        self.lab = lab
+        self.largeur_lab = hauteur_lab
+        self.hauteur_lab = largeur_lab
         self.position=position
         self.largeur_vue=largeur_vue
         self.hauteur_vue=hauteur_vue
@@ -254,16 +257,15 @@ class Runner(Monstre):
         direction_voulue=None
         
         #on initialise le résolveut pour qu'il nous trouve la prochaine position
-        resolveur= Resolveur(vue,len(vue),len(vue[0]),self.fin_lab[0],self.fin_lab[1],self.position[0]-position_lab[0],self.position[1]-position_lab[1],"Largeur")
-        chemin=resolveur.resolution(True,False)
+        resolveur= Resolveur(self.lab.matrice_cases,self.largeur_lab,self.hauteur_lab,self.fin_lab[0],self.fin_lab[1],self.position[0],self.position[1],"Profondeur")
+        chemin=resolveur.resolution(True,False,False,False)
         
         #on renvoie la prochaine action a effectuer
         position_suivante=None
+
         if chemin!=None and chemin!=False:
-            if len(chemin)>2:
+            if len(chemin)>5:
                 position_suivante=chemin[1]
                 direction_voulue=self.direction_suivante(chemin[0],chemin[1])
         
         return direction_voulue
-    
-        
