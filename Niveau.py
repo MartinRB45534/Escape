@@ -69,7 +69,7 @@ class Niveau:
 
         #entitées
         self.joueur=Joueur()
-        self.monstres=[Runner(self.lab,self.CASES_X,self.CASES_Y,[15,15],20,20,self.CASES_X-1,self.CASES_Y-1)]
+        self.monstres=[Horde(self.lab,[15,15],5,5,self)]
 
         #texte de fin
         font = pygame.font.SysFont(None, 72)
@@ -130,7 +130,7 @@ class Niveau:
 
                 for monstre in self.monstres:
                     vue_monstre,position_vue=self.lab.construire_vue(monstre.getPosition(),monstre.getLargeurVue(),monstre.getHauteurVue())
-                    direction_voulue=monstre.decision(position_vue,vue_monstre,self.joueur.get_position())
+                    direction_voulue=monstre.decision(position_vue,vue_monstre,self.joueur.get_position(),position_vue)
                     #direction_voulue=monstre.decision([0,0],self.lab.getMatrice_cases(),self.joueur.get_position())
                     if direction_voulue!=None:
                         passe,newcoord=self.lab.peut_passer(monstre.getPosition(),direction_voulue)
