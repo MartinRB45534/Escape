@@ -23,31 +23,33 @@ class Resolveur:
         self.matrice_cases = matrice_cases
         self.modeResolution = modeResolution
         self.cases_visitees=[[False for i in range(hauteur)]for i in range(largeur)]
-    def resolution(self,get_chemin=False,afficher_chemin=True,afficher_seed=False):
+    def resolution(self,get_chemin=False,afficher_chemin=True,afficher_seed=False,getMatrice=False):
         """
         Fonction qui résoud la matrice
         Entrée:
             Un booléen indiquant si l'on veut le chemin ou pas
             Un booléen indiquant si l'on veut afficher le chemin ou pas
             Un booléen indiquant si l'on veut afficher la seed ou non
+            Un booléen indiquant si l'on veut obtenir la matrice indiquant ou est passé le résolveur
         Sorties:
             un booléen indiquant si la matrice est résolvable
             OU
             le chemin par lequel l'algo est arrivé
         """
         if self.modeResolution=="Profondeur":
-            return self.resolution_en_profondeur(get_chemin,afficher_chemin,afficher_seed)
+            return self.resolution_en_profondeur(get_chemin,afficher_chemin,afficher_seed,getMatrice)
         elif self.modeResolution=="Largeur":
             return self.resolution_en_largeur(get_chemin,afficher_chemin)
         else:
             print("mode de résolution choisi incompatible")
-    def resolution_en_profondeur(self,get_chemin,afficher_chemin,afficher_seed):
+    def resolution_en_profondeur(self,get_chemin,afficher_chemin,afficher_seed,getMatrice):
         """
         Fonction qui résoud la matrice avec la méthode du parcours en profondeur
         Entrées:
             Un booléen indiquant si l'on veut le chemin ou pas 
             Un booléen indiquant si l'on veut afficher le chemin ou pas
             Un booléen indiquant si l'on veut afficher la seed ou non
+            Un booléen indiquant si l'on veut obtenir la matrice indiquant ou est passé le résolveur
         Sorties:
             un booléen indiquant si la matrice est résolvable
             OU
@@ -118,7 +120,9 @@ class Resolveur:
                 stack.pop()
                 #print(position_x,position_y,len(stack))
 
-        if position_x==self.arrivee_x and position_y == self.arrivee_y:
+        if getMatrice:
+            solution=self.cases_visitees
+        elif position_x==self.arrivee_x and position_y == self.arrivee_y:
             if get_chemin:
                 solution=stack
             else:
