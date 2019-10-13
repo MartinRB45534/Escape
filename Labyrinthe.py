@@ -140,12 +140,15 @@ class Labyrinthe:
             max_y=joueur_y+hauteur-hauteur//2
 
             vue, position_vue = self.construire_vue(position_joueur,largeur,hauteur)
+            #on ne veut pas que le résolveur trouve de solution on veut juste qu'il explore la matrice
+            resolveur = Resolveur(vue,largeur,hauteur,-1,-1,joueur_x-position_vue[0],joueur_y-position_vue[1],"Profondeur")
+
+            mat_exploree=resolveur.resolution(False,False,False,True)
             
             for x in range(min_x,max_x):
                 for y in range(min_y,max_y):
                     if not((x<0 or x>=self.largeur) or (y<0 or y>=self.hauteur)):
-                        resolveur = Resolveur(vue,largeur,hauteur,x-position_vue[0],y-position_vue[1],joueur_x-position_vue[0],joueur_y-position_vue[1],"Profondeur")
-                        if resolveur.resolution(False,False,False) :
+                        if mat_exploree[x-position_vue[0]][y-position_vue[1]]:
                             self.matrice_cases[x][y].dessine_toi(screen,position_x,position_y)
                     position_y+=self.tailleCase+self.tailleMur
                 position_y=position_screen[1]
