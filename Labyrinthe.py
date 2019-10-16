@@ -248,7 +248,139 @@ class Labyrinthe:
                 else:
                     colonne.append(self.matrice_cases[x][y])
             vue.append(colonne)
-        return vue,[min_x,min_y] 
+        return vue,[min_x,min_y]
+    def casser_X_murs(self,proba=None,nbMurs=None):
+        """
+        Fonction qui doit casser des murs sur la matrice
+        on peut déterminer le nombre de murs avec un probabilité (proba*nb murs au total)
+        ou selon un nombre défini en entrée
+        """
+        if proba!=None or nbMurs!=None:
+            if proba!=None:
+                nb_murs_a_casser=self.nb_murs_total()*proba
+            elif nbMurs!=None:
+                nb_murs_a_casser=nbMurs
+            self.casser_murs(nb_murs_a_casser)
+        else:
+            print("mauvaise utilisation de la fonction on ne sait que faire")
+
+    def casser_murs(self,nb_murs_a_casser):
+        """
+        Fonction qui casse un certains nombre de murs aléatoirement
+        Entrées:
+            -le nombre de murs a casser
+        """
+        nb_murs_casser=0
+
+        while nb_murs_casser<=nb_murs_a_casser:
+            coord_case=[random.randrange(0,len(self.matrice_cases)),random.randrange(0,len(self.matrice_cases[0]))]
+
+            if self.casser_mur_random_case(coord_case):
+                nb_murs_casser+=1
+
+        
+    def casser_mur_random_case(self,position_case):
+        """
+        Fonction qui prend en entrée la position de la case dont on veut casser un mur
+        et qui renvoie un booléen indiquant si l'on as pu casser un mur
+        """
+        casser = False
+
+        murs=self.directions_utilisables(self.voisins_case(position_case[0],position_case[1]))
+        if len(murs)!=0:
+            mur_casser=random.randrange(0,len(murs))
+            self.casser_mur(murs[mur_casser],position_case[0],position_case[1])
+            casser = True
+        #print(position_case,len(murs),len(self.voisins_case(position_case[0],position_case[1])))
+        return casser
+
+    def voisins_case(self,x,y):
+        """
+        Fonction qui prend en entrée:
+            les coordonnées de la case
+        et qui renvoie les voisins de la case
+        """
+        voisins=[]
+        #on élimine les voisins aux extrémitées
+        if y-1>=0:
+            voisins.append(self.matrice_cases[x][y-1])
+        else:
+            voisins.append(None)
+        if x+1<self.largeur:
+            voisins.append(self.matrice_cases[x+1][y])
+        else:
+            voisins.append(None)
+        if y+1<self.hauteur:
+            voisins.append(self.matrice_cases[x][y+1])
+        else:
+            voisins.append(None)
+        if x-1>=0:
+            voisins.append(self.matrice_cases[x-1][y])
+        else:
+            voisins.append(None)
+        return voisins
+    
+    def directions_utilisables(self,voisins):
+        """
+        Fonction qui prend en entrées:
+            les voisins de la case
+        et qui renvoie les directions ou les murs sont utilisables
+        """
+        murs_utilisables=[]
+
+        for direction in range(0,len(voisins)):
+            if voisins[direction]!=None:
+                direction_inverse=self.direction_opposee(direction)
+                if voisins[direction].mur_plein(direction_inverse):
+                    murs_utilisables.append(direction)
+        return murs_utilisables
+    def direction_opposee(self,direction):
+        """
+        Fonction qui renvoie la direction opposée à celle en entrée
+        """
+        direction_opposee=0
+        
+        if direction == HAUT:
+            direction_opposee=BAS
+        elif direction == DROITE:
+            direction_opposee=GAUCHE
+        elif direction == BAS:
+            direction_opposee=HAUT
+        elif direction == GAUCHE:
+            direction_opposee=DROITE
+
+        return direction_opposee
+    
+    def casser_mur(self,direction,position_x,position_y):
+        """
+        Fonction qui casse un mur spécifique
+        Entrées:
+            la direction du mur
+            la position de la case
+        Sorites:Rien
+        """
+        #on casse les murs de la case et de la case d'en face
+        self.matrice_cases[position_x][position_y].casser_mur(direction)
+        
+        if direction==HAUT:
+            self.matrice_cases[position_x][position_y-1].casser_mur(BAS)
+        elif direction==DROITE:
+            self.matrice_cases[position_x+1][position_y].casser_mur(GAUCHE)
+        elif direction==BAS:
+            self.matrice_cases[position_x][position_y+1].casser_mur(HAUT)
+        elif direction==GAUCHE:
+            self.matrice_cases[position_x-1][position_y].casser_mur(DROITE)
+
+    def nb_murs_total(self):
+        """
+        Fonction qui renvoie le nombres de murs pleins contenus dans le labyrinthe
+        """
+        murs_pleins=0
+        for x in range(0,self.largeur):
+            for y in range(0,self.hauteur):
+                murs_pleins+=self.matrice_cases[x][y].nb_murs_pleins()
+
+        return murs_pleins
 
     def resolution(self,arrivee_x,arrivee_y,depart_x=0,depart_y=0,mode="Profondeur"):
         """

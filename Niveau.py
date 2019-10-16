@@ -78,6 +78,7 @@ class Niveau:
 
         self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.CASES_X-1,self.CASES_Y-1,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
         self.lab.generation()
+        self.lab.casser_X_murs(0.1)
 
         if res :
             self.lab.resolution(self.CASES_X-1,self.CASES_Y-1,0,0,"Largeur")
