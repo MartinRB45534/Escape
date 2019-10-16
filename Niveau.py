@@ -69,8 +69,8 @@ class Niveau:
 
         #entitées
         self.joueur=Joueur()
-        self.monstres=[Horde(self.lab,[15,15],5,5,self)]
-
+        self.monstres=[Slime([15,15],5,5,(255,121,121))]
+        
         #texte de fin
         font = pygame.font.SysFont(None, 72)
         self.textWin = font.render("Vous avez gagné!! \(^o^)/", True, (128, 0, 0))
@@ -108,36 +108,17 @@ class Niveau:
                     self.zoom_largeur = event.w//(self.LARGEUR_CASE + self.LARGEUR_MUR)
                     self.zoom_hauteur = event.h//(self.LARGEUR_CASE + self.LARGEUR_MUR)
                     self.redraw()
-
+            #partie gérant le joueur
             if compteur_j==0:
                 compteur_j=cooldown_joueur
-                #on récupère toutes les touches préssés sous forme de booléens
-                keys=pygame.key.get_pressed()
-
-                if keys[pygame.K_UP]:
-                    move_j = self.joueur.va_vers_le_haut(self.lab)
-                elif keys[pygame.K_DOWN]:
-                    move_j = self.joueur.va_vers_le_bas(self.lab)
-                elif keys[pygame.K_RIGHT]:
-                    move_j = self.joueur.va_vers_la_droite(self.lab)
-                if keys[pygame.K_LEFT]:
-                    move_j = self.joueur.va_vers_la_gauche(self.lab)
+                move_j=self.action_joueur()
             else:
                 compteur_j-=1
-
+            #partie gérant les monstres
             if compteur_m==0:
                 compteur_m=cooldown_monstres
 
-                for monstre in self.monstres:
-                    vue_monstre,position_vue=self.lab.construire_vue(monstre.getPosition(),monstre.getLargeurVue(),monstre.getHauteurVue())
-                    direction_voulue=monstre.decision(position_vue,vue_monstre,self.joueur.get_position(),position_vue)
-                    #direction_voulue=monstre.decision([0,0],self.lab.getMatrice_cases(),self.joueur.get_position())
-                    if direction_voulue!=None:
-                        passe,newcoord=self.lab.peut_passer(monstre.getPosition(),direction_voulue)
-                        if passe:
-                            monstre.setPosition(newcoord)
-                            move_m=True
-                            
+                move_m=self.actions_monstres() 
             else:
                 compteur_m-=1
 
@@ -146,11 +127,54 @@ class Niveau:
                 self.redraw()
 
             if self.lab.as_gagner(self.joueur.get_position()):
-                self.screen.fill((255,255,255))
-                self.screen.blit(self.textWin,(0,0))
+                self.ecran_fin_niveau()
                 run=False
             pygame.display.update()
         pygame.quit()
+
+    def actions_monstres(self):
+        """
+        Fonction qui exécute la partie du code ou les monstres agissent
+        et qui renvoie un booléen indiquant si les monstres on agis ou non
+        """
+        move_m=False
+        if self.monstres!=None:
+            for monstre in self.monstres:
+                vue_monstre,position_vue=self.lab.construire_vue(monstre.getPosition(),monstre.getLargeurVue(),monstre.getHauteurVue())
+                direction_voulue=monstre.decision(position_vue,vue_monstre,self.joueur.get_position(),position_vue)
+                #direction_voulue=monstre.decision([0,0],self.lab.getMatrice_cases(),self.joueur.get_position())
+                if direction_voulue!=None:
+                    passe,newcoord=self.lab.peut_passer(monstre.getPosition(),direction_voulue)
+                    if passe:
+                        monstre.setPosition(newcoord)
+                        move_m=True
+        return move_m
+    
+    def action_joueur(self):
+        """
+        Fonction qui exécute la partie du code ou le jpueur agis
+        et qui renvoie un booléen indiquant si le joueur a agis ou non
+        """
+        move_j=False
+         #on récupère toutes les touches préssés sous forme de
+        keys=pygame.key.get_pressed()
+        
+        if keys[pygame.K_UP]:
+            move_j = self.joueur.va_vers_le_haut(self.lab)
+        elif keys[pygame.K_DOWN]:
+            move_j = self.joueur.va_vers_le_bas(self.lab)
+        elif keys[pygame.K_RIGHT]:
+            move_j = self.joueur.va_vers_la_droite(self.lab)
+        if keys[pygame.K_LEFT]:
+            move_j = self.joueur.va_vers_la_gauche(self.lab)
+
+        return move_j
+    def ecran_fin_niveau(self):
+        """
+        Fonction qui as pour but d'afficher l'écran de fin de niveau (stats etc)
+        """
+        self.screen.fill((255,255,255))
+        self.screen.blit(self.textWin,(0,0))
     def redraw(self):
         """
         Fonction qui redessine l'entièreté de l'écran

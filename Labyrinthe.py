@@ -119,12 +119,12 @@ class Labyrinthe:
                     position_y+=self.tailleCase+self.tailleMur
                 position_y=position_screen[1]
                 position_x+=self.tailleCase+self.tailleMur
-            
-            for entitee in entitees:
-                x=entitee.getPosition()[0]
-                y=entitee.getPosition()[1]
-                if (x>=min_x and x<=max_x) and (y>=min_y and y<=max_y):
-                    entitee.dessine_toi(screen,[largeur//2+x-joueur_x,hauteur//2+y-joueur_y],LARGEUR_CASE,LARGEUR_MUR,position_screen)
+            if entitees!=None:
+                for entitee in entitees:
+                    x=entitee.getPosition()[0]
+                    y=entitee.getPosition()[1]
+                    if (x>=min_x and x<=max_x) and (y>=min_y and y<=max_y):
+                        entitee.dessine_toi(screen,[largeur//2+x-joueur_x,hauteur//2+y-joueur_y],LARGEUR_CASE,LARGEUR_MUR,position_screen)
 
         elif mode_affichage == parcours_en_profondeur :
             joueur_x = position_joueur[0]
@@ -153,12 +153,12 @@ class Labyrinthe:
                     position_y+=self.tailleCase+self.tailleMur
                 position_y=position_screen[1]
                 position_x+=self.tailleCase+self.tailleMur
-            
-            for entitee in entitees:
-                x=entitee.getPosition()[0]
-                y=entitee.getPosition()[1]
-                if (x>=min_x and x<=max_x) and (y>=min_y and y<=max_y):
-                    entitee.dessine_toi(screen,[largeur//2+x-joueur_x,hauteur//2+y-joueur_y],LARGEUR_CASE,LARGEUR_MUR,position_screen)
+            if entitees!=None:
+                for entitee in entitees:
+                    x=entitee.getPosition()[0]
+                    y=entitee.getPosition()[1]
+                    if (x>=min_x and x<=max_x) and (y>=min_y and y<=max_y):
+                        entitee.dessine_toi(screen,[largeur//2+x-joueur_x,hauteur//2+y-joueur_y],LARGEUR_CASE,LARGEUR_MUR,position_screen)
                     
         elif mode_affichage == aveugle :
             self.dessine_case(screen,position_joueur,position_screen,largeur,hauteur,position_joueur)
