@@ -166,8 +166,7 @@ class Monstre:
         #on élimine les voisins aux extrémitées
         x = position_x - position_vue[0]
         y = position_y - position_vue[1]
-        print(vue)
-        print(x,y)
+        
         if y-1>=0:
             voisins.append(vue[x][y-1])
             positions_voisins.append([x,y-1])
