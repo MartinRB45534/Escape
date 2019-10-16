@@ -159,6 +159,40 @@ class Labyrinthe:
                     y=entitee.getPosition()[1]
                     if (x>=min_x and x<=max_x) and (y>=min_y and y<=max_y):
                         entitee.dessine_toi(screen,[largeur//2+x-joueur_x,hauteur//2+y-joueur_y],LARGEUR_CASE,LARGEUR_MUR,position_screen)
+
+        elif mode_affichage == distance_max :
+            joueur_x = position_joueur[0]
+            joueur_y = position_joueur[1]
+
+            position_x=position_screen[0]
+            position_y=position_screen[1]
+
+            min_x=joueur_x-largeur//2
+            max_x=joueur_x+largeur-largeur//2
+
+            min_y=joueur_y-hauteur//2
+            max_y=joueur_y+hauteur-hauteur//2
+
+            vue, position_vue = self.construire_vue(position_joueur,largeur,hauteur)
+            #on ne veut pas que le résolveur trouve de solution on veut juste qu'il explore la matrice
+            resolveur = Resolveur(vue,largeur,hauteur,-1,-1,joueur_x-position_vue[0],joueur_y-position_vue[1])
+
+            mat_exploree=resolveur.resolution_en_profondeur_distance_limitée(False,False,False,True,11)
+            
+            for x in range(min_x,max_x):
+                for y in range(min_y,max_y):
+                    if not((x<0 or x>=self.largeur) or (y<0 or y>=self.hauteur)):
+                        if mat_exploree[x-position_vue[0]][y-position_vue[1]]:
+                            self.matrice_cases[x][y].dessine_toi(screen,position_x,position_y)
+                    position_y+=self.tailleCase+self.tailleMur
+                position_y=position_screen[1]
+                position_x+=self.tailleCase+self.tailleMur
+            if entitees!=None:
+                for entitee in entitees:
+                    x=entitee.getPosition()[0]
+                    y=entitee.getPosition()[1]
+                    if (x>=min_x and x<=max_x) and (y>=min_y and y<=max_y):
+                        entitee.dessine_toi(screen,[largeur//2+x-joueur_x,hauteur//2+y-joueur_y],LARGEUR_CASE,LARGEUR_MUR,position_screen)
                     
         elif mode_affichage == aveugle :
             self.dessine_case(screen,position_joueur,position_screen,largeur,hauteur,position_joueur)

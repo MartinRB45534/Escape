@@ -24,6 +24,8 @@ global parcours_en_profondeur
 parcours_en_profondeur = 1
 global aveugle
 aveugle = 2
+global distance_max
+distance_max = 3
 
 global BEGINNER
 BEGINNER = 0
