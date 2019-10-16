@@ -4,6 +4,10 @@ from Joueur import *
 from Constantes import *
 from Patern import *
 from Monstres import *
+from Potion import *
+from Inventaire import *
+from Stats import *
+from Planning import *
 
 class Niveau:
     def __init__(self,difficulté,mode_affichage):
@@ -49,6 +53,18 @@ class Niveau:
             self.CASES_Y = 1000
             res = False
             self.salles=[Patern(1,1,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+
+        #variables correspondants a la largeur et la hauteur du zoom
+        self.zoom_largeur=11
+        self.zoom_hauteur=11
+
+        self.force_base = 10
+        self.hp_base = 100
+        
+        self.planning = Planning()
+
+        stats_joueur = Stats(self.force_base,self.zoom_hauteur,self.zoom_largeur,self.hp_base)
+        inventaire_joueur = Inventaire(stats_joueur,self.planning)
         
         pygame.init()
         #poids permettants de manipuler l'aléatoire
@@ -68,16 +84,12 @@ class Niveau:
         self.screen.fill((0,0,0))
 
         #entitées
-        self.joueur=Joueur()
+        self.joueur=Joueur(stats_joueur,inventaire_joueur)
         self.monstres=[Horde(self.lab,[15,15],5,5,self)]
 
         #texte de fin
         font = pygame.font.SysFont(None, 72)
         self.textWin = font.render("Vous avez gagné!! \(^o^)/", True, (128, 0, 0))
-
-        #variables correspondants a la largeur et la hauteur du zoom
-        self.zoom_largeur=11
-        self.zoom_hauteur=11
 
         self.position_screen=(0,0)
 
@@ -96,6 +108,7 @@ class Niveau:
         while run:
             #on cadence à 60 frames/sec
             clock.tick(60)
+            self.planning.agit(clock.get_time())
 
             move_j = False
             move_m=False
@@ -104,10 +117,10 @@ class Niveau:
                 if event.type==pygame.QUIT:
                     run=False
 
-                if event.type == pygame.VIDEORESIZE:
-                    self.zoom_largeur = event.w//(self.LARGEUR_CASE + self.LARGEUR_MUR)
-                    self.zoom_hauteur = event.h//(self.LARGEUR_CASE + self.LARGEUR_MUR)
-                    self.redraw()
+                #if event.type == pygame.VIDEORESIZE:
+                #    self.zoom_largeur = event.w//(self.LARGEUR_CASE + self.LARGEUR_MUR)
+                #    self.zoom_hauteur = event.h//(self.LARGEUR_CASE + self.LARGEUR_MUR)
+                #    self.redraw()
 
             if compteur_j==0:
                 compteur_j=cooldown_joueur
@@ -156,6 +169,6 @@ class Niveau:
         Fonction qui redessine l'entièreté de l'écran
         """
         self.screen.fill((0,0,0))
-        self.lab.dessine_toi(self.screen,self.joueur.position,self.monstres,self.position_screen,self.zoom_largeur,self.zoom_hauteur,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR)
-        self.joueur.dessine_toi(self.screen,(self.zoom_largeur//2,self.zoom_hauteur//2),self.LARGEUR_CASE,self.LARGEUR_MUR,self.position_screen)
+        self.lab.dessine_toi(self.screen,self.joueur.position,self.monstres,self.position_screen,self.joueur.stats.largeur_vue,self.joueur.stats.hauteur_vue,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR)
+        self.joueur.dessine_toi(self.screen,(self.joueur.stats.largeur_vue//2,self.joueur.stats.hauteur_vue//2),self.LARGEUR_CASE,self.LARGEUR_MUR,self.position_screen)
 
