@@ -87,7 +87,7 @@ class Resolveur:
         solution=None
         
         while len(stack)!=0 and (position_x!=self.arrivee_x or position_y!=self.arrivee_y):
-            #on récupère les coords de la ou l'on es cad la dernière case dans le stack
+            #on récupère les coords de la ou l'on est cad la dernière case dans le stack
             position_x=stack[len(stack)-1][0]
             position_y=stack[len(stack)-1][1]
             #print(position_x,position_y)
@@ -302,7 +302,97 @@ class Resolveur:
             positions_voisins.append(None)
             
         return voisins,positions_voisins
-    
+
+    def resolution_en_profondeur_distance_limitée(self,get_chemin,afficher_chemin,afficher_seed,getMatrice,distance_max):
+        """
+        Fonction qui résoud la matrice avec la méthode du parcours en profondeur en restant à une certaine distance du joueur
+        Entrées:
+            Un booléen indiquant si l'on veut le chemin ou pas 
+            Un booléen indiquant si l'on veut afficher le chemin ou pas
+            Un booléen indiquant si l'on veut afficher la seed ou non
+            Un booléen indiquant si l'on veut obtenir la matrice indiquant ou est passé le résolveur
+        Sorties:
+            un booléen indiquant si la matrice est résolvable
+            OU
+            le chemin par lequel l'algo est arrivé
+        """
+        rdm=random.randrange (1,10**18,1)
+
+        #on définit la seed de notre solutionneur
+        #cela permet d'avoir le meme résultat
+        if afficher_seed:
+            print("seed",rdm)
+        #random.seed(498965033146031877)
+        random.seed(rdm)
+        depart_x=self.depart_x
+        depart_y=self.depart_y
+
+        #position dans la matrice
+        position_x=depart_x
+        position_y=depart_y
+        #le stack est une liste de positions
+        stack=[[depart_x,depart_y]]
+
+        self.cases_visitees[depart_x][depart_y]=True
+        
+        #schéma boucle
+        #récupérer les positions utilisables
+                #si on as des positions utilisables
+
+                #trouver la nouvelle position
+                #aller à la nouvelle position
+                #marquer la position
+
+                #sinon revenir en arrière
+
+        solution=None
+        
+        while len(stack)!=0 and (position_x!=self.arrivee_x or position_y!=self.arrivee_y):
+            #on récupère les coords de la ou l'on est cad la dernière case dans le stack
+            position_x=stack[len(stack)-1][0]
+            position_y=stack[len(stack)-1][1]
+            #print(position_x,position_y)
+            #on récupère les positions utilisables
+            if afficher_chemin:
+                self.matrice_cases[position_x][position_y].set_Couleur((0,0,255))
+            
+            voisins,positions_voisins = self.voisins_case(position_x,position_y)
+            
+            directions_explorables = self.directions_utilisables(voisins,positions_voisins,position_x,position_y)
+
+            if len(directions_explorables)>0 and len(stack) < distance_max-1:
+                
+                #randrange est exclusif
+                num_direction=random.randrange(0,len(directions_explorables))
+                
+                #direction ou l'on va
+                direction=directions_explorables[num_direction]
+
+                new_x,new_y = self.nouvelles_coords(position_x,position_y,direction)
+
+                self.cases_visitees[new_x][new_y]=True
+                
+                #on ajoute les nouvelles coordonnées de la case au stack
+                stack.append([new_x,new_y])
+            else:
+                if afficher_chemin:
+                    self.matrice_cases[position_x][position_y].set_Couleur((255,0,0))
+                #on revient encore en arrière
+                stack.pop()
+                #print(position_x,position_y,len(stack))
+
+        if getMatrice:
+            solution=self.cases_visitees
+        elif position_x==self.arrivee_x and position_y == self.arrivee_y:
+            if get_chemin:
+                solution=stack
+            else:
+                solution=True
+        else:
+            solution=False
+        
+        return solution
+
 class Chemin():
     def __init__(self,chemin_precedent,poids_precedent,position_x,position_y):
         #print("init chemin precedent: "+str(chemin_precedent)+" position suivante "+str(position_x)+" "+str(position_y))

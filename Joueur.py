@@ -10,8 +10,10 @@ class Joueur:
     #    self.inventaire = niveau.donne_inventaire(difficulté)
     #    self.position = niveau.donne_position(difficulté)
 
-    def __init__(self, position=(0,0)):
+    def __init__(self, stats, inventaire, position=(0,0)):
         self.position = position
+        self.stats = stats
+        self.inventaire = inventaire
 
 
     def va_vers_la_gauche(self, labyrinthe) -> bool:

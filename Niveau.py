@@ -22,6 +22,9 @@ class Niveau:
         elif self.mode_affichage == parcours_en_profondeur :
             self.LARGEUR_CASE = 20
             self.LARGEUR_MUR = 1
+        elif self.mode_affichage == distance_max :
+            self.LARGEUR_CASE = 20
+            self.LARGEUR_MUR = 1
 
         if difficulté == BEGINNER :
             self.CASES_X = 20
@@ -194,5 +197,5 @@ class Niveau:
         """
         self.screen.fill((0,0,0))
         self.lab.dessine_toi(self.screen,self.joueur.position,self.monstres,self.position_screen,self.joueur.stats.largeur_vue,self.joueur.stats.hauteur_vue,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR)
-        self.joueur.dessine_toi(self.screen,(self.zoom_largeur//2,self.zoom_hauteur//2),self.LARGEUR_CASE,self.LARGEUR_MUR,self.position_screen)
+        self.joueur.dessine_toi(self.screen,(self.joueur.stats.largeur_vue//2,self.joueur.stats.hauteur_vue//2),self.LARGEUR_CASE,self.LARGEUR_MUR,self.position_screen)
 
