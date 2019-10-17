@@ -305,12 +305,13 @@ class Resolveur:
 
     def resolution_en_profondeur_distance_limitée(self,get_chemin,afficher_chemin,afficher_seed,getMatrice,distance_max):
         """
-        Fonction qui résoud la matrice avec la méthode du parcours en profondeur en restant à une certaine distance du joueur
+        Fonction qui affiche la matrice avec la méthode du parcours en profondeur en restant à une certaine distance du joueur
         Entrées:
             Un booléen indiquant si l'on veut le chemin ou pas 
             Un booléen indiquant si l'on veut afficher le chemin ou pas
             Un booléen indiquant si l'on veut afficher la seed ou non
             Un booléen indiquant si l'on veut obtenir la matrice indiquant ou est passé le résolveur
+            la distance maximum d'affichage
         Sorties:
             un booléen indiquant si la matrice est résolvable
             OU
@@ -391,6 +392,76 @@ class Resolveur:
         else:
             solution=False
         
+        return solution
+    def resolution_en_largeur_distance_limitée(self,get_chemin,afficher_chemin,afficher_seed,getMatrice,distance_max):
+        """
+        Fonction qui affiche la matrice avec la méthode du parcours en largeur en restant à une certaine distance du joueur
+        Entrées:
+            Un booléen indiquant si l'on veut le chemin ou pas 
+            Un booléen indiquant si l'on veut afficher le chemin ou pas
+            Un booléen indiquant si l'on veut afficher la seed ou non
+            Un booléen indiquant si l'on veut obtenir la matrice indiquant ou est passé le résolveur
+            la distance maximum d'affichage
+        Sorties:
+            un booléen indiquant si la matrice est résolvable
+            OU
+            le chemin par lequel l'algo est arrivé
+        """
+        depart_x=self.depart_x
+        depart_y=self.depart_y
+
+        #position dans la matrice
+        position_x=depart_x
+        position_y=depart_y
+        #la queue est une liste de positions
+        queue=[[depart_x,depart_y]]
+        chemins=[Chemin([],0,depart_x,depart_y)]
+
+
+        chemin_courant=chemins[0]
+
+        self.cases_visitees[depart_x][depart_y]=True
+
+        while len(queue)!=0 and (position_x!=self.arrivee_x or position_y!=self.arrivee_y):
+            chemin_courant=chemins[0]
+            #obtenir elt suivant
+            position_x=queue[0][0]
+            position_y=queue[0][1]
+            #enlever position dans queue
+            queue.pop(0)
+            chemins.pop(0)
+            
+            #on affiche le chemin
+            if afficher_chemin:
+                self.matrice_cases[position_x][position_y].set_Couleur((255,0,0))
+            #trouver les positions explorables
+            voisins,positions_voisins=self.voisins_case(position_x,position_y)
+
+            directions_explorables = self.directions_utilisables(voisins,positions_voisins,position_x,position_y)
+
+            for direction in directions_explorables:
+                if chemin_courant.getPoids()<=distance_max:
+                    queue.append(positions_voisins[direction])
+                    new_chemin=Chemin(chemin_courant.getChemin(),chemin_courant.getPoids(),positions_voisins[direction][0],positions_voisins[direction][1])
+                    chemins.append(new_chemin)
+                    
+                    #on marque la case comme visitée
+                    self.cases_visitees[positions_voisins[direction][0]][positions_voisins[direction][1]]=True       
+            #print(chemin_courant.getChemin())
+
+        if afficher_chemin and len(chemins)>0:
+            for i in chemins[0].getChemin():
+                self.matrice_cases[i[0]][i[1]].set_Couleur((0,0,255))
+
+        solution=None
+        if getMatrice:
+            solution=self.cases_visitees
+        elif get_chemin and (position_x==self.arrivee_x and position_y==self.arrivee_y):
+            solution=chemins[0].getChemin()
+        else:
+            solution= (position_x==self.arrivee_x and position_y==self.arrivee_y)
+
+            
         return solution
 
 class Chemin():

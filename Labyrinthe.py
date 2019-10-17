@@ -119,12 +119,8 @@ class Labyrinthe:
                     position_y+=self.tailleCase+self.tailleMur
                 position_y=position_screen[1]
                 position_x+=self.tailleCase+self.tailleMur
-            if entitees!=None:
-                for entitee in entitees:
-                    x=entitee.getPosition()[0]
-                    y=entitee.getPosition()[1]
-                    if (x>=min_x and x<=max_x) and (y>=min_y and y<=max_y):
-                        entitee.dessine_toi(screen,[largeur//2+x-joueur_x,hauteur//2+y-joueur_y],LARGEUR_CASE,LARGEUR_MUR,position_screen)
+                
+            self.affichage_entitees(entitees,mat_exploree,position_vue,screen,largeur,hauteur,LARGEUR_CASE,LARGEUR_MUR,position_screen)
 
         elif mode_affichage == parcours_en_profondeur :
             joueur_x = position_joueur[0]
@@ -153,13 +149,8 @@ class Labyrinthe:
                     position_y+=self.tailleCase+self.tailleMur
                 position_y=position_screen[1]
                 position_x+=self.tailleCase+self.tailleMur
-            if entitees!=None:
-                for entitee in entitees:
-                    x=entitee.getPosition()[0]
-                    y=entitee.getPosition()[1]
-                    if (x>=min_x and x<=max_x) and (y>=min_y and y<=max_y):
-                        entitee.dessine_toi(screen,[largeur//2+x-joueur_x,hauteur//2+y-joueur_y],LARGEUR_CASE,LARGEUR_MUR,position_screen)
 
+            self.affichage_entitees(entitees,mat_exploree,position_vue,screen,largeur,hauteur,LARGEUR_CASE,LARGEUR_MUR,position_screen)
         elif mode_affichage == distance_max :
             joueur_x = position_joueur[0]
             joueur_y = position_joueur[1]
@@ -177,7 +168,7 @@ class Labyrinthe:
             #on ne veut pas que le résolveur trouve de solution on veut juste qu'il explore la matrice
             resolveur = Resolveur(vue,largeur,hauteur,-1,-1,joueur_x-position_vue[0],joueur_y-position_vue[1])
 
-            mat_exploree=resolveur.resolution_en_profondeur_distance_limitée(False,False,False,True,11)
+            mat_exploree=resolveur.resolution_en_largeur_distance_limitée(False,False,False,True,11)
             
             for x in range(min_x,max_x):
                 for y in range(min_y,max_y):
@@ -187,13 +178,8 @@ class Labyrinthe:
                     position_y+=self.tailleCase+self.tailleMur
                 position_y=position_screen[1]
                 position_x+=self.tailleCase+self.tailleMur
-            if entitees!=None:
-                for entitee in entitees:
-                    x=entitee.getPosition()[0]
-                    y=entitee.getPosition()[1]
-                    if (x>=min_x and x<=max_x) and (y>=min_y and y<=max_y):
-                        entitee.dessine_toi(screen,[largeur//2+x-joueur_x,hauteur//2+y-joueur_y],LARGEUR_CASE,LARGEUR_MUR,position_screen)
-                    
+        
+            self.affichage_entitees(entitees,mat_exploree,position_vue,screen,largeur,hauteur,LARGEUR_CASE,LARGEUR_MUR,position_screen)
         elif mode_affichage == aveugle :
             self.dessine_case(screen,position_joueur,position_screen,largeur,hauteur,position_joueur)
 
@@ -219,6 +205,28 @@ class Labyrinthe:
 
         self.matrice_cases[x][y].dessine_toi(screen,(x-joueur_x+largeur//2)*(self.tailleCase+self.tailleMur),(y-joueur_y+hauteur//2)*(self.tailleCase+self.tailleMur))
 
+    def affichage_entitees(self,entitees,mat_exploree,position_vue,screen,largeur,hauteur,LARGEUR_CASE,LARGEUR_MUR,position_screen):
+        """
+        Fonction qui affiche les entitées
+        Entrées:
+            les entitées a afficher
+            la matrice explorée
+            la position de la vue
+            l'écran sur lequel on dessine
+            la largueur des cases
+            la largeur des murs
+            la position de l'écran dans la fenetre
+        Sorties:
+            Rien
+        """
+        if entitees!=None:
+            for entitee in entitees:
+                x=entitee.getPosition()[0]-position_vue[0]
+                y=entitee.getPosition()[1]-position_vue[1]
+                
+                if not(x>len(mat_exploree)-1 or x<0 or y>len(mat_exploree[0])-1 or y<0):
+                    if mat_exploree[x][y]:
+                        entitee.dessine_toi(screen,[x,y],LARGEUR_CASE,LARGEUR_MUR,position_screen)
     def construire_vue(self,position,largeur,hauteur):
         """
         Fonction qui construit la vue disponible à un monstre ou au joueur
