@@ -120,6 +120,8 @@ class Resolveur:
                 stack.pop()
                 #print(position_x,position_y,len(stack))
 
+        solution=False
+        
         if getMatrice:
             solution=self.cases_visitees
         elif position_x==self.arrivee_x and position_y == self.arrivee_y:
@@ -127,8 +129,7 @@ class Resolveur:
                 solution=stack
             else:
                 solution=True
-        else:
-            solution=False
+
         
         return solution
 

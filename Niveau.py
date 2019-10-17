@@ -8,6 +8,7 @@ from Potion import *
 from Inventaire import *
 from Stats import *
 from Planning import *
+from Collisions import *
 
 class Niveau:
     def __init__(self,difficulté,mode_affichage):
@@ -88,8 +89,12 @@ class Niveau:
         self.screen.fill((0,0,0))
 
         #entitées
-        self.joueur=Joueur(stats_joueur,inventaire_joueur)
-        self.monstres=[Slime([15,15],5,5,(255,121,121))]
+        self.joueur=Joueur(stats_joueur,inventaire_joueur,100,5,2,self.zoom_largeur,self.zoom_hauteur)
+        self.monstres=[Slime([5,5],10,10,100,5,1,(255,121,121))]
+        self.entitees=[self.joueur,self.monstres[0]]
+
+        #objet qui traite les collisions
+        collision=Collision()
         
         #texte de fin
         font = pygame.font.SysFont(None, 72)
@@ -125,10 +130,11 @@ class Niveau:
                     self.zoom_largeur = event.w//(self.LARGEUR_CASE + self.LARGEUR_MUR)
                     self.zoom_hauteur = event.h//(self.LARGEUR_CASE + self.LARGEUR_MUR)
                     self.redraw()
-            #partie gérant le joueur
+            """#partie gérant le joueur
             if compteur_j==0:
                 compteur_j=cooldown_joueur
-                move_j=self.action_joueur()
+                self.action_joueur()
+                move_j=self.traitement_action(self.joueur)
             else:
                 compteur_j-=1
             #partie gérant les monstres
@@ -137,13 +143,18 @@ class Niveau:
 
                 move_m=self.actions_monstres() 
             else:
+                compteur_m-=1"""
+            if compteur_m==0:
+                compteur_m=cooldown_monstres
+                move_m=self.actions_entitees() 
+            else:
                 compteur_m-=1
 
             #si on détecte un mouvement on redessine l'écran
             if move_j or move_m:
                 self.redraw()
 
-            if self.lab.as_gagner(self.joueur.get_position()):
+            if self.lab.as_gagner(self.joueur.getPosition()):
                 self.ecran_fin_niveau()
                 run=False
             pygame.display.update()
@@ -158,7 +169,7 @@ class Niveau:
         if self.monstres!=None:
             for monstre in self.monstres:
                 vue_monstre,position_vue=self.lab.construire_vue(monstre.getPosition(),monstre.getLargeurVue(),monstre.getHauteurVue())
-                direction_voulue=monstre.decision(position_vue,vue_monstre,self.joueur.get_position(),position_vue)
+                direction_voulue=monstre.decision(position_vue,vue_monstre,self.joueur.get_position())
                 #direction_voulue=monstre.decision([0,0],self.lab.getMatrice_cases(),self.joueur.get_position())
                 if direction_voulue!=None:
                     passe,newcoord=self.lab.peut_passer(monstre.getPosition(),direction_voulue)
@@ -169,23 +180,92 @@ class Niveau:
     
     def action_joueur(self):
         """
-        Fonction qui exécute la partie du code ou le jpueur agis
-        et qui renvoie un booléen indiquant si le joueur a agis ou non
+        Fonction qui exécute la partie du code ou le jpueur demande à agir
+        et qui renvoie rien
         """
-        move_j=False
          #on récupère toutes les touches préssés sous forme de
         keys=pygame.key.get_pressed()
         
         if keys[pygame.K_UP]:
-            move_j = self.joueur.va_vers_le_haut(self.lab)
+            self.joueur.va_vers_le_haut()
         elif keys[pygame.K_DOWN]:
-            move_j = self.joueur.va_vers_le_bas(self.lab)
+            self.joueur.va_vers_le_bas()
         elif keys[pygame.K_RIGHT]:
-            move_j = self.joueur.va_vers_la_droite(self.lab)
+            self.joueur.va_vers_la_droite()
         if keys[pygame.K_LEFT]:
-            move_j = self.joueur.va_vers_la_gauche(self.lab)
+            self.joueur.va_vers_la_gauche()
+    def actions_entitees(self):
+        """
+        Fonction qui exécute les actions des entitées
+        renvoie un booléen indiquant si il y a besoin de redessiner l'écran
+        """
+        redessiner=False
+        for entitee in self.entitees:
+            entitee=self.actualiser_vue(entitee)
+            entitee=self.actualiser_donnee(entitee)
+            entitee.prochaine_action()
+            if redessiner:
+                self.traitement_action(entitee)
+            else:
+                redessiner=self.traitement_action(entitee)
+            #print(redessiner,type(entitee))
+        return redessiner
 
-        return move_j
+    def actualiser_vue(self,agissant):
+        """
+        Fonction qui actualise la vue d'un agissant
+        Entrée:
+            un agissant
+        Sortie:
+            un agissant avec sa vue actualiser
+        """
+        vue_agissant,position_vue=self.lab.construire_vue(agissant.getPosition(),agissant.getLargeurVue(),agissant.getHauteurVue())
+        agissant.actualiser_vue(vue_agissant,position_vue)
+
+        return agissant
+    def actualiser_donnee(self,agissant):
+        """
+        Fonction qui actualise les données des agissant en fonction de leur
+        type
+        Entrée:
+            un agissant
+        Sortie:
+            un agissant avec ces données actualisées
+        """
+        if type(agissant)==Slime:
+            #on donne la position du joueur au monstre
+            agissant.setPosition_joueur(self.joueur.getPosition())
+        elif type(agissant)==Joueur:
+            self.action_joueur()
+
+        return agissant
+    def traitement_action(self,agissant):
+        """
+        Fonction qui traite une action donnée d'un agissant
+        et qui renvoie un booléen indiquant si l'action à été exécutée
+        """
+        succes=False
+        
+        id_action,action=agissant.get_action()
+
+        #print(type(agissant),id_action,action)
+        
+        if id_action==BOUGER:
+            #print("veut bouger")
+            direction_voulue=action
+            if direction_voulue!=None:
+                passe,newcoord=self.lab.peut_passer(agissant.getPosition(),direction_voulue)
+                #print(passe)
+                if passe:
+                    succes=True
+                    #print(succes)
+                    agissant.setPosition(newcoord)
+        elif id_action==ATTAQUER:
+            succes,self.entitees=collision.tentative_attaque(agissant,self.entitees)
+        #print(succes)
+        return succes
+        
+        
     def ecran_fin_niveau(self):
         """
         Fonction qui as pour but d'afficher l'écran de fin de niveau (stats etc)

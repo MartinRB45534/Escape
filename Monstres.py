@@ -1,20 +1,33 @@
 from Cases import *
 from Resolveur import *
 from math import sqrt
+from Agissant import *
 
-class Monstre:
-    def __init__(self,position,largeur_vue,hauteur_vue,couleur=(255,0,0)):
+class Monstre(Agissant):
+    def __init__(self,position,largeur_vue,hauteur_vue,pv,degats,radius,couleur=(255,0,0)):
         self.position=position
         self.largeur_vue=largeur_vue
         self.hauteur_vue=hauteur_vue
+        self.pv=pv
+        self.degats=degats
+        self.radius=radius
         self.couleur=couleur
+        #prochaine action
+        self.next_action=None
+        #id de l'action que l'on veut faire
+        self.id_next=None
+        #paramètres de la vue
+        self.vue=None
+        self.position_vue=None
+        self.position_joueur=None
         
-    def en_vue(self,position_lab,vue,pos_cible):
+    def en_vue(self,pos_cible):
         """
         Fonction qui renvoie un booléen qui nous dit si le joueur est en visible par le monstre
-        Entrées:
+        Variables utilisées:
             la position de la vue dans le labyrinthe
             une matrices de cases correspondant à la vue du monstre
+        Entrées:
             la position du joueur dans le labrinthe
         Sorties:
             booléen indiquant si le joueur est visible
@@ -22,11 +35,11 @@ class Monstre:
         """
         visible=False
 
-        min_x=position_lab[0]
-        min_y=position_lab[1]
+        min_x=self.position_vue[0]
+        min_y=self.position_vue[1]
         
-        max_x=min_x+len(vue)
-        max_y=min_y+len(vue[0])
+        max_x=min_x+self.largeur_vue
+        max_y=min_y+self.hauteur_vue
 
         x=pos_cible[0]
         y=pos_cible[1]
@@ -36,44 +49,45 @@ class Monstre:
             
         return visible
     
-    def accessible(self,position_lab,vue,position_cible):
+    def accessible(self,position_cible):
         """
         Fonction qui renvoie un booléen qui nous dit si le joueur est en accessible par le monstre
-        Entrées:
+        Variables utilisées:
             la position de la vue dans le labyrinthe
             une matrices de cases correspondant à la vue du monstre
-            la position du joueur dans le labrinthe
+        Entrées
+            la position de la cible dans le labrinthe
         Sorties:
             booléen indiquant si la cible est accessible
         """
-        accessible=False
+        accesible=False
 
-        if self.en_vue(position_lab,vue,position_cible):
-            solution= Resolveur(vue,len(vue),len(vue[0]),position_cible[0]-position_lab[0],position_cible[1]-position_lab[1],self.position[0]-position_lab[0],self.position[1]-position_lab[1])
+        if self.en_vue(position_cible):
+            solution= Resolveur(self.vue,self.largeur_vue,self.hauteur_vue,position_cible[0]-self.position_vue[0],position_cible[1]-self.position_vue[1],self.position[0]-self.position_vue[0],self.position[1]-self.position_vue[1])
             accesible=solution.resolution(False,False)
 
-        return accessible
+        return accesible
 
-    def decision(self,position_lab,vue,position_joueur,position_vue):
+    def prochaine_action(self):
         """
-        Fonction qui choisis quel comportement le monstre va appliquer
-        Entrées:
+        Fonction qui définit la prochaine action
+        Variables utilisées:
             la position de la vue dans le labyrinthe
             une matrices de cases correspondant à la vue du monstre
             la position du joueur dans le labrinthe
-        Sorties:
-            La direction de la prochaine position voulue par le monstre
         """
         prochaine_position=[]
-
-        prochaine_direction=None
         
-        if self.accessible(position_lab,vue,position_joueur):
-            prochaine_direction=self.rush(position_lab,vue,position_joueur)
+        prochaine_direction=None
+        accesible=self.accessible(self.position_joueur)
+        if accesible:
+            prochaine_direction=self.rush()
         else:
-            prochaine_direction=self.cherche(vue,position_lab,position_vue)
+            prochaine_direction=self.cherche(self.vue,self.position_vue)
 
-        return prochaine_direction
+
+        self.id_next=BOUGER
+        self.next_action=prochaine_direction
     
     def cherche(self,vue,position_lab):
         """
@@ -86,10 +100,10 @@ class Monstre:
         """
         print("Objet non défini un monstre est un type pas une entitée!!")
 
-    def rush(self,position_lab,vue,position_joueur):
+    def rush(self):
         """
         Fonction qui définie le comportement lorsque le monstre a vue le joueur
-        Elle prend en entrée:
+        Elle utilise:
             la position de la vue dans le labyrinthe
             une matrices de cases correspondant à la vue du monstre
             la position du joueur dans le labrinthe
@@ -98,7 +112,7 @@ class Monstre:
         """
         direction_voulue=None
         #on initialise le résolveut pour qu'il nous trouve la prochaine position
-        resolveur= Resolveur(vue,len(vue),len(vue[0]),position_joueur[0]-position_lab[0],position_joueur[1]-position_lab[1],self.position[0]-position_lab[0],self.position[1]-position_lab[1],"Largeur")
+        resolveur= Resolveur(self.vue,self.largeur_vue,self.hauteur_vue,self.position_joueur[0]-self.position_vue[0],self.position_joueur[1]-self.position_vue[1],self.position[0]-self.position_vue[0],self.position[1]-self.position_vue[1],"Largeur")
         chemin=resolveur.resolution(True,False)
         
         #on renvoie la prochaine action a effectuer
@@ -201,20 +215,18 @@ class Monstre:
         pygame.draw.rect(screen, self.couleur,(decalage[0]*(LARGEUR_CASE+LARGEUR_MUR)+LARGEUR_MUR+position_screen[1],decalage[1]*(LARGEUR_CASE+LARGEUR_MUR)+LARGEUR_MUR+position_screen[1],LARGEUR_CASE-2*LARGEUR_MUR,LARGEUR_CASE-2*LARGEUR_MUR))
 
     
-    def setPosition(self,position):
-        self.position=position
-    def getPosition(self):
-        return self.position
     def setCouleur(self,couleur):
         self.couleur=couleur
     def getLargeurVue(self):
         return self.largeur_vue
     def getHauteurVue(self):
         return self.hauteur_vue
+    def setPosition_joueur(self,position_joueur):
+        self.position_joueur=position_joueur
 
 
 class Slime(Monstre):
-    def cherche(self,vue,position_lab,position_vue):
+    def cherche(self,vue,position_lab):
         """
         But: simuler le comportement du slime qui se déplace de manière aléatoire
         Elle prend en entrée:
@@ -223,7 +235,7 @@ class Slime(Monstre):
         Elle renvoie:
             la direction de la prochaine position voulue par le monstre
         """
-        directions=self.directions_utilisables(self.position[0],self.position[1],vue,position_vue)
+        directions=self.directions_utilisables(self.position[0],self.position[1],vue,position_lab)
         
         return directions[random.randrange(0,len(directions))]
 

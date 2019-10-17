@@ -238,7 +238,6 @@ class Labyrinthe:
             la vue correspondante
             les coordonnées de la vue dans le labyrinthe
         """
-
         vue=[]
 
         min_x=position[0]-largeur//2
