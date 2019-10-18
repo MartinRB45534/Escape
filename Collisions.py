@@ -1,3 +1,4 @@
+from Resolveur import *
 class Collision:
     def __init__(self):
         """Les entitees ne sont pas des attributs"""
@@ -16,20 +17,22 @@ class Collision:
 
         vue_attaquant=attaquant.getVue()
         position_vue=attaquant.getPosition_vue()
+        position_attaquant=attaquant.getPosition()
         
-        resol=Resolveur(vue_attaquant,len(vue_attaquant),len(vue_attaquant[0]),-1,-1,attaquant[0]-position_vue[0],attaquant[1]-position_vue[1])
+        resol=Resolveur(vue_attaquant,len(vue_attaquant),len(vue_attaquant[0]),-1,-1,position_attaquant[0]-position_vue[0],position_attaquant[1]-position_vue[1])
         #on récupère la matrice accesible par l'attaque
         mat_explorable=resol.resolution_en_largeur_distance_limitée(False,False,False,True,attaquant.radius)
         
         if entitees!=None:
             for entitee in entitees:
-                x=entitee.getPosition()[0]-position_vue[0]
-                y=entitee.getPosition()[1]-position_vue[1]
-                
-                if not(x>len(mat_explorable)-1 or x<0 or y>len(mat_explorable[0])-1 or y<0):
-                    if mat_explorable[x][y]:
-                        succes=True
-                        self.attaque(entitee,attaquant)
+                if entitee!=attaquant:
+                    x=entitee.getPosition()[0]-position_vue[0]
+                    y=entitee.getPosition()[1]-position_vue[1]
+                    
+                    if not(x>len(mat_explorable)-1 or x<0 or y>len(mat_explorable[0])-1 or y<0):
+                        if mat_explorable[x][y]:
+                            succes=True
+                            self.attaque(entitee,attaquant)
         return succes,entitees
             
     def attaque(self,victime,attaquant):

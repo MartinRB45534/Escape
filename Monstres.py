@@ -78,16 +78,14 @@ class Monstre(Agissant):
         """
         prochaine_position=[]
         
-        prochaine_direction=None
         accesible=self.accessible(self.position_joueur)
         if accesible:
-            prochaine_direction=self.rush()
+            self.id_next,self.next_action=self.rush()
         else:
-            prochaine_direction=self.cherche(self.vue,self.position_vue)
+            self.id_next=BOUGER
+            self.next_action=self.cherche(self.vue,self.position_vue)
 
 
-        self.id_next=BOUGER
-        self.next_action=prochaine_direction
     
     def cherche(self,vue,position_lab):
         """
@@ -108,9 +106,11 @@ class Monstre(Agissant):
             une matrices de cases correspondant à la vue du monstre
             la position du joueur dans le labrinthe
         Sorties:
-            la direction de la prochaine position voulue
+            la prochaine action voulue
+            
         """
         direction_voulue=None
+        prochaine_action=None
         #on initialise le résolveut pour qu'il nous trouve la prochaine position
         resolveur= Resolveur(self.vue,self.largeur_vue,self.hauteur_vue,self.position_joueur[0]-self.position_vue[0],self.position_joueur[1]-self.position_vue[1],self.position[0]-self.position_vue[0],self.position[1]-self.position_vue[1],"Largeur")
         chemin=resolveur.resolution(True,False)
@@ -119,10 +119,12 @@ class Monstre(Agissant):
         position_suivante=None
         if chemin!=None:
             if len(chemin)>2:
+                prochaine_action=BOUGER
                 position_suivante=chemin[1]
                 direction_voulue=self.direction_suivante(chemin[0],chemin[1])
-                
-        return direction_voulue
+            else:
+                prochaine_action=ATTAQUER
+        return prochaine_action,direction_voulue
 
     def direction_suivante(self,position_actuelle,position_voulue):
         """

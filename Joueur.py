@@ -53,6 +53,11 @@ class Joueur(Agissant):
 
         self.next_action=BAS
         self.id_next=BOUGER
+    def attaque(self):
+        """fonction qui demande d'attaquer"""
+
+        self.next_action=None
+        self.id_next=ATTAQUER
 
     def dépose_un_marqueur(self) -> bool:
         """fonction qui pose un marqueur sur la case si possible"""
