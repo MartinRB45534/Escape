@@ -38,8 +38,8 @@ class Monstre(Agissant):
         min_x=self.position_vue[0]
         min_y=self.position_vue[1]
         
-        max_x=min_x+self.largeur_vue
-        max_y=min_y+self.hauteur_vue
+        max_x=min_x+len(self.vue)
+        max_y=min_y+len(self.vue[0])
 
         x=pos_cible[0]
         y=pos_cible[1]
@@ -63,7 +63,7 @@ class Monstre(Agissant):
         accesible=False
 
         if self.en_vue(position_cible):
-            solution= Resolveur(self.vue,self.largeur_vue,self.hauteur_vue,position_cible[0]-self.position_vue[0],position_cible[1]-self.position_vue[1],self.position[0]-self.position_vue[0],self.position[1]-self.position_vue[1])
+            solution= Resolveur(self.vue,len(self.vue),len(self.vue[0]),position_cible[0]-self.position_vue[0],position_cible[1]-self.position_vue[1],self.position[0]-self.position_vue[0],self.position[1]-self.position_vue[1])
             accesible=solution.resolution(False,False)
 
         return accesible
@@ -112,7 +112,7 @@ class Monstre(Agissant):
         direction_voulue=None
         prochaine_action=None
         #on initialise le résolveut pour qu'il nous trouve la prochaine position
-        resolveur= Resolveur(self.vue,self.largeur_vue,self.hauteur_vue,self.position_joueur[0]-self.position_vue[0],self.position_joueur[1]-self.position_vue[1],self.position[0]-self.position_vue[0],self.position[1]-self.position_vue[1],"Largeur")
+        resolveur= Resolveur(self.vue,len(self.vue),len(self.vue[0]),self.position_joueur[0]-self.position_vue[0],self.position_joueur[1]-self.position_vue[1],self.position[0]-self.position_vue[0],self.position[1]-self.position_vue[1],"Largeur")
         chemin=resolveur.resolution(True,False)
         
         #on renvoie la prochaine action a effectuer
@@ -256,8 +256,8 @@ class Fatti(Monstre):
         return None
 
 class Runner(Monstre):
-    def __init__(self,lab,largeur_lab,hauteur_lab,position,largeur_vue,hauteur_vue,fin_lab_x,fin_lab_y,couleur=(255,0,0)):
-        self.lab = lab
+    def __init__(self,mat_lab,largeur_lab,hauteur_lab,position,largeur_vue,hauteur_vue,fin_lab_x,fin_lab_y,couleur=(255,0,0)):
+        self.mat_lab = mat_lab
         self.largeur_lab = hauteur_lab
         self.hauteur_lab = largeur_lab
         self.position=position
@@ -277,7 +277,7 @@ class Runner(Monstre):
         direction_voulue=None
         
         #on initialise le résolveut pour qu'il nous trouve la prochaine position
-        resolveur= Resolveur(self.lab.matrice_cases,self.largeur_lab,self.hauteur_lab,self.fin_lab[0],self.fin_lab[1],self.position[0],self.position[1],"Profondeur")
+        resolveur= Resolveur(self.mat_lab,self.largeur_lab,self.hauteur_lab,self.fin_lab[0],self.fin_lab[1],self.position[0],self.position[1],"Profondeur")
         chemin=resolveur.resolution(True,False,False,False)
       
         #on renvoie la prochaine action a effectuer
@@ -290,83 +290,4 @@ class Runner(Monstre):
         
         return direction_voulue
 
-class Horde(Monstre):
-    def __init__(self,lab,position,largeur_vue,hauteur_vue,niv,couleur=(255,0,0)):
-        self.lab=lab
-        self.position=position
-        self.largeur_vue=largeur_vue
-        self.hauteur_vue=hauteur_vue
-        self.couleur=couleur
-        self.distance_joueur=-1
-        self.temps=0
-        self.niv = niv
 
-    def rush(self,position_lab,vue,position_joueur):
-        """
-        Fonction qui définie le comportement lorsque le monstre a vue le joueur
-        Elle prend en entrée:
-            la position de la vue dans le labyrinthe
-            une matrices de cases correspondant à la vue du monstre
-            la position du joueur dans le labrinthe
-        Sorties:
-            la direction de la prochaine position voulue
-        """
-        self.temps += 1
-        direction_voulue=None
-        #on initialise le résolveut pour qu'il nous trouve la prochaine position
-        resolveur= Resolveur(vue,len(vue),len(vue[0]),position_joueur[0]-position_lab[0],position_joueur[1]-position_lab[1],self.position[0]-position_lab[0],self.position[1]-position_lab[1],"Largeur")
-        chemin=resolveur.resolution(True,False)
-        
-        #on renvoie la prochaine action a effectuer
-        position_suivante=None
-        if chemin!=None:
-            if len(chemin)>2:
-                position_suivante=chemin[1]
-                direction_voulue=self.direction_suivante(chemin[0],chemin[1])
-            self.distance_joueur=len(chemin)
-                
-        return direction_voulue
-
-    def cherche(self,vue,position_lab,position_vue):
-        """
-        But:Simuler le comportement de Runner qui va vers la fin du labyrinthe
-        Elle prend en entrée:
-            la position de la vue dans le labyrinthe
-            une matrices de cases correspondant à la vue du monstre
-        Elle renvoie:
-            la direction de la prochaine position voulue par le monstre
-        """
-        self.temps += 1
-        direction_voulue=None
-        meilleur_trajet = -1
-        for copain in self.niv.monstres:
-            if self.accessible(position_lab,vue,copain.getPosition()) and type(copain)==Horde and (meilleur_trajet < 0 or copain.geolocalisation + self.distance(copain) < meilleur_trajet):
-                meilleur_trajet = copain.geolocalisation + self.distance(copain)
-                meilleur_copain = copain
-
-        if meilleur_trajet == -1:
-            directions=self.directions_utilisables(self.position[0],self.position[1],vue,position_vue)
-            direction_voulue = directions[random.randrange(0,len(directions))]
-
-        else:
-            #on initialise le résolveur pour qu'il nous trouve la prochaine position
-            resolveur= Resolveur(self.lab.matrice_cases,self.largeur_lab,self.hauteur_lab,meilleur_copain.getPosition[0],meilleur_copain.getPosition[1],self.position[0],self.position[1],"Profondeur")
-            chemin=resolveur.resolution(True,False,False,False)
-      
-            #on renvoie la prochaine action a effectuer
-            position_suivante=None
-
-            if chemin!=None and chemin!=False:
-                if len(chemin)>2:
-                    position_suivante=chemin[1]
-                    direction_voulue=self.direction_suivante(chemin[0],chemin[1])
-        
-        return direction_voulue
-
-    def geolocalisation(self,temps):
-        return self.distance_joueur - (self.temps - temps)
-
-    def distance(self,copain):
-        resolveur= Resolveur(self.lab.matrice_cases,self.largeur_lab,self.hauteur_lab,copain.getPosition[0],copain.getPosition[1],self.position[0],self.position[1],"Profondeur")
-        chemin=resolveur.resolution(True,False,False,False)
-        return len(chemin)

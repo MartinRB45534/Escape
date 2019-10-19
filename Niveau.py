@@ -9,6 +9,7 @@ from Inventaire import *
 from Stats import *
 from Planning import *
 from Collisions import *
+from Meute import *
 
 class Niveau:
     def __init__(self,difficulté,mode_affichage):
@@ -90,8 +91,10 @@ class Niveau:
 
         #entitées
         self.joueur=Joueur(stats_joueur,inventaire_joueur,100,5,2,self.zoom_largeur,self.zoom_hauteur)
-        self.monstres=[Slime([5,5],10,10,100,5,1,(255,121,121))]
-        self.entitees=[self.joueur,self.monstres[0]]
+        #self.monstres=[Slime([5,5],10,10,100,5,1,(255,121,121))]
+        self.monstres=[]
+        self.entitees=[self.joueur]
+        self.meutes=[Meute(self.CASES_X,self.CASES_Y,[Fatti([5,30],10,10,100,5,1,(0,0,100)),Fatti([10,30],10,10,100,5,1,(0,0,100))])]
 
         #objet qui traite les collisions
         self.collision=Collision()
@@ -102,7 +105,7 @@ class Niveau:
         self.textLose = font.render("Vous avez perdu!! ;o;", True, (0, 128, 128))
         
         self.position_screen=(0,0)
-
+        
     def run(self):
         run=True
         self.redraw()
@@ -135,7 +138,10 @@ class Niveau:
             if compteur_j==0:
                 compteur_j=cooldown_joueur
                 self.action_joueur()
-                self.joueur=self.actualiser_vue(self.joueur)
+                
+                vue,position=self.actualiser_vue(self.joueur.getPosition(),self.joueur.largeur_vue,self.joueur.hauteur_vue)
+                self.joueur.actualiser_vue(vue,position)
+                
                 self.joueur=self.actualiser_donnee(self.joueur)
                 move_j=self.traitement_action(self.joueur)
             else:
@@ -180,36 +186,94 @@ class Niveau:
             self.joueur.va_vers_la_gauche()
         elif keys[pygame.K_SPACE]:
             self.joueur.attaque()
+
+    def actions_meutes(self):
+        """
+        Fonction qui exécute les actions des meutes
+        renvoie un booléen indiquant si il y a besoin de redessiner l'écran
+        """
+        redessiner=False
+
+        for meute in self.meutes:
+            positions,largeurs_vues,hauteur_vues=meute.getDonneesVues()
+
+            vues,positions_vues=self.actualiser_vue_meute(positions,largeurs_vues,hauteur_vues)
+
+            meute.actualisation_vues(vues,positions_vues,self.joueur.getPosition())
+
+            meute.prochaines_actions()
             
+            monstres_meute=meute.getMonstres()
+            for monstre in monstres_meute:
+                if redessiner:
+                    self.traitement_action(monstre)
+                else:
+                    redessiner=self.traitement_action(monstre)
+            
+        return redessiner
+    def actualiser_vue_meute(self,positions,largeurs_vues,hauteur_vues):
+        """
+        Fonction qui doit renvoyer les vues nécessaires a une meute
+        Entrées:
+            -les positions des monstres de la meute
+            -les largeurs et hauteurs des vues des monstres de la meute
+        Sorties:
+            -les vues des monstres
+            -les positions des vues
+        """
+        vues=[]
+        positions_vues=[]
+
+        for i in range(0,len(positions)):
+            vue,position_vue=self.actualiser_vue(positions[i],largeurs_vues[i],hauteur_vues[i])
+            vues+=[vue]
+            positions_vues+=[position_vue]
+
+        return vues,positions_vues
+
+
     def actions_entitees(self):
         """
         Fonction qui exécute les actions des entitées
         renvoie un booléen indiquant si il y a besoin de redessiner l'écran
         """
         redessiner=False
+        
         for entitee in self.entitees:
-            entitee=self.actualiser_vue(entitee)
+            #on actualise la vue de l'entitée
+            vue_entitee,position_vue=self.actualiser_vue(entitee.getPosition(),entitee.getLargeurVue(),entitee.getHauteurVue())
+            entitee.actualiser_vue(vue_entitee,position_vue)
+            
             entitee=self.actualiser_donnee(entitee)
+
             entitee.prochaine_action()
             if redessiner:
                 self.traitement_action(entitee)
             else:
                 redessiner=self.traitement_action(entitee)
             #print(redessiner,type(entitee))
+        
+        if redessiner:
+            self.actions_meutes()
+        else:
+            redessiner=self.actions_meutes()
+            
         return redessiner
 
-    def actualiser_vue(self,agissant):
+    def actualiser_vue(self,position,largeur_vue,hauteur_vue):
         """
-        Fonction qui actualise la vue d'un agissant
+        Fonction qui construit la vue d'un agissant
         Entrée:
-            un agissant
+            -la position de la vue de l'agissant
+            -la largeur de la vue de l'agissant
+            -la hauteur de la vue de l'agissant
         Sortie:
-            un agissant avec sa vue actualiser
+            -la vue de l'agissant
+            -la position de la vue de l'agissant
         """
-        vue_agissant,position_vue=self.lab.construire_vue(agissant.getPosition(),agissant.getLargeurVue(),agissant.getHauteurVue())
-        agissant.actualiser_vue(vue_agissant,position_vue)
+        vue_agissant,position_vue=self.lab.construire_vue(position,largeur_vue,hauteur_vue)
 
-        return agissant
+        return vue_agissant,position_vue
     def actualiser_donnee(self,agissant):
         """
         Fonction qui actualise les données des agissant en fonction de leur
@@ -273,7 +337,17 @@ class Niveau:
         """
         Fonction qui redessine l'entièreté de l'écran
         """
+        entitees=[]
+        
+        for monstre in self.monstres:
+            entitees+=[monstre]
+            
+        for meute in self.meutes:
+            monstres=meute.getMonstres()
+            for monstre in monstres:
+                entitees+=[monstre]
+                
         self.screen.fill((0,0,0))
-        self.lab.dessine_toi(self.screen,self.joueur.position,self.monstres,self.position_screen,self.joueur.stats.largeur_vue,self.joueur.stats.hauteur_vue,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR)
+        self.lab.dessine_toi(self.screen,self.joueur.position,entitees,self.position_screen,self.joueur.stats.largeur_vue,self.joueur.stats.hauteur_vue,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR)
         self.joueur.dessine_toi(self.screen,(self.joueur.stats.largeur_vue//2,self.joueur.stats.hauteur_vue//2),self.LARGEUR_CASE,self.LARGEUR_MUR,self.position_screen)
 

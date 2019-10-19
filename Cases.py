@@ -31,6 +31,7 @@ class Case:
         """
         pygame.draw.rect(screen,self.couleur,(x,y,self.tailleCase,self.tailleCase))
         #on dessine les murs vides en premiers pour éviter les bugs graphiques
+
         for i in range(0,len(self.murs)):
             if self.murs[i].get_etat()==MUR_VIDE:
                 self.murs[i].dessine_toi(screen,x,y,self.tailleCase,i,self.couleur)
