@@ -10,6 +10,8 @@ from Stats import *
 from Planning import *
 from Collisions import *
 from Meute import *
+from Evenement import *
+from Animation import *
 
 class Niveau:
     def __init__(self,difficulté,mode_affichage):
@@ -98,6 +100,9 @@ class Niveau:
 
         #objet qui traite les collisions
         self.collision=Collision()
+
+        #événements
+        self.evenements=[]
         
         #texte de fin
         font = pygame.font.SysFont(None, 72)
@@ -155,8 +160,9 @@ class Niveau:
                 compteur_m-=1
 
             #si on détecte un mouvement on redessine l'écran
-            if move_j or move_m:
-                self.redraw()
+            #if move_j or move_m:
+            self.redraw()
+            self.traitement_evenements()
 
             if self.lab.as_gagner(self.joueur.getPosition()):
                 self.ecran_fin_niveau(self.textWin)
@@ -167,7 +173,19 @@ class Niveau:
             pygame.display.update()
         pygame.quit()
 
-    
+    def traitement_evenements(self):
+        """
+        Fonction qui traite les événements
+        """
+        events_tmps=[self.evenements[i] for i in range(0,len(self.evenements))]
+        nbSup=0
+        
+        for i in range(0,len(events_tmps)):
+            if events_tmps[i].execute():
+                self.evenements.pop(i-nbSup)
+                nbSup+=1
+                
+                 
     def action_joueur(self):
         """
         Fonction qui exécute la partie du code ou le jpueur demande à agir
@@ -186,6 +204,7 @@ class Niveau:
             self.joueur.va_vers_la_gauche()
         elif keys[pygame.K_SPACE]:
             self.joueur.attaque()
+            self.evenements.append(Attaque(360,[100,100],30,self.screen))
 
     def actions_meutes(self):
         """
