@@ -40,5 +40,6 @@ class Attaque(Animation):
         Sorties:
             Rien
         """
-        pygame.draw.circle(self.surface,(0,0,0),self.position,int(self.radius_max*(self.temps_restant/self.temps_initial)))
+        radius=int(self.radius_max*(self.temps_initial/(self.temps_initial+self.temps_restant)))
+        pygame.draw.circle(self.surface,(194,54,22),self.position,radius,1)
         

@@ -204,8 +204,43 @@ class Niveau:
             self.joueur.va_vers_la_gauche()
         elif keys[pygame.K_SPACE]:
             self.joueur.attaque()
-            self.evenements.append(Attaque(360,[100,100],30,self.screen))
+            
+    def ajout_anim_attaque(self,position_entitee):
+        """
+        Fonction qui ajoute un ajoute une animation d'attaque a la pile d'événements
+        Entrées:
+            -la position de l'entitée
+        Sorties:
+            Rien
+        """
+        if self.est_dans_vue(position_entitee):
+            radius=(self.LARGEUR_CASE+self.LARGEUR_MUR)*2
+            position_anim_x=(self.LARGEUR_CASE+self.LARGEUR_MUR)*(position_entitee[0]-self.joueur.getPosition()[0]+self.joueur.largeur_vue//2)
+            position_anim_y=(self.LARGEUR_CASE+self.LARGEUR_MUR)*(position_entitee[1]-self.joueur.getPosition()[1]+self.joueur.hauteur_vue//2)
 
+            position_anim=[position_anim_x,position_anim_y]
+            self.evenements.append(Attaque(10,position_anim,radius,self.screen))
+    def est_dans_vue(self,position):
+        """
+        Fonction qui détermine si l'entitee est en vue du joueur
+        Entrées:
+            -la position de l'entitée
+        Sorties:
+            -un booléen indiquant si l'entitée est en vue
+        """
+        joueur_position=self.joueur.getPosition()
+
+        joueur_x=joueur_position[0]
+        joueur_y=joueur_position[1]
+
+        min_x=joueur_x-self.joueur.largeur_vue//2
+        max_x=joueur_x+self.joueur.largeur_vue-self.joueur.largeur_vue//2
+
+        min_y=joueur_y-self.joueur.hauteur_vue//2
+        max_y=joueur_y+self.joueur.hauteur_vue-self.joueur.hauteur_vue//2
+
+        return (position[0]>=min_x and position[0]<max_x)and(position[1]>=min_y and position[1]<max_y)
+        
     def actions_meutes(self):
         """
         Fonction qui exécute les actions des meutes
@@ -276,9 +311,30 @@ class Niveau:
             self.actions_meutes()
         else:
             redessiner=self.actions_meutes()
-            
+
+        self.delete_entitees()
+        
         return redessiner
 
+    def delete_entitees(self):
+        """
+        Fonction qui supprime les entitees mortes
+        """
+        nbSupp=0
+        for i in range(0,len(self.entitees)):
+            if self.entitees[i-nbSupp].pv<=0:
+                self.entitees.pop(i-nbSupp)
+                nbSupp+=1
+        #on traite les meutes
+        if self.meutes!=None:
+            for meute in self.meutes:
+                monstres=meute.getMonstres()
+                nbSupp=0
+                for i in range(0,len(monstres)):
+                    if monstres[i-nbSupp].pv<=0:
+                        nbSupp+=1
+                        monstres.pop(i-nbSupp)
+        
     def actualiser_vue(self,position,largeur_vue,hauteur_vue):
         """
         Fonction qui construit la vue d'un agissant
@@ -337,8 +393,8 @@ class Niveau:
                     #print(succes)
                     agissant.setPosition(newcoord)
         elif id_action==ATTAQUER:
-            succes,self.entitees=self.collision.tentative_attaque(agissant,self.entitees)
-            
+            self.ajout_anim_attaque(agissant.getPosition())
+            succes=self.collision.tentative_attaque(agissant,self.entitees,self.meutes)
         return succes
         
     def as_perdu(self):
