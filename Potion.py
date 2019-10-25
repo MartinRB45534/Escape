@@ -26,7 +26,7 @@ class Potion:
     def récupère(self,stats):
         """méthode appelée quand le joueur récupère la potion, qui l'utilise instantannément"""
         self.stats = stats
-        self.utilise
+        self.utilise()
 
     def utilise(self):
         """Fonction à surdéfinir dans la classe fille"""
