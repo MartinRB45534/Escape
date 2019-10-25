@@ -65,13 +65,10 @@ class Niveau:
         self.zoom_largeur=11
         self.zoom_hauteur=11
 
-        self.force_base = 10
-        self.hp_base = 100
+        self.force_joueur = 5
+        self.hp_joueur = 100
 
-        self.planning = Planning()
-
-        stats_joueur = Stats(self.force_base,self.zoom_hauteur,self.zoom_largeur,self.hp_base)
-        inventaire_joueur = Inventaire(stats_joueur,self.planning)
+        inventaire_joueur = Inventaire()
         
         pygame.init()
         #poids permettants de manipuler l'aléatoire
@@ -92,11 +89,11 @@ class Niveau:
         self.screen.fill((0,0,0))
 
         #entitées
-        self.joueur=Joueur(stats_joueur,inventaire_joueur,100,5,2,self.zoom_largeur,self.zoom_hauteur)
+        self.joueur=Joueur(inventaire_joueur,self.hp_joueur,self.force_joueur,2,self.zoom_largeur,self.zoom_hauteur)
         #self.monstres=[Slime([5,5],10,10,100,5,1,(255,121,121))]
         self.monstres=[]
         self.entitees=[self.joueur]
-        self.meutes=[Meute(self.CASES_X,self.CASES_Y,[Fatti([1,2],10,10,100,5,1,(0,0,100)),Fatti([1,1],10,10,100,5,1,(0,0,100))])]
+        self.meutes=[Meute(self.CASES_X,self.CASES_Y,[Fatti([5,10],10,10,100,5,1,(0,0,100)),Fatti([10,10],10,10,100,5,1,(0,0,100))])]
 
         #objet qui traite les collisions
         self.collision=Collision()
@@ -126,7 +123,6 @@ class Niveau:
         while run:
             #on cadence à 60 frames/sec
             clock.tick(60)
-            self.planning.agit(clock.get_time())
 
             move_j = False
             move_m=False
@@ -181,6 +177,7 @@ class Niveau:
         nbSup=0
         
         for i in range(0,len(events_tmps)):
+            print (events_tmps)
             if events_tmps[i].execute():
                 self.evenements.pop(i-nbSup)
                 nbSup+=1
@@ -395,6 +392,10 @@ class Niveau:
                         succes=True
                         #print(succes)
                         agissant.setPosition(newcoord)
+                        if agissant == self.joueur:
+                            nouveaux_evenements = self.collision.visite_case(newcoord,agissant,self.entitees)
+                            for evenement in nouveaux_evenements :
+                                self.evenements.append(evenement)
         elif id_action==ATTAQUER:
             self.ajout_anim_attaque(agissant.getPosition())
             succes=self.collision.tentative_attaque(agissant,self.entitees,self.meutes)
@@ -426,6 +427,6 @@ class Niveau:
                 entitees+=[monstre]
                 
         self.screen.fill((0,0,0))
-        self.lab.dessine_toi(self.screen,self.joueur.position,entitees,self.position_screen,self.joueur.stats.largeur_vue,self.joueur.stats.hauteur_vue,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR)
-        self.joueur.dessine_toi(self.screen,(self.joueur.stats.largeur_vue//2,self.joueur.stats.hauteur_vue//2),self.LARGEUR_CASE,self.LARGEUR_MUR,self.position_screen)
+        self.lab.dessine_toi(self.screen,self.joueur.position,entitees,self.position_screen,self.joueur.largeur_vue,self.joueur.hauteur_vue,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR)
+        self.joueur.dessine_toi(self.screen,(self.joueur.largeur_vue//2,self.joueur.hauteur_vue//2),self.LARGEUR_CASE,self.LARGEUR_MUR,self.position_screen)
 

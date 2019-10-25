@@ -5,15 +5,8 @@ from Agissant import *
 
 class Joueur(Agissant):
 
-    #def __init__(self, niveau) -> None:
-    #    """Initialisation à chaque début de niveau"""
-    #
-    #    self.inventaire = niveau.donne_inventaire(difficulté)
-    #    self.position = niveau.donne_position(difficulté)
-
-    def __init__(self, stats, inventaire,pv,degats,radius,largeur_vue,hauteur_vue,position=(0,0)):
+    def __init__(self, inventaire,pv,degats,radius,largeur_vue,hauteur_vue,position=(0,0)):
         self.position = position
-        self.stats = stats
         self.inventaire = inventaire
         self.pv=pv
         self.degats=degats

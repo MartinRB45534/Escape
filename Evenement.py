@@ -20,6 +20,6 @@ class Evenement:
             un booléen indiquant si l'événement est fini
         """
         self.temps_restant-=1
-        #on exécute l'événement
+        #on exécute l'évènement
         self.action()
         return (self.temps_restant<=0)
