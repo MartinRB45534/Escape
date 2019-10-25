@@ -9,27 +9,6 @@ class Animation(Evenement):
         #radius est en pixels
         self.radius_max=radius
         self.surface=surface
-    def action(self):
-        """
-        Fonction qui exécute l'animation
-        Entrées:
-            La surface sur laquelle on dessine
-        Sorties:
-            Rien
-        """
-        print("a surdéfinir")
-    def execute(self):
-        """
-        Fonction qui exécute un tic de l'animation(1 frame = 1 tic)
-        Entrées:
-            La surface sur laquelle on dessine
-        Sorties:
-            un booléen indiquant si l'événement est fini
-        """
-        self.temps_restant-=1
-        #on exécute l'événement
-        self.action()
-        return (self.temps_restant<=0)
 
 class Attaque(Animation):
     def action(self):

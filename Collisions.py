@@ -3,7 +3,7 @@ class Collision:
     def __init__(self):
         """Les entitees ne sont pas des attributs"""
         pass
-    def tentative_attaque(self,attaquant,entitees,meutes):
+    def tentative_attaque(self,attaquant,agissants,meutes):
         """
         Fonction qui test si l'entitée qui essaie d'attaquer le peut
         Entrées:
@@ -15,7 +15,7 @@ class Collision:
         """
         succes=False
 
-        entitees=self.actualisation_entitees(entitees,meutes)
+        agissants=self.actualisation_entitees(agissants,meutes)
 
         vue_attaquant=attaquant.getVue()
         position_vue=attaquant.getPosition_vue()
@@ -25,16 +25,16 @@ class Collision:
         #on récupère la matrice accesible par l'attaque
         mat_explorable=resol.resolution_en_largeur_distance_limitée(False,False,False,True,attaquant.radius)
         
-        if entitees!=None:
-            for entitee in entitees:
-                if entitee!=attaquant:
-                    x=entitee.getPosition()[0]-position_vue[0]
-                    y=entitee.getPosition()[1]-position_vue[1]
+        if agissants!=None:
+            for agissant in agissants:
+                if agissant!=attaquant:
+                    x=agissant.getPosition()[0]-position_vue[0]
+                    y=agissant.getPosition()[1]-position_vue[1]
                     
                     if not(x>len(mat_explorable)-1 or x<0 or y>len(mat_explorable[0])-1 or y<0):
                         if mat_explorable[x][y]:
                             succes=True
-                            self.attaque(entitee,attaquant)
+                            self.attaque(agissant,attaquant)
         return succes
     def actualisation_entitees(self,old_entitees,meutes):
         """
@@ -77,3 +77,21 @@ class Collision:
         """
         self.attaque(entitee1,entitee2)
         self.attaque(entitee2,entitee1)
+    def case_libre(self,position,agissants,meutes):
+        """
+        Fonction qui vérifie si la case désignée est libre (utilisée pour les déplacements)
+        Entrées :
+            la position ciblée
+            les occupants potentiels de la case
+            les occupants potentiels dans les meutes
+        Sorties:
+            un booléen, si la case est libre ou pas
+        """
+
+        libre = True
+        agissants=self.actualisation_entitees(agissants,meutes)
+        if agissants!=None:
+            for agissant in agissants:
+                if agissant.getPosition() == position:
+                    libre = False
+        return libre
