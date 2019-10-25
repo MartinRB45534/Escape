@@ -96,7 +96,7 @@ class Niveau:
         #self.monstres=[Slime([5,5],10,10,100,5,1,(255,121,121))]
         self.monstres=[]
         self.entitees=[self.joueur]
-        self.meutes=[Meute(self.CASES_X,self.CASES_Y,[Fatti([5,30],10,10,100,5,1,(0,0,100)),Fatti([10,30],10,10,100,5,1,(0,0,100))])]
+        self.meutes=[Meute(self.CASES_X,self.CASES_Y,[Fatti([1,2],10,10,100,5,1,(0,0,100)),Fatti([1,1],10,10,100,5,1,(0,0,100))])]
 
         #objet qui traite les collisions
         self.collision=Collision()
@@ -389,9 +389,12 @@ class Niveau:
                 passe,newcoord=self.lab.peut_passer(agissant.getPosition(),direction_voulue)
                 #print(passe)
                 if passe:
-                    succes=True
-                    #print(succes)
-                    agissant.setPosition(newcoord)
+                    libre = self.collision.case_libre(newcoord,self.entitees,self.meutes)
+                    #print(libre)
+                    if libre:
+                        succes=True
+                        #print(succes)
+                        agissant.setPosition(newcoord)
         elif id_action==ATTAQUER:
             self.ajout_anim_attaque(agissant.getPosition())
             succes=self.collision.tentative_attaque(agissant,self.entitees,self.meutes)
