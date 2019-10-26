@@ -7,6 +7,32 @@ class Patern:
         self.largeur=largeur
         self.matrice_cases = [[Case(tailleCase,tailleMur) for i in range(hauteur)]for i in range(largeur)]
         self.entrees=entrees
+    def pre_gen_entrees_x(self,colonne,depart_x,arrivee_x):
+        """
+        Fonction qui facilite la génération des entrées sur une ligne
+        Entrées:
+            -la colonne sur laquelle on veut générée les entrées
+            -la première en x des entrées générées
+            -la dernière en x des entrées générées
+        Sorties:
+            Rien
+        """
+        for x in range(depart_x,arrivee_x+1):
+            self.entrees.append([x,colonne])
+    def pre_gen_entrees_y(self,ligne,depart_y,arrivee_y):
+        """
+        Fonction qui facilite la génération des entrées sur une colonne
+        Entrées:
+            -la ligne sur laquelle on veut générée les entrées
+            -la première en y des entrées générées
+            -la dernière en y des entrées générées
+        Sorties:
+            Rien
+        """
+        for y in range(depart_y,arrivee_y+1):
+            self.entrees.append([ligne,y])
+
+        
     def pre_generation(self,coordonnee_x,coordonnee_y,matrice_lab):
         """
         Fonction qui prend en entrée:
@@ -40,7 +66,7 @@ class Patern:
         #on ne doit générer que les cases au bords
         #plus précisement on doit empêcher le générateur d'y toucher
         if not(self.case_est_une_entree(x,y)) and self.case_au_bord(x,y):
-            self.pre_generation_case_bord(x,y)
+            self.incorpotation_case(x,y)
     def post_generation_case(self,x,y):
         """
         Fonction qui prend en entrée:
@@ -48,7 +74,7 @@ class Patern:
             et casse les murs les murs en fonction de sa position
         """
         if not(self.case_au_bord(x,y)) or self.case_est_une_entree(x,y):
-            self.clear_case(x,y)
+            self.incorpotation_case(x,y)
             
     def case_est_une_entree(self,x,y):
         """
@@ -77,7 +103,7 @@ class Patern:
         for i in range(0,4):
             self.matrice_cases[x][y].casser_mur(i)
         
-    def pre_generation_case_bord(self,x,y):
+    def incorpotation_case(self,x,y):
         """
         Fonction qui prend en entrée:
             les coordonnées de la case

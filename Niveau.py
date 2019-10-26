@@ -48,7 +48,10 @@ class Niveau:
             self.CASES_X = 60
             self.CASES_Y = 60
             res = False
-            self.salles=[Patern(40,2,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+            self.salles=[Patern(40,2,self.LARGEUR_CASE,self.LARGEUR_MUR,[])]
+            #on génère les entrées de manière a avoir un espace ouvert
+            self.salles[0].pre_gen_entrees_x(0,0,39)
+            self.salles[0].pre_gen_entrees_x(1,0,39)
         elif difficulté == INSANE :
             self.CASES_X = 100
             self.CASES_Y = 100
