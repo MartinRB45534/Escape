@@ -6,7 +6,6 @@ from Patern import *
 from Monstres import *
 from Potion import *
 from Inventaire import *
-from Stats import *
 from Planning import *
 from Collisions import *
 from Meute import *
@@ -177,7 +176,7 @@ class Niveau:
         nbSup=0
         
         for i in range(0,len(events_tmps)):
-            print (events_tmps)
+            #print (events_tmps)
             if events_tmps[i].execute():
                 self.evenements.pop(i-nbSup)
                 nbSup+=1
