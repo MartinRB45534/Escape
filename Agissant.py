@@ -14,7 +14,6 @@ class Agissant(Entitee):
         self.largeur_vue=None
         self.hauteur_vue=None
         self.position_vue=None
-
     def get_action(self):
         """
         Fonction qui renvoie la prochaine action voulue

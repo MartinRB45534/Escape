@@ -4,7 +4,7 @@ from math import sqrt
 from Agissant import *
 
 class Monstre(Agissant):
-    def __init__(self,position,largeur_vue,hauteur_vue,pv,degats,radius,couleur=(255,0,0)):
+    def __init__(self,position,largeur_vue,hauteur_vue,pv,degats,radius,id_meute=0,couleur=(255,0,0)):
         self.position=position
         self.largeur_vue=largeur_vue
         self.hauteur_vue=hauteur_vue
@@ -20,6 +20,8 @@ class Monstre(Agissant):
         self.vue=None
         self.position_vue=None
         self.position_joueur=None
+        #id de la meute a laquelle appartient le monstre
+        self.id_meute=id_meute
         
     def en_vue(self,pos_cible):
         """

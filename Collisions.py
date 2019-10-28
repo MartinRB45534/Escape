@@ -5,19 +5,16 @@ class Collision:
     def __init__(self):
         """Les entitees ne sont pas des attributs"""
         pass
-    def tentative_attaque(self,attaquant,agissants,meutes):
+    def tentative_attaque(self,attaquant,agissants):
         """
         Fonction qui test si l'entitée qui essaie d'attaquer le peut
         Entrées:
             l'attaquant
             les potentiels victimes
-            les potentiels victimes dans les meutes
         Sorties:
             booléen qui indique si l'attaque a réussi
         """
         succes=False
-
-        agissants=self.actualisation_entitees(agissants,meutes)
 
         vue_attaquant=attaquant.getVue()
         position_vue=attaquant.getPosition_vue()
@@ -38,24 +35,6 @@ class Collision:
                             succes=True
                             self.attaque(agissant,attaquant)
         return succes
-    def actualisation_entitees(self,old_entitees,meutes):
-        """
-        Fonction qui construit le vrai tableau des entitees
-        Entrées:
-            les entitees contenues normalement
-            les meutes contenant d'autres entitees
-        Sorties:
-            un tableau avec toutes les entitees
-        """
-        entitees=[]
-
-        for entitee in old_entitees:
-            entitees+=[entitee]
-
-        for meute in meutes:
-            monstres=meute.getMonstres()
-            for entitee in monstres:
-                entitees+=[entitee]
 
         return entitees
     def attaque(self,victime,attaquant):
@@ -79,7 +58,7 @@ class Collision:
         """
         self.attaque(entitee1,entitee2)
         self.attaque(entitee2,entitee1)
-    def case_libre(self,position,agissants,meutes):
+    def case_libre(self,position,agissants):
         """
         Fonction qui vérifie si la case désignée est libre (utilisée pour les déplacements)
         Entrées :
@@ -91,7 +70,7 @@ class Collision:
         """
 
         libre = True
-        agissants=self.actualisation_entitees(agissants,meutes)
+
         if agissants!=None:
             for agissant in agissants:
                 if agissant.getPosition() == position:
