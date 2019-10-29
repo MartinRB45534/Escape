@@ -6,7 +6,6 @@ from Patern import *
 from Monstres import *
 from Potion import *
 from Inventaire import *
-from Stats import *
 from Planning import *
 from Collisions import *
 from Meute import *
@@ -49,7 +48,10 @@ class Niveau:
             self.CASES_X = 60
             self.CASES_Y = 60
             res = False
-            self.salles=[Patern(40,2,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+            self.salles=[Patern(40,2,self.LARGEUR_CASE,self.LARGEUR_MUR,[])]
+            #on génère les entrées de manière a avoir un espace ouvert
+            self.salles[0].pre_gen_entrees_x(0,0,39)
+            self.salles[0].pre_gen_entrees_x(1,0,39)
         elif difficulté == INSANE :
             self.CASES_X = 100
             self.CASES_Y = 100
@@ -91,9 +93,11 @@ class Niveau:
         #entitées
         self.joueur=Joueur(inventaire_joueur,self.hp_joueur,self.force_joueur,2,self.zoom_largeur,self.zoom_hauteur)
         #self.monstres=[Slime([5,5],10,10,100,5,1,(255,121,121))]
-        self.monstres=[]
+        self.monstres=[Fatti([5,10],10,10,100,5,1,5,(0,0,100)),Fatti([10,10],10,10,100,5,1,5,(0,0,100))]
         self.entitees=[self.joueur]
-        self.meutes=[Meute(self.CASES_X,self.CASES_Y,[Fatti([5,10],10,10,100,5,1,(0,0,100)),Fatti([10,10],10,10,100,5,1,(0,0,100))])]
+
+        for i in range(0,len(self.monstres)):
+            self.entitees.append(self.monstres[i])
 
         #objet qui traite les collisions
         self.collision=Collision()
@@ -177,7 +181,7 @@ class Niveau:
         nbSup=0
         
         for i in range(0,len(events_tmps)):
-            print (events_tmps)
+            #print (events_tmps)
             if events_tmps[i].execute():
                 self.evenements.pop(i-nbSup)
                 nbSup+=1
@@ -237,50 +241,6 @@ class Niveau:
         max_y=joueur_y+self.joueur.hauteur_vue-self.joueur.hauteur_vue//2
 
         return (position[0]>=min_x and position[0]<max_x)and(position[1]>=min_y and position[1]<max_y)
-        
-    def actions_meutes(self):
-        """
-        Fonction qui exécute les actions des meutes
-        renvoie un booléen indiquant si il y a besoin de redessiner l'écran
-        """
-        redessiner=False
-
-        for meute in self.meutes:
-            positions,largeurs_vues,hauteur_vues=meute.getDonneesVues()
-
-            vues,positions_vues=self.actualiser_vue_meute(positions,largeurs_vues,hauteur_vues)
-
-            meute.actualisation_vues(vues,positions_vues,self.joueur.getPosition())
-
-            meute.prochaines_actions()
-            
-            monstres_meute=meute.getMonstres()
-            for monstre in monstres_meute:
-                if redessiner:
-                    self.traitement_action(monstre)
-                else:
-                    redessiner=self.traitement_action(monstre)
-            
-        return redessiner
-    def actualiser_vue_meute(self,positions,largeurs_vues,hauteur_vues):
-        """
-        Fonction qui doit renvoyer les vues nécessaires a une meute
-        Entrées:
-            -les positions des monstres de la meute
-            -les largeurs et hauteurs des vues des monstres de la meute
-        Sorties:
-            -les vues des monstres
-            -les positions des vues
-        """
-        vues=[]
-        positions_vues=[]
-
-        for i in range(0,len(positions)):
-            vue,position_vue=self.actualiser_vue(positions[i],largeurs_vues[i],hauteur_vues[i])
-            vues+=[vue]
-            positions_vues+=[position_vue]
-
-        return vues,positions_vues
 
 
     def actions_entitees(self):
@@ -290,10 +250,9 @@ class Niveau:
         """
         redessiner=False
         
+        self.actualiser_vues_entitees()
+        
         for entitee in self.entitees:
-            #on actualise la vue de l'entitée
-            vue_entitee,position_vue=self.actualiser_vue(entitee.getPosition(),entitee.getLargeurVue(),entitee.getHauteurVue())
-            entitee.actualiser_vue(vue_entitee,position_vue)
             
             entitee=self.actualiser_donnee(entitee)
 
@@ -303,11 +262,6 @@ class Niveau:
             else:
                 redessiner=self.traitement_action(entitee)
             #print(redessiner,type(entitee))
-        
-        if redessiner:
-            self.actions_meutes()
-        else:
-            redessiner=self.actions_meutes()
 
         self.delete_entitees()
         
@@ -322,16 +276,54 @@ class Niveau:
             if self.entitees[i-nbSupp].pv<=0:
                 self.entitees.pop(i-nbSupp)
                 nbSupp+=1
-        #on traite les meutes
-        if self.meutes!=None:
-            for meute in self.meutes:
-                monstres=meute.getMonstres()
-                nbSupp=0
-                for i in range(0,len(monstres)):
-                    if monstres[i-nbSupp].pv<=0:
-                        nbSupp+=1
-                        monstres.pop(i-nbSupp)
         
+    def actualiser_vues_entitees(self):
+        """
+        Fonction qui actualise la vue de toutes les entitees (meutes inclues)
+        """
+        for entitee in self.entitees:
+            #l'id 0 indique que l'entitée n'appartient a aucune meute
+            if not(issubclass(type(entitee),Monstre)) or entitee.id_meute==0:
+                #on actualise la vue de l'entitée seule
+                vue_entitee,position_vue=self.actualiser_vue(entitee.getPosition(),entitee.getLargeurVue(),entitee.getHauteurVue())
+                entitee.actualiser_vue(vue_entitee,position_vue)
+
+        id_meutes=[0]
+        meute=Meute(self.CASES_X,self.CASES_Y)
+        for entitee in self.entitees:
+            #on vérifie si on n'as pas déja executée la meute de l'entitée
+            if issubclass(type(entitee),Monstre) and not(entitee.id_meute in id_meutes):
+                id_meutes.append(entitee.id_meute)
+                #on récupère les données de la vue de la meute
+                vues,positions=self.recuperer_vues_meute(entitee.id_meute)
+                #on crée la vue de la meute
+                vue_meute=meute.actualisation_vues(vues,positions)
+                
+                #on actualise les vues des monstres de la meute
+                for entitee_bis in self.entitees:
+                    if issubclass(type(entitee_bis),Monstre):
+                        if entitee_bis.id_meute==entitee.id_meute:
+                            entitee_bis.actualiser_vue(vue_meute,[0,0])
+    def recuperer_vues_meute(self,identifiant):
+        """
+        Fonction qui doit renvoyer les vues nécessaires a une meute
+        Entrées:
+            -l'identifiant de la meute
+        Sorties:
+            -les vues des monstres
+            -les positions des vues
+        """
+        vues=[]
+        positions=[]
+        for entitee_bis in self.entitees:
+            if issubclass(type(entitee_bis),Monstre):
+                if entitee_bis.id_meute==identifiant:
+                    vue_entitee,position_vue=self.actualiser_vue(entitee_bis.getPosition(),entitee_bis.getLargeurVue(),entitee_bis.getHauteurVue())
+                    vues.append(vue_entitee)
+                    positions.append(position_vue)
+
+        return vues,positions
+    
     def actualiser_vue(self,position,largeur_vue,hauteur_vue):
         """
         Fonction qui construit la vue d'un agissant
@@ -355,13 +347,7 @@ class Niveau:
         Sortie:
             un agissant avec ces données actualisées
         """
-        if type(agissant)==Slime:
-            #on donne la position du joueur au monstre
-            agissant.setPosition_joueur(self.joueur.getPosition())
-        elif type(agissant)==Runner:
-            #on donne la position du joueur au monstre
-            agissant.setPosition_joueur(self.joueur.getPosition())
-        elif type(agissant)==Fatti:
+        if issubclass(type(agissant),Monstre):
             #on donne la position du joueur au monstre
             agissant.setPosition_joueur(self.joueur.getPosition())
         elif type(agissant)==Joueur:
@@ -386,7 +372,7 @@ class Niveau:
                 passe,newcoord=self.lab.peut_passer(agissant.getPosition(),direction_voulue)
                 #print(passe)
                 if passe:
-                    libre = self.collision.case_libre(newcoord,self.entitees,self.meutes)
+                    libre = self.collision.case_libre(newcoord,self.entitees)
                     #print(libre)
                     if libre:
                         succes=True
@@ -398,7 +384,7 @@ class Niveau:
                                 self.evenements.append(evenement)
         elif id_action==ATTAQUER:
             self.ajout_anim_attaque(agissant.getPosition())
-            succes=self.collision.tentative_attaque(agissant,self.entitees,self.meutes)
+            succes=self.collision.tentative_attaque(agissant,self.entitees)
         return succes
         
     def as_perdu(self):
@@ -420,11 +406,6 @@ class Niveau:
         
         for monstre in self.monstres:
             entitees+=[monstre]
-            
-        for meute in self.meutes:
-            monstres=meute.getMonstres()
-            for monstre in monstres:
-                entitees+=[monstre]
                 
         self.screen.fill((0,0,0))
         self.lab.dessine_toi(self.screen,self.joueur.position,entitees,self.position_screen,self.joueur.largeur_vue,self.joueur.hauteur_vue,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR)
