@@ -11,6 +11,7 @@ from Collisions import *
 from Meute import *
 from Evenement import *
 from Animation import *
+from Affichage import *
 
 class Niveau:
     def __init__(self,difficulté,mode_affichage):
@@ -104,6 +105,9 @@ class Niveau:
 
         #événements
         self.evenements=[]
+
+        #objet d'affichage
+        self.affichage=Affichage(self.screen,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR)
         
         #texte de fin
         font = pygame.font.SysFont(None, 72)
@@ -205,42 +209,6 @@ class Niveau:
             self.joueur.va_vers_la_gauche()
         elif keys[pygame.K_SPACE]:
             self.joueur.attaque()
-            
-    def ajout_anim_attaque(self,position_entitee):
-        """
-        Fonction qui ajoute un ajoute une animation d'attaque a la pile d'événements
-        Entrées:
-            -la position de l'entitée
-        Sorties:
-            Rien
-        """
-        if self.est_dans_vue(position_entitee):
-            radius=(self.LARGEUR_CASE+self.LARGEUR_MUR)*2
-            position_anim_x=(self.LARGEUR_CASE+self.LARGEUR_MUR)*(position_entitee[0]-self.joueur.getPosition()[0]+self.joueur.largeur_vue//2)
-            position_anim_y=(self.LARGEUR_CASE+self.LARGEUR_MUR)*(position_entitee[1]-self.joueur.getPosition()[1]+self.joueur.hauteur_vue//2)
-
-            position_anim=[position_anim_x,position_anim_y]
-            self.evenements.append(Attaque(10,position_anim,radius,self.screen))
-    def est_dans_vue(self,position):
-        """
-        Fonction qui détermine si l'entitee est en vue du joueur
-        Entrées:
-            -la position de l'entitée
-        Sorties:
-            -un booléen indiquant si l'entitée est en vue
-        """
-        joueur_position=self.joueur.getPosition()
-
-        joueur_x=joueur_position[0]
-        joueur_y=joueur_position[1]
-
-        min_x=joueur_x-self.joueur.largeur_vue//2
-        max_x=joueur_x+self.joueur.largeur_vue-self.joueur.largeur_vue//2
-
-        min_y=joueur_y-self.joueur.hauteur_vue//2
-        max_y=joueur_y+self.joueur.hauteur_vue-self.joueur.hauteur_vue//2
-
-        return (position[0]>=min_x and position[0]<max_x)and(position[1]>=min_y and position[1]<max_y)
 
 
     def actions_entitees(self):
@@ -383,7 +351,7 @@ class Niveau:
                             for evenement in nouveaux_evenements :
                                 self.evenements.append(evenement)
         elif id_action==ATTAQUER:
-            self.ajout_anim_attaque(agissant.getPosition())
+            self.affichage.ajout_animation(agissant.getPosition(),0,3,agissant.getRadius()*(self.LARGEUR_CASE+self.LARGEUR_MUR))
             succes=self.collision.tentative_attaque(agissant,self.entitees)
         return succes
         
@@ -402,6 +370,8 @@ class Niveau:
         """
         Fonction qui redessine l'entièreté de l'écran
         """
+        self.affichage.dessine_frame(self.joueur,self.lab,self.entitees,self.evenements)
+        """
         entitees=[]
         
         for monstre in self.monstres:
@@ -410,4 +380,4 @@ class Niveau:
         self.screen.fill((0,0,0))
         self.lab.dessine_toi(self.screen,self.joueur.position,entitees,self.position_screen,self.joueur.largeur_vue,self.joueur.hauteur_vue,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR)
         self.joueur.dessine_toi(self.screen,(self.joueur.largeur_vue//2,self.joueur.hauteur_vue//2),self.LARGEUR_CASE,self.LARGEUR_MUR,self.position_screen)
-
+        """

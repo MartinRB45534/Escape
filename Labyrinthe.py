@@ -79,20 +79,20 @@ class Labyrinthe:
         
         return win
     
-    def dessine_toi(self,screen,position_joueur,entitees,position_screen,largeur,hauteur,mode_affichage,LARGEUR_CASE,LARGEUR_MUR):
-
+    def dessine_toi(self,screen,position_joueur,position_screen,position_vue,largeur,hauteur,mode_affichage,LARGEUR_CASE,LARGEUR_MUR,mat_exploree):
         """
         Fonction qui dessine le labyrinthe sur l'écran
         Entrées:
             l'écran, la surface sur laquelle on dessine(objet pygame)
             la position du joueur
-            les entitées autres que le joueur a dessiner (ex les monstres)
             la position que l'on prend pour 0,0 sur l'écran (ex: un décalage de 20px sur la droite se traduit par (x+20,y))
+            la position de la vue dans le labyrinthe
             la largeur en cases
             la hauteur en cases
             le mode d'affichage
             la largueur des cases
             la largeur des murs
+            la matrice explorée
         Sorties:
             Rien
         """
@@ -134,12 +134,6 @@ class Labyrinthe:
 
             min_y=joueur_y-hauteur//2
             max_y=joueur_y+hauteur-hauteur//2
-
-            vue, position_vue = self.construire_vue(position_joueur,largeur,hauteur)
-            #on ne veut pas que le résolveur trouve de solution on veut juste qu'il explore la matrice
-            resolveur = Resolveur(vue,largeur,hauteur,-1,-1,joueur_x-position_vue[0],joueur_y-position_vue[1],"Profondeur")
-
-            mat_exploree=resolveur.resolution(False,False,False,True)
             
             for x in range(min_x,max_x):
                 for y in range(min_y,max_y):
@@ -150,7 +144,6 @@ class Labyrinthe:
                 position_y=position_screen[1]
                 position_x+=self.tailleCase+self.tailleMur
 
-            self.affichage_entitees(entitees,mat_exploree,position_vue,screen,largeur,hauteur,LARGEUR_CASE,LARGEUR_MUR,position_screen)
         elif mode_affichage == distance_max :
             joueur_x = position_joueur[0]
             joueur_y = position_joueur[1]
@@ -164,12 +157,6 @@ class Labyrinthe:
             min_y=joueur_y-hauteur//2
             max_y=joueur_y+hauteur-hauteur//2
 
-            vue, position_vue = self.construire_vue(position_joueur,largeur,hauteur)
-            #on ne veut pas que le résolveur trouve de solution on veut juste qu'il explore la matrice
-            resolveur = Resolveur(vue,largeur,hauteur,-1,-1,joueur_x-position_vue[0],joueur_y-position_vue[1])
-
-            mat_exploree=resolveur.resolution_en_largeur_distance_limitée(False,False,False,True,11)
-            
             for x in range(min_x,max_x):
                 for y in range(min_y,max_y):
                     if not((x<0 or x>=self.largeur) or (y<0 or y>=self.hauteur)):
@@ -179,7 +166,7 @@ class Labyrinthe:
                 position_y=position_screen[1]
                 position_x+=self.tailleCase+self.tailleMur
         
-            self.affichage_entitees(entitees,mat_exploree,position_vue,screen,largeur,hauteur,LARGEUR_CASE,LARGEUR_MUR,position_screen)
+
         elif mode_affichage == aveugle :
             self.dessine_case(screen,position_joueur,position_screen,largeur,hauteur,position_joueur)
 

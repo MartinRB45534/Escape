@@ -49,3 +49,5 @@ class Agissant(Entitee):
         return self.largeur_vue
     def getHauteurVue(self):
         return self.hauteur_vue
+    def getRadius(self):
+        return self.radius

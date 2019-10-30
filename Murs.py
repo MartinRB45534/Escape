@@ -5,7 +5,7 @@ class Mur:
     def __init__(self,etat,tailleMur):
         self.etat = etat
         self.tailleMur = tailleMur
-    def dessine_toi(self,screen,case_x,case_y,tailleCase,direction,couleur=(125,125,125)):
+    def dessine_toi(self,screen,case_x,case_y,tailleCase,direction,couleur=(0,0,0)):
         """
         Fonction qui dessine l'objet
             l'écran, la surface sur laquelle on dessine(objet pygame)
