@@ -16,18 +16,22 @@ GREEN = 0, 255, 0
 YELLOW = 255, 255, 0
 BLACK = 0,0,0
 def main():
+    
     fenetre = pygame.display.set_mode((640, 300))
+    #ici on prend les images contenues dans les fichiers pour les convertir vers pygame
     start = pygame.image.load("start.png").convert()
     reprendre = pygame.image.load("reprendre.png").convert()
     quitter = pygame.image.load("quitter.png").convert()
 
 
     loop = True
+    
     green_color = GREEN
     yellow_color = YELLOW
     black_color = BLACK
     NIVEXIST= False
     while loop:
+        #si le niveau est crée on évite d'en recréer un à chaque passage de boucle
         if not(NIVEXIST) :
             niv = Niveau(difficulté,mode_affichage)
             NIVEXIST = True
@@ -38,8 +42,9 @@ def main():
         # Ajout du fond dans la fenêtre
         fenetre.blit(background, (0, 0))
 
-        # ça crée un rectangle vert
+        # ça crée des rectangles qui permettent de zoner les zones clickables...
         rect_green = pygame.draw.rect(fenetre, green_color, [250, 10, 100, 50])
+        #...  puis sont remplacées par les boutons
         fenetre.blit(start, (250,10))
 
         rect_yellow = pygame.draw.rect(fenetre, yellow_color, [250, 85, 100, 50])
