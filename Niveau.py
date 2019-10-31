@@ -175,7 +175,6 @@ class Niveau:
                 self.ecran_fin_niveau(self.textLose)
                 run=False
             pygame.display.update()
-        pygame.quit()
 
     def traitement_evenements(self):
         """
