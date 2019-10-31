@@ -9,6 +9,7 @@ class Joueur(Agissant):
         self.position = position
         self.inventaire = inventaire
         self.pv=pv
+        self.pv_max=pv
         self.degats=degats
         self.radius=radius
         #prochaine action

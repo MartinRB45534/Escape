@@ -17,6 +17,8 @@ class Affichage:
         #constantes
         self.LARGEUR_MUR=LARGEUR_MUR
         self.LARGEUR_CASE=LARGEUR_CASE
+        #decalage de la matrice du labyrinthe sur l'écran (decalage en px)
+        self.decalage_matrice=[0,30]
         #liste des animations
         self.animations=[]
     def dessine_frame(self,joueur,labyrinthe,entitees,evenements):
@@ -31,6 +33,7 @@ class Affichage:
             -rien
         """
         self.reset_screen()
+        self.dessine_hud(joueur)
         if self.mode_affichage==distance_max:
             self.distance_max(joueur,labyrinthe,entitees,evenements)
         else:
@@ -61,13 +64,26 @@ class Affichage:
 
         mat_exploree=resolveur.resolution_en_largeur_distance_limitée(False,False,False,True,joueur.portee_vue)
         #dire au lab d'afficher la matrice correspondante
-        labyrinthe.dessine_toi(self.screen,position_joueur,[0,0],position_vue,largeur_vue,hauteur_vue,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR,mat_exploree)
+        labyrinthe.dessine_toi(self.screen,position_joueur,self.decalage_matrice,position_vue,largeur_vue,hauteur_vue,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR,mat_exploree)
         #afficher les entitées
-        self.dessine_entitees(entitees,position_joueur,mat_exploree,position_vue,[0,0])
+        self.dessine_entitees(entitees,position_joueur,mat_exploree,position_vue,self.decalage_matrice)
         #afficher les animations
         self.dessine_animations(position_joueur,largeur_vue,hauteur_vue)
         #on supprime les animations qui ont expirées
         self.supprime_animations()
+    def dessine_hud(self,joueur):
+        """
+        Fonction qui affiche les informations complémentaires
+        (barre de vie, MINIMAP, etc)
+        Entrées:
+            -le joueur
+        """
+        police_pv=pygame.font.SysFont(None, 20)
+        text_pv=police_pv.render("PV:",True,(0,0,0))
+        self.screen.blit(text_pv,(0,10))
+        
+        #on dessine la barre de vie du joueur
+        pygame.draw.rect(self.screen, pygame.Color(255,0,0),(30,10,int(100*(joueur.pv/joueur.pv_max)),10))
     def getConstantes(self,position_joueur,position_screen,largeur,hauteur):
         """
         Fonction qui génère les constantes nécessaires au fonctionnement de l'affichage
@@ -142,8 +158,8 @@ class Affichage:
         for animation in self.animations:
             position_lab_anim=animation.getPosition()
             if self.est_dans_vue(position_lab_anim,position_joueur,largeur_vue,hauteur_vue):
-                position_anim_x=(self.LARGEUR_CASE+self.LARGEUR_MUR)*(position_lab_anim[0]-position_joueur[0]+largeur_vue//2)+round((self.LARGEUR_CASE+self.LARGEUR_MUR)*0.5)
-                position_anim_y=(self.LARGEUR_CASE+self.LARGEUR_MUR)*(position_lab_anim[1]-position_joueur[1]+hauteur_vue//2)+round((self.LARGEUR_CASE+self.LARGEUR_MUR)*0.5)
+                position_anim_x=(self.LARGEUR_CASE+self.LARGEUR_MUR)*(position_lab_anim[0]-position_joueur[0]+largeur_vue//2)+round((self.LARGEUR_CASE+self.LARGEUR_MUR)*0.5)+self.decalage_matrice[0]
+                position_anim_y=(self.LARGEUR_CASE+self.LARGEUR_MUR)*(position_lab_anim[1]-position_joueur[1]+hauteur_vue//2)+round((self.LARGEUR_CASE+self.LARGEUR_MUR)*0.5)+self.decalage_matrice[1]
 
                 position_anim=[position_anim_x,position_anim_y]
 

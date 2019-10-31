@@ -188,7 +188,7 @@ class Labyrinthe:
         x = position[0]
         y = position[1]
 
-        self.matrice_cases[x][y].dessine_toi(screen,(x-joueur_x+largeur//2)*(self.tailleCase+self.tailleMur),(y-joueur_y+hauteur//2)*(self.tailleCase+self.tailleMur))
+        self.matrice_cases[x][y].dessine_toi(screen,(x-joueur_x+largeur//2)*(self.tailleCase+self.tailleMur)+position_x,(y-joueur_y+hauteur//2)*(self.tailleCase+self.tailleMur)+position_y)
 
     def construire_vue(self,position,largeur,hauteur):
         """
