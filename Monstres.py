@@ -116,7 +116,7 @@ class Monstre(Agissant):
         #on initialise le résolveut pour qu'il nous trouve la prochaine position
         resolveur= Resolveur(self.vue,len(self.vue),len(self.vue[0]),self.position_joueur[0]-self.position_vue[0],self.position_joueur[1]-self.position_vue[1],self.position[0]-self.position_vue[0],self.position[1]-self.position_vue[1],"Largeur")
         chemin=resolveur.resolution(True,False)
-        
+
         #on renvoie la prochaine action a effectuer
         position_suivante=None
         if chemin!=None:

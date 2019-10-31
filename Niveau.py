@@ -94,7 +94,7 @@ class Niveau:
         #entitées
         self.joueur=Joueur(inventaire_joueur,self.hp_joueur,self.force_joueur,2,self.zoom_largeur,self.zoom_hauteur)
         #self.monstres=[Slime([5,5],10,10,100,5,1,(255,121,121))]
-        self.monstres=[Fatti([5,10],10,10,100,5,1,5,(0,0,100)),Fatti([10,10],10,10,100,5,1,5,(0,0,100))]
+        self.monstres=[Fatti([5,10],10,10,100,5,1,5,(0,0,100))]#,Fatti([10,10],10,10,100,5,1,5,(0,0,100))]
         self.entitees=[self.joueur]
 
         for i in range(0,len(self.monstres)):
@@ -371,13 +371,3 @@ class Niveau:
         Fonction qui redessine l'entièreté de l'écran
         """
         self.affichage.dessine_frame(self.joueur,self.lab,self.entitees,self.evenements)
-        """
-        entitees=[]
-        
-        for monstre in self.monstres:
-            entitees+=[monstre]
-                
-        self.screen.fill((0,0,0))
-        self.lab.dessine_toi(self.screen,self.joueur.position,entitees,self.position_screen,self.joueur.largeur_vue,self.joueur.hauteur_vue,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR)
-        self.joueur.dessine_toi(self.screen,(self.joueur.largeur_vue//2,self.joueur.hauteur_vue//2),self.LARGEUR_CASE,self.LARGEUR_MUR,self.position_screen)
-        """

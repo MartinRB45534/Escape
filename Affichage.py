@@ -59,7 +59,7 @@ class Affichage:
         #on ne veut pas que le résolveur trouve de solution on veut juste qu'il explore la matrice
         resolveur = Resolveur(vue,largeur_vue,hauteur_vue,-1,-1,joueur_x-position_vue[0],joueur_y-position_vue[1],"Profondeur")
 
-        mat_exploree=resolveur.resolution_en_largeur_distance_limitée(False,False,False,True,11)
+        mat_exploree=resolveur.resolution_en_largeur_distance_limitée(False,False,False,True,joueur.portee_vue)
         #dire au lab d'afficher la matrice correspondante
         labyrinthe.dessine_toi(self.screen,position_joueur,[0,0],position_vue,largeur_vue,hauteur_vue,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR,mat_exploree)
         #afficher les entitées

@@ -167,12 +167,8 @@ class Resolveur:
         #obtenir elt suivant
             #récuperer premier elt queue
         
-        while len(queue)!=0 and (position_x!=self.arrivee_x or position_y!=self.arrivee_y):
-
-            #enlever position dans queue
-            queue.pop(0)
-            chemins.pop(0)
-            
+        while len(queue)!=0 and not(self.est_dans_chemin([self.arrivee_x,self.arrivee_y],chemin_courant.getChemin())):
+        
             #on affiche le chemin
             if afficher_chemin:
                 self.matrice_cases[position_x][position_y].set_Couleur((255,0,0))
@@ -182,34 +178,48 @@ class Resolveur:
             directions_explorables = self.directions_utilisables(voisins,positions_voisins,position_x,position_y)
 
             for direction in directions_explorables:
-                queue.append(positions_voisins[direction])
-                new_chemin=Chemin(chemin_courant.getChemin(),chemin_courant.getPoids(),positions_voisins[direction][0],positions_voisins[direction][1])
-                chemins.append(new_chemin)
+                if not(positions_voisins[direction] in chemin_courant.getChemin()):
+                    queue.append(positions_voisins[direction])
+                    new_chemin=Chemin(chemin_courant.getChemin(),chemin_courant.getPoids(),positions_voisins[direction][0],positions_voisins[direction][1])
+                    chemins.append(new_chemin)
                 
-                #on marque la case comme visitée
-                self.cases_visitees[positions_voisins[direction][0]][positions_voisins[direction][1]]=True
-            
             chemin_courant=chemins[0]
             #obtenir elt suivant
             position_x=queue[0][0]
             position_y=queue[0][1]
 
-            #print(chemin_courant.getChemin())
-
+            #enlever position dans queue
+            queue.pop(0)
+            chemins.pop(0)
+        
                 
         if afficher_chemin and len(chemins)>0:
-            for i in chemins[0].getChemin():
+            for i in chemin_courant.getChemin():
                 self.matrice_cases[i[0]][i[1]].set_Couleur((0,0,255))
 
         solution=None
         if get_chemin and (position_x==self.arrivee_x and position_y==self.arrivee_y):
-            solution=chemins[0].getChemin()
+            solution=chemin_courant.getChemin()
         else:
             solution= (position_x==self.arrivee_x and position_y==self.arrivee_y)
 
             
         return solution
-        
+    def est_dans_chemin(self,position,chemin):
+        """
+        Fonction qui determine si la position est dans le chemin
+        Entrées:
+            -position
+            -chemin
+        Sorites:
+            -un booléen indiquant si la position est dans le chemin
+        """
+        est_dedans=False
+        for position_bis in chemin:
+            if position_bis==position:
+                est_dedans=True
+
+        return est_dedans
     def nouvelles_coords(self,x,y,direction):
         """
         Fonction qui calcul les nouvelles coordonnées du résolveur
@@ -234,6 +244,7 @@ class Resolveur:
             les voisins de la case
             les positions des voisins
             la position de la case
+            le chemin deja explorée
         et qui renvoie les directions ou l'on peut passer
         """
         directions_utilisables=[]

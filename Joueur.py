@@ -5,7 +5,7 @@ from Agissant import *
 
 class Joueur(Agissant):
 
-    def __init__(self, inventaire,pv,degats,radius,largeur_vue,hauteur_vue,position=(0,0)):
+    def __init__(self, inventaire,pv,degats,radius,largeur_vue,hauteur_vue,position=(0,0),portee_vue=11):
         self.position = position
         self.inventaire = inventaire
         self.pv=pv
@@ -20,6 +20,8 @@ class Joueur(Agissant):
         self.largeur_vue=largeur_vue
         self.hauteur_vue=hauteur_vue
         self.position_vue=None
+        #la portée de la vue 
+        self.portee_vue=portee_vue
 
     def prochaine_action(self):
         pass
