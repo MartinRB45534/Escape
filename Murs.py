@@ -27,3 +27,7 @@ class Mur:
         self.etat=new
     def get_etat(self):
         return self.etat
+
+def Porte(Mur):
+    def __init__(self,tailleMur):
+        pass

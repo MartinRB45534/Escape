@@ -12,6 +12,7 @@ from Meute import *
 from Evenement import *
 from Animation import *
 from Affichage import *
+from Clee import *
 
 class Niveau:
     def __init__(self,difficulté,mode_affichage):
@@ -93,10 +94,10 @@ class Niveau:
 
         #entitées
         self.joueur=Joueur(inventaire_joueur,self.hp_joueur,self.force_joueur,2,self.zoom_largeur,self.zoom_hauteur)
-        #self.monstres=[Slime([5,5],10,10,100,5,1,(255,121,121))]
+        
         self.monstres=[Fatti([5,10],10,10,100,5,1,5,(0,0,100))]#,Fatti([10,10],10,10,100,5,1,5,(0,0,100))]
-        self.entitees=[self.joueur]
-
+        self.entitees=[self.joueur,Clee((3,3),"goodooKey")]
+        
         for i in range(0,len(self.monstres)):
             self.entitees.append(self.monstres[i])
 
@@ -216,61 +217,80 @@ class Niveau:
         renvoie un booléen indiquant si il y a besoin de redessiner l'écran
         """
         redessiner=False
-        
-        self.actualiser_vues_entitees()
-        
-        for entitee in self.entitees:
-            
-            entitee=self.actualiser_donnee(entitee)
 
-            entitee.prochaine_action()
+        agissants=self.getAgissants()
+        
+        self.actualiser_vues_agissants(agissants)
+        
+        for agissant in agissants:
+            
+            agissant=self.actualiser_donnee(agissant)
+
+            agissant.prochaine_action()
             if redessiner:
-                self.traitement_action(entitee)
+                self.traitement_action(agissant)
             else:
-                redessiner=self.traitement_action(entitee)
+                redessiner=self.traitement_action(agissant)
             #print(redessiner,type(entitee))
 
         self.delete_entitees()
         
         return redessiner
+    def getAgissants(self):
+        """
+        Fonction qui renvoie un tableau contenant les agissants
+        """
+        agissants=[]
+        
+        for entitee in self.entitees:
+            if issubclass(type(entitee),Agissant):
+                agissants.append(entitee)
 
+        return agissants
     def delete_entitees(self):
         """
         Fonction qui supprime les entitees mortes
         """
         nbSupp=0
         for i in range(0,len(self.entitees)):
-            if self.entitees[i-nbSupp].pv<=0:
-                self.entitees.pop(i-nbSupp)
-                nbSupp+=1
+            if issubclass(type(self.entitees[i-nbSupp]),Agissant):
+                if self.entitees[i-nbSupp].pv<=0:
+                    self.entitees.pop(i-nbSupp)
+                    nbSupp+=1
+            elif issubclass(type(self.entitees[i-nbSupp]),Item):
+                if self.entitees[i-nbSupp].position==None:
+                    self.entitees.pop(i-nbSupp)
+                    nbSupp+=1
         
-    def actualiser_vues_entitees(self):
+    def actualiser_vues_agissants(self,agissants):
         """
-        Fonction qui actualise la vue de toutes les entitees (meutes inclues)
+        Fonction qui actualise la vue de touts les agissants (meutes inclues)
+        Entrée:
+            -les agissants
         """
-        for entitee in self.entitees:
+        for agissant in agissants:
             #l'id 0 indique que l'entitée n'appartient a aucune meute
-            if not(issubclass(type(entitee),Monstre)) or entitee.id_meute==0:
+            if not(issubclass(type(agissant),Monstre)) or agissant.id_meute==0:
                 #on actualise la vue de l'entitée seule
-                vue_entitee,position_vue=self.actualiser_vue(entitee.getPosition(),entitee.getLargeurVue(),entitee.getHauteurVue())
-                entitee.actualiser_vue(vue_entitee,position_vue)
+                vue_entitee,position_vue=self.actualiser_vue(agissant.getPosition(),agissant.getLargeurVue(),agissant.getHauteurVue())
+                agissant.actualiser_vue(vue_entitee,position_vue)
 
         id_meutes=[0]
         meute=Meute(self.CASES_X,self.CASES_Y)
-        for entitee in self.entitees:
+        for agissant in agissants:
             #on vérifie si on n'as pas déja executée la meute de l'entitée
-            if issubclass(type(entitee),Monstre) and not(entitee.id_meute in id_meutes):
-                id_meutes.append(entitee.id_meute)
+            if issubclass(type(agissant),Monstre) and not(agissant.id_meute in id_meutes):
+                id_meutes.append(agissant.id_meute)
                 #on récupère les données de la vue de la meute
-                vues,positions=self.recuperer_vues_meute(entitee.id_meute)
+                vues,positions=self.recuperer_vues_meute(agissant.id_meute)
                 #on crée la vue de la meute
                 vue_meute=meute.actualisation_vues(vues,positions)
                 
                 #on actualise les vues des monstres de la meute
-                for entitee_bis in self.entitees:
-                    if issubclass(type(entitee_bis),Monstre):
-                        if entitee_bis.id_meute==entitee.id_meute:
-                            entitee_bis.actualiser_vue(vue_meute,[0,0])
+                for agissant_bis in agissants:
+                    if issubclass(type(agissant_bis),Monstre):
+                        if agissant_bis.id_meute==agissant.id_meute:
+                            agissant_bis.actualiser_vue(vue_meute,[0,0])
     def recuperer_vues_meute(self,identifiant):
         """
         Fonction qui doit renvoyer les vues nécessaires a une meute
@@ -339,7 +359,7 @@ class Niveau:
                 passe,newcoord=self.lab.peut_passer(agissant.getPosition(),direction_voulue)
                 #print(passe)
                 if passe:
-                    libre = self.collision.case_libre(newcoord,self.entitees)
+                    libre = self.collision.case_libre(agissant,newcoord,self.entitees)
                     #print(libre)
                     if libre:
                         succes=True

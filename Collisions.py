@@ -1,6 +1,9 @@
 from Resolveur import *
 from Agissant import *
 from Potion import *
+from Clee import *
+from Joueur import *
+
 class Collision:
     def __init__(self):
         """Les entitees ne sont pas des attributs"""
@@ -35,8 +38,6 @@ class Collision:
                             succes=True
                             self.attaque(agissant,attaquant)
         return succes
-
-        return entitees
     def attaque(self,victime,attaquant):
         """
         Fonction qui applique les dégats de l'attaquant à la victime
@@ -58,24 +59,50 @@ class Collision:
         """
         self.attaque(entitee1,entitee2)
         self.attaque(entitee2,entitee1)
-    def case_libre(self,position,agissants):
+    def case_libre(self,entitee,position_voulue,entitees):
         """
         Fonction qui vérifie si la case désignée est libre (utilisée pour les déplacements)
         Entrées :
-            la position ciblée
+            l'entitee qui veut ce deplacer
             les occupants potentiels de la case
-            les occupants potentiels dans les meutes
         Sorties:
             un booléen, si la case est libre ou pas
         """
 
         libre = True
 
-        if agissants!=None:
-            for agissant in agissants:
-                if agissant.getPosition() == position:
-                    libre = False
+        if entitees!=None:
+            for entitee_bis in entitees:
+                if tuple(entitee_bis.getPosition()) == tuple(position_voulue) and entitee_bis!=entitee:
+                    libre,suppItem = self.collision_entitees(entitee,entitee_bis)
+                    if suppItem:
+                        i=0
+                        pop=False
+                        while i<len(entitees) and not(pop):
+                            if entitees[i]==entitee_bis:
+                                pop=True
+                                entitees.pop(i)
+                            i+=1
         return libre
+    def collision_entitees(self,entitee1,entitee2):
+        """
+        Fonction qui gère la collision entre deux entitées
+        Entrées:
+            Les deux entitées
+        Sorties:
+            Un booléen indiquant si l'on valide le mouvement
+            Un booléen indiquant si l'on doit supprimer un item (tjr l'entitee2)
+        """
+        valide=False
+        suppItem=False
+        #on vérifie si le joueur veut ramasser un item
+        if isinstance(entitee1,Joueur) and issubclass(type(entitee2),Item):
+            valide=True
+            suppItem=True
+            entitee2.ramasser(entitee1)
+            entitee1.inventaire.ramasse_item(entitee2)
+            
+        return valide,suppItem
     def visite_case(self,position,joueur,entitees):
         """
         Fonction qui place dans l'inventaire ou utilise tous les items sur la case
