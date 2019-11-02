@@ -99,7 +99,7 @@ class Collision:
         if isinstance(entitee1,Joueur) and issubclass(type(entitee2),Item):
             valide=True
             suppItem=True
-            entitee2.ramasser(entitee1)
+            entitee2.ramasser()
             entitee1.inventaire.ramasse_item(entitee2)
             
         return valide,suppItem

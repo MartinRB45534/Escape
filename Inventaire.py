@@ -16,6 +16,19 @@ class Inventaire:
             -l'item a ramasser
         """
         self.items.append(new_item)
+    def supprime_item(self,item_supp):
+        """
+        Fonction qui supprime un item spécifique
+        Entrée:
+            -l'item a supprimer
+        """
+        i=0
+        pop=False
+        
+        while i<len(self.items) and not(pop):
+            if self.items[i]==item_supp:
+                pop=True
+                self.items.pop(i)
     def get_items_spe(self,type_item):
         """
         Fonction qui renvoie tout lkes items d'un certain type
@@ -30,5 +43,5 @@ class Inventaire:
             if issubclass(type(item),type_item):
                 items_voulus.append(item)
 
-        return utems_voulus
+        return items_voulus
     

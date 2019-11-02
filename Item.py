@@ -2,24 +2,21 @@ from Entitee import *
 class Item(Entitee):
     def __init__(self,position):
         self.position=position
-        self.possesseur=None
     def utiliser(self):
         """
         Fonction qui applique l'item a l'entitée
         """
         print("a surdéfinir")
-    def ramasser(self,entitee):
+    def ramasser(self):
         """
-        Fonction qui recupère les informations de l'entitee qui ramassse l'item
-        Entrées:
-            -l'entitée qui rammasse l'item
+        Fonction qui fait les procvédures nécessaires au ramassage
         """
-        self.possesseur=entitee
         self.position=None
         
-    def lacher(self):
+    def lacher(self,new_position):
         """
         Fonction qui lache l'item
+        Entrée:
+            -la nouvelle position de la potion
         """
-        self.position=self.possesseur.getPosition()
-        self.possesseur=None
+        self.position=new_position

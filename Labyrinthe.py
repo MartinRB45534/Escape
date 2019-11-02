@@ -3,6 +3,7 @@ from Cases import *
 from Constantes import *
 from Resolveur import *
 from Lumiere import *
+from Murs import *
 
 
 class Labyrinthe:
@@ -38,12 +39,13 @@ class Labyrinthe:
         #on change la couleur de la case d'arrivée
         self.matrice_cases[self.arrivee_x][self.arrivee_y].set_Couleur((30,144,255))
 
-    def peut_passer(self,coord,sens):
+    def peut_passer(self,coord,sens,inventaire=None):
         """
         Fonction qui valide et applique ou non le mouvement de l'entitée
         Entrées:
             -coordonnnées  actuelles de l'entitée
             -direction vers laquelle l'entitée veut se diriger
+            -l'éventuel inventaire de l'entitée
         Sorties:
             -un booléen qui indique si l'entitée est passé ou pas
             -les nouvelles coordonnées de l'entitée
@@ -51,6 +53,7 @@ class Labyrinthe:
         newcoord = coord
         case = self.matrice_cases[coord[0]][coord[1]]
         passe = True
+        
         if sens == GAUCHE and not case.mur_plein(GAUCHE):
             newcoord = (coord[0]-1,coord[1])
         elif sens == DROITE and not case.mur_plein(DROITE):
@@ -60,7 +63,29 @@ class Labyrinthe:
         elif sens == HAUT and not case.mur_plein(HAUT):
             newcoord = (coord[0],coord[1]-1)
         else :
-            passe = False
+            if inventaire!=None:
+                #on vérifie si le mur que l'on ne peut passer ne soit pas une porte
+                #et si l'entitee possède la clee
+                if sens == GAUCHE and type(case.get_mur_gauche())==Porte:
+                    if case.get_mur_gauche().tentative_ouverture(inventaire):
+                        newcoord = (coord[0]-1,coord[1])
+                        self.casser_mur(sens,coord[0],coord[1])
+                elif sens == DROITE and type(case.get_mur_droit())==Porte:
+                    if case.get_mur_droit().tentative_ouverture(inventaire):
+                        newcoord = (coord[0]+1,coord[1])
+                        self.casser_mur(sens,coord[0],coord[1])
+                elif sens == BAS and type(case.get_mur_bas())==Porte:
+                    if case.get_mur_bas().tentative_ouverture(inventaire):
+                        newcoord = (coord[0],coord[1]+1)
+                        self.casser_mur(sens,coord[0],coord[1])
+                elif sens == HAUT and type(case.get_mur_haut())==Porte:
+                    if case.get_mur_haut().tentative_ouverture(inventaire):
+                        newcoord = (coord[0],coord[1]-1)
+                        self.casser_mur(sens,coord[0],coord[1])
+                else:
+                    passe = False
+            else:
+                passe=False
         return passe, newcoord
 
     def as_gagner(self,coords):

@@ -13,6 +13,7 @@ from Evenement import *
 from Animation import *
 from Affichage import *
 from Clee import *
+from Murs import *
 
 class Niveau:
     def __init__(self,difficulté,mode_affichage):
@@ -81,10 +82,15 @@ class Niveau:
         #salle pour exp monstres
         self.salles.append(Patern(5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,3]]))
 
+        #génération du labyrinthe
         self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.CASES_X-1,self.CASES_Y-1,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
         self.lab.generation()
         self.lab.casser_X_murs(0.1)
-
+        #exp avec les portes
+        mat_lab=self.lab.getMatrice_cases()
+        mat_lab[4][2].murs[DROITE]=Porte(self.LARGEUR_MUR,"goodooKey")
+        self.lab.matrice_cases=mat_lab
+        
         if res :
             self.lab.resolution(self.CASES_X-1,self.CASES_Y-1,0,0,"Largeur")
 
@@ -356,7 +362,10 @@ class Niveau:
             #print("veut bouger")
             direction_voulue=action
             if direction_voulue!=None:
-                passe,newcoord=self.lab.peut_passer(agissant.getPosition(),direction_voulue)
+                if issubclass(type(agissant),Joueur):
+                    passe,newcoord=self.lab.peut_passer(agissant.getPosition(),direction_voulue,agissant.inventaire)
+                else:
+                    passe,newcoord=self.lab.peut_passer(agissant.getPosition(),direction_voulue)
                 #print(passe)
                 if passe:
                     libre = self.collision.case_libre(agissant,newcoord,self.entitees)
