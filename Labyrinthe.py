@@ -252,10 +252,9 @@ class Labyrinthe:
         """
         if proba!=None or nbMurs!=None:
             if proba!=None:
-                nb_murs_a_casser=self.nb_murs_total()*proba
+                self.casser_murs_selon_proba(proba)
             elif nbMurs!=None:
-                nb_murs_a_casser=nbMurs
-            self.casser_murs(nb_murs_a_casser)
+                self.casser_murs(nb_murs_a_casser)
         else:
             print("mauvaise utilisation de la fonction on ne sait que faire")
 
@@ -288,6 +287,20 @@ class Labyrinthe:
             casser = True
         #print(position_case,len(murs),len(self.voisins_case(position_case[0],position_case[1])))
         return casser
+
+    def casser_murs_selon_proba(self,proba):
+        """
+        Fonction qui casse des murs selon une probabilité donnée
+        Entrée:
+            -la probabilité de casser un mur
+        """
+        for x in range(1,self.largeur) :
+            for y in range(1,self.hauteur) :
+                case = self.matrice_cases[x][y]
+                if case.get_mur_haut().get_etat() == MUR_PLEIN and random.random() <= proba :
+                    self.casser_mur(HAUT,x,y)
+                if case.get_mur_gauche().get_etat() == MUR_PLEIN and random.random() <= proba :
+                    self.casser_mur(GAUCHE,x,y)
 
     def voisins_case(self,x,y):
         """

@@ -2,11 +2,12 @@ from Cases import *
 from Constantes import *
 
 class Patern:
-    def __init__(self,largeur,hauteur,tailleCase,tailleMur,entrees=[[1,0]]):
-        self.hauteur=hauteur
-        self.largeur=largeur
+    def __init__(self,position,largeur,hauteur,tailleCase,tailleMur,entrees=[[1,0]]):
+        self.position = position
+        self.hauteur = hauteur
+        self.largeur = largeur
         self.matrice_cases = [[Case(tailleCase,tailleMur) for i in range(hauteur)]for i in range(largeur)]
-        self.entrees=entrees
+        self.entrees = entrees
     def pre_gen_entrees_x(self,colonne,depart_x,arrivee_x):
         """
         Fonction qui facilite la génération des entrées sur une ligne
@@ -33,25 +34,29 @@ class Patern:
             self.entrees.append([ligne,y])
 
         
-    def pre_generation(self,coordonnee_x,coordonnee_y,matrice_lab):
+    def pre_generation(self,matrice_lab):
         """
         Fonction qui prend en entrée:
             les coordonnées de base du patern dans le labyrinthe
             la matrice de cases du labyrinthe
         et qui pre génère les cases du patern
         """
+        coordonnee_x = self.position[0]
+        coordonnee_y = self.position[1]
         for i in range(coordonnee_x,coordonnee_x+self.largeur):
             for j in range(coordonnee_y,coordonnee_y+self.hauteur):
                 self.pre_generation_case(i-coordonnee_x,j-coordonnee_y)
                 matrice_lab[i][j]=self.matrice_cases[i-coordonnee_x][j-coordonnee_y]
 
-    def post_generation(self,coordonnee_x,coordonnee_y,matrice_lab):
+    def post_generation(self,matrice_lab):
         """
         Fonction qui prend en entrée:
             les coordonnées de base du patern dans le labyrinthe
             la matrice de cases du labyrinthe
         et qui clear la salle
         """
+        coordonnee_x = self.position[0]
+        coordonnee_y = self.position[1]
         for i in range(coordonnee_x,coordonnee_x+self.largeur):
             for j in range(coordonnee_y,coordonnee_y+self.hauteur):
                 self.post_generation_case(i-coordonnee_x,j-coordonnee_y)
@@ -206,6 +211,9 @@ class Patern:
                 matrice_lab[i][j]=self.matrice_cases[i-coordonnee_x][j-coordonnee_y]
                 self.integration_case(i,j,matrice_lab)
         return matrice_lab
+
+    def get_pos(self):
+        return self.position
 
 p=Patern(0,0,0,0,[[0,0],[152,152]])
 print(p.case_est_une_entree(0,0))
