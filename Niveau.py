@@ -106,6 +106,7 @@ class Niveau:
             self.entitees=[self.joueur,Clee((3,3),"goodooKey")]
 
         elif niveau == 1:
+            #niveau labyrinthique sans monstres pour apprendre à se déplacer
 
             self.CASES_X = 40
             self.CASES_Y = 40
@@ -146,6 +147,50 @@ class Niveau:
             self.joueur=Joueur(inventaire_joueur,self.hp_joueur,self.force_joueur,2,self.zoom_largeur,self.zoom_hauteur)
         
             self.monstres=[]#Fatti([25,25],10,10,100,5,1,5,(0,0,100)),Fatti([25,30],10,10,100,5,1,5,(0,0,100)),Fatti([30,25],10,10,100,5,1,5,(0,0,100)),Fatti([30,30],10,10,100,5,1,5,(0,0,100))]
+            self.entitees=[self.joueur]
+
+        elif niveau == 2:
+            #niveau monstrueux sans labyrinthe pour apprendre à se battre
+
+            self.CASES_X = 10
+            self.CASES_Y = 60
+            res = False
+            self.salles=[Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,-1],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,-1],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,-1],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,-1]])]
+
+            #variables correspondants a la largeur et la hauteur du zoom
+            self.zoom_largeur=13
+            self.zoom_hauteur=13
+
+            self.force_joueur = 10
+            self.hp_joueur = 200
+
+            inventaire_joueur = Inventaire()
+        
+            pygame.init()
+            #poids permettants de manipuler l'aléatoire
+            self.poids=[6,2,1,2]
+        
+            #salle pour exp monstres
+            self.salles.append(Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,9],[1,9]]))
+
+            #génération du labyrinthe
+            self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,5,59,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
+            self.lab.generation()
+            self.lab.casser_X_murs(0.2)
+            mat_lab=self.lab.getMatrice_cases()
+            self.lab.matrice_cases=mat_lab
+        
+            if res :
+                self.lab.resolution(5,59,4,0,"Largeur")
+
+            pygame.display.set_caption("test")
+            self.screen = pygame.display.set_mode((FENETRE_X,FENETRE_Y),pygame.RESIZABLE)
+            self.screen.fill((0,0,0))
+
+            #entitées
+            self.joueur=Joueur(inventaire_joueur,self.hp_joueur,self.force_joueur,2,self.zoom_largeur,self.zoom_hauteur,(4,0))
+        
+            self.monstres=[Fatti([5,17],10,10,100,5,1,0,(0,0,100)),Fatti([8,25],10,10,100,5,1,1,(0,0,100)),Fatti([3,48],10,10,100,5,1,2,(0,0,100)),Fatti([5,59],10,10,100,5,1,3,(0,0,100))]
             self.entitees=[self.joueur]
             
         
