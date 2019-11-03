@@ -116,7 +116,7 @@ class Monstre(Agissant):
         #on initialise le résolveut pour qu'il nous trouve la prochaine position
         resolveur= Resolveur(self.vue,len(self.vue),len(self.vue[0]),self.position_joueur[0]-self.position_vue[0],self.position_joueur[1]-self.position_vue[1],self.position[0]-self.position_vue[0],self.position[1]-self.position_vue[1],"Largeur")
         chemin=resolveur.resolution(True,False)
-        
+
         #on renvoie la prochaine action a effectuer
         position_suivante=None
         if chemin!=None:
@@ -216,7 +216,7 @@ class Monstre(Agissant):
         return voisins,positions_voisins
     
     def dessine_toi(self,screen,decalage,LARGEUR_CASE,LARGEUR_MUR,position_screen):
-        pygame.draw.rect(screen, self.couleur,(decalage[0]*(LARGEUR_CASE+LARGEUR_MUR)+LARGEUR_MUR+position_screen[1],decalage[1]*(LARGEUR_CASE+LARGEUR_MUR)+LARGEUR_MUR+position_screen[1],LARGEUR_CASE-2*LARGEUR_MUR,LARGEUR_CASE-2*LARGEUR_MUR))
+        pygame.draw.rect(screen, self.couleur,((decalage[0]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[0],(decalage[1]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[1],LARGEUR_CASE-2*LARGEUR_MUR,LARGEUR_CASE-2*LARGEUR_MUR))
 
     
     def setCouleur(self,couleur):

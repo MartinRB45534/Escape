@@ -3,6 +3,7 @@ from Cases import *
 from Constantes import *
 from Resolveur import *
 from Lumiere import *
+from Murs import *
 
 
 class Labyrinthe:
@@ -38,12 +39,13 @@ class Labyrinthe:
         #on change la couleur de la case d'arrivée
         self.matrice_cases[self.arrivee_x][self.arrivee_y].set_Couleur((30,144,255))
 
-    def peut_passer(self,coord,sens):
+    def peut_passer(self,coord,sens,inventaire=None):
         """
         Fonction qui valide et applique ou non le mouvement de l'entitée
         Entrées:
             -coordonnnées  actuelles de l'entitée
             -direction vers laquelle l'entitée veut se diriger
+            -l'éventuel inventaire de l'entitée
         Sorties:
             -un booléen qui indique si l'entitée est passé ou pas
             -les nouvelles coordonnées de l'entitée
@@ -51,6 +53,7 @@ class Labyrinthe:
         newcoord = coord
         case = self.matrice_cases[coord[0]][coord[1]]
         passe = True
+        
         if sens == GAUCHE and not case.mur_plein(GAUCHE):
             newcoord = (coord[0]-1,coord[1])
         elif sens == DROITE and not case.mur_plein(DROITE):
@@ -60,7 +63,29 @@ class Labyrinthe:
         elif sens == HAUT and not case.mur_plein(HAUT):
             newcoord = (coord[0],coord[1]-1)
         else :
-            passe = False
+            if inventaire!=None:
+                #on vérifie si le mur que l'on ne peut passer ne soit pas une porte
+                #et si l'entitee possède la clee
+                if sens == GAUCHE and type(case.get_mur_gauche())==Porte:
+                    if case.get_mur_gauche().tentative_ouverture(inventaire):
+                        newcoord = (coord[0]-1,coord[1])
+                        self.casser_mur(sens,coord[0],coord[1])
+                elif sens == DROITE and type(case.get_mur_droit())==Porte:
+                    if case.get_mur_droit().tentative_ouverture(inventaire):
+                        newcoord = (coord[0]+1,coord[1])
+                        self.casser_mur(sens,coord[0],coord[1])
+                elif sens == BAS and type(case.get_mur_bas())==Porte:
+                    if case.get_mur_bas().tentative_ouverture(inventaire):
+                        newcoord = (coord[0],coord[1]+1)
+                        self.casser_mur(sens,coord[0],coord[1])
+                elif sens == HAUT and type(case.get_mur_haut())==Porte:
+                    if case.get_mur_haut().tentative_ouverture(inventaire):
+                        newcoord = (coord[0],coord[1]-1)
+                        self.casser_mur(sens,coord[0],coord[1])
+                else:
+                    passe = False
+            else:
+                passe=False
         return passe, newcoord
 
     def as_gagner(self,coords):
@@ -79,20 +104,20 @@ class Labyrinthe:
         
         return win
     
-    def dessine_toi(self,screen,position_joueur,entitees,position_screen,largeur,hauteur,mode_affichage,LARGEUR_CASE,LARGEUR_MUR):
-
+    def dessine_toi(self,screen,position_joueur,position_screen,position_vue,largeur,hauteur,mode_affichage,LARGEUR_CASE,LARGEUR_MUR,mat_exploree):
         """
         Fonction qui dessine le labyrinthe sur l'écran
         Entrées:
             l'écran, la surface sur laquelle on dessine(objet pygame)
             la position du joueur
-            les entitées autres que le joueur a dessiner (ex les monstres)
             la position que l'on prend pour 0,0 sur l'écran (ex: un décalage de 20px sur la droite se traduit par (x+20,y))
+            la position de la vue dans le labyrinthe
             la largeur en cases
             la hauteur en cases
             le mode d'affichage
             la largueur des cases
             la largeur des murs
+            la matrice explorée
         Sorties:
             Rien
         """
@@ -120,8 +145,6 @@ class Labyrinthe:
                 position_y=position_screen[1]
                 position_x+=self.tailleCase+self.tailleMur
                 
-            self.affichage_entitees(entitees,mat_exploree,position_vue,screen,largeur,hauteur,LARGEUR_CASE,LARGEUR_MUR,position_screen)
-
         elif mode_affichage == parcours_en_profondeur :
             joueur_x = position_joueur[0]
             joueur_y = position_joueur[1]
@@ -134,12 +157,6 @@ class Labyrinthe:
 
             min_y=joueur_y-hauteur//2
             max_y=joueur_y+hauteur-hauteur//2
-
-            vue, position_vue = self.construire_vue(position_joueur,largeur,hauteur)
-            #on ne veut pas que le résolveur trouve de solution on veut juste qu'il explore la matrice
-            resolveur = Resolveur(vue,largeur,hauteur,-1,-1,joueur_x-position_vue[0],joueur_y-position_vue[1],"Profondeur")
-
-            mat_exploree=resolveur.resolution(False,False,False,True)
             
             for x in range(min_x,max_x):
                 for y in range(min_y,max_y):
@@ -150,7 +167,6 @@ class Labyrinthe:
                 position_y=position_screen[1]
                 position_x+=self.tailleCase+self.tailleMur
 
-            self.affichage_entitees(entitees,mat_exploree,position_vue,screen,largeur,hauteur,LARGEUR_CASE,LARGEUR_MUR,position_screen)
         elif mode_affichage == distance_max :
             joueur_x = position_joueur[0]
             joueur_y = position_joueur[1]
@@ -164,12 +180,6 @@ class Labyrinthe:
             min_y=joueur_y-hauteur//2
             max_y=joueur_y+hauteur-hauteur//2
 
-            vue, position_vue = self.construire_vue(position_joueur,largeur,hauteur)
-            #on ne veut pas que le résolveur trouve de solution on veut juste qu'il explore la matrice
-            resolveur = Resolveur(vue,largeur,hauteur,-1,-1,joueur_x-position_vue[0],joueur_y-position_vue[1])
-
-            mat_exploree=resolveur.resolution_en_largeur_distance_limitée(False,False,False,True,11)
-            
             for x in range(min_x,max_x):
                 for y in range(min_y,max_y):
                     if not((x<0 or x>=self.largeur) or (y<0 or y>=self.hauteur)):
@@ -179,7 +189,7 @@ class Labyrinthe:
                 position_y=position_screen[1]
                 position_x+=self.tailleCase+self.tailleMur
         
-            self.affichage_entitees(entitees,mat_exploree,position_vue,screen,largeur,hauteur,LARGEUR_CASE,LARGEUR_MUR,position_screen)
+
         elif mode_affichage == aveugle :
             self.dessine_case(screen,position_joueur,position_screen,largeur,hauteur,position_joueur)
 
@@ -203,30 +213,8 @@ class Labyrinthe:
         x = position[0]
         y = position[1]
 
-        self.matrice_cases[x][y].dessine_toi(screen,(x-joueur_x+largeur//2)*(self.tailleCase+self.tailleMur),(y-joueur_y+hauteur//2)*(self.tailleCase+self.tailleMur))
+        self.matrice_cases[x][y].dessine_toi(screen,(x-joueur_x+largeur//2)*(self.tailleCase+self.tailleMur)+position_x,(y-joueur_y+hauteur//2)*(self.tailleCase+self.tailleMur)+position_y)
 
-    def affichage_entitees(self,entitees,mat_exploree,position_vue,screen,largeur,hauteur,LARGEUR_CASE,LARGEUR_MUR,position_screen):
-        """
-        Fonction qui affiche les entitées
-        Entrées:
-            les entitées a afficher
-            la matrice explorée
-            la position de la vue
-            l'écran sur lequel on dessine
-            la largueur des cases
-            la largeur des murs
-            la position de l'écran dans la fenetre
-        Sorties:
-            Rien
-        """
-        if entitees!=None:
-            for entitee in entitees:
-                x=entitee.getPosition()[0]-position_vue[0]
-                y=entitee.getPosition()[1]-position_vue[1]
-                
-                if not(x>len(mat_exploree)-1 or x<0 or y>len(mat_exploree[0])-1 or y<0):
-                    if mat_exploree[x][y]:
-                        entitee.dessine_toi(screen,[x,y],LARGEUR_CASE,LARGEUR_MUR,position_screen)
     def construire_vue(self,position,largeur,hauteur):
         """
         Fonction qui construit la vue disponible à un monstre ou au joueur
@@ -404,6 +392,3 @@ class Labyrinthe:
     def getMatrice_cases(self):
         new_mat = [[self.matrice_cases[j][i] for i in range(self.hauteur)]for j in range(self.largeur)]
         return new_mat
-
-#lab = Labyrinthe(5,5)
-#lab.dessine_toi(0,0,0)
