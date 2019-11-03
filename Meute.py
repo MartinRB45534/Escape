@@ -47,4 +47,5 @@ class Meute:
         """
         for x in range(0,len(vue)):
             for y in range(0,len(vue[0])):
-                self.vue_globale[x+position_vue[0]][y+position_vue[1]]=vue[x][y]
+                if x+position_vue[0] < self.largeur_lab and y+position_vue[1] < self.hauteur_lab and x+position_vue[0] >= 0 and y+position_vue[1] >= 0:
+                    self.vue_globale[x+position_vue[0]][y+position_vue[1]]=vue[x][y]
