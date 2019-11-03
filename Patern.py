@@ -115,6 +115,7 @@ class Patern:
             et génère les murs en fonction de sa position
         """
         #on casse les murs qui ne sont pas aux extrèmes
+        #print(x,y)
         if x!=0:
             self.matrice_cases[x][y].casser_mur(GAUCHE)
             

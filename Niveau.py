@@ -192,6 +192,94 @@ class Niveau:
         
             self.monstres=[Fatti([5,17],10,10,100,5,1,0,(0,0,100)),Fatti([8,25],10,10,100,5,1,1,(0,0,100)),Fatti([3,48],10,10,100,5,1,2,(0,0,100)),Fatti([5,59],10,10,100,5,1,3,(0,0,100))]
             self.entitees=[self.joueur]
+
+        elif niveau == 3:
+            #niveau monstrueux sans labyrinthe pour apprendre à se battre
+
+            self.CASES_X = 10
+            self.CASES_Y = 60
+            res = False
+            self.salles=[Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,-1],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,-1],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,-1],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,-1]])]
+
+            #variables correspondants a la largeur et la hauteur du zoom
+            self.zoom_largeur=13
+            self.zoom_hauteur=13
+
+            self.force_joueur = 10
+            self.hp_joueur = 200
+
+            inventaire_joueur = Inventaire()
+        
+            pygame.init()
+            #poids permettants de manipuler l'aléatoire
+            self.poids=[6,2,1,2]
+        
+            #salle pour exp monstres
+            self.salles.append(Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,9],[1,9]]))
+
+            #génération du labyrinthe
+            self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,5,59,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
+            self.lab.generation()
+            self.lab.casser_X_murs(0.2)
+            mat_lab=self.lab.getMatrice_cases()
+            self.lab.matrice_cases=mat_lab
+        
+            if res :
+                self.lab.resolution(5,59,4,0,"Largeur")
+
+            pygame.display.set_caption("test")
+            self.screen = pygame.display.set_mode((FENETRE_X,FENETRE_Y),pygame.RESIZABLE)
+            self.screen.fill((0,0,0))
+
+            #entitées
+            self.joueur=Joueur(inventaire_joueur,self.hp_joueur,self.force_joueur,2,self.zoom_largeur,self.zoom_hauteur,(4,0))
+        
+            self.monstres=[Slime([5,17],10,10,100,5,1,0,(0,0,100)),Fatti([8,25],10,10,100,5,1,1,(0,0,100)),Runner(self.lab.getMatrice_cases(),5,59,[3,48],10,10,100,5,1,2,(0,0,100)),Fatti([5,59],10,10,100,5,1,3,(0,0,100))]
+            self.entitees=[self.joueur]
+
+        elif niveau == 4:
+            #niveau monstrueux sans labyrinthe pour apprendre à se battre
+
+            self.CASES_X = 15
+            self.CASES_Y = 15
+            res = False
+            self.salles=[Patern((3,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,13],[2,1]]),Patern((6,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,1],[2,13]]),Patern((9,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,13],[2,1]]),Patern((12,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,1]])]
+
+            #variables correspondants a la largeur et la hauteur du zoom
+            self.zoom_largeur=13
+            self.zoom_hauteur=13
+
+            self.force_joueur = 10
+            self.hp_joueur = 200
+
+            inventaire_joueur = Inventaire()
+        
+            pygame.init()
+            #poids permettants de manipuler l'aléatoire
+            self.poids=[6,2,1,2]
+        
+            #salle pour exp monstres
+            self.salles.append(Patern((0,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[2,13]]))
+
+            #génération du labyrinthe
+            self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.CASES_X-1,self.CASES_Y-1,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
+            self.lab.generation()
+            self.lab.casser_X_murs(0.0)
+            mat_lab=self.lab.getMatrice_cases()
+            self.lab.matrice_cases=mat_lab
+        
+            if res :
+                self.lab.resolution(self.CASES_X-1,self.CASES_Y-1,0,0,"Largeur")
+
+            pygame.display.set_caption("test")
+            self.screen = pygame.display.set_mode((FENETRE_X,FENETRE_Y),pygame.RESIZABLE)
+            self.screen.fill((0,0,0))
+
+            #entitées
+            self.joueur=Joueur(inventaire_joueur,self.hp_joueur,self.force_joueur,2,self.zoom_largeur,self.zoom_hauteur)
+        
+            self.monstres=[Slime([1,5],10,10,100,5,1,1,(0,0,100)),Slime([2,12],10,10,100,5,1,1,(0,0,100)),Slime([0,12],10,10,100,5,1,1,(0,0,100)),Slime([1,13],10,10,100,5,1,1,(0,0,100)),Slime([2,8],10,10,100,5,1,1,(0,0,100)),Slime([0,8],10,10,100,5,1,1,(0,0,100)),Slime([1,9],10,10,100,5,1,1,(0,0,100)),Slime([2,10],10,10,100,5,1,1,(0,0,100)),Slime([0,10],10,10,100,5,1,1,(0,0,100)),Slime([1,11],10,10,100,5,1,1,(0,0,100)),Slime([7,5],10,10,100,5,1,2,(0,0,100)),Slime([8,12],10,10,100,5,1,2,(0,0,100)),Slime([6,12],10,10,100,5,1,2,(0,0,100)),Slime([7,13],10,10,100,5,1,2,(0,0,100)),Slime([8,8],10,10,100,5,1,2,(0,0,100)),Slime([6,8],10,10,100,5,1,2,(0,0,100)),Slime([7,9],10,10,100,5,1,2,(0,0,100)),Slime([8,10],10,10,100,5,1,2,(0,0,100)),Slime([6,10],10,10,100,5,1,2,(0,0,100)),Slime([7,11],10,10,100,5,1,2,(0,0,100))]
+            self.entitees=[self.joueur]
             
         
         for i in range(0,len(self.monstres)):

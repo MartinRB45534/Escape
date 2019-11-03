@@ -2,7 +2,7 @@ import pygame
 from Niveau import *
 from Constantes import *
 
-niveau = 2
+niveau = 4
 difficulté = AVERAGE
 mode_affichage = distance_max
 

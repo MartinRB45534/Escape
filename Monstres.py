@@ -240,8 +240,8 @@ class Slime(Monstre):
             la direction de la prochaine position voulue par le monstre
         """
         directions=self.directions_utilisables(self.position[0],self.position[1],vue,position_lab)
-        
         return directions[random.randrange(0,len(directions))]
+    
 
 
 class Fatti(Monstre):
@@ -258,14 +258,11 @@ class Fatti(Monstre):
         return None
 
 class Runner(Monstre):
-    def __init__(self,mat_lab,largeur_lab,hauteur_lab,position,largeur_vue,hauteur_vue,fin_lab_x,fin_lab_y,couleur=(255,0,0)):
+    def __init__(self,mat_lab,fin_lab_x,fin_lab_y,position,largeur_vue,hauteur_vue,pv,degats,radius,id_meute=0,couleur=(255,0,0)):
         self.mat_lab = mat_lab
-        self.largeur_lab = hauteur_lab
-        self.hauteur_lab = largeur_lab
-        self.position=position
-        self.largeur_vue=largeur_vue
-        self.hauteur_vue=hauteur_vue
-        self.couleur=couleur
+        self.largeur_lab = len(mat_lab)
+        self.hauteur_lab = len(mat_lab[0])
+        Monstre.__init__(self,position,largeur_vue,hauteur_vue,pv,degats,radius,id_meute,couleur)
         self.fin_lab=[fin_lab_x,fin_lab_y]
     def cherche(self,vue,position_lab):
         """
@@ -279,7 +276,7 @@ class Runner(Monstre):
         direction_voulue=None
         
         #on initialise le résolveut pour qu'il nous trouve la prochaine position
-        resolveur= Resolveur(self.mat_lab,self.largeur_lab,self.hauteur_lab,self.fin_lab[0],self.fin_lab[1],self.position[0],self.position[1],"Profondeur")
+        resolveur= Resolveur(self.mat_lab,self.largeur_lab,self.hauteur_lab,self.fin_lab[0],self.fin_lab[1],self.position[0],self.position[1],"Largeur")
         chemin=resolveur.resolution(True,False,False,False)
       
         #on renvoie la prochaine action a effectuer
