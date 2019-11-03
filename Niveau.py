@@ -16,7 +16,7 @@ from Clee import *
 from Murs import *
 
 class Niveau:
-    def __init__(self,difficulté,mode_affichage):
+    def __init__(self,niveau,difficulté,mode_affichage):
 
         self.mode_affichage = mode_affichage
         if self.mode_affichage == voir_tout :
@@ -32,77 +32,124 @@ class Niveau:
             self.LARGEUR_CASE = 20
             self.LARGEUR_MUR = 1
 
-        if difficulté == BEGINNER :
-            self.CASES_X = 20
-            self.CASES_Y = 20
-            res = True
-            self.salles=[Patern(10,10,self.LARGEUR_CASE,self.LARGEUR_MUR)]
-        elif difficulté == EASY :
-            self.CASES_X = 20
-            self.CASES_Y = 20
-            res = False
-            self.salles=[Patern(5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
-        elif difficulté == AVERAGE :
+        if niveau == 0:
+            if difficulté == BEGINNER :
+                self.CASES_X = 20
+                self.CASES_Y = 20
+                res = True
+                self.salles=[Patern(10,10,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+            elif difficulté == EASY :
+                self.CASES_X = 20
+                self.CASES_Y = 20
+                res = False
+                self.salles=[Patern(5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+            elif difficulté == AVERAGE :
+                self.CASES_X = 40
+                self.CASES_Y = 40
+                res = False
+                self.salles=[Patern(5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+            elif difficulté == HARD :
+                self.CASES_X = 60
+                self.CASES_Y = 60
+                res = False
+                self.salles=[Patern(40,2,self.LARGEUR_CASE,self.LARGEUR_MUR,[])]
+                #on génère les entrées de manière a avoir un espace ouvert
+                self.salles[0].pre_gen_entrees_x(0,0,39)
+                self.salles[0].pre_gen_entrees_x(1,0,39)
+            elif difficulté == INSANE :
+                self.CASES_X = 100
+                self.CASES_Y = 100
+                res = False
+                self.salles=[Patern(2,40,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+            elif difficulté == IMPOSSIBLE :
+                self.CASES_X = 1000
+                self.CASES_Y = 1000
+                res = False
+                self.salles=[Patern(1,1,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+
+            #variables correspondants a la largeur et la hauteur du zoom
+            self.zoom_largeur=11
+            self.zoom_hauteur=11
+
+            self.force_joueur = 5
+            self.hp_joueur = 100
+
+            inventaire_joueur = Inventaire()
+        
+            pygame.init()
+            #poids permettants de manipuler l'aléatoire
+            self.poids=[6,2,1,2]
+        
+            #salle pour exp monstres
+            self.salles.append(Patern(5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,3]]))
+
+            #génération du labyrinthe
+            self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.CASES_X-1,self.CASES_Y-1,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
+            self.lab.generation()
+            self.lab.casser_X_murs(0.1)
+            #exp avec les portes
+            mat_lab=self.lab.getMatrice_cases()
+            mat_lab[4][2].murs[DROITE]=Porte(self.LARGEUR_MUR,"goodooKey")
+            self.lab.matrice_cases=mat_lab
+        
+            if res :
+                self.lab.resolution(self.CASES_X-1,self.CASES_Y-1,0,0,"Largeur")
+
+            pygame.display.set_caption("test")
+            self.screen = pygame.display.set_mode((FENETRE_X,FENETRE_Y),pygame.RESIZABLE)
+            self.screen.fill((0,0,0))
+
+            #entitées
+            self.joueur=Joueur(inventaire_joueur,self.hp_joueur,self.force_joueur,2,self.zoom_largeur,self.zoom_hauteur)
+        
+            self.monstres=[Fatti([5,10],10,10,100,5,1,5,(0,0,100))]#,Fatti([10,10],10,10,100,5,1,5,(0,0,100))]
+            self.entitees=[self.joueur,Clee((3,3),"goodooKey")]
+
+        elif niveau == 1:
+
             self.CASES_X = 40
             self.CASES_Y = 40
             res = False
-            self.salles=[Patern(5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
-        elif difficulté == HARD :
-            self.CASES_X = 60
-            self.CASES_Y = 60
-            res = False
-            self.salles=[Patern(40,2,self.LARGEUR_CASE,self.LARGEUR_MUR,[])]
-            #on génère les entrées de manière a avoir un espace ouvert
-            self.salles[0].pre_gen_entrees_x(0,0,39)
-            self.salles[0].pre_gen_entrees_x(1,0,39)
-        elif difficulté == INSANE :
-            self.CASES_X = 100
-            self.CASES_Y = 100
-            res = False
-            self.salles=[Patern(2,40,self.LARGEUR_CASE,self.LARGEUR_MUR)]
-        elif difficulté == IMPOSSIBLE :
-            self.CASES_X = 1000
-            self.CASES_Y = 1000
-            res = False
-            self.salles=[Patern(1,1,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+            self.salles=[Patern(10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[])]
+            self.salles[0].pre_gen_entrees_x(0,0,29)
+            self.salles[0].pre_gen_entrees_x(1,0,29)
 
-        #variables correspondants a la largeur et la hauteur du zoom
-        self.zoom_largeur=11
-        self.zoom_hauteur=11
+            #variables correspondants a la largeur et la hauteur du zoom
+            self.zoom_largeur=13
+            self.zoom_hauteur=13
 
-        self.force_joueur = 5
-        self.hp_joueur = 100
+            self.force_joueur = 10
+            self.hp_joueur = 200
 
-        inventaire_joueur = Inventaire()
+            inventaire_joueur = Inventaire()
         
-        pygame.init()
-        #poids permettants de manipuler l'aléatoire
-        self.poids=[6,2,1,2]
+            pygame.init()
+            #poids permettants de manipuler l'aléatoire
+            self.poids=[6,2,1,2]
         
-        #salle pour exp monstres
-        self.salles.append(Patern(5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,3]]))
+            #salle pour exp monstres
+            self.salles.append(Patern(11,3,self.LARGEUR_CASE,self.LARGEUR_MUR,[[10,1],[8,2]]))
 
-        #génération du labyrinthe
-        self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.CASES_X-1,self.CASES_Y-1,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
-        self.lab.generation()
-        self.lab.casser_X_murs(0.1)
-        #exp avec les portes
-        mat_lab=self.lab.getMatrice_cases()
-        mat_lab[4][2].murs[DROITE]=Porte(self.LARGEUR_MUR,"goodooKey")
-        self.lab.matrice_cases=mat_lab
+            #génération du labyrinthe
+            self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.CASES_X-1,self.CASES_Y-1,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
+            self.lab.generation()
+            self.lab.casser_X_murs(0.5)
+            mat_lab=self.lab.getMatrice_cases()
+            self.lab.matrice_cases=mat_lab
         
-        if res :
-            self.lab.resolution(self.CASES_X-1,self.CASES_Y-1,0,0,"Largeur")
+            if res :
+                self.lab.resolution(self.CASES_X-1,self.CASES_Y-1,0,0,"Largeur")
 
-        pygame.display.set_caption("test")
-        self.screen = pygame.display.set_mode((FENETRE_X,FENETRE_Y),pygame.RESIZABLE)
-        self.screen.fill((0,0,0))
+            pygame.display.set_caption("test")
+            self.screen = pygame.display.set_mode((FENETRE_X,FENETRE_Y),pygame.RESIZABLE)
+            self.screen.fill((0,0,0))
 
-        #entitées
-        self.joueur=Joueur(inventaire_joueur,self.hp_joueur,self.force_joueur,2,self.zoom_largeur,self.zoom_hauteur)
+            #entitées
+            self.joueur=Joueur(inventaire_joueur,self.hp_joueur,self.force_joueur,2,self.zoom_largeur,self.zoom_hauteur)
         
-        self.monstres=[Fatti([5,10],10,10,100,5,1,5,(0,0,100))]#,Fatti([10,10],10,10,100,5,1,5,(0,0,100))]
-        self.entitees=[self.joueur,Clee((3,3),"goodooKey")]
+            self.monstres=[Fatti([25,25],10,10,100,5,1,5,(0,0,100)),Fatti([25,30],10,10,100,5,1,5,(0,0,100)),Fatti([30,25],10,10,100,5,1,5,(0,0,100)),Fatti([30,30],10,10,100,5,1,5,(0,0,100))]
+            self.entitees=[self.joueur]
+            
         
         for i in range(0,len(self.monstres)):
             self.entitees.append(self.monstres[i])
