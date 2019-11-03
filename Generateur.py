@@ -41,16 +41,16 @@ class Generateur:
         Fonction qui pregenere les paterns
         """
         if self.paterns != None:
-            self.paterns[0].pre_generation((self.largeur-self.paterns[0].largeur)//2,(self.hauteur-self.paterns[0].hauteur)//2,self.matrice_cases)
-            self.paterns[1].pre_generation(0,0,self.matrice_cases)
+            for patern in self.paterns :
+                patern.pre_generation(self.matrice_cases)
 
     def post_gene_paterns(self):
         """
         Fonction qui postgenere les paterns
         """
         if self.paterns != None:
-            self.paterns[0].post_generation((self.largeur-self.paterns[0].largeur)//2,(self.hauteur-self.paterns[0].hauteur)//2,self.matrice_cases)
-            self.paterns[1].post_generation(0,0,self.matrice_cases)
+            for patern in self.paterns :
+                patern.post_generation(self.matrice_cases)
 
     def generation_en_profondeur(self):
         """

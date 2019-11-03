@@ -37,22 +37,22 @@ class Niveau:
                 self.CASES_X = 20
                 self.CASES_Y = 20
                 res = True
-                self.salles=[Patern(10,10,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+                self.salles=[Patern((8,8),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR)]
             elif difficulté == EASY :
                 self.CASES_X = 20
                 self.CASES_Y = 20
                 res = False
-                self.salles=[Patern(5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+                self.salles=[Patern((14,14),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
             elif difficulté == AVERAGE :
                 self.CASES_X = 40
                 self.CASES_Y = 40
                 res = False
-                self.salles=[Patern(5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+                self.salles=[Patern((17,17),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
             elif difficulté == HARD :
                 self.CASES_X = 60
                 self.CASES_Y = 60
                 res = False
-                self.salles=[Patern(40,2,self.LARGEUR_CASE,self.LARGEUR_MUR,[])]
+                self.salles=[Patern((10,29),40,2,self.LARGEUR_CASE,self.LARGEUR_MUR,[])]
                 #on génère les entrées de manière a avoir un espace ouvert
                 self.salles[0].pre_gen_entrees_x(0,0,39)
                 self.salles[0].pre_gen_entrees_x(1,0,39)
@@ -60,12 +60,12 @@ class Niveau:
                 self.CASES_X = 100
                 self.CASES_Y = 100
                 res = False
-                self.salles=[Patern(2,40,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+                self.salles=[Patern((49,30),2,40,self.LARGEUR_CASE,self.LARGEUR_MUR)]
             elif difficulté == IMPOSSIBLE :
                 self.CASES_X = 1000
                 self.CASES_Y = 1000
                 res = False
-                self.salles=[Patern(1,1,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+                self.salles=[]
 
             #variables correspondants a la largeur et la hauteur du zoom
             self.zoom_largeur=11
@@ -81,7 +81,7 @@ class Niveau:
             self.poids=[6,2,1,2]
         
             #salle pour exp monstres
-            self.salles.append(Patern(5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,3]]))
+            self.salles.append(Patern((0,0),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,3]]))
 
             #génération du labyrinthe
             self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.CASES_X-1,self.CASES_Y-1,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
@@ -110,9 +110,7 @@ class Niveau:
             self.CASES_X = 40
             self.CASES_Y = 40
             res = False
-            self.salles=[Patern(10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[])]
-            self.salles[0].pre_gen_entrees_x(0,0,29)
-            self.salles[0].pre_gen_entrees_x(1,0,29)
+            self.salles=[]
 
             #variables correspondants a la largeur et la hauteur du zoom
             self.zoom_largeur=13
@@ -128,12 +126,12 @@ class Niveau:
             self.poids=[6,2,1,2]
         
             #salle pour exp monstres
-            self.salles.append(Patern(11,3,self.LARGEUR_CASE,self.LARGEUR_MUR,[[10,1],[8,2]]))
+            self.salles.append(Patern((0,0),11,3,self.LARGEUR_CASE,self.LARGEUR_MUR,[[10,1],[8,2]]))
 
             #génération du labyrinthe
             self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.CASES_X-1,self.CASES_Y-1,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
             self.lab.generation()
-            self.lab.casser_X_murs(0.5)
+            self.lab.casser_X_murs(0.2)
             mat_lab=self.lab.getMatrice_cases()
             self.lab.matrice_cases=mat_lab
         
@@ -147,7 +145,7 @@ class Niveau:
             #entitées
             self.joueur=Joueur(inventaire_joueur,self.hp_joueur,self.force_joueur,2,self.zoom_largeur,self.zoom_hauteur)
         
-            self.monstres=[Fatti([25,25],10,10,100,5,1,5,(0,0,100)),Fatti([25,30],10,10,100,5,1,5,(0,0,100)),Fatti([30,25],10,10,100,5,1,5,(0,0,100)),Fatti([30,30],10,10,100,5,1,5,(0,0,100))]
+            self.monstres=[]#Fatti([25,25],10,10,100,5,1,5,(0,0,100)),Fatti([25,30],10,10,100,5,1,5,(0,0,100)),Fatti([30,25],10,10,100,5,1,5,(0,0,100)),Fatti([30,30],10,10,100,5,1,5,(0,0,100))]
             self.entitees=[self.joueur]
             
         
