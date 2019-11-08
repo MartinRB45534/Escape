@@ -6,7 +6,6 @@ from Patern import *
 from Monstres import *
 from Potion import *
 from Inventaire import *
-from Planning import *
 from Collisions import *
 from Meute import *
 from Evenement import *
