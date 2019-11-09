@@ -28,6 +28,8 @@ yBoutonQuitter = 10
 
 def main():
     
+
+    
     fenetre = pygame.display.set_mode((640, 300))
     #ici on prend les images contenues dans les fichiers pour les convertir vers pygame
     start = pygame.image.load("start.png").convert()
@@ -44,6 +46,9 @@ def main():
     black_color = BLACK
     NIVEXIST= False
     while loop:
+        background = pygame.Surface(fenetre.get_size())
+        background.fill(BLACK)
+        fenetre.blit(background, (0, 0))
         #si le niveau est crée on évite d'en recréer un à chaque passage de boucle
         if not(NIVEXIST) :
             niv = Niveau(niveau,difficulté,mode_affichage)
@@ -84,15 +89,16 @@ def main():
                 niv.run()
 
             elif event.type == pygame.MOUSEBUTTONDOWN and over_black:
-                pygame.quit()
+                loop = False
+                
 
         # Actualisation de l'affichage
         pygame.display.flip()
         # 10 fps
         clock.tick(10)
 
-
-if __name__ == '__main__':
-    main()
+    pygame.quit()
+    
+main()
 
     
