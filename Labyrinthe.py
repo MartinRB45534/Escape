@@ -203,6 +203,34 @@ class Labyrinthe:
             lumiere_haut.avance(screen,position_joueur,position_screen,largeur,hauteur)
             lumiere_bas.avance(screen,position_joueur,position_screen,largeur,hauteur)
 
+    def dessine_tout(self,screen,position_screen):
+        """
+        Fonction qui dessine le labyrinthe sur l'écran
+        Entrées:
+            l'écran, la surface sur laquelle on dessine(objet pygame)
+            la position du joueur
+            la position que l'on prend pour 0,0 sur l'écran (ex: un décalage de 20px sur la droite se traduit par (x+20,y))
+            la position de la vue dans le labyrinthe
+            la largeur en cases
+            la hauteur en cases
+            le mode d'affichage
+            la largueur des cases
+            la largeur des murs
+            la matrice explorée
+        Sorties:
+            Rien
+        """
+
+        position_x=position_screen[0]
+        position_y=position_screen[1]
+
+        for x in range(0,self.largeur):
+            for y in range(0,self.hauteur):
+                self.matrice_cases[x][y].dessine_tout(screen,position_x,position_y)
+                position_y+=3
+            position_y=position_screen[1]
+            position_x+=3
+
     def dessine_case(self,screen,position_joueur,position_screen,largeur,hauteur,position):
         joueur_x = position_joueur[0]
         joueur_y = position_joueur[1]
