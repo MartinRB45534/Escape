@@ -9,7 +9,7 @@ from Evenement import *
 from Animation import *
 
 class Affichage:
-    def __init__(self,screen,mode_affichage,LARGEUR_CASE,LARGEUR_MUR):
+    def __init__(self,screen,mode_affichage,LARGEUR_CASE,LARGEUR_MUR,labyrinthe):
         #surface ou l'on dessine
         self.screen=screen
         
@@ -18,7 +18,9 @@ class Affichage:
         self.LARGEUR_MUR=LARGEUR_MUR
         self.LARGEUR_CASE=LARGEUR_CASE
         #decalage de la matrice du labyrinthe sur l'écran (decalage en px)
-        self.decalage_matrice=[0,30]
+        self.hauteur_minimap = labyrinthe.hauteur * 3 + 11
+        self.largeur_minimap = labyrinthe.largeur * 3 + 11
+        self.decalage_matrice=[0,self.hauteur_minimap]
         #liste des animations
         self.animations=[]
     def dessine_frame(self,joueur,labyrinthe,entitees,evenements):
@@ -33,11 +35,12 @@ class Affichage:
             -rien
         """
         self.reset_screen()
-        self.dessine_hud(joueur)
+        self.dessine_hud(joueur,labyrinthe)
         if self.mode_affichage==distance_max:
             self.distance_max(joueur,labyrinthe,entitees,evenements)
         else:
             print("le mode d'affichage selectionnée est incorrect")
+            
     def distance_max(self,joueur,labyrinthe,entitees,evenements):
         """
         Fonction qui dessine une frame avec la méthode de la distance maximum
@@ -71,7 +74,8 @@ class Affichage:
         self.dessine_animations(position_joueur,largeur_vue,hauteur_vue)
         #on supprime les animations qui ont expirées
         self.supprime_animations()
-    def dessine_hud(self,joueur):
+        
+    def dessine_hud(self,joueur,labyrinthe):
         """
         Fonction qui affiche les informations complémentaires
         (barre de vie, MINIMAP, etc)
@@ -80,10 +84,14 @@ class Affichage:
         """
         police_pv=pygame.font.SysFont(None, 20)
         text_pv=police_pv.render("PV:",True,(0,0,0))
-        self.screen.blit(text_pv,(0,10))
+        self.screen.blit(text_pv,(self.largeur_minimap,10))
         
         #on dessine la barre de vie du joueur
-        pygame.draw.rect(self.screen, pygame.Color(255,0,0),(30,10,int(100*(joueur.pv/joueur.pv_max)),10))
+        pygame.draw.rect(self.screen, pygame.Color(255,0,0),(self.largeur_minimap + 30,10,int(100*(joueur.pv/joueur.pv_max)),10))
+
+        #on dessine la minimap
+        labyrinthe.dessine_tout(self.screen,[5,5])
+        
     def getConstantes(self,position_joueur,position_screen,largeur,hauteur):
         """
         Fonction qui génère les constantes nécessaires au fonctionnement de l'affichage

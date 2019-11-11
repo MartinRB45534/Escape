@@ -6,7 +6,6 @@ from Patern import *
 from Monstres import *
 from Potion import *
 from Inventaire import *
-from Planning import *
 from Collisions import *
 from Meute import *
 from Evenement import *
@@ -289,7 +288,7 @@ class Niveau:
         self.horloge_cycle=0
 
         #objet d'affichage
-        self.affichage=Affichage(self.screen,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR)
+        self.affichage=Affichage(self.screen,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR,self.lab)
         
         #texte de fin
         font = pygame.font.SysFont(None, 72)
@@ -565,6 +564,7 @@ class Niveau:
                         agissant.setPosition(newcoord)
                         if agissant == self.joueur:
                             nouveaux_evenements = self.collision.visite_case(newcoord,agissant,self.entitees)
+                            self.lab.matrice_cases[newcoord[0]][newcoord[1]].passage = True
                             for evenement in nouveaux_evenements :
                                 self.evenements.append(evenement)
         elif id_action==ATTAQUER:
