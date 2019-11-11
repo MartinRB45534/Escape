@@ -4,12 +4,13 @@ from math import sqrt
 from Agissant import *
 
 class Monstre(Agissant):
-    def __init__(self,position,largeur_vue,hauteur_vue,pv,degats,radius,id_meute=0,couleur=(255,0,0)):
+    def __init__(self,position,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,id_meute=0,couleur=(255,0,0)):
         self.position=position
         self.largeur_vue=largeur_vue
         self.hauteur_vue=hauteur_vue
         self.pv=pv
         self.degats=degats
+        self.vitesse=vitesse
         self.radius=radius
         self.couleur=couleur
         #prochaine action
@@ -258,11 +259,11 @@ class Fatti(Monstre):
         return None
 
 class Runner(Monstre):
-    def __init__(self,mat_lab,fin_lab_x,fin_lab_y,position,largeur_vue,hauteur_vue,pv,degats,radius,id_meute=0,couleur=(255,0,0)):
+    def __init__(self,mat_lab,fin_lab_x,fin_lab_y,position,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,id_meute=0,couleur=(255,0,0)):
         self.mat_lab = mat_lab
         self.largeur_lab = len(mat_lab)
         self.hauteur_lab = len(mat_lab[0])
-        Monstre.__init__(self,position,largeur_vue,hauteur_vue,pv,degats,radius,id_meute,couleur)
+        Monstre.__init__(self,position,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,id_meute,couleur)
         self.fin_lab=[fin_lab_x,fin_lab_y]
     def cherche(self,vue,position_lab):
         """

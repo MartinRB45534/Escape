@@ -5,12 +5,13 @@ from Agissant import *
 
 class Joueur(Agissant):
 
-    def __init__(self, inventaire,pv,degats,radius,largeur_vue,hauteur_vue,position=(0,0),portee_vue=11):
+    def __init__(self, inventaire,pv,degats,vitesse,radius,largeur_vue,hauteur_vue,position=(0,0),portee_vue=11):
         self.position = position
         self.inventaire = inventaire
         self.pv=pv
         self.pv_max=pv
         self.degats=degats
+        self.vitesse=vitesse
         self.radius=radius
         #prochaine action
         self.next_action=None

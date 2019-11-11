@@ -1,10 +1,11 @@
 from Entitee import *
 class Agissant(Entitee):
-    def __init__(self,position,pv,degats,radius):
+    def __init__(self,position,pv,degats,vitesse,radius):
         self.position=position
         self.pv=pv
         self.degats=degats
         self.radius=radius
+        self.vitesse=vitesse
         #prochaine action
         self.next_action=None
         #id de l'action que l'on veut faire
@@ -51,3 +52,5 @@ class Agissant(Entitee):
         return self.hauteur_vue
     def getRadius(self):
         return self.radius
+    def getVitesse(self):
+        return self.vitesse
