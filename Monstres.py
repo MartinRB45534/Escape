@@ -290,4 +290,17 @@ class Runner(Monstre):
         
         return direction_voulue
 
-
+def spawn_aleatoire(monstre,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,perimetre,proba,max_meute,premiere_meute,couleur=(255,0,0)):
+    nb_meute = premiere_meute
+    taille_meute = 0
+    res = []
+    for i in range (perimetre[0][0],perimetre[1][0]):
+        for j in range (perimetre[0][1],perimetre[1][1]):
+            if random.random() <= proba :
+                res.append(monstre((i,j),largeur_vue,hauteur_vue,pv,degats,vitesse,radius,nb_meute,couleur))
+                taille_meute += 1
+                if taille_meute == max_meute :
+                    nb_meute += 1
+                    taille_meute = 0
+    return res
+                

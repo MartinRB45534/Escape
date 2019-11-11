@@ -122,5 +122,4 @@ class Collision:
                 if isinstance(entitee,Potion) and entitee.getPosition()==position:
                     #à modifier quand on pourra jouer avec l'inventaire
                     evenements.append(entitee.recupere())
-                    del(entitee)
         return evenements
