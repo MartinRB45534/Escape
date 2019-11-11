@@ -15,15 +15,15 @@ from Clee import *
 from Murs import *
 
 class Niveau:
-    def __init__(self,niveau,difficulté,mode_affichage):
+    def __init__(self,niveau,difficulté,mode_affichage,mode_minimap):
 
         self.mode_affichage = mode_affichage
         if self.mode_affichage == voir_tout :
             self.LARGEUR_CASE = 20
             self.LARGEUR_MUR = 1
         elif self.mode_affichage == aveugle :
-            self.LARGEUR_CASE = 45
-            self.LARGEUR_MUR = 5
+            self.LARGEUR_CASE = 20
+            self.LARGEUR_MUR = 1
         elif self.mode_affichage == parcours_en_profondeur :
             self.LARGEUR_CASE = 20
             self.LARGEUR_MUR = 1
@@ -36,22 +36,22 @@ class Niveau:
                 self.CASES_X = 20
                 self.CASES_Y = 20
                 res = True
-                self.salles=[Patern((8,8),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+                self.salles=[Patern((8,8),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap)]
             elif difficulté == EASY :
                 self.CASES_X = 20
                 self.CASES_Y = 20
                 res = False
-                self.salles=[Patern((14,14),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+                self.salles=[Patern((14,14),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap)]
             elif difficulté == AVERAGE :
                 self.CASES_X = 40
                 self.CASES_Y = 40
                 res = False
-                self.salles=[Patern((17,17),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+                self.salles=[Patern((17,17),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap)]
             elif difficulté == HARD :
                 self.CASES_X = 60
                 self.CASES_Y = 60
                 res = False
-                self.salles=[Patern((10,29),40,2,self.LARGEUR_CASE,self.LARGEUR_MUR,[])]
+                self.salles=[Patern((10,29),40,2,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[])]
                 #on génère les entrées de manière a avoir un espace ouvert
                 self.salles[0].pre_gen_entrees_x(0,0,39)
                 self.salles[0].pre_gen_entrees_x(1,0,39)
@@ -59,7 +59,7 @@ class Niveau:
                 self.CASES_X = 100
                 self.CASES_Y = 100
                 res = False
-                self.salles=[Patern((49,30),2,40,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+                self.salles=[Patern((49,30),2,40,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap)]
             elif difficulté == IMPOSSIBLE :
                 self.CASES_X = 1000
                 self.CASES_Y = 1000
@@ -83,10 +83,10 @@ class Niveau:
             self.poids=[6,2,1,2]
         
             #salle pour exp monstres
-            self.salles.append(Patern((0,0),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,3]]))
+            self.salles.append(Patern((0,0),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,3]]))
 
             #génération du labyrinthe
-            self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.CASES_X-1,self.CASES_Y-1,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
+            self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.CASES_X-1,self.CASES_Y-1,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles,mode_minimap)
             self.lab.generation()
             self.lab.casser_X_murs(0.1)
             #exp avec les portes
@@ -129,10 +129,10 @@ class Niveau:
             self.poids=[6,2,1,2]
         
             #salle pour exp monstres
-            self.salles.append(Patern((0,0),11,3,self.LARGEUR_CASE,self.LARGEUR_MUR,[[10,1],[8,2]]))
+            self.salles.append(Patern((0,0),11,3,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[10,1],[8,2]]))
 
             #génération du labyrinthe
-            self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.CASES_X-1,self.CASES_Y-1,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
+            self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.CASES_X-1,self.CASES_Y-1,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles,mode_minimap)
             self.lab.generation()
             self.lab.casser_X_murs(0.2)
 
@@ -152,7 +152,7 @@ class Niveau:
             self.CASES_X = 10
             self.CASES_Y = 60
             res = False
-            self.salles=[Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,-1],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,-1],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,-1],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,-1]])]
+            self.salles=[Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,-1],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,-1],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,-1],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,-1]])]
 
             #variables correspondants a la largeur et la hauteur du zoom
             self.zoom_largeur=13
@@ -171,10 +171,10 @@ class Niveau:
             self.poids=[6,2,1,2]
         
             #salle pour exp monstres
-            self.salles.append(Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,9],[1,9]]))
+            self.salles.append(Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[0,9],[1,9]]))
 
             #génération du labyrinthe
-            self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,5,59,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
+            self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,5,59,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles,mode_minimap)
             self.lab.generation()
             self.lab.casser_X_murs(0.2)
 
@@ -194,7 +194,7 @@ class Niveau:
             self.CASES_X = 10
             self.CASES_Y = 60
             res = False
-            self.salles=[Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,-1],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,-1],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,-1],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,-1]])]
+            self.salles=[Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,-1],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,-1],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,-1],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,-1]])]
 
             #variables correspondants a la largeur et la hauteur du zoom
             self.zoom_largeur=13
@@ -213,10 +213,10 @@ class Niveau:
             self.poids=[6,2,1,2]
         
             #salle pour exp monstres
-            self.salles.append(Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,9],[1,9]]))
+            self.salles.append(Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[0,9],[1,9]]))
 
             #génération du labyrinthe
-            self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,5,59,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
+            self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,5,59,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles,mode_minimap)
             self.lab.generation()
             self.lab.casser_X_murs(0.2)
 
@@ -236,7 +236,7 @@ class Niveau:
             self.CASES_X = 15
             self.CASES_Y = 15
             res = False
-            self.salles=[Patern((3,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,13],[2,1]]),Patern((6,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,1],[2,13]]),Patern((9,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,13],[2,1]]),Patern((12,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,1]])]
+            self.salles=[Patern((3,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[0,13],[2,1]]),Patern((6,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[0,1],[2,13]]),Patern((9,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[0,13],[2,1]]),Patern((12,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[0,1]])]
 
             #variables correspondants a la largeur et la hauteur du zoom
             self.zoom_largeur=13
@@ -255,10 +255,10 @@ class Niveau:
             self.poids=[6,2,1,2]
         
             #salle pour exp monstres
-            self.salles.append(Patern((0,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[2,13]]))
+            self.salles.append(Patern((0,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[2,13]]))
 
             #génération du labyrinthe
-            self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.CASES_X-1,self.CASES_Y-1,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
+            self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.CASES_X-1,self.CASES_Y-1,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles,mode_minimap)
             self.lab.generation()
         
             pygame.display.set_caption("test")
