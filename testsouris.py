@@ -2,9 +2,10 @@ import pygame
 from Niveau import *
 from Constantes import *
 
-niveau = 1
+niveau = 5
 difficulté = AVERAGE
 mode_affichage = distance_max
+mode_minimap = voir_tout
 
 
 
@@ -51,7 +52,7 @@ def main():
         fenetre.blit(background, (0, 0))
         #si le niveau est crée on évite d'en recréer un à chaque passage de boucle
         if not(NIVEXIST) :
-            niv = Niveau(niveau,difficulté,mode_affichage)
+            niv = Niveau(niveau,difficulté,mode_affichage,mode_minimap)
             NIVEXIST = True
 
 
@@ -82,7 +83,7 @@ def main():
                 loop = False
             # si clic, le jeu se lance
             elif event.type == pygame.MOUSEBUTTONDOWN and over_green:
-                niv = Niveau(niveau,difficulté,mode_affichage)
+                niv = Niveau(niveau,difficulté,mode_affichage,mode_minimap)
                 niv.run()
 
             elif event.type == pygame.MOUSEBUTTONDOWN and over_yellow:

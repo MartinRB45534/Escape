@@ -32,6 +32,9 @@ aveugle = 2
 global distance_max
 distance_max = 3
 
+global passage
+passage = 1
+
 global BEGINNER
 BEGINNER = 0
 global EASY
@@ -49,3 +52,6 @@ global BOUGER
 BOUGER=0
 global ATTAQUER
 ATTAQUER=1
+
+global ARRIVEE
+ARRIVEE=(30,144,255)

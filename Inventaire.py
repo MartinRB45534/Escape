@@ -31,11 +31,11 @@ class Inventaire:
                 self.items.pop(i)
     def get_items_spe(self,type_item):
         """
-        Fonction qui renvoie tout lkes items d'un certain type
+        Fonction qui renvoie tout les items d'un certain type
         Entrée:
-            -le type a chercher
+            -le type à chercher
         Sortie:
-            -tous les items du type sélectionner
+            -tous les items du type sélectionné
         """
         items_voulus=[]
 

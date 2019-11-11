@@ -7,15 +7,17 @@ from Murs import *
 
 
 class Labyrinthe:
-    def __init__(self,largeur,hauteur,arrivee_x,arrivee_y,tailleCase=20,tailleMur=1,poids=[1,1,1,1],patterns=None):
+    def __init__(self,largeur,hauteur,arrivee_x,arrivee_y,tailleCase=20,tailleMur=1,poids=[1,1,1,1],patterns=None,mode_minimap=voir_tout):
         self.largeur = largeur
         self.hauteur = hauteur
 
         self.arrivee_x=arrivee_x
         self.arrivee_y=arrivee_y
         
-        self.matrice_cases = [[Case(tailleCase,tailleMur) for i in range(hauteur)]for j in range(largeur)]
+        self.matrice_cases = [[Case(tailleCase,tailleMur,mode_minimap) for i in range(hauteur)]for j in range(largeur)]
 
+        self.mode_minimap = mode_minimap
+        
         #paramètre graphiques
         self.tailleCase = tailleCase
         self.tailleMur = tailleMur
@@ -37,7 +39,7 @@ class Labyrinthe:
         gene=Generateur.Generateur(self.matrice_cases,self.largeur,self.hauteur,self.poids,self.patterns)
         self.matrice_cases=gene.generation()
         #on change la couleur de la case d'arrivée
-        self.matrice_cases[self.arrivee_x][self.arrivee_y].set_Couleur((30,144,255))
+        self.matrice_cases[self.arrivee_x][self.arrivee_y].est_arrivee()
 
     def peut_passer(self,coord,sens,inventaire=None):
         """
