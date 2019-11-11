@@ -268,7 +268,7 @@ class Niveau:
             #entitées
             self.joueur=Joueur(inventaire_joueur,self.hp_joueur,self.force_joueur,self.vitesse_joueur,2,self.zoom_largeur,self.zoom_hauteur)
         
-            self.monstres=[Slime([1,5],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([2,12],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([0,12],10,10,100,5,10,1,1,(0,0,100)),Slime([1,13],10,10,100,5,5,1,1,(0,0,100)),Slime([2,8],10,10,100,5,40,1,1,(0,0,100)),Slime([0,8],10,10,100,5,80,1,1,(0,0,100)),Slime([1,9],10,10,100,5,10,1,1,(0,0,100)),Slime([2,10],10,10,100,5,15,1,1,(0,0,100)),Slime([0,10],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([1,11],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([7,5],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([8,12],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([6,12],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([7,13],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([8,8],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([6,8],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([7,9],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([8,10],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([6,10],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([7,11],10,10,100,5,self.vitesse_montres,1,2,(0,0,100))]
+            self.monstres=[Slime([1,5],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([2,12],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([0,12],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([1,13],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([2,8],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([0,8],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([1,9],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([2,10],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([0,10],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([1,11],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([7,5],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([8,12],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([6,12],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([7,13],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([8,8],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([6,8],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([7,9],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([8,10],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([6,10],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([7,11],10,10,100,5,self.vitesse_montres,1,2,(0,0,100))]
             self.entitees=[self.joueur]
 
         elif niveau == 5:
@@ -308,9 +308,9 @@ class Niveau:
             self.joueur=Joueur(inventaire_joueur,self.hp_joueur,self.force_joueur,self.vitesse_joueur,2,self.zoom_largeur,self.zoom_hauteur)
         
             potions_vue=[Potion_de_vision((35,26),self.joueur),Potion_de_vision((27,38),self.joueur),Potion_de_vision((21,19),self.joueur),Potion_de_visibilite_permanente((8,7),self.joueur)]
-            potions_combat=[Potion_de_force((i,j),self.joueur)for j in range(5,40,5) for i in range(5,40,5)]
+            potions_combat=[Potion_de_force((i,j),self.joueur)for j in range(5,45,10) for i in range(5,45,10)] + [Potion_de_portee((i,j),self.joueur)for j in range (10,40,10) for i in range (10,40,10)] + [Potion_de_soin((20,20),self.joueur),Potion_de_portee_permanente((2,2),self.joueur)]
             potions=potions_vue+potions_combat
-            self.monstres=[]#Fatti([25,25],10,10,100,5,1,5,(0,0,100)),Fatti([25,30],10,10,100,5,1,5,(0,0,100)),Fatti([30,25],10,10,100,5,1,5,(0,0,100)),Fatti([30,30],10,10,100,5,1,5,(0,0,100))]
+            self.monstres=spawn_aleatoire(Fatti,10,10,100,10,self.vitesse_montres,1,((10,10),(30,30)),0.1,5,0)
             self.entitees=[self.joueur]+potions
 
             
@@ -339,6 +339,7 @@ class Niveau:
         self.textLose = font.render("Vous avez perdu!! ;o;", True, (0, 128, 128))
         
         self.position_screen=(0,0)
+        print (len(self.monstres))
         
     def run(self):
         run=True
@@ -494,7 +495,7 @@ class Niveau:
                 if self.entitees[i-nbSupp].pv<=0:
                     self.entitees.pop(i-nbSupp)
                     nbSupp+=1
-            elif issubclass(type(self.entitees[i-nbSupp]),Item):
+            elif issubclass(type(self.entitees[i-nbSupp]),Item) or issubclass(type(self.entitees[i-nbSupp]),Potion):
                 if self.entitees[i-nbSupp].position==None:
                     self.entitees.pop(i-nbSupp)
                     nbSupp+=1
