@@ -101,8 +101,10 @@ class Collision:
             suppItem=True
             entitee2.ramasser()
             entitee1.inventaire.ramasse_item(entitee2)
-            
+        elif isinstance(entitee1,Joueur) and issubclass(type(entitee2),Potion):
+            valide=True
         return valide,suppItem
+    
     def visite_case(self,position,joueur,entitees):
         """
         Fonction qui place dans l'inventaire ou utilise tous les items sur la case
@@ -117,6 +119,8 @@ class Collision:
         evenements = []
         if entitees!=None:
             for entitee in entitees:
-                if isinstance(entitee,Potion):
-                    evenements.append(entitee.recupere(joueur))
+                if isinstance(entitee,Potion) and entitee.getPosition()==position:
+                    #à modifier quand on pourra jouer avec l'inventaire
+                    evenements.append(entitee.recupere())
+                    del(entitee)
         return evenements

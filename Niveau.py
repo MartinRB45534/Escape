@@ -270,6 +270,49 @@ class Niveau:
         
             self.monstres=[Slime([1,5],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([2,12],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([0,12],10,10,100,5,10,1,1,(0,0,100)),Slime([1,13],10,10,100,5,5,1,1,(0,0,100)),Slime([2,8],10,10,100,5,40,1,1,(0,0,100)),Slime([0,8],10,10,100,5,80,1,1,(0,0,100)),Slime([1,9],10,10,100,5,10,1,1,(0,0,100)),Slime([2,10],10,10,100,5,15,1,1,(0,0,100)),Slime([0,10],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([1,11],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([7,5],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([8,12],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([6,12],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([7,13],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([8,8],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([6,8],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([7,9],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([8,10],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([6,10],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([7,11],10,10,100,5,self.vitesse_montres,1,2,(0,0,100))]
             self.entitees=[self.joueur]
+
+        elif niveau == 5:
+            #niveau avec labyrinthe et montres pour apprendre l'utilité des potions
+
+            self.CASES_X = 40
+            self.CASES_Y = 40
+            res = False
+            self.salles=[Patern((0,0),11,11,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[10,1]])]
+
+            #variables correspondants a la largeur et la hauteur du zoom
+            self.zoom_largeur=13
+            self.zoom_hauteur=13
+
+            self.force_joueur = 10
+            self.hp_joueur = 200
+            self.vitesse_joueur=3
+
+            self.vitesse_montres=20
+
+            inventaire_joueur = Inventaire()
+        
+            pygame.init()
+            #poids permettants de manipuler l'aléatoire
+            self.poids=[6,9,1,1]
+
+            #génération du labyrinthe
+            self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.CASES_X-1,self.CASES_Y-1,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles,mode_minimap)
+            self.lab.generation()
+            self.lab.casser_X_murs(0.3)
+
+            pygame.display.set_caption("test")
+            self.screen = pygame.display.set_mode((FENETRE_X,FENETRE_Y),pygame.RESIZABLE)
+            self.screen.fill((0,0,0))
+
+            #entitées
+            self.joueur=Joueur(inventaire_joueur,self.hp_joueur,self.force_joueur,self.vitesse_joueur,2,self.zoom_largeur,self.zoom_hauteur)
+        
+            potions_vue=[Potion_de_vision((35,26),self.joueur),Potion_de_vision((27,38),self.joueur),Potion_de_vision((21,19),self.joueur),Potion_de_visibilite_permanente((8,7),self.joueur)]
+            potions_combat=[Potion_de_force((i,j),self.joueur)for j in range(5,40,5) for i in range(5,40,5)]
+            potions=potions_vue+potions_combat
+            self.monstres=[]#Fatti([25,25],10,10,100,5,1,5,(0,0,100)),Fatti([25,30],10,10,100,5,1,5,(0,0,100)),Fatti([30,25],10,10,100,5,1,5,(0,0,100)),Fatti([30,30],10,10,100,5,1,5,(0,0,100))]
+            self.entitees=[self.joueur]+potions
+
             
         if res :
             self.lab.resolution(self.CASES_X-1,self.CASES_Y-1,0,0,"Largeur")

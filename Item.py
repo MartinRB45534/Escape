@@ -9,7 +9,7 @@ class Item(Entitee):
         print("a surdéfinir")
     def ramasser(self):
         """
-        Fonction qui fait les procvédures nécessaires au ramassage
+        Fonction qui fait les procédures nécessaires au ramassage
         """
         self.position=None
         
