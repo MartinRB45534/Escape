@@ -231,7 +231,7 @@ class Monstre(Agissant):
 
 
 class Slime(Monstre):
-    def __init__(self,position,id_meute=0,largeur_vue=5,hauteur_vue=5,pv=50,degats=5,vitesse=3,radius=1,couleur=(255,100,100)):
+    def __init__(self,position,id_meute=0,largeur_vue=5,hauteur_vue=5,pv=50,degats=3,vitesse=6,radius=1,couleur=(255,100,100)):
         Monstre.__init__(self,position,id_meute,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,couleur)
 
     def cherche(self,vue,position_lab):
@@ -249,7 +249,7 @@ class Slime(Monstre):
 
 
 class Fatti(Monstre):
-    def __init__(self,position,id_meute=0,largeur_vue=10,hauteur_vue=10,pv=200,degats=20,vitesse=40,radius=1,couleur=(0,0,100)):
+    def __init__(self,position,id_meute=0,largeur_vue=10,hauteur_vue=10,pv=200,degats=20,vitesse=20,radius=1,couleur=(0,0,100)):
         Monstre.__init__(self,position,id_meute,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,couleur)
         
     def cherche(self,vue,position_lab):
