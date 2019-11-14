@@ -274,17 +274,20 @@ class Labyrinthe:
                     colonne.append(self.matrice_cases[x][y])
             vue.append(colonne)
         return vue,[min_x,min_y]
-    def casser_X_murs(self,proba=None,nbMurs=None):
+    def casser_X_murs(self,proba=None,nbMurs=None,pourcentage=None):
         """
         Fonction qui doit casser des murs sur la matrice
         on peut déterminer le nombre de murs avec un probabilité (proba*nb murs au total)
         ou selon un nombre défini en entrée
+        ou un pourcentage
         """
-        if proba!=None or nbMurs!=None:
+        if proba!=None or nbMurs!=None or pourcentage!=None:
             if proba!=None:
                 self.casser_murs_selon_proba(proba)
             elif nbMurs!=None:
                 self.casser_murs(nb_murs_a_casser)
+            elif pourcentage!=None:
+                self.casser_murs(int(pourcentage*self.mub_murs_total()))
         else:
             print("mauvaise utilisation de la fonction on ne sait que faire")
 
@@ -417,8 +420,8 @@ class Labyrinthe:
         for x in range(0,self.largeur):
             for y in range(0,self.hauteur):
                 murs_pleins+=self.matrice_cases[x][y].nb_murs_pleins()
-
-        return murs_pleins
+        
+        return int((murs_pleins-self.hauteur*2-self.largeur*2)/2)
 
     def resolution(self,arrivee_x,arrivee_y,depart_x=0,depart_y=0,mode="Profondeur"):
         """
