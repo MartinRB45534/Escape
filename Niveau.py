@@ -529,6 +529,7 @@ class Niveau:
                     if issubclass(type(agissant_bis),Monstre):
                         if agissant_bis.id_meute==agissant.id_meute:
                             agissant_bis.actualiser_vue(vue_meute,[0,0])
+
     def getMeute(self,id_meute):
         """
         Fonction qui renvoie la meute correspondant a l'identifiant entrer
@@ -542,6 +543,7 @@ class Niveau:
             if meute_tmp.id_meute==id_meute:
                 meute=meute_tmp
         return meute
+
     def recuperer_vues_meute(self,identifiant):
         """
         Fonction qui doit renvoyer les vues nécessaires a une meute
@@ -554,11 +556,10 @@ class Niveau:
         vues=[]
         positions=[]
         for entitee_bis in self.entitees:
-            if issubclass(type(entitee_bis),Monstre):
-                if entitee_bis.id_meute==identifiant:
-                    vue_entitee,position_vue=self.actualiser_vue(entitee_bis.getPosition(),entitee_bis.getLargeurVue(),entitee_bis.getHauteurVue())
-                    vues.append(vue_entitee)
-                    positions.append(position_vue)
+            if issubclass(type(entitee_bis),Monstre) and entitee_bis.id_meute==identifiant:
+                vue_entitee,position_vue=self.actualiser_vue(entitee_bis.getPosition(),entitee_bis.getLargeurVue(),entitee_bis.getHauteurVue())
+                vues.append(vue_entitee)
+                positions.append(position_vue)
 
         return vues,positions
     
