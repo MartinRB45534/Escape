@@ -259,7 +259,7 @@ class Niveau:
             meute1 = [Fatti([1,5],1),Fatti([2,12],1),Fatti([0,12],1),Fatti([1,13],1)]
             meute2 = [Slime([4,0],2),Slime([3,1],2),Slime([5,1],2),Slime([4,2],2),Slime([3,3],2),Slime([5,3],2),Slime([4,4],2),Slime([3,5],2),Slime([5,5],2),Slime([4,6],2),Slime([3,7],2),Slime([5,7],2),Slime([4,8],2)]
             meute3 = [Slime([7,8],3),Slime([8,9],3),Slime([6,9],3),Fatti([6,11],3),Fatti([7,11],3),Fatti([8,11],3)]
-            meute4 = [Slime([10,5],4),Slime([10,6],4),Slime([10,7],4),Slime([10,8],4),Slime([10,9],4),Slime([10,10],4),Fatti([10,12],4,10,10,300,30)]
+            meute4 = [Slime([10,5],4),Slime([10,6],4),Slime([10,7],4),Slime([10,8],4),Slime([10,9],4),Slime([10,10],4),Fatti([10,2],4,10,10,300,30)]
             meute5 = [Slime([13,8],5),Slime([14,9],5),Slime([12,9],5),Fatti([12,11],5),Fatti([13,11],5),Fatti([14,11],5),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[12,5]),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[13,0]),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[14,5])]
             self.monstres = meute1
             for meutenumerote in [meute2,meute3,meute4,meute5]:
@@ -653,7 +653,7 @@ class Niveau:
         """
         self.affichage.dessine_frame(self.joueur,self.lab,self.entitees,self.evenements)
 
-    def spawn_aleatoire(monstre,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,perimetre,proba,max_meute,premiere_meute,couleur=(255,0,0)):
+    def spawn_aleatoire(self,monstre,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,perimetre,proba,max_meute,premiere_meute,couleur=(255,0,0)):
         """
         Fonction qui génére des monstres aléatoirement
         Entrées :
