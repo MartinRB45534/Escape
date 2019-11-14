@@ -3,6 +3,7 @@ from Agissant import *
 from Potion import *
 from Clee import *
 from Joueur import *
+from Monstres import *
 
 class Collision:
     def __init__(self):
@@ -70,19 +71,15 @@ class Collision:
         """
 
         libre = True
-
+        items_deletes=[]
         if entitees!=None:
             for entitee_bis in entitees:
                 if tuple(entitee_bis.getPosition()) == tuple(position_voulue) and entitee_bis!=entitee:
-                    libre,suppItem = self.collision_entitees(entitee,entitee_bis)
+                    valide,suppItem = self.collision_entitees(entitee,entitee_bis)
+                    libre=libre and valide
                     if suppItem:
-                        i=0
-                        pop=False
-                        while i<len(entitees) and not(pop):
-                            if entitees[i]==entitee_bis:
-                                pop=True
-                                entitees.pop(i)
-                            i+=1
+                        items_deletes.append(entitee_bis)
+            self.supp_items(items_deletes,entitees)
         return libre
     def collision_entitees(self,entitee1,entitee2):
         """
@@ -101,10 +98,27 @@ class Collision:
             suppItem=True
             entitee2.ramasser()
             entitee1.inventaire.ramasse_item(entitee2)
-        elif isinstance(entitee1,Joueur) and issubclass(type(entitee2),Potion):
+        elif issubclass(type(entitee1),Monstre) and (issubclass(type(entitee2),Item) or issubclass(type(entitee2),Potion)):
+            valide=True
+        elif issubclass(type(entitee1),Joueur) and issubclass(type(entitee2),Potion):
             valide=True
         return valide,suppItem
-    
+    def supp_items(self,items_a_supp,entitees):
+        """
+        Fonction qui supprime les items ramassés
+        Entrées:
+            -les items a supprimer
+            -le tableau des entitées
+        """
+        for item in items_a_supp:
+            i=0
+            pop=False
+            while i<len(entitees) and not(pop):
+                if entitees[i]==item:
+                    pop=True
+                    entitees.pop(i)
+                i+=1
+        
     def visite_case(self,position,joueur,entitees):
         """
         Fonction qui place dans l'inventaire ou utilise tous les items sur la case

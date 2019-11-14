@@ -74,7 +74,7 @@ class Niveau:
             self.hp_joueur = 100
             self.vitesse_joueur=3
 
-            self.vitesse_montres=1
+            self.vitesse_montres=20
 
             inventaire_joueur = Inventaire()
         
@@ -83,7 +83,7 @@ class Niveau:
             self.poids=[6,2,1,2]
         
             #salle pour exp monstres
-            self.salles.append(Patern((0,0),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,3]]))
+            self.salles.append(Patern((0,0),20,20,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,3]]))
 
             #génération du labyrinthe
             self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.CASES_X-1,self.CASES_Y-1,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles,mode_minimap)
@@ -101,7 +101,7 @@ class Niveau:
             #entitées
             self.joueur=Joueur(inventaire_joueur,self.hp_joueur,self.force_joueur,self.vitesse_joueur,2,self.zoom_largeur,self.zoom_hauteur)
         
-            self.monstres=[Fatti([5,10],10,10,100,5,self.vitesse_montres,1,5,(0,0,100))]#,Fatti([10,10],10,10,100,5,1,5,(0,0,100))]
+            self.monstres=[Fatti([4,4],10,10,100,5,self.vitesse_montres,1,5,(0,0,100))]#,Fatti([10,10],10,10,100,5,1,5,(0,0,100))]
             self.entitees=[self.joueur,Clee((3,3),"goodooKey")]
 
         elif niveau == 1:
@@ -310,7 +310,7 @@ class Niveau:
             potions_vue=[Potion_de_vision((35,26),self.joueur),Potion_de_vision((27,38),self.joueur),Potion_de_vision((21,19),self.joueur),Potion_de_visibilite_permanente((8,7),self.joueur)]
             potions_combat=[Potion_de_force((i,j),self.joueur)for j in range(5,45,10) for i in range(5,45,10)] + [Potion_de_portee((i,j),self.joueur)for j in range (10,40,10) for i in range (10,40,10)] + [Potion_de_soin((20,20),self.joueur),Potion_de_portee_permanente((2,2),self.joueur)]
             potions=potions_vue+potions_combat
-            self.monstres=spawn_aleatoire(Fatti,10,10,100,10,self.vitesse_montres,1,((10,10),(30,30)),0.1,5,0)
+            self.monstres=spawn_aleatoire(Fatti,10,10,100,10,self.vitesse_montres,1,((10,10),(30,30)),0.1,5,0,(0,255,0))
             self.entitees=[self.joueur]+potions
 
             
@@ -320,6 +320,8 @@ class Niveau:
         for i in range(0,len(self.monstres)):
             self.entitees.append(self.monstres[i])
 
+        #generation des meutes
+        self.meutes=self.generation_meutes()
         #objet qui traite les collisions
         self.collision=Collision()
 
@@ -331,7 +333,7 @@ class Niveau:
         self.horloge_cycle=0
 
         #objet d'affichage
-        self.affichage=Affichage(self.screen,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR,self.lab)
+        self.affichage=Affichage(self.screen,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR,self.lab.largeur,self.lab.hauteur)
         
         #texte de fin
         font = pygame.font.SysFont(None, 72)
@@ -346,20 +348,12 @@ class Niveau:
         self.redraw()
         #objet qui permet de gérer le temps en pygame
         clock = pygame.time.Clock()
-        #nb de frames que le joueur doit attendre entre chaque action
-        cooldown_joueur=3
-        compteur_j=0
-        #nb de frames que les monstres doivent attendre entre chaque action
-        cooldown_monstres=20
-        compteur_m=0
         
         while run:
             #on cadence à 60 frames/sec
             clock.tick(60)
             self.actualiser_temps()
 
-            """move_j = False
-            move_m=False"""
             #si l'utilisateur décide de mettre fin au programme on sort de la boucle
             for event in pygame.event.get():
                 if event.type==pygame.QUIT:
@@ -369,25 +363,6 @@ class Niveau:
                     self.zoom_largeur = event.w//(self.LARGEUR_CASE + self.LARGEUR_MUR)
                     self.zoom_hauteur = event.h//(self.LARGEUR_CASE + self.LARGEUR_MUR)
                     self.redraw()
-            """#partie gérant le joueur
-            if compteur_j==0:
-                compteur_j=cooldown_joueur
-                self.action_joueur()
-                
-                vue,position=self.actualiser_vue(self.joueur.getPosition(),self.joueur.largeur_vue,self.joueur.hauteur_vue)
-                self.joueur.actualiser_vue(vue,position)
-                
-                self.joueur=self.actualiser_donnee(self.joueur)
-                move_j=self.traitement_action(self.joueur)
-            else:
-                compteur_j-=1
-            #partie gérant les monstres
-            if compteur_m==0:
-                compteur_m=cooldown_monstres
-
-                move_m=self.actions_entitees() 
-            else:
-                compteur_m-=1"""
             self.actions_entitees()
 
             #si on détecte un mouvement on redessine l'écran
@@ -402,6 +377,29 @@ class Niveau:
                 self.ecran_fin_niveau(self.textLose)
                 run=False
             pygame.display.update()
+    def generation_meutes(self):
+        """
+        Fonction qui génère les meutes
+        Sorties:
+            -les meutes
+        """
+        meutes=[]
+        id_meutes=[0]
+        for monstre in self.monstres:
+            if not(monstre.id_meute in id_meutes):
+                #on génère une nouvelle meute
+                nb_monstres=0
+                id_meute=monstre.id_meute
+                for monstre in self.monstres:
+                    if monstre.id_meute==id_meute:
+                        nb_monstres+=1
+                id_meutes.append(id_meute)
+                #on récupère les données de la vue de la meute
+                vues,positions=self.recuperer_vues_meute(id_meute)
+                
+                meutes.append(Meute(self.CASES_X,self.CASES_Y,id_meute,nb_monstres,vues,positions))
+        return meutes
+                
     def actualiser_temps(self):
         """
         Fonction qui actualise la variable permettant de mesurer le temps pour
@@ -463,6 +461,7 @@ class Niveau:
             if self.horloge_cycle % agissant.getVitesse()==0:
                 if issubclass(type(agissant),Joueur):
                     self.action_joueur()
+                    
                 agissant=self.actualiser_donnee(agissant)
 
                 agissant.prochaine_action()
@@ -514,13 +513,14 @@ class Niveau:
                 agissant.actualiser_vue(vue_entitee,position_vue)
 
         id_meutes=[0]
-        meute=Meute(self.CASES_X,self.CASES_Y)
         for agissant in agissants:
             #on vérifie si on n'as pas déja executée la meute de l'entitée
             if issubclass(type(agissant),Monstre) and not(agissant.id_meute in id_meutes):
                 id_meutes.append(agissant.id_meute)
                 #on récupère les données de la vue de la meute
                 vues,positions=self.recuperer_vues_meute(agissant.id_meute)
+                #on obtient la meute du monstre
+                meute=self.getMeute(agissant.id_meute)
                 #on crée la vue de la meute
                 vue_meute=meute.actualisation_vues(vues,positions)
                 
@@ -529,6 +529,20 @@ class Niveau:
                     if issubclass(type(agissant_bis),Monstre):
                         if agissant_bis.id_meute==agissant.id_meute:
                             agissant_bis.actualiser_vue(vue_meute,[0,0])
+
+    def getMeute(self,id_meute):
+        """
+        Fonction qui renvoie la meute correspondant a l'identifiant entrer
+        Entrée:
+            -l'identifiant de la meute
+        Sortie:
+            -la meute qui correspond a l'indentifiant
+        """
+        meute=None
+        for meute_tmp in self.meutes:
+            if meute_tmp.id_meute==id_meute:
+                meute=meute_tmp
+        return meute
 
     def recuperer_vues_meute(self,identifiant):
         """
