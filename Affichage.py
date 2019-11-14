@@ -52,7 +52,7 @@ class Affichage:
         Sorties:
             -rien
         """
-        #récuoérer constantes
+        #récupérer constantes
         largeur_vue=joueur.largeur_vue
         hauteur_vue=joueur.hauteur_vue
         #on dessine le cadre autour du labyrinthe pour faire joli
@@ -66,7 +66,7 @@ class Affichage:
         joueur_x,joueur_y,position_x,position_y,min_x,max_x,min_y,max_y=self.getConstantes(joueur.getPosition(),[0,0],largeur_vue,hauteur_vue)
 
         position_joueur=[joueur_x,joueur_y]
-        #récuperer vue joueur
+        #récupérer vue joueur
         vue, position_vue = labyrinthe.construire_vue(position_joueur,largeur_vue,hauteur_vue)
         #récupérer mat vue visible joueur
         #on ne veut pas que le résolveur trouve de solution on veut juste qu'il explore la matrice
@@ -79,7 +79,7 @@ class Affichage:
         self.dessine_entitees(entitees,position_joueur,mat_exploree,position_vue,self.decalage_matrice)
         #afficher les animations
         self.dessine_animations(position_joueur,largeur_vue,hauteur_vue)
-        #on supprime les animations qui ont expirées
+        #on supprime les animations qui ont expiré
         self.supprime_animations()
         
     def dessine_hud(self,joueur,labyrinthe):

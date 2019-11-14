@@ -310,7 +310,7 @@ class Niveau:
             potions_vue=[Potion_de_vision((35,26),self.joueur),Potion_de_vision((27,38),self.joueur),Potion_de_vision((21,19),self.joueur),Potion_de_visibilite_permanente((8,7),self.joueur)]
             potions_combat=[Potion_de_force((i,j),self.joueur)for j in range(5,45,10) for i in range(5,45,10)] + [Potion_de_portee((i,j),self.joueur)for j in range (10,40,10) for i in range (10,40,10)] + [Potion_de_soin((20,20),self.joueur),Potion_de_portee_permanente((2,2),self.joueur)]
             potions=potions_vue+potions_combat
-            self.monstres=spawn_aleatoire(Fatti,10,10,100,10,self.vitesse_montres,1,((10,10),(30,30)),0.1,5,0,(0,255,0))
+            self.monstres=self.spawn_aleatoire(Fatti,10,10,100,10,self.vitesse_montres,1,((10,10),(30,30)),0.1,5,0,(0,255,0))
             self.entitees=[self.joueur]+potions
 
             
@@ -656,3 +656,27 @@ class Niveau:
         Fonction qui redessine l'entièreté de l'écran
         """
         self.affichage.dessine_frame(self.joueur,self.lab,self.entitees,self.evenements)
+
+    def spawn_aleatoire(monstre,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,perimetre,proba,max_meute,premiere_meute,couleur=(255,0,0)):
+        """
+        Fonction qui génére des monstres aléatoirement
+        Entrées :
+            caractéristiques des monstres à spawner (type de monstre, vue, stats)
+            zone où les monstres seront spawnés
+            probabilité de spawn par case
+            quelques détails pour les meutes (numéro de la première meute libre et nombre maximum de monstre par meute)
+        Sorties :
+            Un tableau avec les monstres demandés
+        """
+        nb_meute = premiere_meute
+        taille_meute = 0
+        res = []
+        for i in range (perimetre[0][0],perimetre[1][0]):
+            for j in range (perimetre[0][1],perimetre[1][1]):
+                if random.random() <= proba :
+                    res.append(monstre((i,j),largeur_vue,hauteur_vue,pv,degats,vitesse,radius,nb_meute,couleur))
+                    taille_meute += 1
+                    if taille_meute == max_meute :
+                        nb_meute += 1
+                        taille_meute = 0
+        return res
