@@ -333,7 +333,7 @@ class Niveau:
         self.horloge_cycle=0
 
         #objet d'affichage
-        self.affichage=Affichage(self.screen,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR,self.lab)
+        self.affichage=Affichage(self.screen,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR,self.lab.largeur,self.lab.hauteur)
         
         #texte de fin
         font = pygame.font.SysFont(None, 72)

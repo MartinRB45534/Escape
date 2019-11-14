@@ -9,7 +9,7 @@ from Evenement import *
 from Animation import *
 
 class Affichage:
-    def __init__(self,screen,mode_affichage,LARGEUR_CASE,LARGEUR_MUR,labyrinthe):
+    def __init__(self,screen,mode_affichage,LARGEUR_CASE,LARGEUR_MUR,hauteur_lab,largeur_lab):
         #surface ou l'on dessine
         self.screen=screen
         
@@ -18,8 +18,8 @@ class Affichage:
         self.LARGEUR_MUR=LARGEUR_MUR
         self.LARGEUR_CASE=LARGEUR_CASE
         #decalage de la matrice du labyrinthe sur l'écran (decalage en px)
-        self.hauteur_minimap = labyrinthe.hauteur * 3 + 11
-        self.largeur_minimap = labyrinthe.largeur * 3 + 11
+        self.hauteur_minimap = hauteur_lab * 3 + 11
+        self.largeur_minimap = largeur_lab * 3 + 11
         self.decalage_matrice=[0,self.hauteur_minimap]
         #liste des animations
         self.animations=[]
@@ -84,14 +84,24 @@ class Affichage:
         """
         police_pv=pygame.font.SysFont(None, 20)
         text_pv=police_pv.render("PV:",True,(0,0,0))
-        self.screen.blit(text_pv,(self.largeur_minimap,10))
+        self.screen.blit(text_pv,(0,self.getBottomY(joueur.hauteur_vue)+10))
         
         #on dessine la barre de vie du joueur
-        pygame.draw.rect(self.screen, pygame.Color(255,0,0),(self.largeur_minimap + 30,10,int(100*(joueur.pv/joueur.pv_max)),10))
+        pygame.draw.rect(self.screen, pygame.Color(255,0,0),(30,self.getBottomY(joueur.hauteur_vue)+10,int(100*(joueur.pv/joueur.pv_max)),10))
 
         #on dessine la minimap
         labyrinthe.dessine_tout(self.screen,[5,5])
-        
+
+    def getBottomY(self,hauteur_vue):
+        """
+        Fonction qui renvoie le y correspondant au bas de l'écran
+        Entrées:
+            -la hauteur de la vue du joueur
+        Sorties:
+            -un entier
+        """
+        #print(self.decalage_matrice[1]+(self.LARGEUR_MUR+self.LARGEUR_CASE)*(portee_joueur+2))
+        return self.decalage_matrice[1]+(self.LARGEUR_MUR+self.LARGEUR_CASE)*(hauteur_vue)
     def getConstantes(self,position_joueur,position_screen,largeur,hauteur):
         """
         Fonction qui génère les constantes nécessaires au fonctionnement de l'affichage
