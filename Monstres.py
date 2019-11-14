@@ -4,7 +4,7 @@ from math import sqrt
 from Agissant import *
 
 class Monstre(Agissant):
-    def __init__(self,position,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,id_meute=0,couleur=(255,0,0)):
+    def __init__(self,position,id_meute,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,couleur):
         self.position=position
         self.largeur_vue=largeur_vue
         self.hauteur_vue=hauteur_vue
@@ -231,6 +231,9 @@ class Monstre(Agissant):
 
 
 class Slime(Monstre):
+    def __init__(self,position,id_meute=0,largeur_vue=5,hauteur_vue=5,pv=50,degats=5,vitesse=3,radius=1,couleur=(255,100,100)):
+        Monstre.__init__(self,position,id_meute,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,couleur)
+
     def cherche(self,vue,position_lab):
         """
         But: simuler le comportement du slime qui se déplace de manière aléatoire
@@ -246,6 +249,9 @@ class Slime(Monstre):
 
 
 class Fatti(Monstre):
+    def __init__(self,position,id_meute=0,largeur_vue=10,hauteur_vue=10,pv=200,degats=20,vitesse=40,radius=1,couleur=(0,0,100)):
+        Monstre.__init__(self,position,id_meute,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,couleur)
+        
     def cherche(self,vue,position_lab):
         """
         But:Simuler le comportement de Fatti qui ne se déplace que si il peut atteindre le joueur
@@ -259,11 +265,11 @@ class Fatti(Monstre):
         return None
 
 class Runner(Monstre):
-    def __init__(self,mat_lab,fin_lab_x,fin_lab_y,position,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,id_meute=0,couleur=(255,0,0)):
+    def __init__(self,mat_lab,fin_lab_x,fin_lab_y,position,id_meute=0,largeur_vue=15,hauteur_vue=15,pv=75,degats=10,vitesse=10,radius=1,couleur=(255,0,0)):
         self.mat_lab = mat_lab
         self.largeur_lab = len(mat_lab)
         self.hauteur_lab = len(mat_lab[0])
-        Monstre.__init__(self,position,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,id_meute,couleur)
+        Monstre.__init__(self,position,id_meute,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,couleur)
         self.fin_lab=[fin_lab_x,fin_lab_y]
     def cherche(self,vue,position_lab):
         """

@@ -101,7 +101,7 @@ class Niveau:
             #entitées
             self.joueur=Joueur(inventaire_joueur,self.hp_joueur,self.force_joueur,self.vitesse_joueur,2,self.zoom_largeur,self.zoom_hauteur)
         
-            self.monstres=[Fatti([4,4],10,10,100,5,self.vitesse_montres,1,5,(0,0,100))]#,Fatti([10,10],10,10,100,5,1,5,(0,0,100))]
+            self.monstres=[Fatti([4,4])]#,Fatti([10,10])]
             self.entitees=[self.joueur,Clee((3,3),"goodooKey")]
 
         elif niveau == 1:
@@ -110,7 +110,7 @@ class Niveau:
             self.CASES_X = 40
             self.CASES_Y = 40
             res = False
-            self.salles=[]
+            self.salles=[Patern((0,0),11,3,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[10,1],[8,2]])]
 
             #variables correspondants a la largeur et la hauteur du zoom
             self.zoom_largeur=13
@@ -127,9 +127,6 @@ class Niveau:
             pygame.init()
             #poids permettants de manipuler l'aléatoire
             self.poids=[6,2,1,2]
-        
-            #salle pour exp monstres
-            self.salles.append(Patern((0,0),11,3,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[10,1],[8,2]]))
 
             #génération du labyrinthe
             self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.CASES_X-1,self.CASES_Y-1,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles,mode_minimap)
@@ -143,7 +140,7 @@ class Niveau:
             #entitées
             self.joueur=Joueur(inventaire_joueur,self.hp_joueur,self.force_joueur,self.vitesse_joueur,2,self.zoom_largeur,self.zoom_hauteur)
         
-            self.monstres=[]#Fatti([25,25],10,10,100,5,1,5,(0,0,100)),Fatti([25,30],10,10,100,5,1,5,(0,0,100)),Fatti([30,25],10,10,100,5,1,5,(0,0,100)),Fatti([30,30],10,10,100,5,1,5,(0,0,100))]
+            self.monstres=[]
             self.entitees=[self.joueur]
 
         elif niveau == 2:
@@ -152,7 +149,7 @@ class Niveau:
             self.CASES_X = 10
             self.CASES_Y = 60
             res = False
-            self.salles=[Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,-1],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,-1],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,-1],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,-1]])]
+            self.salles=[Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[0,9],[1,9]]),Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,-1],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,-1],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,-1],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,-1]])]
 
             #variables correspondants a la largeur et la hauteur du zoom
             self.zoom_largeur=13
@@ -169,9 +166,6 @@ class Niveau:
             pygame.init()
             #poids permettants de manipuler l'aléatoire
             self.poids=[6,2,1,2]
-        
-            #salle pour exp monstres
-            self.salles.append(Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[0,9],[1,9]]))
 
             #génération du labyrinthe
             self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,5,59,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles,mode_minimap)
@@ -185,7 +179,7 @@ class Niveau:
             #entitées
             self.joueur=Joueur(inventaire_joueur,self.hp_joueur,self.force_joueur,self.vitesse_joueur,2,self.zoom_largeur,self.zoom_hauteur,(4,0))
         
-            self.monstres=[Fatti([5,17],10,10,100,5,self.vitesse_montres,1,0,(0,0,100)),Fatti([8,25],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Fatti([3,48],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Fatti([5,59],10,10,100,5,self.vitesse_montres,1,3,(0,0,100))]
+            self.monstres=[Fatti([5,17]),Fatti([8,25]),Fatti([3,48]),Fatti([5,59])]
             self.entitees=[self.joueur]
 
         elif niveau == 3:
@@ -194,7 +188,7 @@ class Niveau:
             self.CASES_X = 10
             self.CASES_Y = 60
             res = False
-            self.salles=[Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,-1],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,-1],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,-1],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,-1]])]
+            self.salles=[Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[0,9],[1,9]]),Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,-1],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,-1],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,-1],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[4,-1]])]
 
             #variables correspondants a la largeur et la hauteur du zoom
             self.zoom_largeur=13
@@ -211,9 +205,6 @@ class Niveau:
             pygame.init()
             #poids permettants de manipuler l'aléatoire
             self.poids=[6,2,1,2]
-        
-            #salle pour exp monstres
-            self.salles.append(Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[0,9],[1,9]]))
 
             #génération du labyrinthe
             self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,5,59,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles,mode_minimap)
@@ -227,16 +218,16 @@ class Niveau:
             #entitées
             self.joueur=Joueur(inventaire_joueur,self.hp_joueur,self.force_joueur,self.vitesse_joueur,2,self.zoom_largeur,self.zoom_hauteur,(4,0))
         
-            self.monstres=[Slime([5,17],10,10,100,5,self.vitesse_montres,1,0,(0,0,100)),Fatti([8,25],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Runner(self.lab.getMatrice_cases(),5,59,[3,48],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Fatti([5,59],10,10,100,5,self.vitesse_montres,1,3,(0,0,100))]
+            self.monstres=[Slime([5,17]),Fatti([8,25]),Runner(self.lab.getMatrice_cases(),5,59,[3,48]),Fatti([5,59])]
             self.entitees=[self.joueur]
 
         elif niveau == 4:
-            #niveau monstrueux sans labyrinthe pour apprendre à se battre
+            #niveau monstrueux sans labyrinthe pour apprendre à se battre contre des meutes
 
             self.CASES_X = 15
             self.CASES_Y = 15
             res = False
-            self.salles=[Patern((3,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[0,13],[2,1]]),Patern((6,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[0,1],[2,13]]),Patern((9,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[0,13],[2,1]]),Patern((12,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[0,1]])]
+            self.salles=[Patern((0,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[2,13]]),Patern((3,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[0,13],[2,1]]),Patern((6,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[0,1],[2,13]]),Patern((9,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[0,13],[2,1]]),Patern((12,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[0,1]])]
 
             #variables correspondants a la largeur et la hauteur du zoom
             self.zoom_largeur=13
@@ -253,9 +244,6 @@ class Niveau:
             pygame.init()
             #poids permettants de manipuler l'aléatoire
             self.poids=[6,2,1,2]
-        
-            #salle pour exp monstres
-            self.salles.append(Patern((0,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,mode_minimap,[[2,13]]))
 
             #génération du labyrinthe
             self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.CASES_X-1,self.CASES_Y-1,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles,mode_minimap)
@@ -267,8 +255,16 @@ class Niveau:
 
             #entitées
             self.joueur=Joueur(inventaire_joueur,self.hp_joueur,self.force_joueur,self.vitesse_joueur,2,self.zoom_largeur,self.zoom_hauteur)
-        
-            self.monstres=[Slime([1,5],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([2,12],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([0,12],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([1,13],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([2,8],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([0,8],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([1,9],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([2,10],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([0,10],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([1,11],10,10,100,5,self.vitesse_montres,1,1,(0,0,100)),Slime([7,5],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([8,12],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([6,12],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([7,13],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([8,8],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([6,8],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([7,9],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([8,10],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([6,10],10,10,100,5,self.vitesse_montres,1,2,(0,0,100)),Slime([7,11],10,10,100,5,self.vitesse_montres,1,2,(0,0,100))]
+            
+            meute1 = [Fatti([1,5],1),Fatti([2,12],1),Fatti([0,12],1),Fatti([1,13],1)]
+            meute2 = [Slime([4,0],2),Slime([3,1],2),Slime([5,1],2),Slime([4,2],2),Slime([3,3],2),Slime([5,3],2),Slime([4,4],2),Slime([3,5],2),Slime([5,5],2),Slime([4,6],2),Slime([3,7],2),Slime([5,7],2),Slime([4,8],2)]
+            meute3 = [Slime([7,8],3),Slime([8,9],3),Slime([6,9],3),Fatti([6,11],3),Fatti([7,11],3),Fatti([8,11],3)]
+            meute4 = [Slime([10,5],4),Slime([10,6],4),Slime([10,7],4),Slime([10,8],4),Slime([10,9],4),Slime([10,10],4),Fatti([10,12],4,10,10,300,30)]
+            meute5 = [Slime([13,8],5),Slime([14,9],5),Slime([12,9],5),Fatti([12,11],5),Fatti([13,11],5),Fatti([14,11],5),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[12,5]),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[13,0]),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[14,5])]
+            self.monstres = meute1
+            for meutenumerote in [meute2,meute3,meute4,meute5]:
+                for monstre in meutenumerote:
+                    self.monstres.append(monstre)
             self.entitees=[self.joueur]
 
         elif niveau == 5:
@@ -310,7 +306,7 @@ class Niveau:
             potions_vue=[Potion_de_vision((35,26),self.joueur),Potion_de_vision((27,38),self.joueur),Potion_de_vision((21,19),self.joueur),Potion_de_visibilite_permanente((8,7),self.joueur)]
             potions_combat=[Potion_de_force((i,j),self.joueur)for j in range(5,45,10) for i in range(5,45,10)] + [Potion_de_portee((i,j),self.joueur)for j in range (10,40,10) for i in range (10,40,10)] + [Potion_de_soin((20,20),self.joueur),Potion_de_portee_permanente((2,2),self.joueur)]
             potions=potions_vue+potions_combat
-            self.monstres=self.spawn_aleatoire(Fatti,10,10,100,10,self.vitesse_montres,1,((10,10),(30,30)),0.1,5,0,(0,255,0))
+            self.monstres=self.spawn_aleatoire(Fatti,10,10,100,10,self.vitesse_montres,1,((10,10),(30,30)),0.1,5,0,(0,0,100))
             self.entitees=[self.joueur]+potions
 
             
