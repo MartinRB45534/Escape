@@ -9,7 +9,7 @@ from Evenement import *
 from Animation import *
 
 class Affichage:
-    def __init__(self,screen,mode_affichage,LARGEUR_CASE,LARGEUR_MUR,hauteur_lab,largeur_lab):
+    def __init__(self,screen,mode_affichage,LARGEUR_CASE,LARGEUR_MUR,largeur_lab,hauteur_lab):
         #surface ou l'on dessine
         self.screen=screen
         
@@ -20,7 +20,7 @@ class Affichage:
         #decalage de la matrice du labyrinthe sur l'écran (decalage en px)
         self.hauteur_minimap = hauteur_lab * 3 + 11
         self.largeur_minimap = largeur_lab * 3 + 11
-        self.decalage_matrice=[0,self.hauteur_minimap]
+        self.decalage_matrice=[11,self.hauteur_minimap]
         #liste des animations
         self.animations=[]
     def dessine_frame(self,joueur,labyrinthe,entitees,evenements):
@@ -55,6 +55,13 @@ class Affichage:
         #récuoérer constantes
         largeur_vue=joueur.largeur_vue
         hauteur_vue=joueur.hauteur_vue
+        #on dessine le cadre autour du labyrinthe pour faire joli
+        limite_gauche = 11
+        limite_droite = (self.LARGEUR_MUR+self.LARGEUR_CASE) * largeur_vue
+        limite_haute = self.hauteur_minimap
+        limite_basse = (self.LARGEUR_MUR+self.LARGEUR_CASE) * hauteur_vue
+        pygame.draw.rect(self.screen, pygame.Color(150,150,150),(limite_gauche,limite_haute,limite_droite,limite_basse))
+        pygame.draw.rect(self.screen, pygame.Color(50,50,50),(limite_gauche,limite_haute,limite_droite,limite_basse),2)
 
         joueur_x,joueur_y,position_x,position_y,min_x,max_x,min_y,max_y=self.getConstantes(joueur.getPosition(),[0,0],largeur_vue,hauteur_vue)
 
