@@ -2,11 +2,11 @@ from Cases import *
 from Constantes import *
 
 class Patern:
-    def __init__(self,position,largeur,hauteur,tailleCase,tailleMur,mode_minimap,entrees=[[1,0]]):
+    def __init__(self,position,largeur,hauteur,tailleCase,tailleMur,entrees=[[1,0]]):
         self.position = position
         self.hauteur = hauteur
         self.largeur = largeur
-        self.matrice_cases = [[Case(tailleCase,tailleMur,mode_minimap) for i in range(hauteur)]for i in range(largeur)]
+        self.matrice_cases = [[Case(tailleCase,tailleMur) for i in range(hauteur)]for i in range(largeur)]
         self.entrees = entrees
     def pre_gen_entrees_x(self,colonne,depart_x,arrivee_x):
         """
