@@ -21,6 +21,7 @@ class Affichage:
         self.hauteur_minimap = hauteur_lab * 3 + 11
         self.largeur_minimap = largeur_lab * 3 + 11
         self.decalage_matrice=[11,self.hauteur_minimap]
+        self.affiche_minimap = False
         #liste des animations
         self.animations=[]
     def dessine_frame(self,joueur,labyrinthe,entitees,evenements):
@@ -35,9 +36,9 @@ class Affichage:
             -rien
         """
         self.reset_screen()
-        if self.mode_affichage==distance_max:
+        if self.mode_affichage==distance_max and not self.affiche_minimap:
             self.distance_max(joueur,labyrinthe,entitees,evenements)
-        else:
+        elif not self.affiche_minimap:
             print("le mode d'affichage selectionnée est incorrect")
         self.dessine_hud(joueur)
             
@@ -91,14 +92,21 @@ class Affichage:
         """
         police_pv=pygame.font.SysFont(None, 20)
         text_pv=police_pv.render("PV:",True,(0,0,0))
-        self.screen.blit(text_pv,(0,self.getBottomY(joueur.hauteur_vue)+10))
-        
-        #on dessine la barre de vie du joueur
-        pygame.draw.rect(self.screen, pygame.Color(255,0,0),(30,self.getBottomY(joueur.hauteur_vue)+10,int(100*(joueur.pv/joueur.pv_max)),10))
+        if self.affiche_minimap:
+            self.screen.blit(text_pv,(0,10))
+            #on dessine la barre de vie du joueur
+            pygame.draw.rect(self.screen, pygame.Color(255,0,0),(30,10,int(100*(joueur.pv/joueur.pv_max)),10))
+        else:
+            self.screen.blit(text_pv,(0,self.getBottomY(joueur.hauteur_vue)+10))
+            #on dessine la barre de vie du joueur
+            pygame.draw.rect(self.screen, pygame.Color(255,0,0),(30,self.getBottomY(joueur.hauteur_vue)+10,int(100*(joueur.pv/joueur.pv_max)),10))
 
         #on dessine la minimap
         joueur.minimap.decouvre(self.position_vue,self.mat_exploree,joueur.position)
-        joueur.dessine_minimap(self.screen,[5,5])
+        if self.affiche_minimap:
+            joueur.affiche_minimap(self.screen)
+        else:
+            joueur.dessine_minimap(self.screen,[5,5])
 
     def getBottomY(self,hauteur_vue):
         """

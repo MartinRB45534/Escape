@@ -27,7 +27,7 @@ class Case_minimap(Case):
         Case.__init__(self,tailleCase,tailleMur)
         self.couleur = self.non_vu
         self.murs = murs
-
+        
     def dessine_toi(self,screen,x,y):
         """
         Fonction qui dessine l'objet
@@ -45,8 +45,29 @@ class Case_minimap(Case):
         #on dessine les autres murs
         for i in range(0,len(self.murs)):
             if self.murs[i].get_etat()!=MUR_VIDE:
-                self.murs[i].dessine_toi(screen,x,y,2,i)    
-        
+                self.murs[i].dessine_toi(screen,x,y,2,i)
+
+    def affiche_toi(self,screen,x,y):
+        """
+        Fonction qui dessine l'objet
+        Entrées:
+            l'écran, la surface sur laquelle on dessine(objet pygame)
+            la position de la case
+        """
+        pygame.draw.rect(screen,self.couleur,(x,y,19,19))
+        self.set_couleur()
+        for i in range(0,len(self.murs)):
+            self.murs[i].tailleMur = 3
+        #on dessine les murs vides en premiers pour éviter les bugs graphiques
+        for i in range(0,len(self.murs)):
+            if self.murs[i].get_etat()==MUR_VIDE:
+                self.murs[i].dessine_toi(screen,x,y,19,i,self.couleur)
+        #on dessine les autres murs
+        for i in range(0,len(self.murs)):
+            if self.murs[i].get_etat()!=MUR_VIDE:
+                self.murs[i].dessine_toi(screen,x,y,19,i)
+        for i in range(0,len(self.murs)):
+            self.murs[i].tailleMur = 1
     def set_couleur(self):
         if self.arrivee and (self.mode_minimap == voir_tout or (self.decouvert>0 and mode_affichage == passage) or self.decouvert == 0):
             self.couleur = ARRIVEE

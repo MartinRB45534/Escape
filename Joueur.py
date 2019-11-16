@@ -67,3 +67,6 @@ class Joueur(Agissant):
 
     def dessine_minimap(self,screen,position_screen):
         self.minimap.dessine_toi(screen,position_screen)
+
+    def affiche_minimap(self,screen):
+        self.minimap.affiche_toi(screen)
