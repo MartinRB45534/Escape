@@ -97,7 +97,7 @@ class Affichage:
         pygame.draw.rect(self.screen, pygame.Color(255,0,0),(30,self.getBottomY(joueur.hauteur_vue)+10,int(100*(joueur.pv/joueur.pv_max)),10))
 
         #on dessine la minimap
-        labyrinthe.dessine_tout(self.screen,[5,5])
+        joueur.dessine_minimap(self.screen,[5,5])
 
     def getBottomY(self,hauteur_vue):
         """

@@ -5,7 +5,8 @@ from Agissant import *
 
 class Joueur(Agissant):
 
-    def __init__(self, inventaire,pv,degats,vitesse,radius,largeur_vue,hauteur_vue,position=(0,0),portee_vue=11):
+    def __init__(self,minimap,inventaire,pv,degats,vitesse,radius,largeur_vue,hauteur_vue,position=(0,0),portee_vue=11):
+        self.minimap = minimap
         self.position = position
         self.inventaire = inventaire
         self.pv=pv
@@ -64,3 +65,5 @@ class Joueur(Agissant):
     def dessine_toi(self,screen,decalage,LARGEUR_CASE,LARGEUR_MUR,position_screen):
         pygame.draw.rect(screen, pygame.Color(0,255,0),((decalage[0])*(LARGEUR_CASE+LARGEUR_MUR)+LARGEUR_MUR+position_screen[0],(decalage[1])*(LARGEUR_CASE+LARGEUR_MUR)+LARGEUR_MUR+position_screen[1],LARGEUR_CASE-2*LARGEUR_MUR,LARGEUR_CASE-2*LARGEUR_MUR))
 
+    def dessine_minimap(self,screen,position_screen):
+        self.minimap.dessine_toi(screen,position_screen)
