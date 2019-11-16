@@ -1,5 +1,4 @@
 from Cases_minimap import *
-from Lumiere import *
 
 class Minimap:
     
@@ -31,7 +30,7 @@ class Minimap:
             position_y=position_screen[1]
             position_x+=3
 
-    def decouvre(self,position_vue,mat_exploree):
+    def decouvre(self,position_vue,mat_exploree,position_joueur):
         """
         Fonction qui dessine le labyrinthe sur l'écran
         Entrées:
@@ -53,3 +52,4 @@ class Minimap:
             for y in range(len(mat_exploree[0])):
                 if mat_exploree[x][y]:
                     self.matrice_cases[x+position_vue[0]][y+position_vue[1]].decouvert = 0
+        self.matrice_cases[position_joueur[0]][position_joueur[1]].passage = True
