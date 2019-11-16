@@ -1,4 +1,5 @@
 from Cases_minimap import *
+from Lumiere import *
 
 class Minimap:
     
@@ -29,3 +30,26 @@ class Minimap:
                 position_y+=3
             position_y=position_screen[1]
             position_x+=3
+
+    def decouvre(self,position_vue,mat_exploree):
+        """
+        Fonction qui dessine le labyrinthe sur l'écran
+        Entrées:
+            l'écran, la surface sur laquelle on dessine(objet pygame)
+            la position du joueur
+            la position que l'on prend pour 0,0 sur l'écran (ex: un décalage de 20px sur la droite se traduit par (x+20,y))
+            la position de la vue dans le labyrinthe
+            la largeur en cases
+            la hauteur en cases
+            le mode d'affichage
+            la largueur des cases
+            la largeur des murs
+            la matrice explorée
+        Sorties:
+            Rien
+        """
+
+        for x in range(len(mat_exploree)):
+            for y in range(len(mat_exploree[0])):
+                if mat_exploree[x][y]:
+                    self.matrice_cases[x+position_vue[0]][y+position_vue[1]].decouvert = 0

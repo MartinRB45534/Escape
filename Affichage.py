@@ -35,11 +35,11 @@ class Affichage:
             -rien
         """
         self.reset_screen()
-        self.dessine_hud(joueur,labyrinthe)
         if self.mode_affichage==distance_max:
             self.distance_max(joueur,labyrinthe,entitees,evenements)
         else:
             print("le mode d'affichage selectionnée est incorrect")
+        self.dessine_hud(joueur)
             
     def distance_max(self,joueur,labyrinthe,entitees,evenements):
         """
@@ -67,22 +67,22 @@ class Affichage:
 
         position_joueur=[joueur_x,joueur_y]
         #récupérer vue joueur
-        vue, position_vue = labyrinthe.construire_vue(position_joueur,largeur_vue,hauteur_vue)
+        vue, self.position_vue = labyrinthe.construire_vue(position_joueur,largeur_vue,hauteur_vue)
         #récupérer mat vue visible joueur
         #on ne veut pas que le résolveur trouve de solution on veut juste qu'il explore la matrice
-        resolveur = Resolveur(vue,largeur_vue,hauteur_vue,-1,-1,joueur_x-position_vue[0],joueur_y-position_vue[1],"Profondeur")
+        resolveur = Resolveur(vue,largeur_vue,hauteur_vue,-1,-1,joueur_x-self.position_vue[0],joueur_y-self.position_vue[1],"Profondeur")
 
-        mat_exploree=resolveur.resolution_en_largeur_distance_limitée(False,False,False,True,joueur.portee_vue)
+        self.mat_exploree=resolveur.resolution_en_largeur_distance_limitée(False,False,False,True,joueur.portee_vue)
         #dire au lab d'afficher la matrice correspondante
-        labyrinthe.dessine_toi(self.screen,position_joueur,self.decalage_matrice,position_vue,largeur_vue,hauteur_vue,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR,mat_exploree)
+        labyrinthe.dessine_toi(self.screen,position_joueur,self.decalage_matrice,self.position_vue,largeur_vue,hauteur_vue,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR,self.mat_exploree)
         #afficher les entitées
-        self.dessine_entitees(entitees,position_joueur,mat_exploree,position_vue,self.decalage_matrice)
+        self.dessine_entitees(entitees,position_joueur,self.mat_exploree,self.position_vue,self.decalage_matrice)
         #afficher les animations
         self.dessine_animations(position_joueur,largeur_vue,hauteur_vue)
         #on supprime les animations qui ont expiré
         self.supprime_animations()
         
-    def dessine_hud(self,joueur,labyrinthe):
+    def dessine_hud(self,joueur):
         """
         Fonction qui affiche les informations complémentaires
         (barre de vie, MINIMAP, etc)
@@ -97,6 +97,7 @@ class Affichage:
         pygame.draw.rect(self.screen, pygame.Color(255,0,0),(30,self.getBottomY(joueur.hauteur_vue)+10,int(100*(joueur.pv/joueur.pv_max)),10))
 
         #on dessine la minimap
+        joueur.minimap.decouvre(self.position_vue,self.mat_exploree)
         joueur.dessine_minimap(self.screen,[5,5])
 
     def getBottomY(self,hauteur_vue):
