@@ -407,6 +407,10 @@ class Niveau:
             self.joueur.va_vers_la_gauche()
         elif keys[pygame.K_SPACE]:
             self.joueur.attaque()
+        if keys[pygame.K_a]:
+            self.affichage.affiche_minimap = True
+        else:
+            self.affichage.affiche_minimap = False
 
 
     def actions_entitees(self):
