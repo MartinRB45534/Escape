@@ -1,4 +1,4 @@
-import Murs
+from Murs import *
 import pygame
 from Constantes import *
 
@@ -8,7 +8,7 @@ class Case:
         self.tailleMur=tailleMur
         self.couleur=couleur
         #on sélectionne la classe Mur du fichier Murs (qui est un objet)
-        self.murs = [Murs.Mur(MUR_PLEIN,tailleMur) for i in range(4)]
+        self.murs = [Mur(MUR_PLEIN,tailleMur) for i in range(4)]
     def nb_murs_non_vides(self):
         pass
     def nb_murs_pleins(self):
