@@ -84,10 +84,10 @@ def main():
             # si clic, le jeu se lance
             elif event.type == pygame.MOUSEBUTTONDOWN and over_green:
                 niv = Niveau(niveau,difficulté,mode_affichage,mode_minimap)
-                niv.run()
+                pygame.time.wait(niv.run())
 
             elif event.type == pygame.MOUSEBUTTONDOWN and over_yellow:
-                niv.run()
+                pygame.time.wait(niv.run())
 
             elif event.type == pygame.MOUSEBUTTONDOWN and over_black:
                 loop = False
