@@ -320,6 +320,7 @@ class Niveau:
             #si l'utilisateur décide de mettre fin au programme on sort de la boucle
             for event in pygame.event.get():
                 if event.type==pygame.QUIT:
+                    res = 0
                     run=False
 
                 if event.type == pygame.VIDEORESIZE:
@@ -335,11 +336,14 @@ class Niveau:
 
             if self.lab.as_gagner(self.joueur.getPosition()):
                 self.ecran_fin_niveau(self.textWin)
+                res = 5000
                 run=False
             if self.as_perdu():
                 self.ecran_fin_niveau(self.textLose)
+                res = 5000
                 run=False
             pygame.display.update()
+        return res
     def generation_meutes(self):
         """
         Fonction qui génère les meutes
