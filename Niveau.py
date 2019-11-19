@@ -94,11 +94,6 @@ class Niveau:
             #salle pour exp monstres
             self.salles.append(Patern((0,0),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,3]]))
 
-            #exp avec les portes
-            #mat_lab=self.lab.getMatrice_cases()
-            #mat_lab[4][2].murs[DROITE]=Porte(self.LARGEUR_MUR,"goodooKey")
-            #self.lab.matrice_cases=mat_lab
-
             monstres=[Fatti([4,4])]#,Fatti([10,10])]
             self.entitees=[Clee((3,3),"goodooKey")]
 
@@ -269,6 +264,11 @@ class Niveau:
         self.joueur=Joueur(minimap,inventaire_joueur,self.hp_joueur,self.force_joueur,self.vitesse_joueur,2,self.zoom_largeur,self.zoom_hauteur,self.depart)
         self.monstres = monstres
         
+        if niveau == 0:
+            #exp avec les portes
+            mat_lab=self.lab.getMatrice_cases()
+            mat_lab[4][2].murs[DROITE]=Porte(self.LARGEUR_MUR,"goodooKey")
+            self.lab.matrice_cases=mat_lab
         if niveau == 5:
             potions_vue=[Potion_de_vision((35,26),self.joueur),Potion_de_vision((27,38),self.joueur),Potion_de_vision((21,19),self.joueur),Potion_de_visibilite_permanente((8,7),self.joueur)]
             potions_combat=[Potion_de_force((i,j),self.joueur)for j in range(5,45,10) for i in range(5,45,10)] + [Potion_de_portee((i,j),self.joueur)for j in range (10,40,10) for i in range (10,40,10)] + [Potion_de_soin((20,20),self.joueur),Potion_de_portee_permanente((2,2),self.joueur)]
@@ -318,6 +318,7 @@ class Niveau:
             self.actualiser_temps()
 
             #si l'utilisateur décide de mettre fin au programme on sort de la boucle
+            events = []
             for event in pygame.event.get():
                 if event.type==pygame.QUIT:
                     res = 0
@@ -327,7 +328,9 @@ class Niveau:
                     self.zoom_largeur = event.w//(self.LARGEUR_CASE + self.LARGEUR_MUR)
                     self.zoom_hauteur = event.h//(self.LARGEUR_CASE + self.LARGEUR_MUR)
                     self.redraw()
-            self.actions_entitees()
+                else:
+                    events.append(event)
+            self.actions_entitees(events)
 
             #si on détecte un mouvement on redessine l'écran
             #if move_j or move_m:
@@ -393,31 +396,51 @@ class Niveau:
                 nbSup+=1
                 
                  
-    def action_joueur(self):
+    def action_joueur(self,events=[]):
         """
         Fonction qui exécute la partie du code ou le jpueur demande à agir
         et qui renvoie rien
         """
+        for event in events:
+            if event.type==pygame.KEYDOWN and event.key==pygame.K_a:
+                if self.affichage.affiche != MINIMAP:
+                    self.affichage.affiche = MINIMAP
+                else :
+                    self.affichage.affiche = LABYRINTHE
+            if event.type==pygame.KEYDOWN and event.key==pygame.K_i:
+                if self.affichage.affiche != INVENTAIRE:
+                    self.affichage.affiche = INVENTAIRE
+                else :
+                    self.affichage.affiche = LABYRINTHE
+                    
+            if self.affichage.affiche == INVENTAIRE:
+                if event.type==pygame.KEYDOWN and event.key==pygame.K_RIGHT:
+                    self.joueur.inventaire_vers_la_droite()
+                elif event.type==pygame.KEYDOWN and event.key==pygame.K_LEFT:
+                    self.joueur.inventaire_vers_la_gauche()
+                elif event.type==pygame.KEYDOWN and event.key==pygame.K_SPACE:
+                    evenement = self.joueur.utilise_inventaire()
+                    if evenement != None:
+                        self.evenements.append()
+
+        if self.affichage.affiche == LABYRINTHE:
          #on récupère toutes les touches préssés sous forme de
-        keys=pygame.key.get_pressed()
-        
-        if keys[pygame.K_UP]:
-            self.joueur.va_vers_le_haut()
-        elif keys[pygame.K_DOWN]:
-            self.joueur.va_vers_le_bas()
-        elif keys[pygame.K_RIGHT]:
-            self.joueur.va_vers_la_droite()
-        elif keys[pygame.K_LEFT]:
-            self.joueur.va_vers_la_gauche()
-        elif keys[pygame.K_SPACE]:
-            self.joueur.attaque()
-        if keys[pygame.K_a]:
-            self.affichage.affiche_minimap = True
-        else:
-            self.affichage.affiche_minimap = False
+            keys=pygame.key.get_pressed()
+    
+            if keys[pygame.K_UP]:
+                self.joueur.va_vers_le_haut()
+            elif keys[pygame.K_DOWN]:
+                self.joueur.va_vers_le_bas()
+            elif keys[pygame.K_RIGHT]:
+                self.joueur.va_vers_la_droite()
+            elif keys[pygame.K_LEFT]:
+                self.joueur.va_vers_la_gauche()
+            elif keys[pygame.K_SPACE]:
+                self.joueur.attaque()
 
 
-    def actions_entitees(self):
+
+    def actions_entitees(self,events):
         """
         Fonction qui exécute les actions des entitées
         renvoie un booléen indiquant si il y a besoin de redessiner l'écran
@@ -431,7 +454,7 @@ class Niveau:
         for agissant in agissants:
             if self.horloge_cycle % agissant.getVitesse()==0:
                 if issubclass(type(agissant),Joueur):
-                    self.action_joueur()
+                    self.action_joueur(events)
                     
                 agissant=self.actualiser_donnee(agissant)
 
@@ -560,8 +583,8 @@ class Niveau:
         if issubclass(type(agissant),Monstre):
             #on donne la position du joueur au monstre
             agissant.setPosition_joueur(self.joueur.getPosition())
-        elif type(agissant)==Joueur:
-            self.action_joueur()
+        #elif type(agissant)==Joueur:
+            #self.action_joueur()
 
         return agissant
     def traitement_action(self,agissant):

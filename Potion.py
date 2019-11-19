@@ -10,7 +10,7 @@ bonus_radius_permanent = 1
 bonus_radius = 3
 temps_effet = 200
 
-class Potion:
+class Potion(Item):
     
     def __init__(self,position,cible):
         """fonction qui crée une potion
@@ -34,20 +34,23 @@ class Potion:
     def getPosition(self):
         return self.position
 
-    def dessine_toi(self,screen,decalage,LARGEUR_CASE,LARGEUR_MUR,position_screen):
-        pygame.draw.rect(screen, self.couleur,((decalage[0]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[0],(decalage[1]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[1],LARGEUR_CASE-2*LARGEUR_MUR,LARGEUR_CASE-2*LARGEUR_MUR))
-
 class Potion_de_portee_permanente(Potion):
 
     def __init__(self,position,cible):
         Potion.__init__(self,position,cible)
         self.effet = Effet_potion_portee_permanente(temps_effet,self.cible)
 
+    def __str__(self):
+        return("Potion_de_portee_permanente")
+
 class Potion_de_portee(Potion):
 
     def __init__(self,position,cible):
         Potion.__init__(self,position,cible)
         self.effet = Effet_potion_portee(temps_effet,self.cible)
+
+    def __str__(self):
+        return("Potion_de_portee")
         
 class Potion_de_soin(Potion):
 
@@ -55,12 +58,17 @@ class Potion_de_soin(Potion):
         Potion.__init__(self,position,cible)
         self.effet = Effet_potion_soin(temps_effet,self.cible)
 
+    def __str__(self):
+        return("Potion_de_soin")
+
 class Potion_de_force(Potion):
 
     def __init__(self,position,cible):
         Potion.__init__(self,position,cible)
         self.effet = Effet_potion_force(temps_effet,self.cible)
 
+    def __str__(self):
+        return("Potion_de_force")
         
 class Potion_de_vision(Potion):
 
@@ -68,6 +76,8 @@ class Potion_de_vision(Potion):
         Potion.__init__(self,position,cible)
         self.effet = Effet_potion_vision(temps_effet,self.cible)
 
+    def __str__(self):
+        return("Potion_de_vision")
 
 class Potion_de_visibilite_permanente(Potion):
 
@@ -75,13 +85,15 @@ class Potion_de_visibilite_permanente(Potion):
         Potion.__init__(self,position,cible)
         self.effet = Effet_potion_visibilite_permanente(temps_effet,self.cible)
 
+    def __str__(self):
+        return("Potion_de_visibilite_permanente")
 
 class Effet_potion(Evenement):
     def __init__(self,temps_restant,cible):
         self.temps_restant = temps_restant
         self.cible = cible
         self.utilise = False
-        
+       
 class Effet_potion_portee(Effet_potion):
     
     def action(self):

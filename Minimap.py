@@ -38,10 +38,10 @@ class Minimap:
         Sorties:
             Rien
         """
-        position_x=30
+        position_x=5
         position_y=30
-        for x in range(0,self.largeur):
-            for y in range(0,self.hauteur):
+        for x in range(self.largeur):
+            for y in range(self.hauteur):
                 self.matrice_cases[x][y].affiche_toi(screen,position_x,position_y)
                 position_y+=21
             position_y=30
