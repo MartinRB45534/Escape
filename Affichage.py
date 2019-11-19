@@ -21,7 +21,7 @@ class Affichage:
         self.hauteur_minimap = hauteur_lab * 3 + 11
         self.largeur_minimap = largeur_lab * 3 + 11
         self.decalage_matrice=[11,self.hauteur_minimap]
-        self.affiche_minimap = False
+        self.affiche = 0
         #liste des animations
         self.animations=[]
     def dessine_frame(self,joueur,labyrinthe,entitees,evenements):
@@ -36,9 +36,9 @@ class Affichage:
             -rien
         """
         self.reset_screen()
-        if self.mode_affichage==distance_max and not self.affiche_minimap:
+        if self.mode_affichage==distance_max and self.affiche == LABYRINTHE:
             self.distance_max(joueur,labyrinthe,entitees,evenements)
-        elif not self.affiche_minimap:
+        elif self.affiche == LABYRINTHE:
             print("le mode d'affichage selectionnée est incorrect")
         self.dessine_hud(joueur)
             
@@ -61,8 +61,8 @@ class Affichage:
         limite_droite = (self.LARGEUR_MUR+self.LARGEUR_CASE) * largeur_vue
         limite_haute = self.hauteur_minimap
         limite_basse = (self.LARGEUR_MUR+self.LARGEUR_CASE) * hauteur_vue
-        pygame.draw.rect(self.screen, pygame.Color(150,150,150),(limite_gauche,limite_haute,limite_droite,limite_basse))
-        pygame.draw.rect(self.screen, pygame.Color(50,50,50),(limite_gauche,limite_haute,limite_droite,limite_basse),2)
+        pygame.draw.rect(self.screen,(150,150,150),(limite_gauche,limite_haute,limite_droite,limite_basse))
+        pygame.draw.rect(self.screen,(50,50,50),(limite_gauche,limite_haute,limite_droite,limite_basse),2)
 
         joueur_x,joueur_y,position_x,position_y,min_x,max_x,min_y,max_y=self.getConstantes(joueur.getPosition(),[0,0],largeur_vue,hauteur_vue)
 
@@ -92,7 +92,7 @@ class Affichage:
         """
         police_pv=pygame.font.SysFont(None, 20)
         text_pv=police_pv.render("PV:",True,(0,0,0))
-        if self.affiche_minimap:
+        if (self.affiche == MINIMAP) or (self.affiche == INVENTAIRE):
             self.screen.blit(text_pv,(0,10))
             #on dessine la barre de vie du joueur
             pygame.draw.rect(self.screen, pygame.Color(255,0,0),(30,10,int(100*(joueur.pv/joueur.pv_max)),10))
@@ -103,10 +103,14 @@ class Affichage:
 
         #on dessine la minimap
         joueur.minimap.decouvre(self.position_vue,self.mat_exploree,joueur.position)
-        if self.affiche_minimap:
+        if self.affiche == MINIMAP:
             joueur.affiche_minimap(self.screen)
-        else:
+        elif self.affiche == LABYRINTHE:
             joueur.dessine_minimap(self.screen,[5,5])
+
+        #on dessine l'inventaire
+        if self.affiche == INVENTAIRE:
+            joueur.affiche_inventaire(self.screen)
 
     def getBottomY(self,hauteur_vue):
         """
