@@ -14,6 +14,8 @@ class Affichage:
         self.screen=screen
         
         self.mode_affichage=mode_affichage
+        self.hauteur = hauteur_lab
+        self.largeur = largeur_lab
         #constantes
         self.LARGEUR_MUR=LARGEUR_MUR
         self.LARGEUR_CASE=LARGEUR_CASE
@@ -59,20 +61,20 @@ class Affichage:
         hauteur_vue=joueur.hauteur_vue
         #on dessine le cadre autour du labyrinthe pour faire joli
         limite_gauche = 11
-        limite_droite = (self.LARGEUR_MUR+self.LARGEUR_CASE) * largeur_vue
+        limite_droite = (self.LARGEUR_MUR+self.LARGEUR_CASE) * (largeur_vue + self.decalage_bord_largeur)
         limite_haute = self.hauteur_minimap
-        limite_basse = (self.LARGEUR_MUR+self.LARGEUR_CASE) * hauteur_vue
+        limite_basse = (self.LARGEUR_MUR+self.LARGEUR_CASE) * (hauteur_vue + self.decalage_bord_hauteur)
         pygame.draw.rect(self.screen,(150,150,150),(limite_gauche,limite_haute,limite_droite,limite_basse))
         pygame.draw.rect(self.screen,(50,50,50),(limite_gauche,limite_haute,limite_droite,limite_basse),2)
 
         joueur_x,joueur_y,position_x,position_y,min_x,max_x,min_y,max_y=self.getConstantes(joueur.getPosition(),[0,0],largeur_vue,hauteur_vue)
 
         position_joueur=[joueur_x,joueur_y]
-
+        self.decalage = [self.decalage_matrice[0] + (self.LARGEUR_MUR+self.LARGEUR_CASE) * self.decalage_gauche,self.decalage_matrice[1] + (self.LARGEUR_MUR+self.LARGEUR_CASE) * self.decalage_haut]
         #dire au lab d'afficher la matrice correspondante
-        labyrinthe.dessine_toi(self.screen,position_joueur,self.decalage_matrice,self.position_vue,largeur_vue,hauteur_vue,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR,self.mat_exploree)
+        labyrinthe.dessine_toi(self.screen,position_joueur,self.decalage,self.position_vue,largeur_vue,hauteur_vue,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR,self.mat_exploree)
         #afficher les entitées
-        self.dessine_entitees(entitees,position_joueur,self.mat_exploree,self.position_vue,self.decalage_matrice)
+        self.dessine_entitees(entitees,position_joueur,self.mat_exploree,self.position_vue,self.decalage)
         #afficher les animations
         self.dessine_animations(position_joueur,largeur_vue,hauteur_vue)
         #on supprime les animations qui ont expiré
@@ -194,8 +196,8 @@ class Affichage:
         for animation in self.animations:
             position_lab_anim=animation.getPosition()
             if self.est_dans_vue(position_lab_anim,position_joueur,largeur_vue,hauteur_vue):
-                position_anim_x=(self.LARGEUR_CASE+self.LARGEUR_MUR)*(position_lab_anim[0]-position_joueur[0]+largeur_vue//2)+round((self.LARGEUR_CASE+self.LARGEUR_MUR)*0.5)+self.decalage_matrice[0]
-                position_anim_y=(self.LARGEUR_CASE+self.LARGEUR_MUR)*(position_lab_anim[1]-position_joueur[1]+hauteur_vue//2)+round((self.LARGEUR_CASE+self.LARGEUR_MUR)*0.5)+self.decalage_matrice[1]
+                position_anim_x=(self.LARGEUR_CASE+self.LARGEUR_MUR)*(position_lab_anim[0]-position_joueur[0]+largeur_vue//2)+round((self.LARGEUR_CASE+self.LARGEUR_MUR)*0.5)+self.decalage[0]
+                position_anim_y=(self.LARGEUR_CASE+self.LARGEUR_MUR)*(position_lab_anim[1]-position_joueur[1]+hauteur_vue//2)+round((self.LARGEUR_CASE+self.LARGEUR_MUR)*0.5)+self.decalage[1]
 
                 position_anim=[position_anim_x,position_anim_y]
 
@@ -254,6 +256,24 @@ class Affichage:
 
         #récupérer vue joueur
         vue, self.position_vue = labyrinthe.construire_vue(position_joueur,largeur_vue,hauteur_vue)
+        if self.position_vue[0] < 0:
+            self.decalage_bord_largeur = self.position_vue[0]
+            self.decalage_gauche = self.decalage_bord_largeur
+        elif self.position_vue[0] + largeur_vue > self.largeur:
+            self.decalage_bord_largeur = -self.position_vue[0] - largeur_vue + self.largeur
+            self.decalage_gauche = 0
+        else:
+            self.decalage_bord_largeur = 0
+            self.decalage_gauche = 0
+        if self.position_vue[1] < 0:
+            self.decalage_bord_hauteur = self.position_vue[1]
+            self.decalage_haut = self.decalage_bord_hauteur
+        elif self.position_vue[1] + hauteur_vue > self.hauteur:
+            self.decalage_bord_hauteur = -self.position_vue[1] - hauteur_vue + self.hauteur
+            self.decalage_haut = 0
+        else:
+            self.decalage_bord_hauteur = 0
+            self.decalage_haut = 0
         #récupérer mat vue visible joueur
         #on ne veut pas que le résolveur trouve de solution on veut juste qu'il explore la matrice
         resolveur = Resolveur(vue,largeur_vue,hauteur_vue,-1,-1,joueur_x-self.position_vue[0],joueur_y-self.position_vue[1],"Profondeur")
