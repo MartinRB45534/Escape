@@ -27,16 +27,16 @@ class Inventaire:
     def utilise_item(self):
         """
         Fonction qui utilise l'item actuellement sélectionné dans l'inventaire
-        En sortie : un événement, l'effet de l'utilisation de l'item
+        En sortie : Rien
         """
         if self.item_courant != 6:
             if self.items[self.entree_dico[self.item_courant]] != []:
-                return self.items[self.entree_dico[self.item_courant]][0].utiliser()
+                self.items[self.entree_dico[self.item_courant]][0].utiliser()
+                self.items[self.entree_dico[self.item_courant]].pop()
             else:
                 print ("Il n'y en a plus !")
         else:
             print ("On ne peut pas utiliser une clée !")
-            return None
     def supprime_item(self,item_supp):
         """
         Fonction qui supprime un item spécifique

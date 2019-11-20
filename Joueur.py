@@ -25,6 +25,7 @@ class Joueur(Agissant):
         self.position_vue=None
         #la portée de la vue 
         self.portee_vue=portee_vue
+        self.evenements=None
 
     def prochaine_action(self):
         pass

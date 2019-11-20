@@ -98,6 +98,7 @@ class Niveau:
             #mat_lab=self.lab.getMatrice_cases()
             #mat_lab[4][2].murs[DROITE].set_etat(INTOUCHABLE)
             #self.lab.matrice_cases=mat_lab
+            
 
             monstres=[]#[Fatti([4,4])]#,Fatti([10,10])]
             self.entitees=[Clee((3,3),"goodooKey")]
@@ -257,7 +258,7 @@ class Niveau:
 
         #génération du labyrinthe
         self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.arrivee[0],self.arrivee[1],self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
-        self.lab.generation(0.95)
+        self.lab.generation(0.15)
 
         pygame.display.set_caption("test")
         self.screen = pygame.display.set_mode((FENETRE_X,FENETRE_Y),pygame.RESIZABLE)
@@ -273,13 +274,18 @@ class Niveau:
             mat_lab=self.lab.getMatrice_cases()
             mat_lab[4][2].murs[DROITE]=Porte(self.LARGEUR_MUR,"goodooKey")
             self.lab.matrice_cases=mat_lab
-        if niveau == 3:
+
+            potions_vue=[Potion_de_vision((35,26),self.joueur),Potion_de_vision((27,38),self.joueur),Potion_de_vision((21,19),self.joueur),Potion_de_visibilite_permanente((8,7),self.joueur)]
+            potions_combat=[Potion_de_force((i,j),self.joueur)for j in range(5,45,10) for i in range(5,45,10)] + [Potion_de_portee((i,j),self.joueur)for j in range (10,40,10) for i in range (10,40,10)] + [Potion_de_soin((20,20),self.joueur),Potion_de_portee_permanente((2,2),self.joueur)]
+            potions=potions_vue+potions_combat
+            self.entitees=potions
+        elif niveau == 3:
             self.monstres.append(Runner(self.lab.getMatrice_cases(),5,59,[3,48]))
-        if niveau == 4:
+        elif niveau == 4:
             meute5 = [Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[12,5]),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[13,0]),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[14,5])]
             for monstre in meute5:
                 self.monstres.append(monstre)
-        if niveau == 5:
+        elif niveau == 5 :
             potions_vue=[Potion_de_vision((35,26),self.joueur),Potion_de_vision((27,38),self.joueur),Potion_de_vision((21,19),self.joueur),Potion_de_visibilite_permanente((8,7),self.joueur)]
             potions_combat=[Potion_de_force((i,j),self.joueur)for j in range(5,45,10) for i in range(5,45,10)] + [Potion_de_portee((i,j),self.joueur)for j in range (10,40,10) for i in range (10,40,10)] + [Potion_de_soin((20,20),self.joueur),Potion_de_portee_permanente((2,2),self.joueur)]
             potions=potions_vue+potions_combat
@@ -428,9 +434,7 @@ class Niveau:
                 elif event.type==pygame.KEYDOWN and event.key==pygame.K_LEFT:
                     self.joueur.inventaire_vers_la_gauche()
                 elif event.type==pygame.KEYDOWN and event.key==pygame.K_SPACE:
-                    evenement = self.joueur.utilise_inventaire()
-                    if evenement != None:
-                        self.evenements.append()
+                    self.joueur.utilise_inventaire()
 
         if self.affichage.affiche == LABYRINTHE:
          #on récupère toutes les touches préssés sous forme de
@@ -464,10 +468,12 @@ class Niveau:
             if self.horloge_cycle % agissant.getVitesse()==0:
                 if issubclass(type(agissant),Joueur):
                     self.action_joueur(events)
-                    
+                
                 agissant=self.actualiser_donnee(agissant)
 
                 agissant.prochaine_action()
+
+                agissant.execute_evenements()
                 if redessiner:
                     self.traitement_action(agissant)
                 else:

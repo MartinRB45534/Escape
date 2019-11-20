@@ -1,4 +1,5 @@
 from Entitee import *
+from Evenement import *
 class Agissant(Entitee):
     def __init__(self,position,pv,degats,vitesse,radius):
         self.position=position
@@ -15,6 +16,8 @@ class Agissant(Entitee):
         self.largeur_vue=None
         self.hauteur_vue=None
         self.position_vue=None
+        #évévnements auquel est soumi l'agissant
+        self.evenements=[]
     def get_action(self):
         """
         Fonction qui renvoie la prochaine action voulue
@@ -42,6 +45,24 @@ class Agissant(Entitee):
         Fonction a surdéfinir qui permet de définir l'action
         """
         print("a surdéfinir")
+    def execute_evenements(self):
+        """
+        Fonction qui exécute les événements propre a l'entitée
+        """
+        if self.evenements!=None:
+            for evenement in self.evenements:
+                fini = evenement.execute()
+                if fini:
+                    self.evenements.pop(self.evenements.index(evenement))
+    def add_evenement(self,new_evenement):
+        """
+        Fonction qui ajoute un evenement
+        """
+        if self.evenements==None:
+            self.evenements=[new_evenement]
+        else:
+            self.evenements.append(new_evenement)
+        
     def getVue(self):
         return self.vue
     def getPosition_vue(self):

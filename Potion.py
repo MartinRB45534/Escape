@@ -1,6 +1,7 @@
 import pygame
 from Evenement import *
 from Item import *
+from Effets import *
 
 bonus_force = 5
 bonus_hauteur_vue = 5
@@ -18,6 +19,7 @@ class Potion(Item):
         self.position = position
         self.cible = cible
         self.couleur = (255,255,0)
+        self.effet=None
 
     #def récupère(self):
     #    """méthode appelée quand le joueur récupère la potion, qui la place dans l'inventaire"""
@@ -29,7 +31,7 @@ class Potion(Item):
 
     def utiliser(self):
         """fonction qui agit quand on utilise la potion"""
-        return self.effet
+        self.cible.add_evenement(self.effet)
 
     def getPosition(self):
         return self.position
@@ -86,63 +88,5 @@ class Potion_de_visibilite_permanente(Potion):
         self.effet = Effet_potion_visibilite_permanente(temps_effet,self.cible)
 
     def __str__(self):
-        return("Potion_de_visibilite_permanente")
+        return("Potion_de_visibilité_permanente")
 
-class Effet_potion(Evenement):
-    def __init__(self,temps_restant,cible):
-        self.temps_restant = temps_restant
-        self.cible = cible
-        self.utilise = False
-       
-class Effet_potion_portee(Effet_potion):
-    
-    def action(self):
-        if not self.utilise :
-            self.utilise = True
-            self.cible.radius += bonus_radius
-        if self.temps_restant == 0:
-            self.cible.radius -= bonus_radius
-
-class Effet_potion_portee_permanente(Effet_potion):
-    
-    def action(self):
-        if not self.utilise :
-            self.utilise = True
-            self.cible.radius += bonus_radius_permanent
-
-class Effet_potion_soin(Effet_potion):
-    
-    def action(self):
-        if not self.utilise :
-            self.utilise = True
-            self.cible.pv += bonus_pv
-            if self.cible.pv > self.cible.pv_max:
-                self.cible.pv = self.cible.pv_max
-            
-class Effet_potion_force(Effet_potion):
-    
-    def action(self):
-        if not self.utilise :
-            self.utilise = True
-            self.cible.degats += bonus_force
-        if self.temps_restant == 0:
-            self.cible.degats -= bonus_force
-            
-class Effet_potion_vision(Effet_potion):
-    
-    def action(self):
-        if not self.utilise :
-            self.utilise = True
-            self.cible.largeur_vue += bonus_largeur_vue
-            self.cible.hauteur_vue += bonus_hauteur_vue
-        if self.temps_restant == 0:
-            self.cible.largeur_vue -= bonus_largeur_vue
-            self.cible.hauteur_vue -= bonus_hauteur_vue
-
-class Effet_potion_visibilite_permanente(Effet_potion):
-    
-    def action(self):
-        if not self.utilise :
-            self.utilise = True
-            self.cible.largeur_vue += bonus_largeur_vue
-            self.cible.hauteur_vue += bonus_hauteur_vue
