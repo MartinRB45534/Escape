@@ -264,6 +264,24 @@ class Labyrinthe:
         new_mat = [[self.matrice_cases[j][i] for i in range(self.hauteur)]for j in range(self.largeur)]
         return new_mat
 
+    def casser_mur(self,direction,position_x,position_y):
+        """
+        Fonction qui casse un mur spécifique
+        Entrées:
+            la direction du mur
+            la position de la case
+        Sorites:Rien
+        """
+        #on casse les murs de la case et de la case d'en face
+        self.matrice_cases[position_x][position_y].casser_mur(direction)
 
+        if direction==HAUT:
+            self.matrice_cases[position_x][position_y-1].casser_mur(BAS)
+        elif direction==DROITE:
+            self.matrice_cases[position_x+1][position_y].casser_mur(GAUCHE)
+        elif direction==BAS:
+            self.matrice_cases[position_x][position_y+1].casser_mur(HAUT)
+        elif direction==GAUCHE:
+            self.matrice_cases[position_x-1][position_y].casser_mur(DROITE)
 
 
