@@ -4,10 +4,10 @@ import pygame
 from Niveau import *
 from Constantes import *
 
-niveau = 0
+niveau = 3
 difficulté = HARD
 mode_affichage = distance_max
-mode_minimap = voir_tout
+mode_minimap = passage
 
 
 
@@ -86,10 +86,10 @@ def main():
             # si clic, le jeu se lance
             elif event.type == pygame.MOUSEBUTTONDOWN and over_green:
                 niv = Niveau(niveau,difficulté,mode_affichage,mode_minimap)
-                niv.run()
+                pygame.time.wait(niv.run())
 
             elif event.type == pygame.MOUSEBUTTONDOWN and over_yellow:
-                niv.run()
+                pygame.time.wait(niv.run())
 
             elif event.type == pygame.MOUSEBUTTONDOWN and over_black:
                 loop = False

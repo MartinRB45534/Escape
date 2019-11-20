@@ -8,6 +8,7 @@ BAS=2
 global GAUCHE
 GAUCHE=3
 
+
 global MUR_VIDE
 MUR_VIDE=0
 global MUR_PLEIN
@@ -20,10 +21,12 @@ PORTE_FERMEE=0
 global PORTE_OUVERTE
 PORTE_OUVERTE=1
 
+
 global FENETRE_X
 FENETRE_X = 600
 global FENETRE_Y
 FENETRE_Y = 600
+
 
 global voir_tout
 voir_tout = 0
@@ -36,6 +39,7 @@ distance_max = 3
 
 global passage
 passage = 1
+
 
 global BEGINNER
 BEGINNER = 0
@@ -50,10 +54,19 @@ INSANE = 4
 global IMPOSSIBLE
 IMPOSSIBLE = 5
 
+
 global BOUGER
 BOUGER=0
 global ATTAQUER
 ATTAQUER=1
 
+
 global ARRIVEE
 ARRIVEE=(30,144,255)
+
+global LABYRINTHE
+LABYRINTHE=0
+global MINIMAP
+MINIMAP=1
+global INVENTAIRE
+INVENTAIRE=2
