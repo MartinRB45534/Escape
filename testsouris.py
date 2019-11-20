@@ -5,7 +5,7 @@ from Constantes import *
 niveau = 0
 difficulté = HARD
 mode_affichage = distance_max
-mode_minimap = voir_tout
+mode_minimap = passage
 
 
 

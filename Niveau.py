@@ -260,7 +260,7 @@ class Niveau:
         self.screen.fill((0,0,0))
 
         #entitées
-        minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap)
+        minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap,self.depart,self.arrivee)
         self.joueur=Joueur(minimap,inventaire_joueur,self.hp_joueur,self.force_joueur,self.vitesse_joueur,2,self.zoom_largeur,self.zoom_hauteur,self.depart)
         self.monstres = monstres
         

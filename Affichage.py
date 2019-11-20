@@ -18,10 +18,10 @@ class Affichage:
         self.LARGEUR_MUR=LARGEUR_MUR
         self.LARGEUR_CASE=LARGEUR_CASE
         #decalage de la matrice du labyrinthe sur l'écran (decalage en px)
-        self.hauteur_minimap = hauteur_lab * 3 + 11
-        self.largeur_minimap = largeur_lab * 3 + 11
+        self.hauteur_minimap = 1 * 3 + 11
+        self.largeur_minimap = 1 * 3 + 11
         self.decalage_matrice=[11,self.hauteur_minimap]
-        self.affiche = 0
+        self.affiche = LABYRINTHE
         #liste des animations
         self.animations=[]
     def dessine_frame(self,joueur,labyrinthe,entitees,evenements):
@@ -35,12 +35,13 @@ class Affichage:
         Sorties:
             -rien
         """
+        self.decouvre_joueur(joueur,labyrinthe)
         self.reset_screen()
+        self.dessine_hud(joueur)
         if self.mode_affichage==distance_max and self.affiche == LABYRINTHE:
             self.distance_max(joueur,labyrinthe,entitees,evenements)
         elif self.affiche == LABYRINTHE:
             print("le mode d'affichage selectionnée est incorrect")
-        self.dessine_hud(joueur)
             
     def distance_max(self,joueur,labyrinthe,entitees,evenements):
         """
@@ -67,13 +68,7 @@ class Affichage:
         joueur_x,joueur_y,position_x,position_y,min_x,max_x,min_y,max_y=self.getConstantes(joueur.getPosition(),[0,0],largeur_vue,hauteur_vue)
 
         position_joueur=[joueur_x,joueur_y]
-        #récupérer vue joueur
-        vue, self.position_vue = labyrinthe.construire_vue(position_joueur,largeur_vue,hauteur_vue)
-        #récupérer mat vue visible joueur
-        #on ne veut pas que le résolveur trouve de solution on veut juste qu'il explore la matrice
-        resolveur = Resolveur(vue,largeur_vue,hauteur_vue,-1,-1,joueur_x-self.position_vue[0],joueur_y-self.position_vue[1],"Profondeur")
 
-        self.mat_exploree=resolveur.resolution_en_largeur_distance_limitée(False,False,False,True,joueur.portee_vue)
         #dire au lab d'afficher la matrice correspondante
         labyrinthe.dessine_toi(self.screen,position_joueur,self.decalage_matrice,self.position_vue,largeur_vue,hauteur_vue,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR,self.mat_exploree)
         #afficher les entitées
@@ -102,7 +97,10 @@ class Affichage:
             pygame.draw.rect(self.screen, pygame.Color(255,0,0),(30,self.getBottomY(joueur.hauteur_vue)+10,int(100*(joueur.pv/joueur.pv_max)),10))
 
         #on dessine la minimap
-        joueur.minimap.decouvre(self.position_vue,self.mat_exploree,joueur.position)
+        self.taille_minimap = joueur.minimap.decouvre(self.position_vue,self.mat_exploree,joueur.position)
+        self.hauteur_minimap = self.taille_minimap[1] * 3 + 11
+        self.largeur_minimap = self.taille_minimap[0] * 3 + 11
+        self.decalage_matrice=[11,self.hauteur_minimap]
         if self.affiche == MINIMAP:
             joueur.affiche_minimap(self.screen)
         elif self.affiche == LABYRINTHE:
@@ -243,4 +241,21 @@ class Affichage:
         """
         self.screen.fill((125,125,125))
 
+    def decouvre_joueur(self,joueur,labyrinthe):
+        """
+        Fonction qui détermine ce que le joueur voit (sur l'écran et dans la minimap)
+        """
+        #récupérer constantes
+        largeur_vue=joueur.largeur_vue
+        hauteur_vue=joueur.hauteur_vue
+        position_joueur = joueur.getPosition()
+        joueur_x = position_joueur[0]
+        joueur_y = position_joueur[1]
 
+        #récupérer vue joueur
+        vue, self.position_vue = labyrinthe.construire_vue(position_joueur,largeur_vue,hauteur_vue)
+        #récupérer mat vue visible joueur
+        #on ne veut pas que le résolveur trouve de solution on veut juste qu'il explore la matrice
+        resolveur = Resolveur(vue,largeur_vue,hauteur_vue,-1,-1,joueur_x-self.position_vue[0],joueur_y-self.position_vue[1],"Profondeur")
+
+        self.mat_exploree=resolveur.resolution_en_largeur_distance_limitée(False,False,False,True,joueur.portee_vue)
