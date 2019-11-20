@@ -183,7 +183,7 @@ class Niveau:
             #poids permettants de manipuler l'aléatoire
             self.poids=[6,2,1,2]
         
-            monstres=[Slime([5,17]),Fatti([8,25]),Fatti([5,59])]#,Runner(self.lab.getMatrice_cases(),5,59,[3,48])]
+            monstres=[Slime([5,17]),Fatti([8,25]),Fatti([5,59])]
             self.entitees=[]
 
         elif niveau == 4:
@@ -216,7 +216,7 @@ class Niveau:
             meute2 = [Slime([4,0],2),Slime([3,1],2),Slime([5,1],2),Slime([4,2],2),Slime([3,3],2),Slime([5,3],2),Slime([4,4],2),Slime([3,5],2),Slime([5,5],2),Slime([4,6],2),Slime([3,7],2),Slime([5,7],2),Slime([4,8],2)]
             meute3 = [Slime([7,8],3),Slime([8,9],3),Slime([6,9],3),Fatti([6,11],3),Fatti([7,11],3),Fatti([8,11],3)]
             meute4 = [Slime([10,5],4),Slime([10,6],4),Slime([10,7],4),Slime([10,8],4),Slime([10,9],4),Slime([10,10],4),Fatti([10,2],4,10,10,300,30)]
-            meute5 = [Slime([13,8],5),Slime([14,9],5),Slime([12,9],5),Fatti([12,11],5),Fatti([13,11],5),Fatti([14,11],5)]#,Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[12,5]),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[13,0]),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[14,5])]
+            meute5 = [Slime([13,8],5),Slime([14,9],5),Slime([12,9],5),Fatti([12,11],5),Fatti([13,11],5),Fatti([14,11],5)]
             monstres = meute1
             for meutenumerote in [meute2,meute3,meute4,meute5]:
                 for monstre in meutenumerote:
@@ -269,6 +269,12 @@ class Niveau:
             mat_lab=self.lab.getMatrice_cases()
             mat_lab[4][2].murs[DROITE]=Porte(self.LARGEUR_MUR,"goodooKey")
             self.lab.matrice_cases=mat_lab
+        if niveau == 3:
+            self.monstres.append(Runner(self.lab.getMatrice_cases(),5,59,[3,48]))
+        if niveau == 4:
+            meute5 = [Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[12,5]),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[13,0]),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[14,5])]
+            for monstre in meute5:
+                self.monstres.append(monstre)
         if niveau == 5:
             potions_vue=[Potion_de_vision((35,26),self.joueur),Potion_de_vision((27,38),self.joueur),Potion_de_vision((21,19),self.joueur),Potion_de_visibilite_permanente((8,7),self.joueur)]
             potions_combat=[Potion_de_force((i,j),self.joueur)for j in range(5,45,10) for i in range(5,45,10)] + [Potion_de_portee((i,j),self.joueur)for j in range (10,40,10) for i in range (10,40,10)] + [Potion_de_soin((20,20),self.joueur),Potion_de_portee_permanente((2,2),self.joueur)]
@@ -278,7 +284,7 @@ class Niveau:
         self.entitees.append(self.joueur)
         
         if res :
-            self.lab.resolution(self.CASES_X-1,self.CASES_Y-1,0,0,"Largeur")
+            self.lab.resolution(self.arrivee[0],self.arrivee[1],self.depart[0],self.depart[1],"Largeur")
         
         for i in range(0,len(self.monstres)):
             self.entitees.append(self.monstres[i])
