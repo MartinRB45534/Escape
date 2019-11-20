@@ -37,34 +37,34 @@ class Niveau:
                 self.CASES_X = 20
                 self.CASES_Y = 20
                 res = True
-                self.salles=[Patern((8,8),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+                #self.salles=[Patern((8,8),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR)]
                 proba_murs = 0.5
             elif difficulté == EASY :
                 self.CASES_X = 20
                 self.CASES_Y = 20
                 res = False
-                self.salles=[Patern((14,14),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+                #self.salles=[Patern((14,14),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
                 proba_murs = 0.4
             elif difficulté == AVERAGE :
                 self.CASES_X = 40
                 self.CASES_Y = 40
                 res = False
-                self.salles=[Patern((17,17),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+                #self.salles=[Patern((17,17),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
                 proba_murs = 0.3
             elif difficulté == HARD :
                 self.CASES_X = 60
                 self.CASES_Y = 60
                 res = False
-                self.salles=[Patern((10,29),40,2,self.LARGEUR_CASE,self.LARGEUR_MUR,[])]
+                #self.salles=[Patern((10,29),40,2,self.LARGEUR_CASE,self.LARGEUR_MUR,[])]
                 #on génère les entrées de manière a avoir un espace ouvert
-                self.salles[0].pre_gen_entrees_x(0,0,39)
-                self.salles[0].pre_gen_entrees_x(1,0,39)
+                #self.salles[0].pre_gen_entrees_x(0,0,39)
+                #self.salles[0].pre_gen_entrees_x(1,0,39)
                 proba_murs = 0.2
             elif difficulté == INSANE :
                 self.CASES_X = 100
                 self.CASES_Y = 100
                 res = False
-                self.salles=[Patern((49,30),2,40,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+                #self.salles=[Patern((49,30),2,40,self.LARGEUR_CASE,self.LARGEUR_MUR)]
                 proba_murs = 0.1
             elif difficulté == IMPOSSIBLE :
                 self.CASES_X = 1000
@@ -92,14 +92,14 @@ class Niveau:
             self.poids=[6,2,1,2]
         
             #salle pour exp monstres
-            self.salles.append(Patern((0,0),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,3]]))
+            self.salles=[Patern((0,0),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[1,0],[4,3]])]
 
             #exp avec les portes
             #mat_lab=self.lab.getMatrice_cases()
-            #mat_lab[4][2].murs[DROITE]=Porte(self.LARGEUR_MUR,"goodooKey")
+            #mat_lab[4][2].murs[DROITE].set_etat(INTOUCHABLE)
             #self.lab.matrice_cases=mat_lab
 
-            monstres=[Fatti([4,4])]#,Fatti([10,10])]
+            monstres=[]#[Fatti([4,4])]#,Fatti([10,10])]
             self.entitees=[Clee((3,3),"goodooKey")]
 
         elif niveau == 1:
@@ -257,8 +257,7 @@ class Niveau:
 
         #génération du labyrinthe
         self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.arrivee[0],self.arrivee[1],self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
-        self.lab.generation()
-        self.lab.casser_X_murs(proba_murs)
+        self.lab.generation(0.95)
 
         pygame.display.set_caption("test")
         self.screen = pygame.display.set_mode((FENETRE_X,FENETRE_Y),pygame.RESIZABLE)
@@ -304,7 +303,6 @@ class Niveau:
         self.textLose = font.render("Vous avez perdu!! ;o;", True, (0, 128, 128))
         
         self.position_screen=(0,0)
-        print (len(self.monstres))
         
     def run(self):
         run=True
@@ -556,9 +554,7 @@ class Niveau:
         if issubclass(type(agissant),Monstre):
             #on donne la position du joueur au monstre
             agissant.setPosition_joueur(self.joueur.getPosition())
-        elif type(agissant)==Joueur:
-            self.action_joueur()
-
+            
         return agissant
     def traitement_action(self,agissant):
         """

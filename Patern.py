@@ -37,7 +37,6 @@ class Patern:
     def pre_generation(self,matrice_lab):
         """
         Fonction qui prend en entrée:
-            les coordonnées de base du patern dans le labyrinthe
             la matrice de cases du labyrinthe
         et qui pre génère les cases du patern
         """
@@ -45,13 +44,20 @@ class Patern:
         coordonnee_y = self.position[1]
         for i in range(coordonnee_x,coordonnee_x+self.largeur):
             for j in range(coordonnee_y,coordonnee_y+self.hauteur):
-                self.pre_generation_case(i-coordonnee_x,j-coordonnee_y)
+                #on ne doit générer que les cases au bords
+                #plus précisement on doit empêcher le générateur d'y toucher
+                if not(self.case_est_une_entree(i,j)) and self.case_au_bord(i,j):
+                    dirs_intouchables=self.contraintes_cases(i,j)
+                    for direction in dirs_intouchables:
+                        matrice_lab[i][j].set_mur(direction,INTOUCHABLE)
+                        if self.get_voisin_dir(i,j,direction,matrice_lab)!=None:
+                            self.get_voisin_dir(i,j,direction,matrice_lab).set_mur(self.direction_opposee(direction),INTOUCHABLE)
+        
                 matrice_lab[i][j]=self.matrice_cases[i-coordonnee_x][j-coordonnee_y]
 
     def post_generation(self,matrice_lab):
         """
         Fonction qui prend en entrée:
-            les coordonnées de base du patern dans le labyrinthe
             la matrice de cases du labyrinthe
         et qui clear la salle
         """
@@ -59,6 +65,14 @@ class Patern:
         coordonnee_y = self.position[1]
         for i in range(coordonnee_x,coordonnee_x+self.largeur):
             for j in range(coordonnee_y,coordonnee_y+self.hauteur):
+                #on enlève les murs intouchables
+                if not(self.case_est_une_entree(i,j)) and self.case_au_bord(i,j):
+                    dirs_intouchables=self.contraintes_cases(i,j)
+                    for direction in dirs_intouchables:
+                        matrice_lab[i][j].set_mur(direction,MUR_PLEIN)
+                        if self.get_voisin_dir(i,j,direction,matrice_lab)!=None:
+                            self.get_voisin_dir(i,j,direction,matrice_lab).set_mur(self.direction_opposee(direction),MUR_PLEIN)
+                            
                 self.post_generation_case(i-coordonnee_x,j-coordonnee_y)
                 matrice_lab[i][j]=self.matrice_cases[i-coordonnee_x][j-coordonnee_y]
 
@@ -71,15 +85,17 @@ class Patern:
         #on ne doit générer que les cases au bords
         #plus précisement on doit empêcher le générateur d'y toucher
         if not(self.case_est_une_entree(x,y)) and self.case_au_bord(x,y):
-            self.incorpotation_case(x,y)
+            dirs_intouchables=self.contraintes_cases(x,y)
+            
+            
     def post_generation_case(self,x,y):
         """
         Fonction qui prend en entrée:
             les coordonnées de la case
             et casse les murs les murs en fonction de sa position
         """
-        if not(self.case_au_bord(x,y)) or self.case_est_une_entree(x,y):
-            self.incorpotation_case(x,y)
+        #if not(self.case_au_bord(x,y)) or self.case_est_une_entree(x,y):
+        self.incorpotation_case(x,y)
             
     def case_est_une_entree(self,x,y):
         """
@@ -134,7 +150,6 @@ class Patern:
         """
         Fonction qui prend en enetrées:
             les coordonnées de la case
-            les coordonnées de base du patern
             la matrice du labyrinthe
 
         et casse les murs qui empêches la navigation dans le labyrinthe
@@ -176,27 +191,79 @@ class Patern:
             mur=matrice_lab[x-1][y].get_mur_droit()
             
         return mur
-    
-    def case_bord(self,x,y,largeur_lab,hauteur_lab):
+    def get_voisin_dir(self,x,y,direction,matrice_lab):
+        """
+        Fonction qui prend en en entrées:
+            les coordonnées de la case
+            la direction du voisin que l'on veut récuperer
+            la matrice du labyrinthe
+        et renvoie le voisin conformément a la direction
+        """
+
+
+        largeur_lab=len(matrice_lab)
+        hauteur_lab=len(matrice_lab[0])
+
+        voisin=None
+
+        if direction==HAUT and y>0:
+            voisin=matrice_lab[x][y-1]
+            
+        elif direction==DROITE and x<largeur_lab-1:
+            voisin=matrice_lab[x+1][y]
+            
+        elif direction==BAS and y<hauteur_lab-1:
+            voisin=matrice_lab[x][y+1]
+            
+        elif direction==GAUCHE and x>0:
+            voisin=matrice_lab[x-1][y]
+            
+        return voisin
+    def case_bord(self,x,y,largeur_mat,hauteur_mat):
         """
         Fonction qui prend en entrée:
             les coordonnées de la case
-            la largeur et la hauteur du labyrinthe
+            la largeur et la hauteur de la matrice
             et qui renvoie la/les direction/s des bords
         """
         bords=[]
         
-        #on casse les murs qui ne sont pas aux extrèmes
+        #on ajoute les murs qui ne sont pas aux extrèmes
         if x!=0:
             bords+=[GAUCHE]
             
-        if x!=(largeur_lab-1):
+        if x!=(largeur_mat-1):
             bords+=[DROITE]
 
         if y!=0:
             bords+=[HAUT]
             
-        if y!=(hauteur_lab-1):
+        if y!=(hauteur_mat-1):
+            bords+=[BAS]
+
+        return bords
+    def contraintes_cases(self,x,y):
+        """
+        Fonction qui renvoie les murs qui sont soumis a des contraintes
+        venant de la salle
+        Entrées:
+            -les coordonnées de la case
+        Sorties:
+            -les directions des murs a ne pas caser
+        """
+        #pour l'instant les contraintes se limites justes au bords de la matrice
+        bords=[]
+        
+        if x==0:
+            bords+=[GAUCHE]
+            
+        if x==(self.largeur-1):
+            bords+=[DROITE]
+
+        if y==0:
+            bords+=[HAUT]
+            
+        if y==(self.hauteur-1):
             bords+=[BAS]
 
         return bords
@@ -215,4 +282,28 @@ class Patern:
 
     def get_pos(self):
         return self.position
+    def getCoins(self):
+        """
+        Fonction qui renvoie les coins de la salle
+        """
+        coin_haut_gauche=self.position
+        coin_bas_gauche=[self.position[0],self.position[1]+self.hauteur-1]
+        coin_haut_droite=[self.position[0]+self.largeur-1,self.position[1]+self.hauteur-1]
+        coin_bas_droite=[self.position[0]+self.largeur-1,self.position[1]]
+        return [coin_haut_gauche,coin_bas_gauche,coin_bas_droite,coin_haut_droite]
+    def direction_opposee(self,direction):
+        """
+        Fonction qui renvoie la direction opposée à celle en entrée
+        """
+        direction_opposee=0
+        
+        if direction == HAUT:
+            direction_opposee=BAS
+        elif direction == DROITE:
+            direction_opposee=GAUCHE
+        elif direction == BAS:
+            direction_opposee=HAUT
+        elif direction == GAUCHE:
+            direction_opposee=DROITE
 
+        return direction_opposee

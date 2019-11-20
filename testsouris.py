@@ -1,8 +1,10 @@
 import pygame
+
+            
 from Niveau import *
 from Constantes import *
 
-niveau = 4
+niveau = 0
 difficulté = HARD
 mode_affichage = distance_max
 mode_minimap = voir_tout
