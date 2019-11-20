@@ -2,12 +2,15 @@ from Cases import *
 from Constantes import *
 
 class Patern:
-    def __init__(self,position,largeur,hauteur,tailleCase,tailleMur,entrees=[[1,0]]):
+    def __init__(self,position,largeur,hauteur,tailleCase,tailleMur,entrees=[(1,0)],clees=[],vide = True):
         self.position = position
         self.hauteur = hauteur
         self.largeur = largeur
         self.matrice_cases = [[Case(tailleCase,tailleMur) for i in range(hauteur)]for i in range(largeur)]
+        self.taille_mur = tailleMur
         self.entrees = entrees
+        self.clees = clees
+        self.vide = vide
     def pre_gen_entrees_x(self,colonne,depart_x,arrivee_x):
         """
         Fonction qui facilite la génération des entrées sur une ligne
@@ -33,7 +36,14 @@ class Patern:
         for y in range(depart_y,arrivee_y+1):
             self.entrees.append([ligne,y])
 
-        
+    def post_gen_entrees(self,matrice_lab):
+        """
+        Fonction qui transforme les entrées en portes
+        """
+        for i in range(len(self.clees)):
+            for bord in self.contraintes_cases(self.entrees[i][0],self.entrees[i][1]):
+                matrice_lab[self.entrees[i][0]][self.entrees[i][1]].murs[bord]=Porte(self.taille_mur,self.clees[i].nom_clee)
+
     def pre_generation(self,matrice_lab):
         """
         Fonction qui prend en entrée:
@@ -75,6 +85,8 @@ class Patern:
                             
                 self.post_generation_case(i-coordonnee_x,j-coordonnee_y)
                 matrice_lab[i][j]=self.matrice_cases[i-coordonnee_x][j-coordonnee_y]
+        if self.clees != []:
+            self.post_gen_entrees(matrice_lab)
 
     def pre_generation_case(self,x,y):
         """
@@ -95,7 +107,8 @@ class Patern:
             et casse les murs les murs en fonction de sa position
         """
         #if not(self.case_au_bord(x,y)) or self.case_est_une_entree(x,y):
-        self.incorpotation_case(x,y)
+        if self.vide :
+            self.incorpotation_case(x,y)
             
     def case_est_une_entree(self,x,y):
         """
