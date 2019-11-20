@@ -100,7 +100,7 @@ class Niveau:
             #self.lab.matrice_cases=mat_lab
             
 
-            monstres=[]#[Fatti([4,4])]#,Fatti([10,10])]
+            monstres=[Slime([4,4])]#,Fatti([10,10])]
             self.entitees=[Clee((3,3),"goodooKey")]
 
         elif niveau == 1:
