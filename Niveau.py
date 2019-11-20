@@ -92,7 +92,8 @@ class Niveau:
             self.poids=[6,2,1,2]
         
             #salle pour exp monstres
-            self.salles=[Patern((0,0),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[1,0],[4,3]])]
+            self.clees = [Clee((3,3),"goodooKey")]
+            self.salles=[Patern((0,0),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[(4,3),(3,4)],self.clees,False)]
 
             #exp avec les portes
             #mat_lab=self.lab.getMatrice_cases()
@@ -101,7 +102,7 @@ class Niveau:
             
 
             monstres=[]#[Fatti([4,4])]#,Fatti([10,10])]
-            self.entitees=[Clee((3,3),"goodooKey")]
+            self.entitees=self.clees
 
         elif niveau == 1:
             #niveau labyrinthique sans monstres pour apprendre à se déplacer
@@ -270,15 +271,11 @@ class Niveau:
         self.monstres = monstres
         
         if niveau == 0:
-            #exp avec les portes
-            mat_lab=self.lab.getMatrice_cases()
-            mat_lab[4][2].murs[DROITE]=Porte(self.LARGEUR_MUR,"goodooKey")
-            self.lab.matrice_cases=mat_lab
-
             potions_vue=[Potion_de_vision((35,26),self.joueur),Potion_de_vision((27,38),self.joueur),Potion_de_vision((21,19),self.joueur),Potion_de_visibilite_permanente((8,7),self.joueur)]
             potions_combat=[Potion_de_force((i,j),self.joueur)for j in range(5,45,10) for i in range(5,45,10)] + [Potion_de_portee((i,j),self.joueur)for j in range (10,40,10) for i in range (10,40,10)] + [Potion_de_soin((20,20),self.joueur),Potion_de_portee_permanente((2,2),self.joueur)]
             potions=potions_vue+potions_combat
-            self.entitees=potions
+            for potion in potions:
+                self.entitees.append(potion)
         elif niveau == 3:
             self.monstres.append(Runner(self.lab.getMatrice_cases(),5,59,[3,48]))
         elif niveau == 4:
