@@ -16,7 +16,7 @@ from Murs import *
 from Minimap import *
 
 class Niveau:
-    def __init__(self,niveau,difficulté,mode_affichage,mode_minimap):
+    def __init__(self,niveau,difficulté,mode_affichage,mode_minimap,joueur=None):
         
         self.mode_affichage = mode_affichage
         if self.mode_affichage == voir_tout :
@@ -259,7 +259,7 @@ class Niveau:
 
         #génération du labyrinthe
         self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.arrivee[0],self.arrivee[1],self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
-        self.lab.generation(0.15)
+        self.lab.generation(proba_murs,None,None)
 
         pygame.display.set_caption("test")
         self.screen = pygame.display.set_mode((FENETRE_X,FENETRE_Y),pygame.RESIZABLE)
@@ -267,7 +267,12 @@ class Niveau:
 
         #entitées
         minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap,self.depart,self.arrivee)
-        self.joueur=Joueur(minimap,inventaire_joueur,self.hp_joueur,self.force_joueur,self.vitesse_joueur,2,self.zoom_largeur,self.zoom_hauteur,self.depart)
+        #si le joueur passe d'un niveau a un autre
+        if joueur!=None:
+            #le joueur est heal entre les niveaux
+            self.joueur=Joueur(minimap,joueur.inventaire,joueur.pv_max,joueur.pv_max,joueur.degats,joueur.vitesse,2,joueur.largeur_vue,joueur.hauteur_vue,self.depart)
+        else:
+            self.joueur=Joueur(minimap,inventaire_joueur,self.hp_joueur,self.hp_joueur,self.force_joueur,self.vitesse_joueur,2,self.zoom_largeur,self.zoom_hauteur,self.depart)
         self.monstres = monstres
         
         if niveau == 0:
@@ -319,6 +324,13 @@ class Niveau:
         self.position_screen=(0,0)
         
     def run(self):
+        """
+        Boucle principale du niveau
+        Sorties:
+            -le temps a attendre si le joueur as finit la niveau
+            -un booléen indiquant si le joueur a gagné ou perdu
+            -le joueur
+        """
         run=True
         self.redraw()
         #objet qui permet de gérer le temps en pygame
@@ -333,7 +345,7 @@ class Niveau:
             events = []
             for event in pygame.event.get():
                 if event.type==pygame.QUIT:
-                    res = 0
+                    res = -1
                     run=False
 
                 if event.type == pygame.VIDEORESIZE:
@@ -358,7 +370,17 @@ class Niveau:
                 res = 5000
                 run=False
             pygame.display.update()
-        return res
+        self.fin_niveau()
+        return res,self.lab.as_gagner(self.joueur.getPosition()),self.joueur
+
+    def fin_niveau(self):
+        """
+        Fonction qui gère la fin du niveau
+        """
+        #on met fin a tout les événements
+        for evenement in self.evenements:
+            evenement.temps_restant=0
+            evenement.action()
     def generation_meutes(self):
         """
         Fonction qui génère les meutes
