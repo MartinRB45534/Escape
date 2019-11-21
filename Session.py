@@ -1,11 +1,12 @@
 from pygame import *
 from Niveau import *
+from Constantes import *
 
 class Session ():
-    def __init__(self,niveau,difficulté,mode_affichage,mode_minimap,nb_niv_max):
-        self.niv_courant = Niveau(niveau,difficulté,mode_affichage,mode_minimap)
+    def __init__(self,niveau,difficulte,mode_affichage,mode_minimap,nb_niv_max):
+        self.niv_courant = Niveau(niveau,difficulte,mode_affichage,mode_minimap)
         #paramètres pour la réinitialisation
-        self.difficulte=difficulté
+        self.difficulte=difficulte
         self.mode_affichage=mode_affichage
         self.mode_minimap=mode_minimap
         #paramètres pourle transfert de niveau
@@ -22,6 +23,7 @@ class Session ():
         Entrées:
             -le niveau
         """
+        print (self.difficulte)
         self.niv_courant = Niveau(self.nb_niv_courant,self.difficulte,self.mode_affichage,self.mode_minimap,joueur)
     def run(self):
         """
@@ -35,9 +37,10 @@ class Session ():
                 pygame.time.wait(res)
                 if win:
                     self.nb_niv_courant+=1
+                    if self.nb_niv_courant>self.nb_niv_max:
+                        self.nb_niv_courant=1
                     self.transfert_niveau(joueur)
                 else:
                     self.reset_niveau()
-        if self.nb_niv_courant>self.nb_niv_max:
-            self.nb_niv_courant=1
+
         
