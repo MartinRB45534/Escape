@@ -54,16 +54,18 @@ class Patern:
         coordonnee_y = self.position[1]
         for i in range(coordonnee_x,coordonnee_x+self.largeur):
             for j in range(coordonnee_y,coordonnee_y+self.hauteur):
+                x_pat=i-coordonnee_x
+                y_pat=j-coordonnee_y
                 #on ne doit générer que les cases au bords
                 #plus précisement on doit empêcher le générateur d'y toucher
-                if not(self.case_est_une_entree(i,j)) and self.case_au_bord(i,j):
-                    dirs_intouchables=self.contraintes_cases(i,j)
+                if not(self.case_est_une_entree(x_pat,y_pat)) and self.case_au_bord(x_pat,y_pat):
+                    dirs_intouchables=self.contraintes_cases(x_pat,y_pat)
                     for direction in dirs_intouchables:
                         matrice_lab[i][j].set_mur(direction,INTOUCHABLE)
                         if self.get_voisin_dir(i,j,direction,matrice_lab)!=None:
                             self.get_voisin_dir(i,j,direction,matrice_lab).set_mur(self.direction_opposee(direction),INTOUCHABLE)
-        
-                matrice_lab[i][j]=self.matrice_cases[i-coordonnee_x][j-coordonnee_y]
+
+                
 
     def post_generation(self,matrice_lab):
         """
@@ -75,16 +77,19 @@ class Patern:
         coordonnee_y = self.position[1]
         for i in range(coordonnee_x,coordonnee_x+self.largeur):
             for j in range(coordonnee_y,coordonnee_y+self.hauteur):
+                x_pat=i-coordonnee_x
+                y_pat=j-coordonnee_y
                 #on enlève les murs intouchables
-                if not(self.case_est_une_entree(i,j)) and self.case_au_bord(i,j):
-                    dirs_intouchables=self.contraintes_cases(i,j)
+                if not(self.case_est_une_entree(x_pat,y_pat)) and self.case_au_bord(x_pat,y_pat):
+                    dirs_intouchables=self.contraintes_cases(x_pat,y_pat)
                     for direction in dirs_intouchables:
                         matrice_lab[i][j].set_mur(direction,MUR_PLEIN)
                         if self.get_voisin_dir(i,j,direction,matrice_lab)!=None:
                             self.get_voisin_dir(i,j,direction,matrice_lab).set_mur(self.direction_opposee(direction),MUR_PLEIN)
                             
-                self.post_generation_case(i-coordonnee_x,j-coordonnee_y)
-                matrice_lab[i][j]=self.matrice_cases[i-coordonnee_x][j-coordonnee_y]
+                self.post_generation_case(x_pat,y_pat)
+                if self.vide:
+                    matrice_lab[i][j]=self.matrice_cases[i-coordonnee_x][j-coordonnee_y]
         if self.clees != []:
             self.post_gen_entrees(matrice_lab)
 

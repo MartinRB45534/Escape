@@ -32,7 +32,6 @@ class Niveau:
             self.LARGEUR_CASE = 20
             self.LARGEUR_MUR = 1
 
-        print(niveau)
         
         if niveau == 0:
             if difficulte == BEGINNER :
@@ -95,7 +94,7 @@ class Niveau:
         
             #salle pour exp monstres
             self.clees = [Clee((3,3),"goodooKey")]
-            self.salles=[Patern((0,0),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[(4,3),(3,4)],self.clees,False)]
+            self.salles=[Patern((0,0),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[(4,3),(3,4)],self.clees,False)]
 
             #exp avec les portes
             #mat_lab=self.lab.getMatrice_cases()
@@ -107,7 +106,6 @@ class Niveau:
             self.entitees=self.clees
 
         elif niveau == 1:
-            print("check")
             #niveau labyrinthique sans monstres pour apprendre à se déplacer
 
             self.CASES_X = 40
@@ -275,7 +273,7 @@ class Niveau:
             #le joueur est heal entre les niveaux
             self.joueur=Joueur(minimap,joueur.inventaire,joueur.pv_max,joueur.pv_max,joueur.degats,joueur.vitesse,joueur.radius,joueur.largeur_vue,joueur.hauteur_vue,self.depart)
         else:
-            self.joueur=Joueur(minimap,inventaire_joueur,self.hp_joueur,self.hp_joueur,self.force_joueur,self.vitesse_joueur,10,self.zoom_largeur,self.zoom_hauteur,self.depart)
+            self.joueur=Joueur(minimap,inventaire_joueur,self.hp_joueur,self.hp_joueur,self.force_joueur,self.vitesse_joueur,2,self.zoom_largeur,self.zoom_hauteur,self.depart)
         self.monstres = monstres
         
         if niveau == 0:

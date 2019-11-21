@@ -309,6 +309,7 @@ class Generateur:
                     self.casser_mur(HAUT,x,y)
                 if GAUCHE in murs and random.random() <= proba :
                     self.casser_mur(GAUCHE,x,y)
+                    
     def casser_mur(self,direction,position_x,position_y):
         """
         Fonction qui casse un mur spécifique
