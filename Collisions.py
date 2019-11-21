@@ -20,25 +20,73 @@ class Collision:
         """
         succes=False
 
-        vue_attaquant=attaquant.getVue()
-        position_vue=attaquant.getPosition_vue()
-        position_attaquant=attaquant.getPosition()
-        
-        resol=Resolveur(vue_attaquant,len(vue_attaquant),len(vue_attaquant[0]),-1,-1,position_attaquant[0]-position_vue[0],position_attaquant[1]-position_vue[1])
-        #on récupère la matrice accesible par l'attaque
-        mat_explorable=resol.resolution_en_largeur_distance_limitée(False,False,False,True,attaquant.radius)
+        mat_explorable,position_vue=self.get_zone_attaque(attaquant)
         
         if agissants!=None:
             for agissant in agissants:
                 if agissant!=attaquant and isinstance(agissant,Agissant):
                     x=agissant.getPosition()[0]-position_vue[0]
                     y=agissant.getPosition()[1]-position_vue[1]
-                    
+
                     if not(x>len(mat_explorable)-1 or x<0 or y>len(mat_explorable[0])-1 or y<0):
                         if mat_explorable[x][y]:
                             succes=True
                             self.attaque(agissant,attaquant)
+                        else:
+                            print(mat_explorable[x][y])
         return succes
+    def get_zone_attaque(self,attaquant):
+        """
+        Fonction qui détermine la zone de l'attaque
+        Entrée:
+            -l'attaquant
+        Sortie:
+            -la matrice correspondant a la zone ou l'attaque a eu lieu
+            -la nouvelle position de la vue
+        """
+        vue_attaquant=attaquant.getVue()
+        position_vue=attaquant.getPosition_vue()
+        position_attaquant=attaquant.getPosition()
+
+
+        new_position_vue=position_vue
+        mat_attaque=None
+        if issubclass(type(attaquant),Joueur):
+            position_attaquant_dans_vue=[position_attaquant[0]-position_vue[0],position_attaquant[1]-position_vue[1]]
+            
+            if not(vue_attaquant[position_attaquant_dans_vue[0]][position_attaquant_dans_vue[1]].mur_plein(attaquant.dir_regard)):
+                nb_cases=1
+                mat_attaque=[[]]
+                while nb_cases<=attaquant.radius:
+                    if attaquant.dir_regard==HAUT and vue_attaquant[position_attaquant_dans_vue[0]][position_attaquant_dans_vue[1]-nb_cases+1]!=None and not(vue_attaquant[position_attaquant_dans_vue[0]][position_attaquant_dans_vue[1]-nb_cases+1].mur_plein(attaquant.dir_regard)):
+                        mat_attaque[0].append(True)
+                    elif attaquant.dir_regard==DROITE and vue_attaquant[position_attaquant_dans_vue[0]+nb_cases-1][position_attaquant_dans_vue[1]]!=None and not(vue_attaquant[position_attaquant_dans_vue[0]+nb_cases-1][position_attaquant_dans_vue[1]].mur_plein(attaquant.dir_regard)):
+                        mat_attaque.append([True])
+                    elif attaquant.dir_regard==BAS and vue_attaquant[position_attaquant_dans_vue[0]][position_attaquant_dans_vue[1]+nb_cases-1]!=None and not(vue_attaquant[position_attaquant_dans_vue[0]][position_attaquant_dans_vue[1]+nb_cases-1].mur_plein(attaquant.dir_regard)):
+                        mat_attaque[0].append(True)
+                    elif attaquant.dir_regard==GAUCHE and vue_attaquant[position_attaquant_dans_vue[0]-nb_cases+1][position_attaquant_dans_vue[1]]!=None and not(vue_attaquant[position_attaquant_dans_vue[0]-nb_cases+1][position_attaquant_dans_vue[1]].mur_plein(attaquant.dir_regard)):
+                        mat_attaque.append([True])
+                    nb_cases+=1
+                #on actualise la position de la vue
+                if attaquant.dir_regard==HAUT:
+                    new_position_vue=[position_attaquant[0],position_attaquant[1]-attaquant.radius]
+                elif attaquant.dir_regard==DROITE:
+                    new_position_vue=position_attaquant
+                    mat_attaque.pop(0)
+                elif attaquant.dir_regard==BAS:
+                    new_position_vue=position_attaquant
+                elif attaquant.dir_regard==GAUCHE:
+                    new_position_vue=[position_attaquant[0]-attaquant.radius,position_attaquant[1]]
+                    mat_attaque.pop(0)
+            else:
+                mat_attaque=[[]]
+        elif issubclass(type(attaquant),Monstre):
+            resol=Resolveur(vue_attaquant,len(vue_attaquant),len(vue_attaquant[0]),-1,-1,position_attaquant[0]-position_vue[0],position_attaquant[1]-position_vue[1])
+            #on récupère la matrice accesible par l'attaque
+            mat_attaque=resol.resolution_en_largeur_distance_limitée(False,False,False,True,attaquant.radius)
+            
+            
+        return mat_attaque,new_position_vue
     def attaque(self,victime,attaquant):
         """
         Fonction qui applique les dégats de l'attaquant à la victime
