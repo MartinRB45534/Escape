@@ -25,6 +25,7 @@ class Affichage:
         self.largeur_minimap = 1 * 3 + 11
         self.decalage_matrice=[11,self.hauteur_minimap]
         self.affiche = LABYRINTHE
+        self.affiche_precedent = None
         #liste des animations
         self.animations=[]
     def dessine_frame(self,joueur,labyrinthe,entitees,evenements):
@@ -39,12 +40,14 @@ class Affichage:
             -rien
         """
         self.decouvre_joueur(joueur,labyrinthe)
-        self.reset_screen()
+        self.reset_screen(joueur)
         self.dessine_hud(joueur)
         if self.mode_affichage==distance_max and self.affiche == LABYRINTHE:
             self.distance_max(joueur,labyrinthe,entitees,evenements)
         elif self.affiche == LABYRINTHE:
             print("le mode d'affichage selectionnée est incorrect")
+        if self.affiche != self.affiche_precedent:
+            self.affiche_precedent = self.affiche
             
     def distance_max(self,joueur,labyrinthe,entitees,evenements):
         """
@@ -107,7 +110,7 @@ class Affichage:
         if self.affiche == MINIMAP:
             joueur.affiche_minimap(self.screen)
         elif self.affiche == LABYRINTHE:
-            joueur.dessine_minimap(self.screen,[5,5])
+            joueur.redessine_minimap(self.screen,[5,5])
 
         #on dessine l'inventaire
         if self.affiche == INVENTAIRE:
@@ -238,11 +241,14 @@ class Affichage:
         max_y=joueur_y+hauteur_vue-hauteur_vue//2
 
         return (position[0]>=min_x and position[0]<max_x)and(position[1]>=min_y and position[1]<max_y)
-    def reset_screen(self):
+    def reset_screen(self,joueur):
         """
         Fonction qui "réinitialise la surface"
         """
-        self.screen.fill((125,125,125))
+        if self.affiche_precedent == LABYRINTHE and self.affiche == LABYRINTHE:
+            pygame.draw.rect(self.screen,(125,125,125),(0,self.hauteur_minimap,(self.LARGEUR_MUR+self.LARGEUR_CASE) * joueur.largeur_vue + 30,(self.LARGEUR_MUR+self.LARGEUR_CASE) * joueur.hauteur_vue + 30))
+        else:
+            self.screen.fill((125,125,125))
 
     def decouvre_joueur(self,joueur,labyrinthe):
         """
