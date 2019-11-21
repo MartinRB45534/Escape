@@ -29,6 +29,25 @@ class Minimap:
                 position_y+=3
             position_y=position_screen[1]
             position_x+=3
+
+    def redessine_toi(self,screen,position_screen):
+        """
+        Fonction qui dessine la minimap sur l'écran dans le coin
+        Entrées:
+            l'écran, la surface sur laquelle on dessine(objet pygame)
+            la position que l'on prend pour 0,0 sur l'écran (ex: un décalage de 20px sur la droite se traduit par (x+20,y))
+        Sorties:
+            Rien
+        """
+        position_x=position_screen[0]
+        position_y=position_screen[1]
+        for x in range(self.min_visible[0],self.max_visible[0]+1):
+            for y in range(self.min_visible[1],self.max_visible[1]+1):
+                if self.matrice_cases[x][y].decouvert != -1 or self.matrice_cases[x][y].decouvert < 3:
+                    self.matrice_cases[x][y].dessine_toi(screen,position_x,position_y)
+                position_y+=3
+            position_y=position_screen[1]
+            position_x+=3
             
     def affiche_toi(self,screen):
         """
