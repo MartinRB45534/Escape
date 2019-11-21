@@ -94,7 +94,7 @@ class Niveau:
         
             #salle pour exp monstres
             self.clees = [Clee((3,3),"goodooKey")]
-            self.salles=[Patern((0,0),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[(4,3),(3,4)],self.clees,False)]
+            self.salles=[Patern((0,0),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[9,9]],self.clees,False)]
 
             #exp avec les portes
             #mat_lab=self.lab.getMatrice_cases()
@@ -102,7 +102,7 @@ class Niveau:
             #self.lab.matrice_cases=mat_lab
             
 
-            monstres=[]#[Fatti([4,4])]#,Fatti([10,10])]
+            monstres=[Slime([4,4])]#,Fatti([10,10])]
             self.entitees=self.clees
 
         elif niveau == 1:

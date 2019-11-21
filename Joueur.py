@@ -26,30 +26,32 @@ class Joueur(Agissant):
         #la portée de la vue 
         self.portee_vue=portee_vue
         self.evenements=None
+        #la direction du regard du joueur
+        self.dir_regard=HAUT
 
     def prochaine_action(self):
         pass
     def va_vers_la_gauche(self):
         """fonction qui demande d'aller vers la gauche"""
-
+        self.dir_regard=GAUCHE
         self.next_action=GAUCHE
         self.id_next=BOUGER
 
     def va_vers_la_droite(self):
         """fonction qui demande d'aller vers la droite"""
-
+        self.dir_regard=DROITE
         self.next_action=DROITE
         self.id_next=BOUGER
 
     def va_vers_le_haut(self):
         """fonction qui demande d'aller vers le haut"""
-
+        self.dir_regard=HAUT
         self.next_action=HAUT
         self.id_next=BOUGER
 
     def va_vers_le_bas(self):
         """fonction qui demande d'aller vers le bas"""
-
+        self.dir_regard=BAS
         self.next_action=BAS
         self.id_next=BOUGER
     def attaque(self):
