@@ -5,12 +5,12 @@ from Agissant import *
 
 class Joueur(Agissant):
 
-    def __init__(self,minimap,inventaire,pv,degats,vitesse,radius,largeur_vue,hauteur_vue,position,portee_vue=11):
+    def __init__(self,minimap,inventaire,pv,pv_max,degats,vitesse,radius,largeur_vue,hauteur_vue,position,portee_vue=11):
         self.minimap = minimap
         self.position = position
         self.inventaire = inventaire
         self.pv=pv
-        self.pv_max=pv
+        self.pv_max=pv_max
         self.degats=degats
         self.vitesse=vitesse
         self.radius=radius
