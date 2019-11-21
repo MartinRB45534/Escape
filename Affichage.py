@@ -14,14 +14,17 @@ class Affichage:
         self.screen=screen
         
         self.mode_affichage=mode_affichage
+        self.hauteur = hauteur_lab
+        self.largeur = largeur_lab
         #constantes
         self.LARGEUR_MUR=LARGEUR_MUR
         self.LARGEUR_CASE=LARGEUR_CASE
+        self.TAILLE_CASE=LARGEUR_MUR+LARGEUR_CASE
         #decalage de la matrice du labyrinthe sur l'écran (decalage en px)
-        self.hauteur_minimap = hauteur_lab * 3 + 11
-        self.largeur_minimap = largeur_lab * 3 + 11
+        self.hauteur_minimap = 1 * 3 + 11
+        self.largeur_minimap = 1 * 3 + 11
         self.decalage_matrice=[11,self.hauteur_minimap]
-        self.affiche_minimap = False
+        self.affiche = LABYRINTHE
         #liste des animations
         self.animations=[]
     def dessine_frame(self,joueur,labyrinthe,entitees,evenements):
@@ -35,12 +38,13 @@ class Affichage:
         Sorties:
             -rien
         """
+        self.decouvre_joueur(joueur,labyrinthe)
         self.reset_screen()
-        if self.mode_affichage==distance_max and not self.affiche_minimap:
-            self.distance_max(joueur,labyrinthe,entitees,evenements)
-        elif not self.affiche_minimap:
-            print("le mode d'affichage selectionnée est incorrect")
         self.dessine_hud(joueur)
+        if self.mode_affichage==distance_max and self.affiche == LABYRINTHE:
+            self.distance_max(joueur,labyrinthe,entitees,evenements)
+        elif self.affiche == LABYRINTHE:
+            print("le mode d'affichage selectionnée est incorrect")
             
     def distance_max(self,joueur,labyrinthe,entitees,evenements):
         """
@@ -58,26 +62,20 @@ class Affichage:
         hauteur_vue=joueur.hauteur_vue
         #on dessine le cadre autour du labyrinthe pour faire joli
         limite_gauche = 11
-        limite_droite = (self.LARGEUR_MUR+self.LARGEUR_CASE) * largeur_vue
+        limite_droite = (self.LARGEUR_MUR+self.LARGEUR_CASE) * (largeur_vue + self.decalage_bord_largeur)
         limite_haute = self.hauteur_minimap
-        limite_basse = (self.LARGEUR_MUR+self.LARGEUR_CASE) * hauteur_vue
-        pygame.draw.rect(self.screen, pygame.Color(150,150,150),(limite_gauche,limite_haute,limite_droite,limite_basse))
-        pygame.draw.rect(self.screen, pygame.Color(50,50,50),(limite_gauche,limite_haute,limite_droite,limite_basse),2)
+        limite_basse = (self.LARGEUR_MUR+self.LARGEUR_CASE) * (hauteur_vue + self.decalage_bord_hauteur)
+        pygame.draw.rect(self.screen,(150,150,150),(limite_gauche,limite_haute,limite_droite,limite_basse))
+        pygame.draw.rect(self.screen,(50,50,50),(limite_gauche,limite_haute,limite_droite,limite_basse),2)
 
         joueur_x,joueur_y,position_x,position_y,min_x,max_x,min_y,max_y=self.getConstantes(joueur.getPosition(),[0,0],largeur_vue,hauteur_vue)
 
         position_joueur=[joueur_x,joueur_y]
-        #récupérer vue joueur
-        vue, self.position_vue = labyrinthe.construire_vue(position_joueur,largeur_vue,hauteur_vue)
-        #récupérer mat vue visible joueur
-        #on ne veut pas que le résolveur trouve de solution on veut juste qu'il explore la matrice
-        resolveur = Resolveur(vue,largeur_vue,hauteur_vue,-1,-1,joueur_x-self.position_vue[0],joueur_y-self.position_vue[1],"Profondeur")
-
-        self.mat_exploree=resolveur.resolution_en_largeur_distance_limitée(False,False,False,True,joueur.portee_vue)
+        self.decalage = [self.decalage_matrice[0] + (self.LARGEUR_MUR+self.LARGEUR_CASE) * self.decalage_gauche,self.decalage_matrice[1] + (self.LARGEUR_MUR+self.LARGEUR_CASE) * self.decalage_haut]
         #dire au lab d'afficher la matrice correspondante
-        labyrinthe.dessine_toi(self.screen,position_joueur,self.decalage_matrice,self.position_vue,largeur_vue,hauteur_vue,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR,self.mat_exploree)
+        labyrinthe.dessine_toi(self.screen,position_joueur,self.decalage,self.position_vue,largeur_vue,hauteur_vue,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR,self.mat_exploree)
         #afficher les entitées
-        self.dessine_entitees(entitees,position_joueur,self.mat_exploree,self.position_vue,self.decalage_matrice)
+        self.dessine_entitees(entitees,position_joueur,self.mat_exploree,self.position_vue,self.decalage)
         #afficher les animations
         self.dessine_animations(position_joueur,largeur_vue,hauteur_vue)
         #on supprime les animations qui ont expiré
@@ -92,21 +90,28 @@ class Affichage:
         """
         police_pv=pygame.font.SysFont(None, 20)
         text_pv=police_pv.render("PV:",True,(0,0,0))
-        if self.affiche_minimap:
+        if (self.affiche == MINIMAP) or (self.affiche == INVENTAIRE):
             self.screen.blit(text_pv,(0,10))
             #on dessine la barre de vie du joueur
             pygame.draw.rect(self.screen, pygame.Color(255,0,0),(30,10,int(100*(joueur.pv/joueur.pv_max)),10))
         else:
-            self.screen.blit(text_pv,(0,self.getBottomY(joueur.hauteur_vue)+10))
+            self.screen.blit(text_pv,(joueur.largeur_vue*self.TAILLE_CASE-130,self.getBottomY(joueur.hauteur_vue)+10))
             #on dessine la barre de vie du joueur
-            pygame.draw.rect(self.screen, pygame.Color(255,0,0),(30,self.getBottomY(joueur.hauteur_vue)+10,int(100*(joueur.pv/joueur.pv_max)),10))
+            pygame.draw.rect(self.screen, pygame.Color(255,0,0),(joueur.largeur_vue*self.TAILLE_CASE-100,self.getBottomY(joueur.hauteur_vue)+10,int(100*(joueur.pv/joueur.pv_max)),10))
 
         #on dessine la minimap
-        joueur.minimap.decouvre(self.position_vue,self.mat_exploree,joueur.position)
-        if self.affiche_minimap:
+        self.taille_minimap = joueur.minimap.decouvre(self.position_vue,self.mat_exploree,joueur.position)
+        self.hauteur_minimap = self.taille_minimap[1] * 3 + 11
+        self.largeur_minimap = self.taille_minimap[0] * 3 + 11
+        self.decalage_matrice=[11,self.hauteur_minimap]
+        if self.affiche == MINIMAP:
             joueur.affiche_minimap(self.screen)
-        else:
+        elif self.affiche == LABYRINTHE:
             joueur.dessine_minimap(self.screen,[5,5])
+
+        #on dessine l'inventaire
+        if self.affiche == INVENTAIRE:
+            joueur.affiche_inventaire(self.screen)
 
     def getBottomY(self,hauteur_vue):
         """
@@ -192,8 +197,8 @@ class Affichage:
         for animation in self.animations:
             position_lab_anim=animation.getPosition()
             if self.est_dans_vue(position_lab_anim,position_joueur,largeur_vue,hauteur_vue):
-                position_anim_x=(self.LARGEUR_CASE+self.LARGEUR_MUR)*(position_lab_anim[0]-position_joueur[0]+largeur_vue//2)+round((self.LARGEUR_CASE+self.LARGEUR_MUR)*0.5)+self.decalage_matrice[0]
-                position_anim_y=(self.LARGEUR_CASE+self.LARGEUR_MUR)*(position_lab_anim[1]-position_joueur[1]+hauteur_vue//2)+round((self.LARGEUR_CASE+self.LARGEUR_MUR)*0.5)+self.decalage_matrice[1]
+                position_anim_x=(self.LARGEUR_CASE+self.LARGEUR_MUR)*(position_lab_anim[0]-position_joueur[0]+largeur_vue//2)+round((self.LARGEUR_CASE+self.LARGEUR_MUR)*0.5)+self.decalage[0]
+                position_anim_y=(self.LARGEUR_CASE+self.LARGEUR_MUR)*(position_lab_anim[1]-position_joueur[1]+hauteur_vue//2)+round((self.LARGEUR_CASE+self.LARGEUR_MUR)*0.5)+self.decalage[1]
 
                 position_anim=[position_anim_x,position_anim_y]
 
@@ -239,4 +244,39 @@ class Affichage:
         """
         self.screen.fill((125,125,125))
 
+    def decouvre_joueur(self,joueur,labyrinthe):
+        """
+        Fonction qui détermine ce que le joueur voit (sur l'écran et dans la minimap)
+        """
+        #récupérer constantes
+        largeur_vue=joueur.largeur_vue
+        hauteur_vue=joueur.hauteur_vue
+        position_joueur = joueur.getPosition()
+        joueur_x = position_joueur[0]
+        joueur_y = position_joueur[1]
 
+        #récupérer vue joueur
+        vue, self.position_vue = labyrinthe.construire_vue(position_joueur,largeur_vue,hauteur_vue)
+        if self.position_vue[0] < 0:
+            self.decalage_bord_largeur = self.position_vue[0]
+            self.decalage_gauche = self.decalage_bord_largeur
+        elif self.position_vue[0] + largeur_vue > self.largeur:
+            self.decalage_bord_largeur = -self.position_vue[0] - largeur_vue + self.largeur
+            self.decalage_gauche = 0
+        else:
+            self.decalage_bord_largeur = 0
+            self.decalage_gauche = 0
+        if self.position_vue[1] < 0:
+            self.decalage_bord_hauteur = self.position_vue[1]
+            self.decalage_haut = self.decalage_bord_hauteur
+        elif self.position_vue[1] + hauteur_vue > self.hauteur:
+            self.decalage_bord_hauteur = -self.position_vue[1] - hauteur_vue + self.hauteur
+            self.decalage_haut = 0
+        else:
+            self.decalage_bord_hauteur = 0
+            self.decalage_haut = 0
+        #récupérer mat vue visible joueur
+        #on ne veut pas que le résolveur trouve de solution on veut juste qu'il explore la matrice
+        resolveur = Resolveur(vue,largeur_vue,hauteur_vue,-1,-1,joueur_x-self.position_vue[0],joueur_y-self.position_vue[1],"Profondeur")
+
+        self.mat_exploree=resolveur.resolution_en_largeur_distance_limitée(False,False,False,True,joueur.portee_vue)

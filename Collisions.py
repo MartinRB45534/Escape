@@ -100,8 +100,6 @@ class Collision:
             entitee1.inventaire.ramasse_item(entitee2)
         elif issubclass(type(entitee1),Monstre) and (issubclass(type(entitee2),Item) or issubclass(type(entitee2),Potion)):
             valide=True
-        elif issubclass(type(entitee1),Joueur) and issubclass(type(entitee2),Potion):
-            valide=True
         return valide,suppItem
     def supp_items(self,items_a_supp,entitees):
         """

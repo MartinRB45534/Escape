@@ -1,13 +1,17 @@
 import pygame
+
+            
 from Niveau import *
 from Constantes import *
+from Session import *
 
-niveau = 4
+niveau = 0
 difficulté = HARD
 mode_affichage = distance_max
-mode_minimap = voir_tout
+mode_minimap = passage
 
-
+#nombres de niveaux (en excluant 0) que l'on as
+nb_max_niv = 5
 
 
 pygame.init()
@@ -38,7 +42,8 @@ def main():
     quitter = pygame.image.load("quitter.png").convert()
     imgmenutest = pygame.image.load("imgmenutest.png").convert()
     
-    
+    #session
+    session = Session(niveau,difficulté,mode_affichage,mode_minimap,nb_max_niv)
 
     loop = True
     
@@ -83,12 +88,11 @@ def main():
                 loop = False
             # si clic, le jeu se lance
             elif event.type == pygame.MOUSEBUTTONDOWN and over_green:
-                niv = Niveau(niveau,difficulté,mode_affichage,mode_minimap)
-                pygame.time.wait(niv.run())
+                session.reset_niveau()
+                session.run()
 
             elif event.type == pygame.MOUSEBUTTONDOWN and over_yellow:
-                pygame.time.wait(niv.run())
-
+                session.run()
             elif event.type == pygame.MOUSEBUTTONDOWN and over_black:
                 loop = False
                 

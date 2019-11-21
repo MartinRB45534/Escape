@@ -61,7 +61,7 @@ class Porte(Mur):
             -un booléen indiquant si l'entitée peut passer
         """
         #on récupère toute les clées de l'inventaire
-        clees=inventaire.get_items_spe(Clee)
+        clees=inventaire.get_items_spe("Clee")
         peut_passer=False
 
         for clee in clees:

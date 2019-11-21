@@ -16,7 +16,7 @@ from Murs import *
 from Minimap import *
 
 class Niveau:
-    def __init__(self,niveau,difficulté,mode_affichage,mode_minimap):
+    def __init__(self,niveau,difficulté,mode_affichage,mode_minimap,joueur=None):
         
         self.mode_affichage = mode_affichage
         if self.mode_affichage == voir_tout :
@@ -37,34 +37,34 @@ class Niveau:
                 self.CASES_X = 20
                 self.CASES_Y = 20
                 res = True
-                self.salles=[Patern((8,8),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+                #self.salles=[Patern((8,8),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR)]
                 proba_murs = 0.5
             elif difficulté == EASY :
                 self.CASES_X = 20
                 self.CASES_Y = 20
                 res = False
-                self.salles=[Patern((14,14),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+                #self.salles=[Patern((14,14),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
                 proba_murs = 0.4
             elif difficulté == AVERAGE :
                 self.CASES_X = 40
                 self.CASES_Y = 40
                 res = False
-                self.salles=[Patern((17,17),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+                #self.salles=[Patern((17,17),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
                 proba_murs = 0.3
             elif difficulté == HARD :
                 self.CASES_X = 60
                 self.CASES_Y = 60
                 res = False
-                self.salles=[Patern((10,29),40,2,self.LARGEUR_CASE,self.LARGEUR_MUR,[])]
+                #self.salles=[Patern((10,29),40,2,self.LARGEUR_CASE,self.LARGEUR_MUR,[])]
                 #on génère les entrées de manière a avoir un espace ouvert
-                self.salles[0].pre_gen_entrees_x(0,0,39)
-                self.salles[0].pre_gen_entrees_x(1,0,39)
+                #self.salles[0].pre_gen_entrees_x(0,0,39)
+                #self.salles[0].pre_gen_entrees_x(1,0,39)
                 proba_murs = 0.2
             elif difficulté == INSANE :
                 self.CASES_X = 100
                 self.CASES_Y = 100
                 res = False
-                self.salles=[Patern((49,30),2,40,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+                #self.salles=[Patern((49,30),2,40,self.LARGEUR_CASE,self.LARGEUR_MUR)]
                 proba_murs = 0.1
             elif difficulté == IMPOSSIBLE :
                 self.CASES_X = 1000
@@ -92,15 +92,17 @@ class Niveau:
             self.poids=[6,2,1,2]
         
             #salle pour exp monstres
-            self.salles.append(Patern((0,0),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,3]]))
+            self.clees = [Clee((3,3),"goodooKey")]
+            self.salles=[Patern((0,0),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[(4,3),(3,4)],self.clees,False)]
 
             #exp avec les portes
             #mat_lab=self.lab.getMatrice_cases()
-            #mat_lab[4][2].murs[DROITE]=Porte(self.LARGEUR_MUR,"goodooKey")
+            #mat_lab[4][2].murs[DROITE].set_etat(INTOUCHABLE)
             #self.lab.matrice_cases=mat_lab
+            
 
-            monstres=[Fatti([4,4])]#,Fatti([10,10])]
-            self.entitees=[Clee((3,3),"goodooKey")]
+            monstres=[]#[Fatti([4,4])]#,Fatti([10,10])]
+            self.entitees=self.clees
 
         elif niveau == 1:
             #niveau labyrinthique sans monstres pour apprendre à se déplacer
@@ -188,7 +190,7 @@ class Niveau:
             #poids permettants de manipuler l'aléatoire
             self.poids=[6,2,1,2]
         
-            monstres=[Slime([5,17]),Fatti([8,25]),Fatti([5,59])]#,Runner(self.lab.getMatrice_cases(),5,59,[3,48])]
+            monstres=[Slime([5,17]),Fatti([8,25]),Fatti([5,59])]
             self.entitees=[]
 
         elif niveau == 4:
@@ -221,7 +223,7 @@ class Niveau:
             meute2 = [Slime([4,0],2),Slime([3,1],2),Slime([5,1],2),Slime([4,2],2),Slime([3,3],2),Slime([5,3],2),Slime([4,4],2),Slime([3,5],2),Slime([5,5],2),Slime([4,6],2),Slime([3,7],2),Slime([5,7],2),Slime([4,8],2)]
             meute3 = [Slime([7,8],3),Slime([8,9],3),Slime([6,9],3),Fatti([6,11],3),Fatti([7,11],3),Fatti([8,11],3)]
             meute4 = [Slime([10,5],4),Slime([10,6],4),Slime([10,7],4),Slime([10,8],4),Slime([10,9],4),Slime([10,10],4),Fatti([10,2],4,10,10,300,30)]
-            meute5 = [Slime([13,8],5),Slime([14,9],5),Slime([12,9],5),Fatti([12,11],5),Fatti([13,11],5),Fatti([14,11],5)]#,Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[12,5]),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[13,0]),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[14,5])]
+            meute5 = [Slime([13,8],5),Slime([14,9],5),Slime([12,9],5),Fatti([12,11],5),Fatti([13,11],5),Fatti([14,11],5)]
             monstres = meute1
             for meutenumerote in [meute2,meute3,meute4,meute5]:
                 for monstre in meutenumerote:
@@ -257,19 +259,35 @@ class Niveau:
 
         #génération du labyrinthe
         self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.arrivee[0],self.arrivee[1],self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
-        self.lab.generation()
-        self.lab.casser_X_murs(proba_murs)
+        self.lab.generation(proba_murs,None,None)
 
         pygame.display.set_caption("test")
         self.screen = pygame.display.set_mode((FENETRE_X,FENETRE_Y),pygame.RESIZABLE)
         self.screen.fill((0,0,0))
 
         #entitées
-        minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap)
-        self.joueur=Joueur(minimap,inventaire_joueur,self.hp_joueur,self.force_joueur,self.vitesse_joueur,2,self.zoom_largeur,self.zoom_hauteur,self.depart)
+        minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap,self.depart,self.arrivee)
+        #si le joueur passe d'un niveau a un autre
+        if joueur!=None:
+            #le joueur est heal entre les niveaux
+            self.joueur=Joueur(minimap,joueur.inventaire,joueur.pv_max,joueur.pv_max,joueur.degats,joueur.vitesse,2,joueur.largeur_vue,joueur.hauteur_vue,self.depart)
+        else:
+            self.joueur=Joueur(minimap,inventaire_joueur,self.hp_joueur,self.hp_joueur,self.force_joueur,self.vitesse_joueur,2,self.zoom_largeur,self.zoom_hauteur,self.depart)
         self.monstres = monstres
         
-        if niveau == 5:
+        if niveau == 0:
+            potions_vue=[Potion_de_vision((35,26),self.joueur),Potion_de_vision((27,38),self.joueur),Potion_de_vision((21,19),self.joueur),Potion_de_visibilite_permanente((8,7),self.joueur)]
+            potions_combat=[Potion_de_force((i,j),self.joueur)for j in range(5,45,10) for i in range(5,45,10)] + [Potion_de_portee((i,j),self.joueur)for j in range (10,40,10) for i in range (10,40,10)] + [Potion_de_soin((20,20),self.joueur),Potion_de_portee_permanente((2,2),self.joueur)]
+            potions=potions_vue+potions_combat
+            for potion in potions:
+                self.entitees.append(potion)
+        elif niveau == 3:
+            self.monstres.append(Runner(self.lab.getMatrice_cases(),5,59,[3,48]))
+        elif niveau == 4:
+            meute5 = [Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[12,5]),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[13,0]),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[14,5])]
+            for monstre in meute5:
+                self.monstres.append(monstre)
+        elif niveau == 5 :
             potions_vue=[Potion_de_vision((35,26),self.joueur),Potion_de_vision((27,38),self.joueur),Potion_de_vision((21,19),self.joueur),Potion_de_visibilite_permanente((8,7),self.joueur)]
             potions_combat=[Potion_de_force((i,j),self.joueur)for j in range(5,45,10) for i in range(5,45,10)] + [Potion_de_portee((i,j),self.joueur)for j in range (10,40,10) for i in range (10,40,10)] + [Potion_de_soin((20,20),self.joueur),Potion_de_portee_permanente((2,2),self.joueur)]
             potions=potions_vue+potions_combat
@@ -278,7 +296,7 @@ class Niveau:
         self.entitees.append(self.joueur)
         
         if res :
-            self.lab.resolution(self.CASES_X-1,self.CASES_Y-1,0,0,"Largeur")
+            self.lab.resolution(self.arrivee[0],self.arrivee[1],self.depart[0],self.depart[1],"Largeur")
         
         for i in range(0,len(self.monstres)):
             self.entitees.append(self.monstres[i])
@@ -304,9 +322,15 @@ class Niveau:
         self.textLose = font.render("Vous avez perdu!! ;o;", True, (0, 128, 128))
         
         self.position_screen=(0,0)
-        print (len(self.monstres))
         
     def run(self):
+        """
+        Boucle principale du niveau
+        Sorties:
+            -le temps a attendre si le joueur as finit la niveau
+            -un booléen indiquant si le joueur a gagné ou perdu
+            -le joueur
+        """
         run=True
         self.redraw()
         #objet qui permet de gérer le temps en pygame
@@ -318,16 +342,19 @@ class Niveau:
             self.actualiser_temps()
 
             #si l'utilisateur décide de mettre fin au programme on sort de la boucle
+            events = []
             for event in pygame.event.get():
                 if event.type==pygame.QUIT:
-                    res = 0
+                    res = -1
                     run=False
 
                 if event.type == pygame.VIDEORESIZE:
                     self.zoom_largeur = event.w//(self.LARGEUR_CASE + self.LARGEUR_MUR)
                     self.zoom_hauteur = event.h//(self.LARGEUR_CASE + self.LARGEUR_MUR)
                     self.redraw()
-            self.actions_entitees()
+                else:
+                    events.append(event)
+            self.actions_entitees(events)
 
             #si on détecte un mouvement on redessine l'écran
             #if move_j or move_m:
@@ -343,7 +370,17 @@ class Niveau:
                 res = 5000
                 run=False
             pygame.display.update()
-        return res
+        self.fin_niveau()
+        return res,self.lab.as_gagner(self.joueur.getPosition()),self.joueur
+
+    def fin_niveau(self):
+        """
+        Fonction qui gère la fin du niveau
+        """
+        #on met fin a tout les événements
+        for evenement in self.evenements:
+            evenement.temps_restant=0
+            evenement.action()
     def generation_meutes(self):
         """
         Fonction qui génère les meutes
@@ -393,31 +430,49 @@ class Niveau:
                 nbSup+=1
                 
                  
-    def action_joueur(self):
+    def action_joueur(self,events=[]):
         """
         Fonction qui exécute la partie du code ou le jpueur demande à agir
         et qui renvoie rien
         """
+        for event in events:
+            if event.type==pygame.KEYDOWN and event.key==pygame.K_a:
+                if self.affichage.affiche != MINIMAP:
+                    self.affichage.affiche = MINIMAP
+                else :
+                    self.affichage.affiche = LABYRINTHE
+            if event.type==pygame.KEYDOWN and event.key==pygame.K_i:
+                if self.affichage.affiche != INVENTAIRE:
+                    self.affichage.affiche = INVENTAIRE
+                else :
+                    self.affichage.affiche = LABYRINTHE
+                    
+            if self.affichage.affiche == INVENTAIRE:
+                if event.type==pygame.KEYDOWN and event.key==pygame.K_RIGHT:
+                    self.joueur.inventaire_vers_la_droite()
+                elif event.type==pygame.KEYDOWN and event.key==pygame.K_LEFT:
+                    self.joueur.inventaire_vers_la_gauche()
+                elif event.type==pygame.KEYDOWN and event.key==pygame.K_SPACE:
+                    self.joueur.utilise_inventaire()
+
+        if self.affichage.affiche == LABYRINTHE:
          #on récupère toutes les touches préssés sous forme de
-        keys=pygame.key.get_pressed()
-        
-        if keys[pygame.K_UP]:
-            self.joueur.va_vers_le_haut()
-        elif keys[pygame.K_DOWN]:
-            self.joueur.va_vers_le_bas()
-        elif keys[pygame.K_RIGHT]:
-            self.joueur.va_vers_la_droite()
-        elif keys[pygame.K_LEFT]:
-            self.joueur.va_vers_la_gauche()
-        elif keys[pygame.K_SPACE]:
-            self.joueur.attaque()
-        if keys[pygame.K_a]:
-            self.affichage.affiche_minimap = True
-        else:
-            self.affichage.affiche_minimap = False
+            keys=pygame.key.get_pressed()
+    
+            if keys[pygame.K_UP]:
+                self.joueur.va_vers_le_haut()
+            elif keys[pygame.K_DOWN]:
+                self.joueur.va_vers_le_bas()
+            elif keys[pygame.K_RIGHT]:
+                self.joueur.va_vers_la_droite()
+            elif keys[pygame.K_LEFT]:
+                self.joueur.va_vers_la_gauche()
+            elif keys[pygame.K_SPACE]:
+                self.joueur.attaque()
 
 
-    def actions_entitees(self):
+
+    def actions_entitees(self,events):
         """
         Fonction qui exécute les actions des entitées
         renvoie un booléen indiquant si il y a besoin de redessiner l'écran
@@ -431,11 +486,13 @@ class Niveau:
         for agissant in agissants:
             if self.horloge_cycle % agissant.getVitesse()==0:
                 if issubclass(type(agissant),Joueur):
-                    self.action_joueur()
-                    
+                    self.action_joueur(events)
+                
                 agissant=self.actualiser_donnee(agissant)
 
                 agissant.prochaine_action()
+
+                agissant.execute_evenements()
                 if redessiner:
                     self.traitement_action(agissant)
                 else:
@@ -560,9 +617,7 @@ class Niveau:
         if issubclass(type(agissant),Monstre):
             #on donne la position du joueur au monstre
             agissant.setPosition_joueur(self.joueur.getPosition())
-        elif type(agissant)==Joueur:
-            self.action_joueur()
-
+            
         return agissant
     def traitement_action(self,agissant):
         """

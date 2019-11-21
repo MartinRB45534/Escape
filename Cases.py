@@ -18,7 +18,7 @@ class Case:
         pleins=0
 
         for mur in self.murs:
-            if mur.get_etat()==MUR_PLEIN:
+            if mur.get_etat()==MUR_PLEIN or mur.get_etat()==INTOUCHABLE:
                 pleins+=1
         
         return pleins
@@ -56,10 +56,18 @@ class Case:
         Fonction qui indique si le mur indiquée par la direction est plein ou non
         """
         mur_plein=False
-        if self.murs[direction].get_etat()==MUR_PLEIN:
+        if self.murs[direction].get_etat()==MUR_PLEIN or self.murs[direction].get_etat()==INTOUCHABLE:
             mur_plein=True
         return mur_plein
-
+    def set_mur(self,direction,new_etat):
+        """
+        Fonction qui modifie l'état d'un mur en fonction de la direction
+        en entrée
+        """
+        if direction>=0 and direction<=3:
+            self.murs[direction].set_etat(new_etat)
+    def get_mur_dir(self,direction):
+        return self.murs[direction]
     def get_murs(self):
         return self.murs
 

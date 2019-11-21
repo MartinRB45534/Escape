@@ -5,12 +5,12 @@ from Agissant import *
 
 class Joueur(Agissant):
 
-    def __init__(self,minimap,inventaire,pv,degats,vitesse,radius,largeur_vue,hauteur_vue,position,portee_vue=11):
+    def __init__(self,minimap,inventaire,pv,pv_max,degats,vitesse,radius,largeur_vue,hauteur_vue,position,portee_vue=11):
         self.minimap = minimap
         self.position = position
         self.inventaire = inventaire
         self.pv=pv
-        self.pv_max=pv
+        self.pv_max=pv_max
         self.degats=degats
         self.vitesse=vitesse
         self.radius=radius
@@ -25,6 +25,7 @@ class Joueur(Agissant):
         self.position_vue=None
         #la portée de la vue 
         self.portee_vue=portee_vue
+        self.evenements=None
 
     def prochaine_action(self):
         pass
@@ -70,3 +71,15 @@ class Joueur(Agissant):
 
     def affiche_minimap(self,screen):
         self.minimap.affiche_toi(screen)
+
+    def affiche_inventaire(self,screen):
+        self.inventaire.affiche_toi(screen)
+
+    def inventaire_vers_la_droite(self):
+        self.inventaire.vers_la_droite()
+
+    def inventaire_vers_la_gauche(self):
+        self.inventaire.vers_la_gauche()
+
+    def utilise_inventaire(self):
+        self.inventaire.utilise_item()
