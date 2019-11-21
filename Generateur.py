@@ -304,9 +304,10 @@ class Generateur:
         for x in range(1,self.largeur) :
             for y in range(1,self.hauteur) :
                 case = self.matrice_cases[x][y]
-                if case.get_mur_haut().get_etat() == MUR_PLEIN and random.random() <= proba :
+                murs=self.directions_utilisables(self.voisins_case(x,y))
+                if HAUT in murs and random.random() <= proba :
                     self.casser_mur(HAUT,x,y)
-                if case.get_mur_gauche().get_etat() == MUR_PLEIN and random.random() <= proba :
+                if GAUCHE in murs and random.random() <= proba :
                     self.casser_mur(GAUCHE,x,y)
     def casser_mur(self,direction,position_x,position_y):
         """

@@ -270,9 +270,9 @@ class Niveau:
         #si le joueur passe d'un niveau a un autre
         if joueur!=None:
             #le joueur est heal entre les niveaux
-            self.joueur=Joueur(minimap,joueur.inventaire,joueur.pv_max,joueur.pv_max,joueur.degats,joueur.vitesse,2,joueur.largeur_vue,joueur.hauteur_vue,self.depart)
+            self.joueur=Joueur(minimap,joueur.inventaire,joueur.pv_max,joueur.pv_max,joueur.degats,joueur.vitesse,joueur.radius,joueur.largeur_vue,joueur.hauteur_vue,self.depart)
         else:
-            self.joueur=Joueur(minimap,inventaire_joueur,self.hp_joueur,self.hp_joueur,self.force_joueur,self.vitesse_joueur,2,self.zoom_largeur,self.zoom_hauteur,self.depart)
+            self.joueur=Joueur(minimap,inventaire_joueur,self.hp_joueur,self.hp_joueur,self.force_joueur,self.vitesse_joueur,10,self.zoom_largeur,self.zoom_hauteur,self.depart)
         self.monstres = monstres
         
         if niveau == 0:

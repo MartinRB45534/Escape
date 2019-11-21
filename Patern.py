@@ -108,7 +108,10 @@ class Patern:
         """
         #if not(self.case_au_bord(x,y)) or self.case_est_une_entree(x,y):
         if self.vide :
-            self.incorpotation_case(x,y)
+            if not(self.case_est_une_entree(x,y)):
+                self.incorporation_case(x,y)
+            else:
+                self.clear_case(x,y)
             
     def case_est_une_entree(self,x,y):
         """
@@ -136,8 +139,8 @@ class Patern:
         """
         for i in range(0,4):
             self.matrice_cases[x][y].casser_mur(i)
-        
-    def incorpotation_case(self,x,y):
+    
+    def incorporation_case(self,x,y):
         """
         Fonction qui prend en entrée:
             les coordonnées de la case

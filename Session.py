@@ -35,6 +35,8 @@ class Session ():
                 pygame.time.wait(res)
                 if win:
                     self.nb_niv_courant+=1
+                    if self.nb_niv_courant>self.nb_niv_max:
+                        self.nb_niv_courant=1
                     self.transfert_niveau(joueur)
                 else:
                     self.reset_niveau()
