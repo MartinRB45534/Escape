@@ -16,7 +16,7 @@ from Murs import *
 from Minimap import *
 
 class Niveau:
-    def __init__(self,niveau,difficulté,mode_affichage,mode_minimap,joueur=None):
+    def __init__(self,niveau,difficulte,mode_affichage,mode_minimap,joueur=None):
         
         self.mode_affichage = mode_affichage
         if self.mode_affichage == voir_tout :
@@ -32,26 +32,28 @@ class Niveau:
             self.LARGEUR_CASE = 20
             self.LARGEUR_MUR = 1
 
+        print(niveau)
+        
         if niveau == 0:
-            if difficulté == BEGINNER :
+            if difficulte == BEGINNER :
                 self.CASES_X = 20
                 self.CASES_Y = 20
                 res = True
                 #self.salles=[Patern((8,8),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR)]
                 proba_murs = 0.5
-            elif difficulté == EASY :
+            elif difficulte == EASY :
                 self.CASES_X = 20
                 self.CASES_Y = 20
                 res = False
                 #self.salles=[Patern((14,14),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
                 proba_murs = 0.4
-            elif difficulté == AVERAGE :
+            elif difficulte == AVERAGE :
                 self.CASES_X = 40
                 self.CASES_Y = 40
                 res = False
                 #self.salles=[Patern((17,17),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
                 proba_murs = 0.3
-            elif difficulté == HARD :
+            elif difficulte == HARD :
                 self.CASES_X = 60
                 self.CASES_Y = 60
                 res = False
@@ -60,13 +62,13 @@ class Niveau:
                 #self.salles[0].pre_gen_entrees_x(0,0,39)
                 #self.salles[0].pre_gen_entrees_x(1,0,39)
                 proba_murs = 0.2
-            elif difficulté == INSANE :
+            elif difficulte == INSANE :
                 self.CASES_X = 100
                 self.CASES_Y = 100
                 res = False
                 #self.salles=[Patern((49,30),2,40,self.LARGEUR_CASE,self.LARGEUR_MUR)]
                 proba_murs = 0.1
-            elif difficulté == IMPOSSIBLE :
+            elif difficulte == IMPOSSIBLE :
                 self.CASES_X = 1000
                 self.CASES_Y = 1000
                 res = False
@@ -105,6 +107,7 @@ class Niveau:
             self.entitees=self.clees
 
         elif niveau == 1:
+            print("check")
             #niveau labyrinthique sans monstres pour apprendre à se déplacer
 
             self.CASES_X = 40
@@ -252,7 +255,7 @@ class Niveau:
             self.vitesse_montres=20
 
             inventaire_joueur = Inventaire()
-            monstres=self.spawn_aleatoire(Fatti,10,10,100,10,self.vitesse_montres,1,((10,10),(30,30)),0.1,5,0,(0,0,100))
+            monstres=self.spawn_aleatoire(Fatti,10,10,100,10,self.vitesse_montres,1,((10,10),(30,30)),0.01,5,0,(0,0,100))
             
             #poids permettants de manipuler l'aléatoire
             self.poids=[6,9,1,1]
@@ -261,7 +264,7 @@ class Niveau:
         self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.arrivee[0],self.arrivee[1],self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
         self.lab.generation(proba_murs,None,None)
 
-        pygame.display.set_caption("test")
+        pygame.display.set_caption("niveau " + str(niveau))
         self.screen = pygame.display.set_mode((FENETRE_X,FENETRE_Y),pygame.RESIZABLE)
         self.screen.fill((0,0,0))
 
@@ -700,7 +703,7 @@ class Niveau:
         for i in range (perimetre[0][0],perimetre[1][0]):
             for j in range (perimetre[0][1],perimetre[1][1]):
                 if random.random() <= proba :
-                    res.append(monstre((i,j),largeur_vue,hauteur_vue,pv,degats,vitesse,radius,nb_meute,couleur))
+                    res.append(monstre((i,j),nb_meute,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,couleur))
                     taille_meute += 1
                     if taille_meute == max_meute :
                         nb_meute += 1

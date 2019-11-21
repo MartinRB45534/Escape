@@ -5,13 +5,13 @@ from Niveau import *
 from Constantes import *
 from Session import *
 
-niveau = 1
+niveau = 5
 difficulté = HARD
 mode_affichage = distance_max
 mode_minimap = passage
 
 #nombres de niveaux (en excluant 0) que l'on as
-nb_max_niv = 4
+nb_max_niv = 5
 
 
 pygame.init()
