@@ -1,17 +1,14 @@
 import pygame
-
-            
 from Niveau import *
 from Constantes import *
-from Session import *
+from Bouton import *
 
-niveau = 0
+niveau = 4
 difficulté = HARD
 mode_affichage = distance_max
-mode_minimap = passage
+mode_minimap = voir_tout
 
-#nombres de niveaux (en excluant 0) que l'on as
-nb_max_niv = 5
+
 
 
 pygame.init()
@@ -42,14 +39,14 @@ def main():
     quitter = pygame.image.load("quitter.png").convert()
     imgmenutest = pygame.image.load("imgmenutest.png").convert()
     
-    #session
-    session = Session(niveau,difficulté,mode_affichage,mode_minimap,nb_max_niv)
+    
 
     loop = True
     
     green_color = GREEN
     yellow_color = YELLOW
     black_color = BLACK
+    miniBouton = Bouton(fenetre,0,0,GREEN,"trolololo","test",80,80)
     NIVEXIST= False
     while loop:
         background = pygame.Surface(fenetre.get_size())
@@ -82,17 +79,19 @@ def main():
         over_yellow = rect_yellow.collidepoint(mouse_xy)
         over_black = rect_black.collidepoint(mouse_xy)
 
+        miniBouton = Bouton(fenetre,0,0,GREEN,"trolololo","test",280,480)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 loop = False
             # si clic, le jeu se lance
             elif event.type == pygame.MOUSEBUTTONDOWN and over_green:
-                session.reset_niveau()
-                session.run()
+                niv = Niveau(niveau,difficulté,mode_affichage,mode_minimap)
+                pygame.time.wait(niv.run())
 
             elif event.type == pygame.MOUSEBUTTONDOWN and over_yellow:
-                session.run()
+                pygame.time.wait(niv.run())
+
             elif event.type == pygame.MOUSEBUTTONDOWN and over_black:
                 loop = False
                 
