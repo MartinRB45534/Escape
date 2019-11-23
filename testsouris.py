@@ -84,12 +84,13 @@ def main():
                 session.reset_niveau()
                 session.run()
                 partieEnCours = True
+            elif event.type == pygame.MOUSEBUTTONDOWN and quitter.survolBouton:
+                loop = False
             elif partieEnCours:
                 
                 if event.type == pygame.MOUSEBUTTONDOWN and reprendre.survolBouton:
                     session.run()
-            elif event.type == pygame.MOUSEBUTTONDOWN and quitter.survolBouton:
-                loop = False
+            
                 
 
         # Actualisation de l'affichage
