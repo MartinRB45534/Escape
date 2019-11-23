@@ -3,7 +3,7 @@ import pygame
 
 
 class Bouton:
-    def __init__(self,fenetre,positionHorizontale,positionVerticale,couleur,texte,lien,largeur=20,longueur=40) :
+    def __init__(self,fenetre,positionHorizontale,positionVerticale,couleur,couleurTexte,texte,lien,largeur=20,longueur=40) :
         """Classe qui crée un bouton,
            largeur pour la largeur du bouton,
            longueur pour la longueur du bouton,
@@ -27,6 +27,7 @@ class Bouton:
 
         #couleur du bouton
         self.couleur = couleur
+        self.couleurTexte = couleurTexte
 
         #fenetre
         self.fenetre = fenetre
@@ -37,21 +38,17 @@ class Bouton:
 
         #pour créer un bouton start, start = Bouton(machin machin)
 
+        #le texte du bouton est crée
         font=pygame.font.Font(None, 24)
-        text = font.render("Texte",1,(255,255,255))
+        self.champs = font.render(self.texte,1,self.couleurTexte)
 
 
  
-        rect = pygame.draw.rect(fenetre,couleur,[positionHorizontale, positionVerticale,longueur,largeur])
-        fenetre.blit(text,(largeur/2,longueur/10))
+        corpsBouton = pygame.draw.rect(self.fenetre,self.couleur,[self.positionHorizontale, self.positionVerticale,self.longueur,self.largeur])
+        fenetre.blit(self.champs,(self.positionHorizontale,self.positionVerticale))
 
-
-
-#class BoutonMenu(Bouton):
-    """Bouton type du menu"""
-
-#    def __init__(positionHorizontale,positionVerticale,texte,lien,largeur,longueur) :
-#    Bouton.__init__(positionHorizontale,positionVerticale,texte,lien,largeur,longueur)
-    
+        
+        self.mouse_xy = pygame.mouse.get_pos()
+        self.survolBouton = corpsBouton.collidepoint(self.mouse_xy)
 
         
