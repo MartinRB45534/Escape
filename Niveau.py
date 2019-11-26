@@ -455,7 +455,7 @@ class Niveau:
                     self.joueur.inventaire_vers_la_gauche()
                 elif event.type==pygame.KEYDOWN and event.key==pygame.K_SPACE:
                     self.joueur.utilise_inventaire()
-
+                    
         if self.affichage.affiche == LABYRINTHE:
          #on récupère toutes les touches préssés sous forme de
             keys=pygame.key.get_pressed()
