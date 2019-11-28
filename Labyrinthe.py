@@ -256,10 +256,29 @@ class Labyrinthe:
         Sorties:
             Rien
         """
-        print(mode)
         resol = Resolveur(self.matrice_cases,self.largeur,self.hauteur,arrivee_x,arrivee_y,depart_x,depart_y,mode)
-        solution=resol.resolution()
+        solution = resol.resolution()
+            
+    def petit_poucet(self,interval):
+        """
+        Fonction qui positionne des indices à intervals réguliers
+        Entrées:
+            -le nombre de cases entre chaque indice
+        Sorties:
+            -les positions des indices
+        """
+        resol = Resolveur(self.matrice_cases,self.largeur,self.hauteur,self.arrivee_x,self.arrivee_y,0,0,"Largeur")
+        chemin = resol.resolution(True,False)
 
+        i = 0
+        positions_indices = []
+        
+        for position in chemin:
+            if i == interval:
+                i = 0
+                positions_indices.append(position)
+            i+=1
+        return positions_indices
     def getMatrice_cases(self):
         new_mat = [[self.matrice_cases[j][i] for i in range(self.hauteur)]for j in range(self.largeur)]
         return new_mat
@@ -283,5 +302,4 @@ class Labyrinthe:
             self.matrice_cases[position_x][position_y+1].casser_mur(HAUT)
         elif direction==GAUCHE:
             self.matrice_cases[position_x-1][position_y].casser_mur(DROITE)
-
 

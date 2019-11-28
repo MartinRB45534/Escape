@@ -5,6 +5,7 @@ from Clee import *
 from Joueur import *
 from Monstres import *
 from Pnjs import *
+from Cailloux import *
 
 class Collision:
     def __init__(self):
@@ -186,8 +187,10 @@ class Collision:
             suppItem=True
             entitee2.ramasser()
             entitee1.inventaire.ramasse_item(entitee2)
-        elif issubclass(type(entitee1),Monstre) and (issubclass(type(entitee2),Item) or issubclass(type(entitee2),Potion)):
+        elif issubclass(type(entitee1),Monstre) and issubclass(type(entitee2),Item):
             valide=True
+        elif issubclass(type(entitee1),Agissant) and issubclass(type(entitee2),Caillou):
+            valide = True
         return valide,suppItem
     def try_interaction(self,agissant,entitee):
         """

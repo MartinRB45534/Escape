@@ -15,6 +15,7 @@ from Clee import *
 from Murs import *
 from Minimap import *
 from Pnjs import *
+from Cailloux import *
 
 class Niveau:
     def __init__(self,niveau,difficulte,mode_affichage,mode_minimap,joueur=None):
@@ -288,6 +289,10 @@ class Niveau:
             potions=potions_vue+potions_combat
             for potion in potions:
                 self.entitees.append(potion)
+            #on place les indices
+            positions = self.lab.petit_poucet(20)
+            for position in positions:
+                self.entitees.append(Caillou(position))
         elif niveau == 3:
             self.monstres.append(Runner(self.lab.getMatrice_cases(),5,59,[3,48]))
         elif niveau == 4:
