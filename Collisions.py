@@ -4,6 +4,7 @@ from Potion import *
 from Clee import *
 from Joueur import *
 from Monstres import *
+from Pnjs import *
 
 class Collision:
     def __init__(self):
@@ -35,6 +36,45 @@ class Collision:
                         else:
                             print(mat_explorable[x][y])
         return succes
+    def tentative_interaction(self,agissant,entitees):
+        """
+        Fonction qui effectue une interaction entre un agissant et
+        une entitée avec laquelle on peut intéragir
+        Entrées:
+            -l'agissant cherchant à interagir
+            -les entitees avec lesquelles on peut intéragir
+        Sorties:
+            -un booléen indiquant si l'interaction s'est produite
+        """
+        succes = False
+
+        if entitees != None:
+            for entitee in entitees:
+                if entitee!=agissant:
+                    if self.est_voisin(agissant.getPosition(),entitee.getPosition()):
+                        self.try_interaction(agissant,entitee)
+        
+        return succes
+    def est_voisin(self,position1,position2):
+        """
+        Fonction qui définie si une entitée est au voisinage de l'autre
+        Entrées:
+            -la position d'une entitée
+            -la position d'une autre entitée
+        Sorties:
+            -un booléen indiquant si les 2 entitées sont au voisinnages l'une de l'autre
+        """
+        voisins = False
+
+        distance_x = abs(position1[0]-position2[0])
+        distance_y = abs(position1[1]-position2[1])
+
+        if distance_x == 1 and distance_y ==0:
+            voisins = True
+        elif distance_y == 1 and distance_x ==0:
+            voisins = True
+            
+        return voisins
     def get_zone_attaque(self,attaquant):
         """
         Fonction qui détermine la zone de l'attaque
@@ -149,6 +189,22 @@ class Collision:
         elif issubclass(type(entitee1),Monstre) and (issubclass(type(entitee2),Item) or issubclass(type(entitee2),Potion)):
             valide=True
         return valide,suppItem
+    def try_interaction(self,agissant,entitee):
+        """
+        Fonction qui essaie de faire intéragir deux entitées entre elles
+        Entrées:
+            -l'agissant essayant d'intéragir
+            -l'entitée avec laquelle l'agissant veut intéragir
+        Sorites:
+            -un booléen indiquant si l'intéraction à fonctionner
+        """
+        succes = False
+
+        if issubclass(type(agissant),Joueur) and issubclass(type(entitee),Pnj_passif):
+            #on fait parler le pnj
+            entitee.interaction()
+        
+        return succes
     def supp_items(self,items_a_supp,entitees):
         """
         Fonction qui supprime les items ramassés

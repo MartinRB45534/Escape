@@ -1,6 +1,5 @@
 from Cases import *
 from Resolveur import *
-from math import sqrt
 from Agissant import *
 
 class Monstre(Agissant):

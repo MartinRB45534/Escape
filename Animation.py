@@ -37,7 +37,7 @@ class Attaque(Animation):
         """
         Fonction qui exécute l'animation d'attaque
         Entrées:
-            La surface sur laquelle on dessine
+            Rien
         Sorties:
             Rien
         """

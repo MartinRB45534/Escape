@@ -20,7 +20,14 @@ class Replique ():
 
             self.position_replique+=nb_chars
                 
-
         return chaine
-        
+    def est_fini(self):
+        """
+        Fonction qui indique si la réplique est finie
+        Entrées:
+            -Rien
+        Sorties:
+            -un booléen indiquant si la réplique est finie
+        """
+        return (self.position_replique == len(self.contenu))
     
