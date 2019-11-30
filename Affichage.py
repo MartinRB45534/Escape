@@ -7,6 +7,7 @@ from Monstres import *
 from Potion import *
 from Evenement import *
 from Animation import *
+from Replique import *
 
 class Affichage:
     def __init__(self,screen,mode_affichage,LARGEUR_CASE,LARGEUR_MUR,largeur_lab,hauteur_lab):
@@ -28,6 +29,11 @@ class Affichage:
         self.affiche_precedent = None
         #liste des animations
         self.animations=[]
+        #dialogue courant
+        self.diag_cour = None#Replique("J'ai perdu J'ai perdu J'ai perdu J'ai perdu J'ai perdu J'ai perdu J'ai perdu J'ai perdu J'ai perdu J'ai perdu J'ai perdu J'ai perdu J'ai perdu J'ai perdu J'ai perdu J'ai perdu ",20)
+        self.text_cour = None
+        self.police_cour = None
+        self.nb_chars_affichables = 0
     def dessine_frame(self,joueur,labyrinthe,entitees,evenements):
         """
         Fonction qui dessine une frame
@@ -42,7 +48,7 @@ class Affichage:
         self.decouvre_joueur(joueur,labyrinthe)
         self.reset_screen(joueur)
         self.dessine_hud(joueur)
-        if self.mode_affichage==distance_max and self.affiche == LABYRINTHE:
+        if self.mode_affichage==distance_max and (self.affiche == LABYRINTHE or self.affiche == DIALOGUE):
             self.distance_max(joueur,labyrinthe,entitees,evenements)
         elif self.affiche == LABYRINTHE:
             print("le mode d'affichage selectionnée est incorrect")
@@ -64,7 +70,7 @@ class Affichage:
         largeur_vue=joueur.largeur_vue
         hauteur_vue=joueur.hauteur_vue
         #on dessine le cadre autour du labyrinthe pour faire joli
-        limite_gauche = 11
+        limite_gauche = self.decalage_matrice[0]
         limite_droite = (self.LARGEUR_MUR+self.LARGEUR_CASE) * (largeur_vue + self.decalage_bord_largeur)
         limite_haute = self.hauteur_minimap
         limite_basse = (self.LARGEUR_MUR+self.LARGEUR_CASE) * (hauteur_vue + self.decalage_bord_hauteur)
@@ -98,24 +104,162 @@ class Affichage:
             #on dessine la barre de vie du joueur
             pygame.draw.rect(self.screen, pygame.Color(255,0,0),(30,10,int(100*(joueur.pv/joueur.pv_max)),10))
         else:
-            self.screen.blit(text_pv,(joueur.largeur_vue*self.TAILLE_CASE-130,self.getBottomY(joueur.hauteur_vue)+10))
+            self.screen.blit(text_pv,(joueur.largeur_vue*self.TAILLE_CASE-130+self.decalage_matrice[0],self.getBottomY(joueur.hauteur_vue)+10))
             #on dessine la barre de vie du joueur
-            pygame.draw.rect(self.screen, pygame.Color(255,0,0),(joueur.largeur_vue*self.TAILLE_CASE-100,self.getBottomY(joueur.hauteur_vue)+10,int(100*(joueur.pv/joueur.pv_max)),10))
+            pygame.draw.rect(self.screen, pygame.Color(255,0,0),(joueur.largeur_vue*self.TAILLE_CASE-100+self.decalage_matrice[0],self.getBottomY(joueur.hauteur_vue)+10,int(100*(joueur.pv/joueur.pv_max)),10))
 
         #on dessine la minimap
         self.taille_minimap = joueur.minimap.decouvre(self.position_vue,self.mat_exploree,joueur.position)
         self.hauteur_minimap = self.taille_minimap[1] * 3 + 11
         self.largeur_minimap = self.taille_minimap[0] * 3 + 11
-        self.decalage_matrice=[11,self.hauteur_minimap]
+        self.decalage_matrice=[self.largeur_minimap,self.hauteur_minimap]
+        
         if self.affiche == MINIMAP:
             joueur.affiche_minimap(self.screen)
-        elif self.affiche == LABYRINTHE:
+        elif self.affiche == LABYRINTHE or self.affiche == DIALOGUE:
             joueur.redessine_minimap(self.screen,[5,5])
-
+            if self.affiche == DIALOGUE:
+                self.dessine_dialogue(joueur.largeur_vue)
         #on dessine l'inventaire
         if self.affiche == INVENTAIRE:
             joueur.affiche_inventaire(self.screen)
+    def dessine_dialogue(self, largeur_vue):
+        """
+        Fonction qui dessine le dialogue courant
+        Entrée:
+            -la largeur de la vue du joueur
+        """
+        if self.diag_cour != None:
+            largeur_bordure_externe = 2
+            largeur_bordure_interne = 5
+            
+            limite_droite = (self.LARGEUR_MUR+self.LARGEUR_CASE) * (largeur_vue + self.decalage_bord_largeur)# + self.decalage_matrice[0]
+            #fond blanc
+            pygame.draw.rect(self.screen, pygame.Color(255,255,255),(self.decalage_matrice[0]+5,5,limite_droite-5,self.decalage_matrice[1]-10))
+            #bord noir
+            pygame.draw.rect(self.screen, pygame.Color(0,0,0),(self.decalage_matrice[0]+5,5,limite_droite-5,self.decalage_matrice[1]-10),largeur_bordure_externe)
 
+            #texte de base à écrire en bas
+            police_default = pygame.font.SysFont(None, 15)
+            text_next = police_default.render("- Appuyer sur Entrée pour continuer -",True,(0,0,0))
+            taille_x, taille_y = police_default.size("- Appuyer pour continuer -")
+            #taille alouée aux texte
+            size_y = self.decalage_matrice[1]-10-largeur_bordure_externe-largeur_bordure_interne - taille_y
+            size_x = limite_droite-10-largeur_bordure_externe-largeur_bordure_interne - taille_x
+            size = [size_x, size_y]
+
+            curseur = [self.decalage_matrice[0]+5+largeur_bordure_interne,5+largeur_bordure_interne]
+
+            if self.police_cour == None:
+                self.police_cour = pygame.font.SysFont(None, self.diag_cour.taille_ecriture)
+            largeur_police, hauteur_police = self.police_cour.size("a")
+
+            if self.text_cour == None:
+                self.nb_chars_affichables = (self.taille_max_colonne(self.diag_cour,self.police_cour,size_y)-1)*self.taille_max_ligne(self.diag_cour.contenu,self.police_cour,size_x,0)
+                self.text_cour = self.diag_cour.get_contenu(self.nb_chars_affichables)
+
+            #on essaie d'empêcher un potentiel soft lock
+            if self.nb_chars_affichables <= 0:
+                self.diag_cour = None
+                self.police_cour = None
+                self.affiche = LABYRINTHE
+                self.text_cour = None
+                
+            else:
+                last_char = 0
+                for y in range(0,self.taille_max_colonne(self.diag_cour,self.police_cour,size_y)):
+                    #extraction du texte a afficher sur la ligne
+                    nb_chars = self.taille_max_ligne(self.text_cour,self.police_cour,size_x,last_char)
+                    if last_char < len(self.text_cour):
+                        if not(last_char+nb_chars < len(self.text_cour)):
+                            nb_chars -= (last_char+nb_chars)-len(self.text_cour)
+                        text_ligne = self.text_cour[last_char:last_char+nb_chars]
+                    else:
+                        text_ligne = None
+                    #affichage du texte
+                    text_dialogue = self.police_cour.render(text_ligne,True,(0,0,0))
+                    self.screen.blit(text_dialogue,curseur)
+                    last_char += nb_chars
+                    curseur[1] += hauteur_police
+
+                self.screen.blit(text_next, curseur)
+    def taille_max_colonne(self,replique,police,taille_y):
+        """
+        Fonction qui calcule le nombre max de charactères que l'on
+        peut mettre sur une colonne
+        Entrées:
+            -la replique a afficher
+            -la police avec laquelle on affiche la replique
+            -la taille allouée en y
+        Sortie:
+            -le nombre de charactères max sur une colonne
+        """
+        largeur,hauteur = police.size(replique.contenu[0])
+        
+        return int(taille_y/hauteur)
+
+    def taille_max_ligne(self,contenu,police,taille_x,last_char):
+        """
+        Fonction qui calcule le nombre max de charactères que l'on
+        peut mettre sur une ligne
+        Entrées:
+            -le contenu a afficher
+            -la police avec laquelle on affiche la replique
+            -la taille allouée en x
+            -le dernier charactère auquel on as pas touché
+        Sortie:
+            -le nombre de charactères max sur une ligne
+        """
+        nb_chars=0
+        i=last_char
+        taille_px=0
+
+        while i<len(contenu) and taille_px<=taille_x:
+            largeur,hauteur = police.size(contenu[i])
+            taille_px += largeur
+            nb_chars += 1
+            i += 1
+            
+        return nb_chars
+    def add_dialogue(self,new_dialogue):
+        """
+        Fonction qui si possible ajoute un dialogue à afficher
+        Entrées:
+            -la réplique à afficher
+        Sorties:
+            -un booléen indiquant si la demande à réussi
+        """
+        succes = False
+        if self.diag_cour == None:
+            self.diag_cour = new_dialogue
+            self.affiche = DIALOGUE
+            succes = True
+            
+        return succes
+    def pass_replique(self):
+        """
+        Fonction qui passe une partie du dialogue
+        et qui le réinitialise s'il est finit
+        Entrées:
+            -Rien
+        Sorties:
+            -Rien
+        """
+        if self.diag_cour != None:
+            if self.diag_cour.est_fini():
+                self.diag_cour = None
+                self.police_cour = None
+                self.affiche = LABYRINTHE
+            self.text_cour = None
+    def dialogue_finit(self):
+        """
+        Fonction qui teste si le dialogue est finit
+        Entrées:
+            -Rien
+        Sorties:
+            -un booléen indiquant si le dialogue est finit
+        """
+        return (self.diag_cour==None)
     def getBottomY(self,hauteur_vue):
         """
         Fonction qui renvoie le y correspondant au bas de l'écran

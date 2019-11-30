@@ -14,6 +14,8 @@ from Affichage import *
 from Clee import *
 from Murs import *
 from Minimap import *
+from Pnjs import *
+from Cailloux import *
 
 class Niveau:
     def __init__(self,niveau,difficulte,mode_affichage,mode_minimap,joueur=None):
@@ -102,9 +104,14 @@ class Niveau:
             #self.lab.matrice_cases=mat_lab
             
 
-            monstres=[Slime([4,4])]#,Fatti([10,10])]
-            self.entitees=self.clees
+            monstres=[]#[Slime([4,4])]#,Fatti([10,10])
 
+            #pnj d'expérimentation
+            self.pnj = Pnj_passif([4,4],100,(0,255,0),[Replique("Teswwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwt",20)])
+            self.entitees=[self.pnj]
+
+            self.entitees.append(self.clees[0])
+            
         elif niveau == 1:
             #niveau labyrinthique sans monstres pour apprendre à se déplacer
 
@@ -282,6 +289,10 @@ class Niveau:
             potions=potions_vue+potions_combat
             for potion in potions:
                 self.entitees.append(potion)
+            #on place les indices
+            positions = self.lab.petit_poucet(20)
+            for position in positions:
+                self.entitees.append(Caillou(position))
         elif niveau == 3:
             self.monstres.append(Runner(self.lab.getMatrice_cases(),5,59,[3,48]))
         elif niveau == 4:
@@ -455,9 +466,9 @@ class Niveau:
                     self.joueur.inventaire_vers_la_gauche()
                 elif event.type==pygame.KEYDOWN and event.key==pygame.K_SPACE:
                     self.joueur.utilise_inventaire()
-
+                    
         if self.affichage.affiche == LABYRINTHE:
-         #on récupère toutes les touches préssés sous forme de
+            #on récupère toutes les touches préssés sous forme de booléen
             keys=pygame.key.get_pressed()
     
             if keys[pygame.K_UP]:
@@ -470,7 +481,13 @@ class Niveau:
                 self.joueur.va_vers_la_gauche()
             elif keys[pygame.K_SPACE]:
                 self.joueur.attaque()
-
+            elif keys[pygame.K_x]:
+                self.joueur.tentative_interaction()
+        elif self.affichage.affiche == DIALOGUE:
+            #on récupère toutes les touches préssés sous forme de booléen
+            keys=pygame.key.get_pressed()
+            if keys[pygame.K_RETURN]:
+                self.affichage.pass_replique()
 
 
     def actions_entitees(self,events):
@@ -655,6 +672,10 @@ class Niveau:
         elif id_action==ATTAQUER:
             self.affichage.ajout_animation(agissant.getPosition(),0,3,agissant.getRadius()*(self.LARGEUR_CASE+self.LARGEUR_MUR))
             succes=self.collision.tentative_attaque(agissant,self.entitees)
+        elif id_action==INTERAGIR:
+            succes = self.collision.tentative_interaction(agissant,self.entitees)
+        elif id_action==PARLER:
+            succes = self.affichage.add_dialogue(action)
         return succes
     def getPlusLent(self):
         """

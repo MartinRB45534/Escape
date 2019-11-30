@@ -59,6 +59,10 @@ class Joueur(Agissant):
 
         self.next_action=None
         self.id_next=ATTAQUER
+    def tentative_interaction(self):
+        """Fonction qui essaie d'interagir"""
+        self.next_action = None
+        self.id_next = INTERAGIR
 
     def dépose_un_marqueur(self) -> bool:
         """fonction qui pose un marqueur sur la case si possible"""
