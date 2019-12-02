@@ -447,30 +447,42 @@ class Niveau:
         Fonction qui exécute la partie du code ou le jpueur demande à agir
         et qui renvoie rien
         """
-        for event in events:
-            if event.type==pygame.KEYDOWN and event.key==pygame.K_a:
-                if self.affichage.affiche != MINIMAP:
-                    self.affichage.affiche = MINIMAP
-                else :
-                    self.affichage.affiche = LABYRINTHE
-            if event.type==pygame.KEYDOWN and event.key==pygame.K_i:
-                if self.affichage.affiche != INVENTAIRE:
-                    self.affichage.affiche = INVENTAIRE
-                else :
-                    self.affichage.affiche = LABYRINTHE
                     
-            if self.affichage.affiche == INVENTAIRE:
-                if event.type==pygame.KEYDOWN and event.key==pygame.K_RIGHT:
-                    self.joueur.inventaire_vers_la_droite()
-                elif event.type==pygame.KEYDOWN and event.key==pygame.K_LEFT:
-                    self.joueur.inventaire_vers_la_gauche()
-                elif event.type==pygame.KEYDOWN and event.key==pygame.K_SPACE:
-                    self.joueur.utilise_inventaire()
-                    
-        if self.affichage.affiche == LABYRINTHE:
-            #on récupère toutes les touches préssés sous forme de booléen
-            keys=pygame.key.get_pressed()
-    
+
+
+        #on récupère toutes les touches préssés sous forme de booléen
+        keys=pygame.key.get_pressed()
+        
+        if keys[pygame.K_a]:
+            self.affichage.affiche = MINIMAP
+        elif keys[pygame.K_i]:
+            self.affichage.affiche = INVENTAIRE
+        elif keys[pygame.K_RETURN] and (self.affichage.affiche == INVENTAIRE or self.affichage.affiche == MINIMAP):
+            self.affichage.affiche = LABYRINTHE
+
+        if self.affichage.affiche == INVENTAIRE:
+            if keys[pygame.K_RIGHT]:
+                self.joueur.inventaire_vers_la_droite()
+            elif keys[pygame.K_LEFT]:
+                self.joueur.inventaire_vers_la_gauche()
+            elif keys[pygame.K_SPACE]:
+                self.joueur.utilise_inventaire()
+
+        elif self.affichage.affiche == MINIMAP:
+            if keys[pygame.K_UP]:
+                self.joueur.minimap.va_vers_le_haut()
+            elif keys[pygame.K_DOWN]:
+                self.joueur.minimap.va_vers_le_bas()
+            elif keys[pygame.K_RIGHT]:
+                self.joueur.minimap.va_vers_la_droite()
+            elif keys[pygame.K_LEFT]:
+                self.joueur.minimap.va_vers_la_gauche()
+            elif keys[pygame.K_EQUALS]:
+                self.joueur.minimap.rezoom()
+            elif keys[pygame.K_MINUS]:
+                self.joueur.minimap.dezoom()
+
+        elif self.affichage.affiche == LABYRINTHE:
             if keys[pygame.K_UP]:
                 self.joueur.va_vers_le_haut()
             elif keys[pygame.K_DOWN]:
@@ -483,9 +495,8 @@ class Niveau:
                 self.joueur.attaque()
             elif keys[pygame.K_x]:
                 self.joueur.tentative_interaction()
+
         elif self.affichage.affiche == DIALOGUE:
-            #on récupère toutes les touches préssés sous forme de booléen
-            keys=pygame.key.get_pressed()
             if keys[pygame.K_RETURN]:
                 self.affichage.pass_replique()
 
