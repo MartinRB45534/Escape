@@ -22,9 +22,9 @@ class Affichage:
         self.LARGEUR_CASE=LARGEUR_CASE
         self.TAILLE_CASE=LARGEUR_MUR+LARGEUR_CASE
         #decalage de la matrice du labyrinthe sur l'écran (decalage en px)
-        self.hauteur_minimap = 1 * 3 + 11
-        self.largeur_minimap = 1 * 3 + 11
-        self.decalage_matrice=[11,self.hauteur_minimap]
+        self.hauteur_minimap = 1 * 3 + 33
+        self.largeur_minimap = 1 * 3 + 33
+        self.decalage_matrice=[33,self.hauteur_minimap]
         self.affiche = LABYRINTHE
         self.affiche_precedent = None
         #liste des animations
@@ -390,7 +390,10 @@ class Affichage:
         Fonction qui "réinitialise la surface"
         """
         if self.affiche_precedent == LABYRINTHE and self.affiche == LABYRINTHE:
-            pygame.draw.rect(self.screen,(125,125,125),(0,self.hauteur_minimap,(self.LARGEUR_MUR+self.LARGEUR_CASE) * joueur.largeur_vue + 30,(self.LARGEUR_MUR+self.LARGEUR_CASE) * joueur.hauteur_vue + 30))
+            pygame.draw.rect(self.screen,(125,125,125),(0,self.hauteur_minimap-3,self.screen.get_width(),self.screen.get_height()+3-self.hauteur_minimap))
+            pygame.draw.rect(self.screen,(125,125,125),(self.largeur_minimap-3,0,self.screen.get_width()+3-self.largeur_minimap,self.hauteur_minimap-3))
+            pygame.draw.rect(self.screen,(125,125,125),(0,0,self.largeur_minimap-3,5))
+            pygame.draw.rect(self.screen,(125,125,125),(0,5,5,self.hauteur_minimap-8))
         else:
             self.screen.fill((125,125,125))
 

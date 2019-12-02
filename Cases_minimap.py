@@ -43,25 +43,28 @@ class Case_minimap(Case):
             if self.murs[i].get_etat()!=MUR_VIDE:
                 self.murs[i].dessine_toi(screen,x,y,2,i)
 
-    def affiche_toi(self,screen,x,y):
+    def affiche_toi(self,screen,x,y,zoom):
         """
         Fonction qui dessine l'objet
         Entrées:
             l'écran, la surface sur laquelle on dessine(objet pygame)
             la position de la case
         """
-        pygame.draw.rect(screen,self.couleur,(x,y,19,19))
+        tailleMur = 1 * zoom
+        tailleCase = 5 * zoom
+        pygame.draw.rect(screen,self.couleur,(x,y,tailleCase,tailleCase))
+        
         self.set_couleur()
         for i in range(0,len(self.murs)):
-            self.murs[i].tailleMur = 3
+            self.murs[i].tailleMur = tailleMur
         #on dessine les murs vides en premiers pour éviter les bugs graphiques
         for i in range(0,len(self.murs)):
             if self.murs[i].get_etat()==MUR_VIDE:
-                self.murs[i].dessine_toi(screen,x,y,19,i,self.couleur)
+                self.murs[i].dessine_toi(screen,x,y,tailleCase,i,self.couleur)
         #on dessine les autres murs
         for i in range(0,len(self.murs)):
             if self.murs[i].get_etat()!=MUR_VIDE:
-                self.murs[i].dessine_toi(screen,x,y,19,i)
+                self.murs[i].dessine_toi(screen,x,y,tailleCase,i)
         for i in range(0,len(self.murs)):
             self.murs[i].tailleMur = 1
     def set_couleur(self):

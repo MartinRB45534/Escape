@@ -84,7 +84,8 @@ class Niveau:
 
             self.force_joueur = 5
             self.hp_joueur = 100
-            self.vitesse_joueur=3
+            self.vitesse_joueur_lab=3
+            self.vitesse_joueur_autres=6
 
             self.vitesse_montres=20
 
@@ -129,7 +130,8 @@ class Niveau:
 
             self.force_joueur = 10
             self.hp_joueur = 200
-            self.vitesse_joueur=3
+            self.vitesse_joueur_lab=3
+            self.vitesse_joueur_autres=6
 
             self.vitesse_montres=20
 
@@ -150,7 +152,7 @@ class Niveau:
             self.arrivee = (5,59)
             self.depart = (5,0)
             res = False
-            self.salles=[Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,9],[1,9]]),Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,-1],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,-1],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,-1],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,-1]])]
+            self.salles=[Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,9],[1,9]]),Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0]])]
             proba_murs = 0.3
 
             #variables correspondants a la largeur et la hauteur du zoom
@@ -159,7 +161,8 @@ class Niveau:
 
             self.force_joueur = 10
             self.hp_joueur = 200
-            self.vitesse_joueur=3
+            self.vitesse_joueur_lab=3
+            self.vitesse_joueur_autres=6
 
             self.vitesse_montres=20
 
@@ -180,7 +183,7 @@ class Niveau:
             self.arrivee = (5,59)
             self.depart = (5,0)
             res = False
-            self.salles=[Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,9],[1,9]]),Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,-1],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,-1],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,-1],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,-1]])]
+            self.salles=[Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,9],[1,9]]),Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0]])]
             proba_murs = 0.2
 
             #variables correspondants a la largeur et la hauteur du zoom
@@ -189,7 +192,8 @@ class Niveau:
 
             self.force_joueur = 10
             self.hp_joueur = 200
-            self.vitesse_joueur=3
+            self.vitesse_joueur_lab=3
+            self.vitesse_joueur_autres=6
 
             self.vitesse_montres=20
 
@@ -218,7 +222,8 @@ class Niveau:
 
             self.force_joueur = 10
             self.hp_joueur = 200
-            self.vitesse_joueur=3
+            self.vitesse_joueur_lab=3
+            self.vitesse_joueur_autres=6
 
             self.vitesse_montres=20
 
@@ -255,7 +260,8 @@ class Niveau:
 
             self.force_joueur = 10
             self.hp_joueur = 200
-            self.vitesse_joueur=3
+            self.vitesse_joueur_lab=3
+            self.vitesse_joueur_autres=6
 
             self.vitesse_montres=20
 
@@ -278,9 +284,9 @@ class Niveau:
         #si le joueur passe d'un niveau a un autre
         if joueur!=None:
             #le joueur est heal entre les niveaux
-            self.joueur=Joueur(minimap,joueur.inventaire,joueur.pv_max,joueur.pv_max,joueur.degats,joueur.vitesse,joueur.radius,joueur.largeur_vue,joueur.hauteur_vue,self.depart)
+            self.joueur=Joueur(minimap,joueur.inventaire,joueur.pv_max,joueur.pv_max,joueur.degats,joueur.vitesse_lab,joueur.vitesse_autres,joueur.radius,joueur.largeur_vue,joueur.hauteur_vue,self.depart)
         else:
-            self.joueur=Joueur(minimap,inventaire_joueur,self.hp_joueur,self.hp_joueur,self.force_joueur,self.vitesse_joueur,2,self.zoom_largeur,self.zoom_hauteur,self.depart)
+            self.joueur=Joueur(minimap,inventaire_joueur,self.hp_joueur,self.hp_joueur,self.force_joueur,self.vitesse_joueur_lab,self.vitesse_joueur_autres,2,self.zoom_largeur,self.zoom_hauteur,self.depart)
         self.monstres = monstres
         
         if niveau == 0:
@@ -354,7 +360,6 @@ class Niveau:
             self.actualiser_temps()
 
             #si l'utilisateur décide de mettre fin au programme on sort de la boucle
-            events = []
             for event in pygame.event.get():
                 if event.type==pygame.QUIT:
                     res = -1
@@ -364,9 +369,8 @@ class Niveau:
                     self.zoom_largeur = event.w//(self.LARGEUR_CASE + self.LARGEUR_MUR)
                     self.zoom_hauteur = event.h//(self.LARGEUR_CASE + self.LARGEUR_MUR)
                     self.redraw()
-                else:
-                    events.append(event)
-            self.actions_entitees(events)
+                    
+            self.actions_entitees()
 
             #si on détecte un mouvement on redessine l'écran
             #if move_j or move_m:
@@ -442,35 +446,51 @@ class Niveau:
                 nbSup+=1
                 
                  
-    def action_joueur(self,events=[]):
+    def action_joueur(self):
         """
         Fonction qui exécute la partie du code ou le jpueur demande à agir
         et qui renvoie rien
         """
-        for event in events:
-            if event.type==pygame.KEYDOWN and event.key==pygame.K_a:
-                if self.affichage.affiche != MINIMAP:
-                    self.affichage.affiche = MINIMAP
-                else :
-                    self.affichage.affiche = LABYRINTHE
-            if event.type==pygame.KEYDOWN and event.key==pygame.K_i:
-                if self.affichage.affiche != INVENTAIRE:
-                    self.affichage.affiche = INVENTAIRE
-                else :
-                    self.affichage.affiche = LABYRINTHE
                     
-            if self.affichage.affiche == INVENTAIRE:
-                if event.type==pygame.KEYDOWN and event.key==pygame.K_RIGHT:
-                    self.joueur.inventaire_vers_la_droite()
-                elif event.type==pygame.KEYDOWN and event.key==pygame.K_LEFT:
-                    self.joueur.inventaire_vers_la_gauche()
-                elif event.type==pygame.KEYDOWN and event.key==pygame.K_SPACE:
-                    self.joueur.utilise_inventaire()
-                    
-        if self.affichage.affiche == LABYRINTHE:
-            #on récupère toutes les touches préssés sous forme de booléen
-            keys=pygame.key.get_pressed()
-    
+
+
+        #on récupère toutes les touches préssés sous forme de booléen
+        keys=pygame.key.get_pressed()
+        
+        if keys[pygame.K_a]:
+            self.affichage.affiche = MINIMAP
+            self.joueur.vitesse = self.joueur.vitesse_autres
+            print(self.joueur.vitesse)
+        elif keys[pygame.K_i]:
+            self.affichage.affiche = INVENTAIRE
+            self.joueur.vitesse = self.joueur.vitesse_autres
+        elif keys[pygame.K_RETURN] and (self.affichage.affiche == INVENTAIRE or self.affichage.affiche == MINIMAP):
+            self.affichage.affiche = LABYRINTHE
+            self.joueur.vitesse = self.joueur.vitesse_lab
+
+        if self.affichage.affiche == INVENTAIRE:
+            if keys[pygame.K_RIGHT]:
+                self.joueur.inventaire_vers_la_droite()
+            elif keys[pygame.K_LEFT]:
+                self.joueur.inventaire_vers_la_gauche()
+            elif keys[pygame.K_SPACE]:
+                self.joueur.utilise_inventaire()
+
+        elif self.affichage.affiche == MINIMAP:
+            if keys[pygame.K_UP]:
+                self.joueur.minimap.va_vers_le_haut()
+            elif keys[pygame.K_DOWN]:
+                self.joueur.minimap.va_vers_le_bas()
+            elif keys[pygame.K_RIGHT]:
+                self.joueur.minimap.va_vers_la_droite()
+            elif keys[pygame.K_LEFT]:
+                self.joueur.minimap.va_vers_la_gauche()
+            elif keys[pygame.K_EQUALS]:
+                self.joueur.minimap.rezoom()
+            elif keys[pygame.K_MINUS]:
+                self.joueur.minimap.dezoom()
+
+        elif self.affichage.affiche == LABYRINTHE:
             if keys[pygame.K_UP]:
                 self.joueur.va_vers_le_haut()
             elif keys[pygame.K_DOWN]:
@@ -483,14 +503,13 @@ class Niveau:
                 self.joueur.attaque()
             elif keys[pygame.K_x]:
                 self.joueur.tentative_interaction()
+
         elif self.affichage.affiche == DIALOGUE:
-            #on récupère toutes les touches préssés sous forme de booléen
-            keys=pygame.key.get_pressed()
             if keys[pygame.K_RETURN]:
                 self.affichage.pass_replique()
 
 
-    def actions_entitees(self,events):
+    def actions_entitees(self):
         """
         Fonction qui exécute les actions des entitées
         renvoie un booléen indiquant si il y a besoin de redessiner l'écran
@@ -504,7 +523,7 @@ class Niveau:
         for agissant in agissants:
             if self.horloge_cycle % agissant.getVitesse()==0:
                 if issubclass(type(agissant),Joueur):
-                    self.action_joueur(events)
+                    self.action_joueur()
                 
                 agissant=self.actualiser_donnee(agissant)
 
@@ -687,7 +706,9 @@ class Niveau:
         vitesses=[]
         for agissant in agissants:
             vitesses.append(agissant.getVitesse())
-        return max(vitesses)
+            if issubclass(type(agissant),Joueur):
+                vitesses.append(agissant.vitesse_autres)
+        return self.ppcm(vitesses)
     def as_perdu(self):
         """
         Fonction qui vérifie si le joueur as perdu(pv=0 ou soft lock)
@@ -727,4 +748,18 @@ class Niveau:
                     if taille_meute == max_meute :
                         nb_meute += 1
                         taille_meute = 0
+        return res
+
+    def ppcm(self,vitesses):
+        """Calcul du 'Plus Petit Commun Multiple' des vitesses"""
+        def _pgcd(a,b):
+            while b != 0:
+                a,b = b,a%b
+            return a
+        if len(vitesses) == 1:
+            res = vitesses[0]
+        else:
+            res = (vitesses[0]*vitesses[1])//_pgcd(vitesses[0], vitesses[1])
+            for x in vitesses[2:]:
+                res = (res*x)//_pgcd(res, x)
         return res
