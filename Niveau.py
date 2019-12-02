@@ -18,9 +18,12 @@ from Pnjs import *
 from Cailloux import *
 
 class Niveau:
-    def __init__(self,niveau,difficulte,mode_affichage,mode_minimap,joueur=None):
+    def __init__(self,niveau,difficulte,mode_affichage,mode_minimap,debut_niveau=False,joueur=None,labyrinthe=None,entitees=None,evenements=None,horloge_cycle=None):
         
         self.mode_affichage = mode_affichage
+        self.difficulte = difficulte
+        self.mode_minimap = mode_minimap
+        self.niveau = niveau
         if self.mode_affichage == voir_tout :
             self.LARGEUR_CASE = 20
             self.LARGEUR_MUR = 1
@@ -34,302 +37,275 @@ class Niveau:
             self.LARGEUR_CASE = 20
             self.LARGEUR_MUR = 1
 
-        
-        if niveau == 0:
-            if difficulte == BEGINNER :
-                self.CASES_X = 20
-                self.CASES_Y = 20
-                res = True
-                #self.salles=[Patern((8,8),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR)]
-                proba_murs = 0.5
-            elif difficulte == EASY :
-                self.CASES_X = 20
-                self.CASES_Y = 20
-                res = False
-                #self.salles=[Patern((14,14),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
-                proba_murs = 0.4
-            elif difficulte == AVERAGE :
+        if labyrinthe == None:
+            if niveau == 0:
+                if difficulte == BEGINNER :
+                    self.CASES_X = 20
+                    self.CASES_Y = 20
+                    res = True
+                    #self.salles=[Patern((8,8),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+                    proba_murs = 0.5
+                elif difficulte == EASY :
+                    self.CASES_X = 20
+                    self.CASES_Y = 20
+                    res = False
+                    #self.salles=[Patern((14,14),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+                    proba_murs = 0.4
+                elif difficulte == AVERAGE :
+                    self.CASES_X = 40
+                    self.CASES_Y = 40
+                    res = False
+                    #self.salles=[Patern((17,17),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+                    proba_murs = 0.3
+                elif difficulte == HARD :
+                    self.CASES_X = 60
+                    self.CASES_Y = 60
+                    res = False
+                    #self.salles=[Patern((10,29),40,2,self.LARGEUR_CASE,self.LARGEUR_MUR,[])]
+                    #on génère les entrées de manière a avoir un espace ouvert
+                    #self.salles[0].pre_gen_entrees_x(0,0,39)
+                    #self.salles[0].pre_gen_entrees_x(1,0,39)
+                    proba_murs = 0.2
+                elif difficulte == INSANE :
+                    self.CASES_X = 100
+                    self.CASES_Y = 100
+                    res = False
+                    #self.salles=[Patern((49,30),2,40,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+                    proba_murs = 0.1
+                elif difficulte == IMPOSSIBLE :
+                    self.CASES_X = 1000
+                    self.CASES_Y = 1000
+                    res = False
+                    self.salles=[]
+                    proba_murs = 0
+
+                self.clees = [Clee((3,3),"goodooKey")]
+                
+                self.salles=[Patern((0,0),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[9,9]],self.clees,False)]
+                self.depart = (0,0)
+                self.arrivee = (self.CASES_X-1,self.CASES_Y-1)
+                #variables correspondants a la largeur et la hauteur du zoom
+
+            elif niveau == 1:
+                #niveau labyrinthique sans monstres pour apprendre à se déplacer
+
                 self.CASES_X = 40
                 self.CASES_Y = 40
+                self.arrivee = (39,39)
+                self.depart = (0,0)
                 res = False
-                #self.salles=[Patern((17,17),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
-                proba_murs = 0.3
-            elif difficulte == HARD :
-                self.CASES_X = 60
-                self.CASES_Y = 60
-                res = False
-                #self.salles=[Patern((10,29),40,2,self.LARGEUR_CASE,self.LARGEUR_MUR,[])]
-                #on génère les entrées de manière a avoir un espace ouvert
-                #self.salles[0].pre_gen_entrees_x(0,0,39)
-                #self.salles[0].pre_gen_entrees_x(1,0,39)
-                proba_murs = 0.2
-            elif difficulte == INSANE :
-                self.CASES_X = 100
-                self.CASES_Y = 100
-                res = False
-                #self.salles=[Patern((49,30),2,40,self.LARGEUR_CASE,self.LARGEUR_MUR)]
+                self.salles=[Patern((0,0),11,3,self.LARGEUR_CASE,self.LARGEUR_MUR,[[10,1],[8,2]])]
                 proba_murs = 0.1
-            elif difficulte == IMPOSSIBLE :
-                self.CASES_X = 1000
-                self.CASES_Y = 1000
+
+            elif niveau == 2:
+                #niveau monstrueux sans labyrinthe pour apprendre à se battre
+
+                self.CASES_X = 10
+                self.CASES_Y = 60
+                self.arrivee = (5,59)
+                self.depart = (5,0)
                 res = False
-                self.salles=[]
+                self.salles=[Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,9],[1,9]]),Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0]])]
+                proba_murs = 0.3
+
+            elif niveau == 3:
+                #niveau monstrueux sans labyrinthe pour apprendre à se battre
+
+                self.CASES_X = 10
+                self.CASES_Y = 60
+                self.arrivee = (5,59)
+                self.depart = (5,0)
+                res = False
+                self.salles=[Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,9],[1,9]]),Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0]])]
+                proba_murs = 0.2
+
+            elif niveau == 4:
+                #niveau monstrueux sans labyrinthe pour apprendre à se battre contre des meutes
+
+                self.CASES_X = 15
+                self.CASES_Y = 15
+                self.arrivee = (13,13)
+                self.depart = (1,1)
+                res = False
+                self.salles=[Patern((0,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[2,13]]),Patern((3,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,13],[2,1]]),Patern((6,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,1],[2,13]]),Patern((9,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,13],[2,1]]),Patern((12,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,1]])]
                 proba_murs = 0
 
-            self.depart = (0,0)
-            self.arrivee = (self.CASES_X-1,self.CASES_Y-1)
-            #variables correspondants a la largeur et la hauteur du zoom
-            self.zoom_largeur=11
-            self.zoom_hauteur=11
+            elif niveau == 5:
+                #niveau avec labyrinthe et montres pour apprendre l'utilité des potions
 
-            self.force_joueur = 5
-            self.hp_joueur = 100
+                self.CASES_X = 40
+                self.CASES_Y = 40
+                self.arrivee = (39,39)
+                self.depart = (0,0)
+                res = False
+                self.salles=[Patern((0,0),11,11,self.LARGEUR_CASE,self.LARGEUR_MUR,[[10,1]])]
+                proba_murs = 0.2
+
+            self.poids=[6,2,1,2]
+            #génération du labyrinthe
+            self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.arrivee[0],self.arrivee[1],self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
+            self.lab.generation(proba_murs,None,None)
+
+        else:
+            self.lab = labyrinthe
+
+
+
+
+        if joueur == None:
+            #if niveau == 0:
+            #    if difficulte == BEGINNER :
+            #    elif difficulte == EASY :
+            #    elif difficulte == AVERAGE :
+            #    elif difficulte == HARD :
+            #    elif difficulte == INSANE :
+            #    elif difficulte == IMPOSSIBLE :
+            #elif niveau == 1:
+            #elif niveau == 2:
+            #elif niveau == 3:
+            #elif niveau == 4:
+            #elif niveau == 5:
+                
+            self.force_joueur = 10
+            self.hp_joueur = 200
             self.vitesse_joueur_lab=3
             self.vitesse_joueur_autres=6
-
-            self.vitesse_montres=20
-
             inventaire_joueur = Inventaire()
-        
-            pygame.init()
-            #poids permettants de manipuler l'aléatoire
-            self.poids=[6,2,1,2]
-        
-            #salle pour exp monstres
-            self.clees = [Clee((3,3),"goodooKey")]
-            self.salles=[Patern((0,0),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[9,9]],self.clees,False)]
+            minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap,self.depart,self.arrivee)
 
-            #exp avec les portes
-            #mat_lab=self.lab.getMatrice_cases()
-            #mat_lab[4][2].murs[DROITE].set_etat(INTOUCHABLE)
-            #self.lab.matrice_cases=mat_lab
+            #variables correspondants a la largeur et la hauteur du zoom
+            self.zoom_largeur=13
+            self.zoom_hauteur=13
+
+            self.joueur=Joueur(minimap,inventaire_joueur,self.hp_joueur,self.hp_joueur,self.force_joueur,self.vitesse_joueur_lab,self.vitesse_joueur_autres,2,self.zoom_largeur,self.zoom_hauteur,self.depart)
             
-
-            monstres=[]#[Slime([4,4])]#,Fatti([10,10])
-
-            #pnj d'expérimentation
-            self.pnj = Pnj_passif([4,4],100,(0,255,0),[Replique("Teswwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwt",20)])
-            self.entitees=[self.pnj]
-
-            self.entitees.append(self.clees[0])
+        elif debut_niveau:
             
-        elif niveau == 1:
-            #niveau labyrinthique sans monstres pour apprendre à se déplacer
+            self.joueur = Joueur(minimap,joueur.inventaire,joueur.pv_max,joueur.pv_max,joueur.degats,joueur.vitesse_lab,joueur.vitesse_autres,joueur.radius,joueur.largeur_vue,joueur.hauteur_vue,self.depart)
 
-            self.CASES_X = 40
-            self.CASES_Y = 40
-            self.arrivee = (39,39)
-            self.depart = (0,0)
-            res = False
-            self.salles=[Patern((0,0),11,3,self.LARGEUR_CASE,self.LARGEUR_MUR,[[10,1],[8,2]])]
-            proba_murs = 0.1
+        else:
 
-            #variables correspondants a la largeur et la hauteur du zoom
-            self.zoom_largeur=13
-            self.zoom_hauteur=13
+            self.joueur = joueur
 
-            self.force_joueur = 10
-            self.hp_joueur = 200
-            self.vitesse_joueur_lab=3
-            self.vitesse_joueur_autres=6
 
-            self.vitesse_montres=20
 
-            inventaire_joueur = Inventaire()
-        
-            pygame.init()
-            #poids permettants de manipuler l'aléatoire
-            self.poids=[6,2,1,2]
-        
-            monstres=[]
-            self.entitees=[]
 
-        elif niveau == 2:
-            #niveau monstrueux sans labyrinthe pour apprendre à se battre
+        if entitees == None:
 
-            self.CASES_X = 10
-            self.CASES_Y = 60
-            self.arrivee = (5,59)
-            self.depart = (5,0)
-            res = False
-            self.salles=[Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,9],[1,9]]),Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0]])]
-            proba_murs = 0.3
-
-            #variables correspondants a la largeur et la hauteur du zoom
-            self.zoom_largeur=13
-            self.zoom_hauteur=13
-
-            self.force_joueur = 10
-            self.hp_joueur = 200
-            self.vitesse_joueur_lab=3
-            self.vitesse_joueur_autres=6
-
-            self.vitesse_montres=20
-
-            inventaire_joueur = Inventaire()
-        
-            pygame.init()
-            #poids permettants de manipuler l'aléatoire
-            self.poids=[6,2,1,2]
-
-            monstres=[Fatti([5,17]),Fatti([8,25]),Fatti([3,48]),Fatti([5,59])]
-            self.entitees=[]
-
-        elif niveau == 3:
-            #niveau monstrueux sans labyrinthe pour apprendre à se battre
-
-            self.CASES_X = 10
-            self.CASES_Y = 60
-            self.arrivee = (5,59)
-            self.depart = (5,0)
-            res = False
-            self.salles=[Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,9],[1,9]]),Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0]])]
-            proba_murs = 0.2
-
-            #variables correspondants a la largeur et la hauteur du zoom
-            self.zoom_largeur=13
-            self.zoom_hauteur=13
-
-            self.force_joueur = 10
-            self.hp_joueur = 200
-            self.vitesse_joueur_lab=3
-            self.vitesse_joueur_autres=6
-
-            self.vitesse_montres=20
-
-            inventaire_joueur = Inventaire()
-        
-            #poids permettants de manipuler l'aléatoire
-            self.poids=[6,2,1,2]
-        
-            monstres=[Slime([5,17]),Fatti([8,25]),Fatti([5,59])]
-            self.entitees=[]
-
-        elif niveau == 4:
-            #niveau monstrueux sans labyrinthe pour apprendre à se battre contre des meutes
-
-            self.CASES_X = 15
-            self.CASES_Y = 15
-            self.arrivee = (13,13)
-            self.depart = (1,1)
-            res = False
-            self.salles=[Patern((0,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[2,13]]),Patern((3,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,13],[2,1]]),Patern((6,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,1],[2,13]]),Patern((9,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,13],[2,1]]),Patern((12,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,1]])]
-            proba_murs = 0
-
-            #variables correspondants a la largeur et la hauteur du zoom
-            self.zoom_largeur=13
-            self.zoom_hauteur=13
-
-            self.force_joueur = 10
-            self.hp_joueur = 200
-            self.vitesse_joueur_lab=3
-            self.vitesse_joueur_autres=6
-
-            self.vitesse_montres=20
-
-            inventaire_joueur = Inventaire()
-
-            #poids permettants de manipuler l'aléatoire
-            self.poids=[6,2,1,2]
+            if niveau == 0:
+                
+                self.vitesse_montres=20
             
-            meute1 = [Fatti([1,5],1),Fatti([2,12],1),Fatti([0,12],1),Fatti([1,13],1)]
-            meute2 = [Slime([4,0],2),Slime([3,1],2),Slime([5,1],2),Slime([4,2],2),Slime([3,3],2),Slime([5,3],2),Slime([4,4],2),Slime([3,5],2),Slime([5,5],2),Slime([4,6],2),Slime([3,7],2),Slime([5,7],2),Slime([4,8],2)]
-            meute3 = [Slime([7,8],3),Slime([8,9],3),Slime([6,9],3),Fatti([6,11],3),Fatti([7,11],3),Fatti([8,11],3)]
-            meute4 = [Slime([10,5],4),Slime([10,6],4),Slime([10,7],4),Slime([10,8],4),Slime([10,9],4),Slime([10,10],4),Fatti([10,2],4,10,10,300,30)]
-            meute5 = [Slime([13,8],5),Slime([14,9],5),Slime([12,9],5),Fatti([12,11],5),Fatti([13,11],5),Fatti([14,11],5)]
-            monstres = meute1
-            for meutenumerote in [meute2,meute3,meute4,meute5]:
-                for monstre in meutenumerote:
-                    monstres.append(monstre)
-            self.entitees=[]
+                monstres=[Slime([10,13]),Fatti([15,12])]
 
-        elif niveau == 5:
-            #niveau avec labyrinthe et montres pour apprendre l'utilité des potions
+                #pnj d'expérimentation
+                self.pnj = Pnj_passif([4,4],100,(0,255,0),[Replique("Teswwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwt",20)])
+                self.entitees=[self.pnj]
 
-            self.CASES_X = 40
-            self.CASES_Y = 40
-            self.arrivee = (39,39)
-            self.depart = (0,0)
-            res = False
-            self.salles=[Patern((0,0),11,11,self.LARGEUR_CASE,self.LARGEUR_MUR,[[10,1]])]
-            proba_murs = 0.2
+                self.entitees.append(self.clees[0])
 
-            #variables correspondants a la largeur et la hauteur du zoom
-            self.zoom_largeur=13
-            self.zoom_hauteur=13
-
-            self.force_joueur = 10
-            self.hp_joueur = 200
-            self.vitesse_joueur_lab=3
-            self.vitesse_joueur_autres=6
-
-            self.vitesse_montres=20
-
-            inventaire_joueur = Inventaire()
-            monstres=self.spawn_aleatoire(Fatti,10,10,100,10,self.vitesse_montres,1,((10,10),(30,30)),0.01,5,0,(0,0,100))
+                potions_vue=[Potion_de_vision((35,26),self.joueur),Potion_de_vision((27,38),self.joueur),Potion_de_vision((21,19),self.joueur),Potion_de_visibilite_permanente((8,7),self.joueur)]
+                potions_combat=[Potion_de_force((i,j),self.joueur)for j in range(5,45,10) for i in range(5,45,10)] + [Potion_de_portee((i,j),self.joueur)for j in range (10,40,10) for i in range (10,40,10)] + [Potion_de_soin((20,20),self.joueur),Potion_de_portee_permanente((2,2),self.joueur)]
+                potions=potions_vue+potions_combat
+                for potion in potions:
+                    self.entitees.append(potion)
+                #on place les indices
+                positions = self.lab.petit_poucet(20)
+                for position in positions:
+                    self.entitees.append(Caillou(position))
             
-            #poids permettants de manipuler l'aléatoire
-            self.poids=[6,9,1,1]
+            elif niveau == 1:
 
-        #génération du labyrinthe
-        self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.arrivee[0],self.arrivee[1],self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
-        self.lab.generation(proba_murs,None,None)
+                self.vitesse_montres=20
+
+                monstres=[]
+                self.entitees=[]
+
+            elif niveau == 2:
+
+                self.vitesse_montres=20
+
+                monstres=[Fatti([5,17]),Fatti([8,25]),Fatti([3,48]),Fatti([5,59])]
+                self.entitees=[]
+
+            elif niveau == 3:
+
+                self.vitesse_montres=20
+
+                monstres=[Slime([5,17]),Fatti([8,25]),Runner(self.lab.getMatrice_cases(),5,59,[3,48]),Fatti([5,59])]
+                self.entitees=[]
+
+            elif niveau == 4:
+
+                self.vitesse_montres=20
+
+                meute1 = [Fatti([1,5],1),Fatti([2,12],1),Fatti([0,12],1),Fatti([1,13],1)]
+                meute2 = [Slime([4,0],2),Slime([3,1],2),Slime([5,1],2),Slime([4,2],2),Slime([3,3],2),Slime([5,3],2),Slime([4,4],2),Slime([3,5],2),Slime([5,5],2),Slime([4,6],2),Slime([3,7],2),Slime([5,7],2),Slime([4,8],2)]
+                meute3 = [Slime([7,8],3),Slime([8,9],3),Slime([6,9],3),Fatti([6,11],3),Fatti([7,11],3),Fatti([8,11],3)]
+                meute4 = [Slime([10,5],4),Slime([10,6],4),Slime([10,7],4),Slime([10,8],4),Slime([10,9],4),Slime([10,10],4),Fatti([10,2],4,10,10,300,30)]
+                meute5 = [Slime([13,8],5),Slime([14,9],5),Slime([12,9],5),Fatti([12,11],5),Fatti([13,11],5),Fatti([14,11],5),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[12,5]),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[13,0]),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[14,5])]
+                monstres = meute1
+                for meutenumerote in [meute2,meute3,meute4,meute5]:
+                    for monstre in meutenumerote:
+                        monstres.append(monstre)
+                self.entitees=[]
+
+            elif niveau == 5:
+
+                self.vitesse_montres=20
+
+                monstres=self.spawn_aleatoire(Fatti,10,10,100,10,self.vitesse_montres,1,((10,10),(30,30)),0.01,5,0,(0,0,100))
+
+                potions_vue=[Potion_de_vision((35,26),self.joueur),Potion_de_vision((27,38),self.joueur),Potion_de_vision((21,19),self.joueur),Potion_de_visibilite_permanente((8,7),self.joueur)]
+                potions_combat=[Potion_de_force((i,j),self.joueur)for j in range(5,45,10) for i in range(5,45,10)] + [Potion_de_portee((i,j),self.joueur)for j in range (10,40,10) for i in range (10,40,10)] + [Potion_de_soin((20,20),self.joueur),Potion_de_portee_permanente((2,2),self.joueur)]
+                potions=potions_vue+potions_combat
+                self.entitees=potions
+
+            self.monstres = monstres
+
+            self.entitees.append(self.joueur)
+
+            if res :
+                self.lab.resolution(self.arrivee[0],self.arrivee[1],self.depart[0],self.depart[1],"Largeur")
+
+            for i in range(0,len(self.monstres)):
+                self.entitees.append(self.monstres[i])
+
+            #generation des meutes
+            self.meutes=self.generation_meutes()
+
+        else:
+            self.entitees = entitees
+
+
+
+
+        if evenements == None:
+            self.evenements=[]
+        else:
+            self.evenements = evenements
+
+
+
+
+        if horloge_cycle == None:
+            self.horloge_cycle=0
+        else:
+            self.horloge_cycle = horloge_cycle
+
+
+
 
         pygame.display.set_caption("niveau " + str(niveau))
         self.screen = pygame.display.set_mode((FENETRE_X,FENETRE_Y),pygame.RESIZABLE)
         self.screen.fill((0,0,0))
 
-        #entitées
-        minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap,self.depart,self.arrivee)
-        #si le joueur passe d'un niveau a un autre
-        if joueur!=None:
-            #le joueur est heal entre les niveaux
-            self.joueur=Joueur(minimap,joueur.inventaire,joueur.pv_max,joueur.pv_max,joueur.degats,joueur.vitesse_lab,joueur.vitesse_autres,joueur.radius,joueur.largeur_vue,joueur.hauteur_vue,self.depart)
-        else:
-            self.joueur=Joueur(minimap,inventaire_joueur,self.hp_joueur,self.hp_joueur,self.force_joueur,self.vitesse_joueur_lab,self.vitesse_joueur_autres,2,self.zoom_largeur,self.zoom_hauteur,self.depart)
-        self.monstres = monstres
         
-        if niveau == 0:
-            potions_vue=[Potion_de_vision((35,26),self.joueur),Potion_de_vision((27,38),self.joueur),Potion_de_vision((21,19),self.joueur),Potion_de_visibilite_permanente((8,7),self.joueur)]
-            potions_combat=[Potion_de_force((i,j),self.joueur)for j in range(5,45,10) for i in range(5,45,10)] + [Potion_de_portee((i,j),self.joueur)for j in range (10,40,10) for i in range (10,40,10)] + [Potion_de_soin((20,20),self.joueur),Potion_de_portee_permanente((2,2),self.joueur)]
-            potions=potions_vue+potions_combat
-            for potion in potions:
-                self.entitees.append(potion)
-            #on place les indices
-            positions = self.lab.petit_poucet(20)
-            for position in positions:
-                self.entitees.append(Caillou(position))
-        elif niveau == 3:
-            self.monstres.append(Runner(self.lab.getMatrice_cases(),5,59,[3,48]))
-        elif niveau == 4:
-            meute5 = [Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[12,5]),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[13,0]),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[14,5])]
-            for monstre in meute5:
-                self.monstres.append(monstre)
-        elif niveau == 5 :
-            potions_vue=[Potion_de_vision((35,26),self.joueur),Potion_de_vision((27,38),self.joueur),Potion_de_vision((21,19),self.joueur),Potion_de_visibilite_permanente((8,7),self.joueur)]
-            potions_combat=[Potion_de_force((i,j),self.joueur)for j in range(5,45,10) for i in range(5,45,10)] + [Potion_de_portee((i,j),self.joueur)for j in range (10,40,10) for i in range (10,40,10)] + [Potion_de_soin((20,20),self.joueur),Potion_de_portee_permanente((2,2),self.joueur)]
-            potions=potions_vue+potions_combat
-            self.entitees=potions
-
-        self.entitees.append(self.joueur)
-        
-        if res :
-            self.lab.resolution(self.arrivee[0],self.arrivee[1],self.depart[0],self.depart[1],"Largeur")
-        
-        for i in range(0,len(self.monstres)):
-            self.entitees.append(self.monstres[i])
-
-        #generation des meutes
-        self.meutes=self.generation_meutes()
         #objet qui traite les collisions
         self.collision=Collision()
 
-        #événements
-        self.evenements=[]
-
         self.plus_lent=self.getPlusLent()
         #variable qui nous sert a exécuter les actions des entitées
-        self.horloge_cycle=0
 
         #objet d'affichage
         self.affichage=Affichage(self.screen,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR,self.lab.largeur,self.lab.hauteur)
@@ -340,7 +316,12 @@ class Niveau:
         self.textLose = font.render("Vous avez perdu!! ;o;", True, (0, 128, 128))
         
         self.position_screen=(0,0)
-        
+
+    def sauve(self):
+        return [self.niveau,self.difficulte,self.mode_affichage,self.mode_minimap,self.lab.as_gagner(self.joueur.getPosition()) or self.as_perdu(),self.joueur,self.lab,self.entitees,self.evenements,self.horloge_cycle]
+
+
+
     def run(self):
         """
         Boucle principale du niveau
@@ -763,3 +744,6 @@ class Niveau:
             for x in vitesses[2:]:
                 res = (res*x)//_pgcd(res, x)
         return res
+
+    def __str__(self):
+        return "Niveau("+str(self.niveau)+","+str(self.difficulte)+","+str(self.mode_affichage)+","+str(self.mode_minimap)+","+str(self.joueur)+")"
