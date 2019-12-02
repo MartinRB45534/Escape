@@ -53,16 +53,11 @@ def main():
     yellow_color = YELLOW
     black_color = BLACK
     NIVEXIST= False
-    partieEnCours = False
+    partieEnCours = session.recupere
     while loop:
         background = pygame.Surface(fenetre.get_size())
         background.fill(BLACK)
         fenetre.blit(background, (0, 0))
-        #si le niveau est crée on évite d'en recréer un à chaque passage de boucle
-        if not(NIVEXIST) :
-            niv = Niveau(niveau,difficulté,mode_affichage,mode_minimap)
-            NIVEXIST = True
-
 
         #Ajout du fond dans la fenêtre
         fenetre.blit(imgmenutest, (0, 0))

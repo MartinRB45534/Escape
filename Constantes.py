@@ -76,3 +76,6 @@ global INVENTAIRE
 INVENTAIRE=2
 global DIALOGUE
 DIALOGUE = 3
+
+global sauvegarde
+sauvegarde = "save.p"
