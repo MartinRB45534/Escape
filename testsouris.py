@@ -4,12 +4,12 @@ from Constantes import *
 from Bouton import *
 from Session import *
 
-niveau = 2
+niveau = 0
 difficulté = HARD
 mode_affichage = distance_max
-mode_minimap = voir_tout
+mode_minimap = passage
 
-#nombres de niveaux (en excluant 0) que l'on as
+#nombres de niveaux (en excluant 0) que l'on a
 nb_max_niv = 5
 
 
@@ -45,7 +45,7 @@ def main():
     imgmenutest = pygame.image.load("imgmenutest.png").convert()
     
     #session
-    session = Session(niveau,difficulté,mode_affichage,mode_minimap,nb_max_niv)
+    session = Session(niveau,difficulté,mode_affichage,mode_minimap,nb_max_niv,True)
 
     loop = True
     
@@ -55,7 +55,8 @@ def main():
     NIVEXIST= False
     partieEnCours = session.recupere
     while loop:
-        fenetre = pygame.display.set_mode((640, 600))
+        if fenetre.get_width() != 640 or fenetre.get_height() != 600:
+            fenetre = pygame.display.set_mode((640, 600))
         background = pygame.Surface(fenetre.get_size())
         background.fill(BLACK)
         fenetre.blit(background, (0, 0))
@@ -77,8 +78,8 @@ def main():
                 loop = False
             # si clic, le jeu se lance
             elif event.type == pygame.MOUSEBUTTONDOWN and start.survolBouton:
-                session.reset_niveau()
-                session.run()
+                session.reset_niveau_tuto()
+                session.runtuto()
                 partieEnCours = True
             elif event.type == pygame.MOUSEBUTTONDOWN and quitter.survolBouton:
                 loop = False

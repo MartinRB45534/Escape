@@ -7,12 +7,13 @@ from Murs import *
 
 
 class Labyrinthe:
-    def __init__(self,largeur,hauteur,arrivee_x,arrivee_y,tailleCase=20,tailleMur=1,poids=[1,1,1,1],patterns=None):
+    def __init__(self,largeur,hauteur,arrivee,depart,tailleCase=20,tailleMur=1,poids=[1,1,1,1],patterns=None):
         self.largeur = largeur
         self.hauteur = hauteur
 
-        self.arrivee_x=arrivee_x
-        self.arrivee_y=arrivee_y
+        self.arrivee = arrivee
+        self.depart = depart
+        
         
         self.matrice_cases = [[Case(tailleCase,tailleMur) for i in range(hauteur)]for j in range(largeur)]
         
@@ -39,7 +40,7 @@ class Labyrinthe:
         gene=Generateur.Generateur(self.matrice_cases,self.largeur,self.hauteur,self.poids,self.patterns)
         self.matrice_cases=gene.generation(proba,nbMurs,pourcentage)
         #on change la couleur de la case d'arrivée
-        self.matrice_cases[self.arrivee_x][self.arrivee_y].set_Couleur(ARRIVEE)
+        self.matrice_cases[self.arrivee[0]][self.arrivee[1]].set_Couleur(ARRIVEE)
 
     def peut_passer(self,coord,sens,inventaire=None):
         """
@@ -101,7 +102,7 @@ class Labyrinthe:
 
         win=False
 
-        if coords[0]==self.arrivee_x and coords[1]==self.arrivee_y:
+        if coords == self.arrivee:
             win=True
         
         return win
@@ -259,7 +260,7 @@ class Labyrinthe:
         resol = Resolveur(self.matrice_cases,self.largeur,self.hauteur,arrivee_x,arrivee_y,depart_x,depart_y,mode)
         solution = resol.resolution()
             
-    def petit_poucet(self,interval):
+    def petit_poucet(self,interval,depart=None,arrivee=None):
         """
         Fonction qui positionne des indices à intervals réguliers
         Entrées:
@@ -267,8 +268,12 @@ class Labyrinthe:
         Sorties:
             -les positions des indices
         """
-        resol = Resolveur(self.matrice_cases,self.largeur,self.hauteur,self.arrivee_x,self.arrivee_y,0,0,"Largeur")
-        chemin = resol.resolution(True,False)
+        if depart == None:
+            depart = self.depart
+        if arrivee == None:
+            arrivee = self.arrivee
+        resol = Resolveur(self.matrice_cases,self.largeur,self.hauteur,arrivee[0],arrivee[1],depart[0],depart[1],"Largeur")
+        chemin = resol.resolution(True,False,False,False,True)
 
         i = 0
         positions_indices = []

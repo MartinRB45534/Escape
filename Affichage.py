@@ -26,7 +26,8 @@ class Affichage:
         #decalage de la matrice du labyrinthe sur l'écran (decalage en px)
         self.hauteur_minimap = 1 * 3 + 13
         self.largeur_minimap = 1 * 3 + 13
-        self.decalage_matrice=[5,self.hauteur_minimap]
+        self.hauteur_HUD = 50
+        self.decalage_matrice=[5,self.hauteur_HUD]
         self.affiche = LABYRINTHE
         self.affiche_precedent = None
         #liste des animations
@@ -52,7 +53,8 @@ class Affichage:
         self.taille_minimap = joueur.minimap.decouvre(self.position_vue,self.mat_exploree,joueur.position)
         self.hauteur_minimap = self.taille_minimap[1] * 3 + 13
         self.largeur_minimap = self.taille_minimap[0] * 3 + 13
-        self.decalage_matrice=[5,self.hauteur_minimap]
+        self.hauteur_HUD = max(100,self.hauteur_minimap)
+        self.decalage_matrice=[5,self.hauteur_HUD]
 
         taille_min_ecran_X = self.getBottomX(joueur.largeur_vue)
         taille_min_ecran_Y = self.getBottomY(joueur.hauteur_vue)
@@ -87,7 +89,7 @@ class Affichage:
         #on dessine le cadre autour du labyrinthe pour faire joli
         limite_gauche = self.decalage_matrice[0]
         limite_droite = (self.LARGEUR_MUR+self.LARGEUR_CASE) * (largeur_vue + self.decalage_bord_largeur)
-        limite_haute = self.hauteur_minimap
+        limite_haute = self.hauteur_HUD
         limite_basse = (self.LARGEUR_MUR+self.LARGEUR_CASE) * (hauteur_vue + self.decalage_bord_hauteur)
         pygame.draw.rect(self.screen,(150,150,150),(limite_gauche,limite_haute,limite_droite,limite_basse))
         pygame.draw.rect(self.screen,(50,50,50),(limite_gauche,limite_haute,limite_droite,limite_basse),2)
@@ -143,11 +145,11 @@ class Affichage:
             largeur_bordure_externe = 2
             largeur_bordure_interne = 5
             
-            limite_droite = (self.LARGEUR_MUR+self.LARGEUR_CASE) * (largeur_vue + self.decalage_bord_largeur)# + self.decalage_matrice[0]
+            limite_droite = (self.LARGEUR_MUR+self.LARGEUR_CASE) * (largeur_vue + self.decalage_bord_largeur)
             #fond blanc
-            pygame.draw.rect(self.screen, pygame.Color(255,255,255),(self.decalage_matrice[0]+5,5,limite_droite-5,self.decalage_matrice[1]-10))
+            pygame.draw.rect(self.screen, pygame.Color(255,255,255),(self.largeur_minimap+5,5,limite_droite-5,self.decalage_matrice[1]-10))
             #bord noir
-            pygame.draw.rect(self.screen, pygame.Color(0,0,0),(self.decalage_matrice[0]+5,5,limite_droite-5,self.decalage_matrice[1]-10),largeur_bordure_externe)
+            pygame.draw.rect(self.screen, pygame.Color(0,0,0),(self.largeur_minimap+5,5,limite_droite-5,self.decalage_matrice[1]-10),largeur_bordure_externe)
 
             #texte de base à écrire en bas
             police_default = pygame.font.SysFont(None, 15)
@@ -155,10 +157,11 @@ class Affichage:
             taille_x, taille_y = police_default.size("- Appuyer pour continuer -")
             #taille alouée aux texte
             size_y = self.decalage_matrice[1]-10-largeur_bordure_externe-largeur_bordure_interne - taille_y
-            size_x = limite_droite-10-largeur_bordure_externe-largeur_bordure_interne - taille_x
+            size_x = limite_droite-10-largeur_bordure_externe-largeur_bordure_interne
+
             size = [size_x, size_y]
 
-            curseur = [self.decalage_matrice[0]+5+largeur_bordure_interne,5+largeur_bordure_interne]
+            curseur = [self.largeur_minimap+5+largeur_bordure_interne,5+largeur_bordure_interne]
 
             if self.police_cour == None:
                 self.police_cour = pygame.font.SysFont(None, self.diag_cour.taille_ecriture)
@@ -220,6 +223,7 @@ class Affichage:
         Sortie:
             -le nombre de charactères max sur une ligne
         """
+        
         nb_chars=0
         i=last_char
         taille_px=0

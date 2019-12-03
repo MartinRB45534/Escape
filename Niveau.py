@@ -86,7 +86,17 @@ class Niveau:
                 self.arrivee = (self.CASES_X-1,self.CASES_Y-1)
                 #variables correspondants a la largeur et la hauteur du zoom
 
-            elif niveau == 2:
+            elif niveau == "tuto1":
+                self.CASES_X = 15
+                self.CASES_Y = 3
+                self.arrivee = (14,1)
+                self.depart = (1,1)
+                res = False
+                self.clees = []
+                self.salles = [Patern((0,0),14,3,self.LARGEUR_CASE,self.LARGEUR_MUR,[[13,1]],[Clee(None,"Premier pas")])]
+                proba_murs = 1
+                
+            elif niveau == "tuto2":
                 #niveau labyrinthique sans monstres pour apprendre à se déplacer
 
                 self.CASES_X = 40
@@ -94,23 +104,24 @@ class Niveau:
                 self.arrivee = (39,39)
                 self.depart = (0,0)
                 res = False
-                self.clees = [Clee((1,1),"Nord"),Clee((25,5),"Est"),Clee((3,18),"Ouest"),Clee((35,18),"Sud")]
+                self.clees = [Clee((1,1),"Nord"),Clee((3,18),"Ouest"),Clee((5,35),"Est"),Clee((35,18),"Sud")]
                 self.salles=[Patern((0,0),20,20,self.LARGEUR_CASE,self.LARGEUR_MUR,[[15,19],[16,19],[17,19],[18,19],[19,19],[19,18],[19,17],[19,16],[19,15]],[],False),Patern((20,20),20,20,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[3,0],[2,0],[1,0],[0,0],[0,1],[0,2],[0,3],[0,4]],[],False),Patern((0,0),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,3]]),Patern((15,15),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,1],[0,8],[9,1],[9,8]],self.clees)]
                 self.clees.append(Clee((19,1),"Bonus_1"))
                 proba_murs = 0.1
 
-            elif niveau == 3:
-                #niveau monstrueux sans labyrinthe pour apprendre à se battre
+            elif niveau == "tuto3":
+                #niveau monstrueux sans trop de labyrinthe pour apprendre à se battre
 
                 self.CASES_X = 10
                 self.CASES_Y = 60
                 self.arrivee = (5,59)
                 self.depart = (5,0)
                 res = False
-                self.salles=[Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,9],[1,9]]),Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0]])]
+                self.clees = [Clee((0,59),"Bonus_2")]
+                self.salles=[Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,9],[1,9]]),Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0]]),Patern((0,0),4,4,self.LARGEUR_CASE,self.LARGEUR_MUR,[[2,3]],[Clee(None,"Bonus_1")])]
                 proba_murs = 0.3
 
-            elif niveau == 4:
+            elif niveau == "tuto4":
                 #niveau monstrueux sans labyrinthe pour apprendre à se battre
 
                 self.CASES_X = 10
@@ -118,10 +129,11 @@ class Niveau:
                 self.arrivee = (5,59)
                 self.depart = (5,0)
                 res = False
-                self.salles=[Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,9],[1,9]]),Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0]])]
+                self.clees = [Clee((0,59),"Bonus_3")]
+                self.salles=[Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,9],[1,9]]),Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0]]),Patern((0,56),4,4,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((0,52),4,4,self.LARGEUR_CASE,self.LARGEUR_MUR,[[1,0],[2,3]],[Clee(None,"Bonus_2"),Clee(None,"Bonus_1")])]
                 proba_murs = 0.2
 
-            elif niveau == 5:
+            elif niveau == "tuto5":
                 #niveau monstrueux sans labyrinthe pour apprendre à se battre contre des meutes
 
                 self.CASES_X = 15
@@ -132,7 +144,7 @@ class Niveau:
                 self.salles=[Patern((0,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[2,13]]),Patern((3,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,13],[2,1]]),Patern((6,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,1],[2,13]]),Patern((9,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,13],[2,1]]),Patern((12,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,1]])]
                 proba_murs = 0
 
-            elif niveau == 6:
+            elif niveau == "tuto6":
                 #niveau avec labyrinthe et montres pour apprendre l'utilité des potions
 
                 self.CASES_X = 40
@@ -145,35 +157,43 @@ class Niveau:
 
             self.poids=[6,2,1,2]
             #génération du labyrinthe
-            self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.arrivee[0],self.arrivee[1],self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
+            self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.arrivee,self.depart,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
             self.lab.generation(proba_murs,None,None)
 
         else:
             self.lab = labyrinthe
+            self.arrivee = self.lab.arrivee
+            self.depart = self.lab.depart
 
 
 
 
         if joueur == None:
-            #if niveau == 0:
+            if niveau == 0:
+                inventaire_joueur = Inventaire()
             #    if difficulte == BEGINNER :
             #    elif difficulte == EASY :
             #    elif difficulte == AVERAGE :
             #    elif difficulte == HARD :
             #    elif difficulte == INSANE :
             #    elif difficulte == IMPOSSIBLE :
-            #elif niveau == 1:
-            #elif niveau == 2:
-            #elif niveau == 3:
-            #elif niveau == 4:
-            #elif niveau == 5:
-            #elif niveau == 6:
+            elif niveau == "tuto1":
+                inventaire_joueur = Inventaire([],[],[],[],[],[],[Clee(None,"Premier pas")])
+            elif niveau == "tuto2":
+                inventaire_joueur = Inventaire()
+            elif niveau == "tuto3":
+                inventaire_joueur = Inventaire()
+            elif niveau == "tuto4":
+                inventaire_joueur = Inventaire([],[],[],[],[],[],[Clee(None,"Bonus_1"),Clee(None,"Bonus_2")])
+            elif niveau == "tuto5":
+                inventaire_joueur = Inventaire()
+            elif niveau == "tuto6":
+                inventaire_joueur = Inventaire()
                 
             self.force_joueur = 10
             self.hp_joueur = 200
             self.vitesse_joueur_lab=3
             self.vitesse_joueur_autres=6
-            inventaire_joueur = Inventaire()
             minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap,self.depart,self.arrivee)
 
             #variables correspondants a la largeur et la hauteur du zoom
@@ -205,7 +225,7 @@ class Niveau:
                 self.entitees = self.clees
 
                 #pnj d'expérimentation
-                self.pnj = Pnj_passif([4,4],100,(0,255,0),[Replique("Teswwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwt",20)])
+                self.pnj = Pnj_passif([4,4],100,(125,255,125),[Replique("Teswwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwt",20)])
                 self.entitees.append(self.pnj)
 
                 potions_vue=[Potion_de_vision((35,26),self.joueur),Potion_de_vision((27,38),self.joueur),Potion_de_vision((21,19),self.joueur),Potion_de_visibilite_permanente((8,7),self.joueur)]
@@ -219,31 +239,73 @@ class Niveau:
                     self.entitees.append(Caillou(position))
 
 
-            elif niveau == 1:
-                pass
+            elif niveau == "tuto1":
+                self.vitesse_monstres=20
 
-            elif niveau == 2:
+                monstres=[]
+                self.entitees=self.clees
+
+                self.pnj = Pnj_passif((1,0),1000,(125,255,125),[Replique("Tu as déjà découvert comment te déplacer ? Essaies les touches directionnelles !",20),Replique("Tu devrais chercher la sortie de cette grotte. La porte au bout du couloir me semble suspecte.",20)])
+                self.entitees.append(self.pnj)
+
+            elif niveau == "tuto2":
 
                 self.vitesse_montres=20
 
                 monstres=[]
                 self.entitees=self.clees
 
-            elif niveau == 3:
+                self.pnj = Pnj_passif((2,3),1000,(190,255,56),[Replique("J'ai peur j'ai peur j'ai peur !J'ai peeeeuuurrr ! ! !",20),Replique("Cet endroit est horrible ! Jevoudrais remonter à la surface, mais avec ce labyrinthe je risque de me perdre, ce serait terrible !",20),Replique("Quelqu'un est passé avant, il a dit que la sortie était en bas à droite et qu'il avait laissé des cailloux sur le chemin, mais je n'ose pas y aller...",20),Replique("Je crois aussi qu'il a parlé de clées, je crois que tu dois les trouver pour ouvrir des portes",20),Replique("L'une d'elle est sur la case de coordonnées (19,1), mais je ne sais pas ce que ça veut dire",20)])
+                self.entitees.append(self.pnj)
+
+                positions = self.lab.petit_poucet(5,(0,0),self.clees[0].position)
+                for position in positions:
+                    self.entitees.append(Caillou(position))
+
+                positions = self.lab.petit_poucet(5,self.clees[0].position,(14,16))
+                for position in positions:
+                    self.entitees.append(Caillou(position))
+
+                positions = self.lab.petit_poucet(5,(14,16),self.clees[1].position)
+                for position in positions:
+                    self.entitees.append(Caillou(position))
+
+                positions = self.lab.petit_poucet(5,self.clees[1].position,self.clees[2].position)
+                for position in positions:
+                    self.entitees.append(Caillou(position))
+
+                positions = self.lab.petit_poucet(5,self.clees[2].position,self.clees[3].position)
+                for position in positions:
+                    self.entitees.append(Caillou(position))
+
+                positions = self.lab.petit_poucet(5,self.clees[3].position)
+                for position in positions:
+                    self.entitees.append(Caillou(position))
+                    
+            elif niveau == "tuto3":
 
                 self.vitesse_montres=20
 
-                monstres=[Fatti([5,17]),Fatti([8,25]),Fatti([3,48]),Fatti([5,59])]
-                self.entitees=[]
+                monstres=[Fatti([5,17]),Fatti([5,28]),Fatti([3,43]),Fatti([5,59])]
+                self.entitees=self.clees
 
-            elif niveau == 4:
+                self.pnj = Pnj_passif((5,3),1,(56,255,190),[Replique("Bonjour ! Fais très attention, il y des montres là-bas. Heureusement que je cours plus vite qu'eux !",20),Replique("C'est vraiment dommage, s'il n'y avait pas tous ces monstres, je serais sorti depuis longtemps. Mais j'ai beau être très intelligente et pouvoir trouver la sortie de tous ces labyrinthes en une fraction de seconde, je suis faible.",20),Replique("Tu peux essayer de tuer les monstres en les attaquant avec la touche espace, mais ne fait pas ça trop près de moi. C'est une attaque qui affecte tous les êtres vivants dans son périmètre.",20),Replique("Je peux voir tes armes ? Mais tu as une lance ! Tu peux utiliser les touches WASD pour attaquer dans la direction de ton choix. Cette attaque tape plus loin et plus fort que l'autre, mais dans une seule direction.",20),Replique("Tu peux essayer d'éviter les monstres en les coutournant, car ceux-ci ont une moins bonne vue que toi, mais je préférerais que tu les tues tous. Tu veux bien ?",20)])
+                self.entitees.append(self.pnj)
+
+                self.pnj = Pnj_passif((0,2),100,(0,255,125),[Replique("Qu'est-ce que tu fais là ? Personne ne vient jamais ici d'habitude ! Mais tu as raison. Il faut toujours explorer tout le labyrinthe, écouter toutes les répliques de tout le monde, ne rien négliger. C'est le seul moyen de gagner...",20)])
+                self.entitees.append(self.pnj)
+
+            elif niveau == "tuto4":
 
                 self.vitesse_montres=20
 
                 monstres=[Slime([5,17]),Fatti([8,25]),Runner(self.lab.getMatrice_cases(),5,59,[3,48]),Fatti([5,59])]
-                self.entitees=[]
+                self.entitees=self.clees
 
-            elif niveau == 5:
+                self.pnj = Pnj_passif((5,3),1,(56,255,190),[Replique("Eh bah, je suis content d'avoir survécu.",20),Replique("Ici, les monstres sont différents. Tu devrais aller voir chaque salle puis revenir pour que je t'explique",20),Replique("Tu as vu le premier ? C'est un slime ! Il est presque aveugle, mais il se déplace et attaque très vite. Enfin, il ne te fais pas beaucoup de dégats et il meure vite aussi. Au fait, j'ai analysé ses mouvements et il semblerait qu'il se déplace totalement au hasard ! Ce n'est pas comme ça qu'on trouve quelques chose dans un labyrinthe...",20),Replique("Tu as vu le monstre suivant ? C'est le même qu'au niveau précédent, un fatti. Il est lent et ne bouge pas tant qu'il ne t'a pas repéré, mais évite de le laisser te taper, il fait très mal.",20),Replique("La salle suivante était vide ? Normal, elle était habitée par un runner. Il s'est précipité jusqu'à la sortie pour t'attendre.",20),Replique("Un fatti sur la sortie et un runner juste à côté, voilà un combo qui les rend très dangereux.",20)])
+                self.entitees.append(self.pnj)
+
+            elif niveau == "tuto5":
 
                 self.vitesse_montres=20
 
@@ -258,7 +320,7 @@ class Niveau:
                         monstres.append(monstre)
                 self.entitees=[]
 
-            elif niveau == 6:
+            elif niveau == "tuto6":
 
                 self.vitesse_montres=20
 
@@ -317,7 +379,13 @@ class Niveau:
 
         #objet d'affichage
         self.affichage=Affichage(self.screen,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR,self.lab.largeur,self.lab.hauteur)
-        
+
+        if niveau == "tuto1":
+            self.affichage.affiche = DIALOGUE
+            self.affichage.diag_cour = Replique("Tu va bien ? Quand je    t'ai vu tomber de là-hautj'ai cru que tu allais       mourir...            Bon, je te laisse te         reposer. N'hésite pas à revenir me parler avec  la touche x.",20)
+            
+
+
         #texte de fin
         font = pygame.font.SysFont(None, 72)
         self.textWin = font.render("Vous avez gagné!! \(^o^)/", True, (128, 0, 0))
@@ -369,12 +437,12 @@ class Niveau:
             if self.lab.as_gagner(self.joueur.getPosition()) and self.affichage.affiche == LABYRINTHE:
                 self.screen = pygame.display.set_mode((640, 300))
                 self.ecran_fin_niveau(self.textWin)
-                res = 5000
+                res = 1000
                 run=False
             if self.as_perdu():
                 self.screen = pygame.display.set_mode((640, 300))
                 self.ecran_fin_niveau(self.textLose)
-                res = 5000
+                res = 1000
                 run=False
             pygame.display.update()
         self.fin_niveau()
@@ -451,7 +519,6 @@ class Niveau:
         if keys[pygame.K_a]:
             self.affichage.affiche = MINIMAP
             self.joueur.vitesse = self.joueur.vitesse_autres
-            print(self.joueur.vitesse)
         elif keys[pygame.K_i]:
             self.affichage.affiche = INVENTAIRE
             self.joueur.vitesse = self.joueur.vitesse_autres
@@ -496,8 +563,10 @@ class Niveau:
                 self.joueur.tentative_interaction()
 
         elif self.affichage.affiche == DIALOGUE:
+            self.joueur.vitesse = self.joueur.vitesse_autres
             if keys[pygame.K_RETURN]:
                 self.affichage.pass_replique()
+                self.joueur.vitesse = self.joueur.vitesse_lab
 
 
     def actions_entitees(self):
