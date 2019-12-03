@@ -136,12 +136,12 @@ class Niveau:
             elif niveau == "tuto5":
                 #niveau monstrueux sans labyrinthe pour apprendre à se battre contre des meutes
 
-                self.CASES_X = 15
-                self.CASES_Y = 15
-                self.arrivee = (13,13)
-                self.depart = (1,1)
+                self.CASES_X = 16
+                self.CASES_Y = 16
+                self.arrivee = (13,14)
+                self.depart = (1,2)
                 res = False
-                self.salles=[Patern((0,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[2,13]]),Patern((3,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,13],[2,1]]),Patern((6,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,1],[2,13]]),Patern((9,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,13],[2,1]]),Patern((12,0),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,1]])]
+                self.salles=[Patern((0,0),16,16,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((0,1),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[1,0],[2,13]],[Clee(None,"Bonus_3")]),Patern((3,1),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,13],[2,1]]),Patern((6,1),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,1],[2,13]]),Patern((9,1),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,13],[2,1]]),Patern((12,1),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[2,13],[0,1]],[Clee(None,"Bonus_3")])]
                 proba_murs = 0
 
             elif niveau == "tuto6":
@@ -186,7 +186,7 @@ class Niveau:
             elif niveau == "tuto4":
                 inventaire_joueur = Inventaire([],[],[],[],[],[],[Clee(None,"Bonus_1"),Clee(None,"Bonus_2")])
             elif niveau == "tuto5":
-                inventaire_joueur = Inventaire()
+                inventaire_joueur = Inventaire([],[],[],[],[],[],[Clee(None,"Bonus_1"),Clee(None,"Bonus_2"),Clee(None,"Bonus_3")])
             elif niveau == "tuto6":
                 inventaire_joueur = Inventaire()
                 
@@ -309,11 +309,11 @@ class Niveau:
 
                 self.vitesse_montres=20
 
-                meute1 = [Fatti([1,5],1),Fatti([2,12],1),Fatti([0,12],1),Fatti([1,13],1)]
-                meute2 = [Slime([4,0],2),Slime([3,1],2),Slime([5,1],2),Slime([4,2],2),Slime([3,3],2),Slime([5,3],2),Slime([4,4],2),Slime([3,5],2),Slime([5,5],2),Slime([4,6],2),Slime([3,7],2),Slime([5,7],2),Slime([4,8],2)]
-                meute3 = [Slime([7,8],3),Slime([8,9],3),Slime([6,9],3),Fatti([6,11],3),Fatti([7,11],3),Fatti([8,11],3)]
-                meute4 = [Slime([10,5],4),Slime([10,6],4),Slime([10,7],4),Slime([10,8],4),Slime([10,9],4),Slime([10,10],4),Fatti([10,2],4,10,10,300,30)]
-                meute5 = [Slime([13,8],5),Slime([14,9],5),Slime([12,9],5),Fatti([12,11],5),Fatti([13,11],5),Fatti([14,11],5),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[12,5]),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[13,0]),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[14,5])]
+                meute1 = [Fatti([1,6],1),Fatti([2,13],1),Fatti([0,13],1),Fatti([1,14],1)]
+                meute2 = [Slime([4,1],2),Slime([3,2],2),Slime([5,2],2),Slime([4,1],2),Slime([3,4],2),Slime([5,4],2),Slime([4,5],2),Slime([3,6],2),Slime([5,6],2),Slime([4,7],2),Slime([3,8],2),Slime([5,8],2),Slime([4,9],2)]
+                meute3 = [Slime([7,9],3),Slime([8,10],3),Slime([6,10],3),Fatti([6,12],3),Fatti([7,12],3),Fatti([8,12],3)]
+                meute4 = [Slime([10,6],4),Slime([10,7],4),Slime([10,8],4),Slime([10,9],4),Slime([10,10],4),Slime([10,11],4),Fatti([10,3],4,10,10,300,30)]
+                meute5 = [Slime([13,9],5),Slime([14,10],5),Slime([12,10],5),Fatti([12,12],5),Fatti([13,12],5),Fatti([14,12],5),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[12,6]),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[13,1]),Runner(self.lab.getMatrice_cases(),self.CASES_X-1,self.CASES_Y-1,[14,6])]
                 monstres = meute1
                 for meutenumerote in [meute2,meute3,meute4,meute5]:
                     for monstre in meutenumerote:

@@ -37,7 +37,7 @@ class Session ():
         """
         Fonction qui recommence le niveau courant
         """
-        self.nb_niv_courant = 1
+        self.nb_niv_courant = 5
         self.niv_courant = Niveau("tuto"+str(self.nb_niv_courant),self.difficulte,self.mode_affichage,self.mode_minimap)
     def transfert_niveau(self,joueur):
         """
@@ -82,12 +82,8 @@ class Session ():
         nb_niv_courant=1
         pause = False
         fintuto = False
-        while self.nb_niv_courant<=self.nb_niv_max and not pause and not fintuto:
+        while not (pause or fintuto):
             res,win,joueur = self.niv_courant.run()
-            fichier = open(sauvegarde,'wb')
-            f = pickle.Pickler(fichier)
-            f.clear_memo()
-            f.dump(self.niv_courant.sauve())
             pause = (res==-1)
             if res != -1:
                 pygame.time.wait(res)
@@ -96,6 +92,7 @@ class Session ():
                     try:
                         self.transfert_niveau_tuto(joueur)
                     except:
+                        print("badcheck")
                         self.nb_niv_courant=1
                         fintuto = True
                 else:

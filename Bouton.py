@@ -45,7 +45,7 @@ class Bouton:
 
  
         corpsBouton = pygame.draw.rect(self.fenetre,self.couleur,[self.positionHorizontale, self.positionVerticale,self.longueur,self.largeur])
-        fenetre.blit(self.champs,(self.positionHorizontale,self.positionVerticale))
+        fenetre.blit(self.champs,(self.positionHorizontale+3,self.positionVerticale+3))
 
         
         self.mouse_xy = pygame.mouse.get_pos()
