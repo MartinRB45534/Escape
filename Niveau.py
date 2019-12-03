@@ -359,10 +359,12 @@ class Niveau:
             self.traitement_evenements()
 
             if self.lab.as_gagner(self.joueur.getPosition()):
+                self.screen = pygame.display.set_mode((640, 300))
                 self.ecran_fin_niveau(self.textWin)
                 res = 5000
                 run=False
             if self.as_perdu():
+                self.screen = pygame.display.set_mode((640, 300))
                 self.ecran_fin_niveau(self.textLose)
                 res = 5000
                 run=False

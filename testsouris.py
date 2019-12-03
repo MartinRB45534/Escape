@@ -4,7 +4,7 @@ from Constantes import *
 from Bouton import *
 from Session import *
 
-niveau = 0
+niveau = 1
 difficulté = HARD
 mode_affichage = distance_max
 mode_minimap = passage
@@ -39,7 +39,7 @@ def main():
     
 
     
-    fenetre = pygame.display.set_mode((640, 300))
+    fenetre = pygame.display.set_mode((640, 600))
     #ici on prend les images contenues dans les fichiers pour les convertir vers pygame
 
     imgmenutest = pygame.image.load("imgmenutest.png").convert()
@@ -55,6 +55,7 @@ def main():
     NIVEXIST= False
     partieEnCours = session.recupere
     while loop:
+        fenetre = pygame.display.set_mode((640, 600))
         background = pygame.Surface(fenetre.get_size())
         background.fill(BLACK)
         fenetre.blit(background, (0, 0))
@@ -66,8 +67,8 @@ def main():
         start = Bouton(fenetre,xBoutonStart,yBoutonStart,WHITE,BLACK,"START","test",50,100)
         if partieEnCours :
             reprendre = Bouton(fenetre,xBoutonReprendre,yBoutonReprendre,WHITE,BLACK,"Reprendre","test",50,100)
-        else :
-            reglage = Bouton(fenetre,xBoutonReprendre,yBoutonReprendre,WHITE,BLACK,"CommingSoon","test",50,100)
+#        else :
+#            reglage = Bouton(fenetre,xBoutonReprendre,yBoutonReprendre,WHITE,BLACK,"CommingSoon","test",50,100)
             
         quitter = Bouton(fenetre,xBoutonQuitter,yBoutonQuitter,WHITE,BLACK,"Quitter","test",50,100)
 
