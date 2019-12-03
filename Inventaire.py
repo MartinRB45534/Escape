@@ -4,14 +4,14 @@ from Clee import *
 
 class Inventaire:
 
-    def __init__(self,potions_force = [],potions_vision = [],potions_visibilité_permanente = [],potions_portee = [],potions_portee_permanente = [],potions_soin = []):
+    def __init__(self,potions_force = [],potions_vision = [],potions_visibilité_permanente = [],potions_portee = [],potions_portee_permanente = [],potions_soin = [],clees = []):
         self.items={"Potion_de_force":potions_force,
                     "Potion_de_vision":potions_vision,
                     "Potion_de_visibilité_permanente":potions_visibilité_permanente,
                     "Potion_de_portee":potions_portee,
                     "Potion_de_portee_permanente":potions_portee_permanente,
                     "Potion_de_soin":potions_soin,
-                    "Clee":[]}
+                    "Clee":clees}
         self.entree_dico = ["Potion_de_force","Potion_de_vision","Potion_de_visibilité_permanente","Potion_de_portee","Potion_de_portee_permanente","Potion_de_soin"]
         self.item_courant = 0
         self.longueur = len(self.items)

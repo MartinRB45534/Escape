@@ -20,7 +20,6 @@ class Generateur:
         self.poids=poids
         self.paterns=paterns
     def generation(self,proba=None,nbMurs=None,pourcentage=None):
-        print("checkGen")
         """
         Fonction qui permet de générer une matrice conformément au paramètres
         et au paterns

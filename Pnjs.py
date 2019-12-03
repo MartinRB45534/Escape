@@ -34,6 +34,9 @@ class Pnj_passif(Agissant):
         self.id_next = PARLER
         self.repliques[self.indice_replique].position_replique = 0
         self.next_action = self.repliques[self.indice_replique]
+        if self.indice_replique < len(self.repliques) -1:
+            self.indice_replique += 1
+        
     def prochaine_action(self):
         """
         Fonction qui s'éxécute automatiquement
