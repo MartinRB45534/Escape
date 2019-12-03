@@ -20,6 +20,7 @@ class Generateur:
         self.poids=poids
         self.paterns=paterns
     def generation(self,proba=None,nbMurs=None,pourcentage=None):
+        print("checkGen")
         """
         Fonction qui permet de générer une matrice conformément au paramètres
         et au paterns
@@ -82,6 +83,7 @@ class Generateur:
     
 
         while len(stack)!=0 :
+            
             #on récupère les coords de la ou l'on es cad la dernière case dans le stack
             position_x=stack[len(stack)-1][0]
             position_y=stack[len(stack)-1][1]
@@ -91,6 +93,7 @@ class Generateur:
             voisins = self.voisins_case(position_x,position_y)
             
             murs_generables = self.murs_utilisables(voisins)
+
 
             if len(murs_generables)>0:
                 

@@ -4,10 +4,10 @@ from Constantes import *
 from Bouton import *
 from Session import *
 
-niveau = 1
+niveau = 2
 difficulté = HARD
 mode_affichage = distance_max
-mode_minimap = passage
+mode_minimap = voir_tout
 
 #nombres de niveaux (en excluant 0) que l'on as
 nb_max_niv = 5

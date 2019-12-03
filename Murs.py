@@ -67,7 +67,6 @@ class Porte(Mur):
         for clee in clees:
             if self.bonne_clee(clee):
                 peut_passer=True
-                inventaire.supprime_item(clee)
 
         return peut_passer
     def dessine_toi(self,screen,case_x,case_y,tailleCase,direction,couleur=(0,0,0)):
