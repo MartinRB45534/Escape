@@ -36,15 +36,6 @@ class Potion(Item):
     def getPosition(self):
         return self.position
 
-class Potion_de_portee_permanente(Potion):
-
-    def __init__(self,position,cible):
-        Potion.__init__(self,position,cible)
-        self.effet = Effet_potion_portee_permanente(temps_effet,self.cible)
-
-    def __str__(self):
-        return("Potion_de_portee_permanente")
-
 class Potion_de_portee(Potion):
 
     def __init__(self,position,cible):
@@ -53,6 +44,15 @@ class Potion_de_portee(Potion):
 
     def __str__(self):
         return("Potion_de_portee")
+
+class Potion_de_portee_permanente(Potion):
+
+    def __init__(self,position,cible):
+        Potion.__init__(self,position,cible)
+        self.effet = Effet_potion_portee_permanente(temps_effet,self.cible)
+
+    def __str__(self):
+        return("Potion_de_portee_permanente")
         
 class Potion_de_soin(Potion):
 
@@ -63,6 +63,15 @@ class Potion_de_soin(Potion):
     def __str__(self):
         return("Potion_de_soin")
 
+class Potion_de_soin_permanente(Potion):
+
+    def __init__(self,position,cible):
+        Potion.__init__(self,position,cible)
+        self.effet = Effet_potion_soin_permanente(temps_effet,self.cible)
+
+    def __str__(self):
+        return("Potion_de_soin_permanente")
+
 class Potion_de_force(Potion):
 
     def __init__(self,position,cible):
@@ -71,6 +80,15 @@ class Potion_de_force(Potion):
 
     def __str__(self):
         return("Potion_de_force")
+
+class Potion_de_force_permanente(Potion):
+
+    def __init__(self,position,cible):
+        Potion.__init__(self,position,cible)
+        self.effet = Effet_potion_force_permanente(temps_effet,self.cible)
+
+    def __str__(self):
+        return("Potion_de_force_permanente")
         
 class Potion_de_vision(Potion):
 

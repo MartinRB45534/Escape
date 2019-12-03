@@ -76,10 +76,6 @@ class Patern:
                         matrice_lab[i][j].set_mur(direction,INTOUCHABLE)
                         if self.get_voisin_dir(i,j,direction,matrice_lab)!=None:
                             self.get_voisin_dir(i,j,direction,matrice_lab).set_mur(self.direction_opposee(direction),INTOUCHABLE)
-#        for ligne in matrice_lab:
- #           for case in ligne:
-  #              print (case.toString())
-                
 
     def post_generation(self,matrice_lab):
         """
@@ -190,7 +186,7 @@ class Patern:
         """
         bords=[]
         bords=self.case_bord(x,y,len(matrice_lab),len(matrice_lab[0]))
-        
+
         if len(bords)!=0:
             for i in range(0,len(bords)):
                 mur=self.mur_opposee(x,y,bords[i],matrice_lab)
@@ -233,7 +229,6 @@ class Patern:
             la matrice du labyrinthe
         et renvoie le voisin conformément a la direction
         """
-
 
         largeur_lab=len(matrice_lab)
         hauteur_lab=len(matrice_lab[0])
