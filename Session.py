@@ -37,7 +37,6 @@ class Session ():
         Entrées:
             -le niveau
         """
-        print (self.difficulte)
         self.niv_courant = Niveau(self.nb_niv_courant,self.difficulte,self.mode_affichage,self.mode_minimap,joueur)
     def run(self):
         """

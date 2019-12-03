@@ -13,6 +13,8 @@ class Affichage:
     def __init__(self,screen,mode_affichage,LARGEUR_CASE,LARGEUR_MUR,largeur_lab,hauteur_lab):
         #surface ou l'on dessine
         self.screen=screen
+        self.taille_ecran_X = 0
+        self.taille_ecran_Y = 0
         
         self.mode_affichage=mode_affichage
         self.hauteur = hauteur_lab
@@ -22,9 +24,9 @@ class Affichage:
         self.LARGEUR_CASE=LARGEUR_CASE
         self.TAILLE_CASE=LARGEUR_MUR+LARGEUR_CASE
         #decalage de la matrice du labyrinthe sur l'écran (decalage en px)
-        self.hauteur_minimap = 1 * 3 + 33
-        self.largeur_minimap = 1 * 3 + 33
-        self.decalage_matrice=[33,self.hauteur_minimap]
+        self.hauteur_minimap = 1 * 3 + 13
+        self.largeur_minimap = 1 * 3 + 13
+        self.decalage_matrice=[5,self.hauteur_minimap]
         self.affiche = LABYRINTHE
         self.affiche_precedent = None
         #liste des animations
@@ -46,6 +48,19 @@ class Affichage:
             -rien
         """
         self.decouvre_joueur(joueur,labyrinthe)
+        
+        self.taille_minimap = joueur.minimap.decouvre(self.position_vue,self.mat_exploree,joueur.position)
+        self.hauteur_minimap = self.taille_minimap[1] * 3 + 13
+        self.largeur_minimap = self.taille_minimap[0] * 3 + 13
+        self.decalage_matrice=[5,self.hauteur_minimap]
+
+        taille_min_ecran_X = self.getBottomX(joueur.largeur_vue)
+        taille_min_ecran_Y = self.getBottomY(joueur.hauteur_vue)
+        if self.taille_ecran_X <= taille_min_ecran_X or self.taille_ecran_Y <= taille_min_ecran_Y :
+            self.taille_ecran_X = taille_min_ecran_X + 33
+            self.taille_ecran_Y = taille_min_ecran_Y + 33
+            self.screen = pygame.display.set_mode((self.taille_ecran_X,self.taille_ecran_Y))
+
         self.reset_screen(joueur)
         self.dessine_hud(joueur)
         if self.mode_affichage==distance_max and (self.affiche == LABYRINTHE or self.affiche == DIALOGUE):
@@ -104,16 +119,11 @@ class Affichage:
             #on dessine la barre de vie du joueur
             pygame.draw.rect(self.screen, pygame.Color(255,0,0),(30,10,int(100*(joueur.pv/joueur.pv_max)),10))
         else:
-            self.screen.blit(text_pv,(joueur.largeur_vue*self.TAILLE_CASE-130+self.decalage_matrice[0],self.getBottomY(joueur.hauteur_vue)+10))
+            self.screen.blit(text_pv,(joueur.largeur_vue*self.TAILLE_CASE-130+self.decalage_matrice[0],self.getBottomY(joueur.hauteur_vue)-20))
             #on dessine la barre de vie du joueur
-            pygame.draw.rect(self.screen, pygame.Color(255,0,0),(joueur.largeur_vue*self.TAILLE_CASE-100+self.decalage_matrice[0],self.getBottomY(joueur.hauteur_vue)+10,int(100*(joueur.pv/joueur.pv_max)),10))
+            pygame.draw.rect(self.screen, pygame.Color(255,0,0),(joueur.largeur_vue*self.TAILLE_CASE-100+self.decalage_matrice[0],self.getBottomY(joueur.hauteur_vue)-20,int(100*(joueur.pv/joueur.pv_max)),10))
 
-        #on dessine la minimap
-        self.taille_minimap = joueur.minimap.decouvre(self.position_vue,self.mat_exploree,joueur.position)
-        self.hauteur_minimap = self.taille_minimap[1] * 3 + 11
-        self.largeur_minimap = self.taille_minimap[0] * 3 + 11
-        self.decalage_matrice=[self.largeur_minimap,self.hauteur_minimap]
-        
+        #on dessine la minimap        
         if self.affiche == MINIMAP:
             joueur.affiche_minimap(self.screen)
         elif self.affiche == LABYRINTHE or self.affiche == DIALOGUE:
@@ -269,7 +279,19 @@ class Affichage:
             -un entier
         """
         #print(self.decalage_matrice[1]+(self.LARGEUR_MUR+self.LARGEUR_CASE)*(portee_joueur+2))
-        return self.decalage_matrice[1]+(self.LARGEUR_MUR+self.LARGEUR_CASE)*(hauteur_vue)
+        return self.decalage_matrice[1]+(self.LARGEUR_MUR+self.LARGEUR_CASE)*(hauteur_vue) + 30
+    def getBottomX(self,largeur_vue):
+        """
+        Fonction qui renvoie le x correspondant à la droite de l'écran
+        Entrées:
+            -la hauteur de la vue du joueur
+        Sorties:
+            -un entier
+        """
+        if self.largeur_minimap>(self.LARGEUR_MUR+self.LARGEUR_CASE)*(largeur_vue):
+            return self.largeur_minimap + 13
+        else:
+            return (self.LARGEUR_MUR+self.LARGEUR_CASE)*(largeur_vue)+13
     def getConstantes(self,position_joueur,position_screen,largeur,hauteur):
         """
         Fonction qui génère les constantes nécessaires au fonctionnement de l'affichage

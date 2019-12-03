@@ -38,11 +38,23 @@ class Patern:
 
     def post_gen_entrees(self,matrice_lab):
         """
-        Fonction qui transforme les entrées en portes
+        Fonction qui transforme les entrées en portes ou en murs vides
         """
-        for i in range(len(self.clees)):
-            for bord in self.contraintes_cases(self.entrees[i][0],self.entrees[i][1]):
-                matrice_lab[self.entrees[i][0]][self.entrees[i][1]].murs[bord]=Porte(self.taille_mur,self.clees[i].nom_clee)
+        coordonnee_x = self.position[0]
+        coordonnee_y = self.position[1]
+        
+        for nb in range(len(self.entrees)):
+            i = self.entrees[nb][0]+coordonnee_x
+            j = self.entrees[nb][1]+coordonnee_y
+            for bord in self.contraintes_cases(self.entrees[nb][0],self.entrees[nb][1]):
+                if self.get_voisin_dir(i,j,bord,matrice_lab)==None:
+                    print("On ne peut pas ouvrir d'entrée sur l'extérieur du labyrinthe")
+                elif nb < len(self.clees) :
+                    matrice_lab[i][j].murs[bord]=Porte(self.taille_mur,self.clees[nb].nom_clee)
+                    self.get_voisin_dir(i,j,bord,matrice_lab).murs[self.direction_opposee(bord)]=Porte(self.taille_mur,self.clees[nb].nom_clee)
+                else :
+                    matrice_lab[i][j].set_mur(bord,MUR_VIDE)
+                    self.get_voisin_dir(i,j,bord,matrice_lab).set_mur(self.direction_opposee(bord),MUR_VIDE)
 
     def pre_generation(self,matrice_lab):
         """
@@ -58,13 +70,15 @@ class Patern:
                 y_pat=j-coordonnee_y
                 #on ne doit générer que les cases au bords
                 #plus précisement on doit empêcher le générateur d'y toucher
-                if not(self.case_est_une_entree(x_pat,y_pat)) and self.case_au_bord(x_pat,y_pat):
+                if not self.case_est_une_entree(x_pat,y_pat) and self.case_au_bord(x_pat,y_pat):
                     dirs_intouchables=self.contraintes_cases(x_pat,y_pat)
                     for direction in dirs_intouchables:
                         matrice_lab[i][j].set_mur(direction,INTOUCHABLE)
                         if self.get_voisin_dir(i,j,direction,matrice_lab)!=None:
                             self.get_voisin_dir(i,j,direction,matrice_lab).set_mur(self.direction_opposee(direction),INTOUCHABLE)
-
+#        for ligne in matrice_lab:
+ #           for case in ligne:
+  #              print (case.toString())
                 
 
     def post_generation(self,matrice_lab):
@@ -90,8 +104,7 @@ class Patern:
                 self.post_generation_case(x_pat,y_pat)
                 if self.vide:
                     matrice_lab[i][j]=self.matrice_cases[i-coordonnee_x][j-coordonnee_y]
-        if self.clees != []:
-            self.post_gen_entrees(matrice_lab)
+        self.post_gen_entrees(matrice_lab)
 
     def pre_generation_case(self,x,y):
         """

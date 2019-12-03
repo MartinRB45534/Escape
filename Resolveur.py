@@ -260,7 +260,7 @@ class Resolveur:
                 voisin_y=positions_voisins[i][1]
 
                 #on vérifie si la case n'as pas été explorée et si l'on peut passer
-                if (not(self.cases_visitees[voisin_x][voisin_y]) and not(self.matrice_cases[position_x][position_y].mur_plein(i))) or issubclass(type(self.matrice_cases[position_x][position_y].get_mur_dir(i)),Porte):
+                if not(self.cases_visitees[voisin_x][voisin_y] or (self.matrice_cases[position_x][position_y].mur_plein(i))):
                     directions_utilisables.append(i)
         return directions_utilisables
 
