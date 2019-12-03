@@ -8,6 +8,8 @@ class Monstre(Agissant):
         self.largeur_vue=largeur_vue
         self.hauteur_vue=hauteur_vue
         self.pv=pv
+        self.pv_max=self.pv
+        self.regeneration=0
         self.degats=degats
         self.vitesse=vitesse
         self.radius=radius
@@ -244,7 +246,10 @@ class Slime(Monstre):
             la direction de la prochaine position voulue par le monstre
         """
         directions=self.directions_utilisables(self.position[0],self.position[1],vue,position_lab)
-        return directions[random.randrange(0,len(directions))]
+        if len(directions)>0:
+            return directions[random.randrange(0,len(directions))]
+        else:
+            return None
     
 
 

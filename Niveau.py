@@ -152,7 +152,9 @@ class Niveau:
                 self.arrivee = (39,39)
                 self.depart = (0,0)
                 res = False
-                self.salles=[Patern((0,0),11,11,self.LARGEUR_CASE,self.LARGEUR_MUR,[[10,1]])]
+                self.clees = [Clee((3,38),"Porte_1_niveau_6_tutoriel"),Clee((37,4),"Porte_2_niveau_6_tutoriel"),Clee((25,7),"Porte_3_niveau_6_tutoriel"),Clee((8,22),"Porte_4_niveau_6_tutoriel"),Clee((17,38),"Porte_5_niveau_6_tutoriel"),Clee((38,13),"Porte_6_niveau_6_tutoriel"),Clee((21,22),"Porte_7_niveau_6_tutoriel"),Clee((17,23),"Porte_8_niveau_6_tutoriel")]
+                self.salles=[Patern((0,0),11,11,self.LARGEUR_CASE,self.LARGEUR_MUR,[[10,1]]),Patern((0,30),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[8,0],[9,0],[9,1]]),Patern((8,27),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[3,0],[0,4]],[Clee(None,"Bonus_2"),Clee(None,"Bonus_3")]),Patern((30,0),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,8],[0,9],[1,9]]),Patern((27,8),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[3,4],[4,0]],[Clee(None,"Bonus_1"),Clee(None,"Bonus_3")]),Patern((35,35),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,4],[0,3],[0,2],[0,1],[1,0],[2,0],[3,0],[4,0]],self.clees),Patern((24,5),3,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[1,9]]),Patern((5,19),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[2,0]]),Patern((15,35),10,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[5,0]],[Clee(None,"Porte_7_niveau_6_tutoriel")]),Patern((35,15),5,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,5]],[Clee(None,"Porte_3_niveau_6_tutoriel")])]
+                self.clees = self.clees + [Clee((5,6),"Bonus_4"),Clee((28,37),"Bonus_5"),Clee((38,17),"Bonus_6")]
                 proba_murs = 0.2
 
             self.poids=[6,2,1,2]
@@ -178,17 +180,17 @@ class Niveau:
             #    elif difficulte == INSANE :
             #    elif difficulte == IMPOSSIBLE :
             elif niveau == "tuto1":
-                inventaire_joueur = Inventaire([],[],[],[],[],[],[Clee(None,"Premier pas")])
+                inventaire_joueur = Inventaire([Clee(None,"Premier pas")])
             elif niveau == "tuto2":
                 inventaire_joueur = Inventaire()
             elif niveau == "tuto3":
-                inventaire_joueur = Inventaire()
+                inventaire_joueur = Inventaire([Clee(None,"Bonus_1")])
             elif niveau == "tuto4":
-                inventaire_joueur = Inventaire([],[],[],[],[],[],[Clee(None,"Bonus_1"),Clee(None,"Bonus_2")])
+                inventaire_joueur = Inventaire([Clee(None,"Bonus_1"),Clee(None,"Bonus_2")])
             elif niveau == "tuto5":
-                inventaire_joueur = Inventaire([],[],[],[],[],[],[Clee(None,"Bonus_1"),Clee(None,"Bonus_2"),Clee(None,"Bonus_3")])
+                inventaire_joueur = Inventaire([Clee(None,"Bonus_1"),Clee(None,"Bonus_2"),Clee(None,"Bonus_3")])
             elif niveau == "tuto6":
-                inventaire_joueur = Inventaire()
+                inventaire_joueur = Inventaire([Clee(None,"Bonus_1"),Clee(None,"Bonus_2"),Clee(None,"Bonus_3")])
                 
             self.force_joueur = 10
             self.hp_joueur = 200
@@ -324,12 +326,15 @@ class Niveau:
 
                 self.vitesse_montres=20
 
-                monstres=self.spawn_aleatoire(Fatti,10,10,100,10,self.vitesse_montres,1,((10,10),(30,30)),0.01,5,0,(0,0,100))
+                fattis=self.spawn_aleatoire(Fatti,10,10,200,20,20,1,((10,10),(30,30)),0.05,5,0,(0,0,100))
+                slimes=self.spawn_aleatoire(Slime,5,5,50,3,6,1,((15,15),(25,25)),0.15,5,0,(255,100,100))
 
-                potions_vue=[Potion_de_vision((35,26),self.joueur),Potion_de_vision((27,38),self.joueur),Potion_de_vision((21,19),self.joueur),Potion_de_visibilite_permanente((8,7),self.joueur)]
-                potions_combat=[Potion_de_force((i,j),self.joueur)for j in range(5,45,10) for i in range(5,45,10)] + [Potion_de_portee((i,j),self.joueur)for j in range (10,40,10) for i in range (10,40,10)] + [Potion_de_soin((20,20),self.joueur),Potion_de_portee_permanente((2,2),self.joueur)]
-                potions=potions_vue+potions_combat
-                self.entitees=potions
+                potions_vue=[Potion_de_vision((35,26),self.joueur),Potion_de_vision((27,38),self.joueur),Potion_de_vision((21,19),self.joueur)]
+                potions_combat=[Potion_de_force((i,j),self.joueur)for j in range(5,45,10) for i in range(5,45,10)] + [Potion_de_portee((i,j),self.joueur)for j in range (10,40,10) for i in range (10,40,10)]
+                potions_bonus=[Potion_de_visibilite_permanente((8,23),self.joueur),Potion_de_visibilite_permanente((8,31),self.joueur),Potion_de_portee_permanente((23,37),self.joueur),Potion_de_portee_permanente((7,35),self.joueur),Potion_de_force_permanente((24,13),self.joueur),Potion_de_force_permanente((32,2),self.joueur),Potion_de_soin_permanente((39,0),self.joueur),Potion_de_soin_permanente((37,16),self.joueur),Potion_de_soin((20,20),self.joueur),Potion_de_soin((35,5),self.joueur),Potion_de_soin((5,35),self.joueur)]
+                potions=potions_vue+potions_combat+potions_bonus
+                self.entitees=potions+self.clees
+                monstres = fattis + slimes
 
             self.monstres = monstres
 
@@ -584,6 +589,8 @@ class Niveau:
             if self.horloge_cycle % agissant.getVitesse()==0:
                 if issubclass(type(agissant),Joueur):
                     self.action_joueur()
+
+                agissant.soigne_toi()
                 
                 agissant=self.actualiser_donnee(agissant)
 

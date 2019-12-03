@@ -37,7 +37,7 @@ class Session ():
         """
         Fonction qui recommence le niveau courant
         """
-        self.nb_niv_courant = 5
+        self.nb_niv_courant = 1
         self.niv_courant = Niveau("tuto"+str(self.nb_niv_courant),self.difficulte,self.mode_affichage,self.mode_minimap)
     def transfert_niveau(self,joueur):
         """
@@ -89,11 +89,10 @@ class Session ():
                 pygame.time.wait(res)
                 if win:
                     self.nb_niv_courant+=1
-                    try:
-                        self.transfert_niveau_tuto(joueur)
-                    except:
-                        print("badcheck")
-                        self.nb_niv_courant=1
-                        fintuto = True
+                    #try:
+                    self.transfert_niveau_tuto(joueur)
+                    #except:
+                     #   self.nb_niv_courant=1
+                      #  fintuto = True
                 else:
                     self.reset_niveau_tuto()       

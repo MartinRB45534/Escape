@@ -10,6 +10,7 @@ class Joueur(Agissant):
         self.position = position
         self.inventaire = inventaire
         self.pv=pv
+        self.regeneration=0
         self.pv_max=pv_max
         self.degats=degats
         self.vitesse_lab=vitesse_lab
