@@ -24,6 +24,16 @@ YELLOW = 255, 255, 0
 BLACK = 0,0,0
 WHITE = 255,255,255
 
+emplacement_Bouton_1 = (10,10)
+
+emplacement_Bouton_2 = (10,40)
+
+emplacement_Bouton_3 = (10,70)
+
+emplacement_Bouton_4 = (10,100)
+
+emplacement_Bouton_5 = (10,130)
+
 xBoutonStart = 50
 yBoutonStart = 10
 
@@ -64,27 +74,29 @@ def main():
         #Ajout du fond dans la fenêtre
         fenetre.blit(imgmenutest, (0, 0))
 
-
-        start = Bouton(fenetre,xBoutonStart,yBoutonStart,WHITE,BLACK,"START","test",50,100)
+        tuto = Bouton(fenetre,emplacement_Bouton_1[0],emplacement_Bouton_1[1],WHITE,BLACK,"Tutoriel","test",20,130)
+        start = Bouton(fenetre,emplacement_Bouton_2[0],emplacement_Bouton_2[1],WHITE,BLACK,"Nouvelle partie","test",20,130)
         if partieEnCours :
-            reprendre = Bouton(fenetre,xBoutonReprendre,yBoutonReprendre,WHITE,BLACK,"Reprendre","test",50,100)
-#        else :
-#            reglage = Bouton(fenetre,xBoutonReprendre,yBoutonReprendre,WHITE,BLACK,"CommingSoon","test",50,100)
-            
-        quitter = Bouton(fenetre,xBoutonQuitter,yBoutonQuitter,WHITE,BLACK,"Quitter","test",50,100)
+            reprendre = Bouton(fenetre,emplacement_Bouton_3[0],emplacement_Bouton_3[1],WHITE,BLACK,"Continuer","test",20,130)
+            quitter = Bouton(fenetre,emplacement_Bouton_4[0],emplacement_Bouton_4[1],WHITE,BLACK,"Quitter","test",20,130)
+        else :
+            quitter = Bouton(fenetre,emplacement_Bouton_3[0],emplacement_Bouton_3[1],WHITE,BLACK,"Quitter","test",20,130)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 loop = False
             # si clic, le jeu se lance
             elif event.type == pygame.MOUSEBUTTONDOWN and start.survolBouton:
-                session.reset_niveau_tuto()
-                session.runtuto()
+                session.reset_niveau()
+                session.run()
                 partieEnCours = True
             elif event.type == pygame.MOUSEBUTTONDOWN and quitter.survolBouton:
                 loop = False
+            elif event.type == pygame.MOUSEBUTTONDOWN and tuto.survolBouton:
+                session.reset_niveau_tuto()
+                session.runtuto()
+
             elif partieEnCours:
-                
                 if event.type == pygame.MOUSEBUTTONDOWN and reprendre.survolBouton:
                     session.run()
             
