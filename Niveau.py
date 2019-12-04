@@ -304,7 +304,7 @@ class Niveau:
                 monstres=[Slime([5,17]),Fatti([8,25]),Runner(self.lab.getMatrice_cases(),5,59,[3,48]),Fatti([5,59])]
                 self.entitees=self.clees
 
-                self.pnj = Pnj_passif((5,3),1,(56,255,190),[Replique("Eh bah, je suis content d'avoir survécu.",20),Replique("Ici, les monstres sont différents. Tu devrais aller voir chaque salle puis revenir pour que je t'explique",20),Replique("Tu as vu le premier ? C'est un slime ! Il est presque aveugle, mais il se déplace et attaque très vite. Enfin, il ne te fais pas beaucoup de dégats et il meure vite aussi. Au fait, j'ai analysé ses mouvements et il semblerait qu'il se déplace totalement au hasard ! Ce n'est pas comme ça qu'on trouve quelques chose dans un labyrinthe...",20),Replique("Tu as vu le monstre suivant ? C'est le même qu'au niveau précédent, un fatti. Il est lent et ne bouge pas tant qu'il ne t'a pas repéré, mais évite de le laisser te taper, il fait très mal.",20),Replique("La salle suivante était vide ? Normal, elle était habitée par un runner. Il s'est précipité jusqu'à la sortie pour t'attendre.",20),Replique("Un fatti sur la sortie et un runner juste à côté, voilà un combo qui les rend très dangereux.",20)])
+                self.pnj = Pnj_passif((5,3),1,(56,255,190),[Replique("Eh bah, je suis contente d'avoir survécu.",20),Replique("Ici, les monstres sont différents. Tu devrais aller voir chaque salle puis revenir pour que je t'explique",20),Replique("Tu as vu le premier ? C'est un slime ! Il est presque aveugle, mais il se déplace et attaque très vite. Enfin, il ne te fais pas beaucoup de dégats et il meure vite aussi. Au fait, j'ai analysé ses mouvements et il semblerait qu'il se déplace totalement au hasard ! Ce n'est pas comme ça qu'on trouve quelques chose dans un labyrinthe...",20),Replique("Tu as vu le monstre suivant ? C'est le même qu'au niveau précédent, un fatti. Il est lent et ne bouge pas tant qu'il ne t'a pas repéré, mais évite de le laisser te taper, il fait très mal.",20),Replique("La salle suivante était vide ? Normal, elle était habitée par un runner. Il s'est précipité jusqu'à la sortie pour t'attendre.",20),Replique("Un fatti sur la sortie et un runner juste à côté, voilà un combo qui les rend très dangereux.",20)])
                 self.entitees.append(self.pnj)
 
             elif niveau == "tuto5":
@@ -320,7 +320,9 @@ class Niveau:
                 for meutenumerote in [meute2,meute3,meute4,meute5]:
                     for monstre in meutenumerote:
                         monstres.append(monstre)
-                self.entitees=[]
+
+                self.pnj = Pnj_passif((2,2),1,(56,255,190),[Replique("Ces monstres ont l'air différents, c'est comme s'ils communiquaient ! Tu vois les trois qui n'étaient pas dans ton champ de vision au départ ? Ils ne te voyaient pas, donc ils n'auraient pas du pouvoir venir jusqu'ici. Mais l'autre qui te voyait leur a révélé ta position ! D'ailleurs, as-tu remarqué que tu ne peux ni te battre, ni te déplacer quand tu parles à quelqu'un ?",20)])
+                self.entitees=[self.pnj]
 
             elif niveau == "tuto6":
 
@@ -333,7 +335,10 @@ class Niveau:
                 potions_combat=[Potion_de_force((i,j),self.joueur)for j in range(5,45,10) for i in range(5,45,10)] + [Potion_de_portee((i,j),self.joueur)for j in range (10,40,10) for i in range (10,40,10)]
                 potions_bonus=[Potion_de_visibilite_permanente((8,23),self.joueur),Potion_de_visibilite_permanente((8,31),self.joueur),Potion_de_portee_permanente((23,37),self.joueur),Potion_de_portee_permanente((7,35),self.joueur),Potion_de_force_permanente((24,13),self.joueur),Potion_de_force_permanente((32,2),self.joueur),Potion_de_soin_permanente((39,0),self.joueur),Potion_de_soin_permanente((37,16),self.joueur),Potion_de_soin((20,20),self.joueur),Potion_de_soin((35,5),self.joueur),Potion_de_soin((5,35),self.joueur)]
                 potions=potions_vue+potions_combat+potions_bonus
+
+                self.pnj = Pnj_passif((3,4),250,(255,200,20),[Replique("Malheureux ! Jamais tu ne sortiras d'ici vivant ! Moi-même, qui ait atteint le plus haut niveau qu'un mage puisse atteindre, j'ai été forcé de fuir face au [insérer le nom du boss final ici] qui garde la sortie !",20),Replique("Mes potions me permettent d'annihiler tous les monstres sur mon passage, de voir au travers des murs de ces labyrinthes et même de les briser, mais elle n'ont pas suffit face au [insérer le nom du boss final ici].",20),Replique("Le plus terrible, c'est que j'ai perdu mes potions dans ma fuite, et qu'elles sont dispersées dans les labyrinthes. Si tu me les ramènes, je te donnerai beaucoup d'argent ! Hélas, je n'ai pas assez pour racheter les potions permanentes, ce sont de vrais trésors qui coutent une fortune. Si tu en trouve, tu peux les garder. D'ailleurs, gardes toutes les potions si ça peut te permettre d'éliminer le [insérer le nom du boss final ici] une bonne fois pour toute.",20)])
                 self.entitees=potions+self.clees
+                self.entitees.append(self.pnj)
                 monstres = fattis + slimes
 
             self.monstres = monstres
