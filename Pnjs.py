@@ -6,6 +6,8 @@ class Pnj_passif(Agissant):
     def __init__(self,position, pv, couleur, repliques):
         self.position=position
         self.pv=pv
+        self.pv_max=self.pv
+        self.regeneration=0
         self.couleur=couleur
         self.vitesse = 1
         self.largeur_vue = 0
