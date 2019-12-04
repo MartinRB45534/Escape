@@ -10,7 +10,7 @@ class Session ():
             fichier = open(sauvegarde,'rb')
             f = pickle.Unpickler(fichier)
             parametres = f.load()
-            self.niv_courant = Niveau(parametres[0],parametres[1],parametres[2],parametres[3],parametres[4],parametres[5],parametres[6],parametres[7],parametres[8],parametres[9])
+            self.niv_courant = Niveau(parametres[0],parametres[1],parametres[2],parametres[3],None,parametres[4],parametres[5],parametres[6],parametres[7],parametres[8],parametres[9])
             #paramètres pour la réinitialisation
             self.difficulte=self.niv_courant.difficulte
             self.mode_affichage=self.niv_courant.mode_affichage
@@ -32,26 +32,26 @@ class Session ():
         """
         Fonction qui recommence le niveau courant
         """
-        self.niv_courant = Niveau(self.nb_niv_courant,self.difficulte,self.mode_affichage,self.mode_minimap,True,self.joueur)
+        self.niv_courant = Niveau(self.nb_niv_courant,self.difficulte,self.mode_affichage,self.mode_minimap,None,True,self.joueur)
     def reset_niveau_tuto(self):
         """
         Fonction qui recommence le niveau courant
         """
-        self.niv_courant = Niveau("tuto"+str(self.tuto_courant),self.difficulte,self.mode_affichage,self.mode_minimap,True,self.joueur)
+        self.niv_courant = Niveau("tuto"+str(self.tuto_courant),self.difficulte,self.mode_affichage,self.mode_minimap,None,True,self.joueur)
     def transfert_niveau(self,joueur):
         """
         Fonction qui transfert les informations d'un niveau a un autre
         Entrées:
             -le niveau
         """
-        self.niv_courant = Niveau(self.nb_niv_courant,self.difficulte,self.mode_affichage,self.mode_minimap,True,joueur)
+        self.niv_courant = Niveau(self.nb_niv_courant,self.difficulte,self.mode_affichage,self.mode_minimap,None,True,joueur)
     def transfert_niveau_tuto(self,joueur):
         """
         Fonction qui transfert les informations d'un niveau a un autre
         Entrées:
             -le niveau
         """
-        self.niv_courant = Niveau("tuto"+str(self.tuto_courant),self.difficulte,self.mode_affichage,self.mode_minimap,True,joueur)
+        self.niv_courant = Niveau("tuto"+str(self.tuto_courant),self.difficulte,self.mode_affichage,self.mode_minimap,None,True,joueur)
     def run(self):
         """
         Fonction qui prend en charge la boucle principale de la session
@@ -64,6 +64,10 @@ class Session ():
             f.clear_memo()
             f.dump(self.niv_courant.sauve())
             pause = (res==-1)
+            if res == 0:
+                if self.niv_courant.greater_teleportation:
+                    self.teleporte(joueur,self.niv_courant.destination)
+                    pause = True
             if res != -1:
                 pygame.time.wait(res)
                 if win:
@@ -79,12 +83,15 @@ class Session ():
         """
         Fonction qui parcours les niveaux du tutoriels
         """
-        self.tuto_courant=1
         pause = False
         fintuto = False
         while not (pause or fintuto):
             res,win,joueur = self.niv_courant.run()
             pause = (res==-1)
+            if res == 0:
+                if self.niv_courant.greater_teleportation:
+                    self.teleporte(joueur,self.niv_courant.destination)
+                    pause = True
             if res != -1:
                 pygame.time.wait(res)
                 if win:
@@ -97,3 +104,13 @@ class Session ():
                         fintuto = True
                 else:
                     self.reset_niveau_tuto()
+
+    def teleporte(self,joueur,destination):
+        """
+        Fonction qui téléporte le joueur entre les niveaux
+        """
+        self.niv_courant = Niveau(destination[0],self.difficulte,self.mode_affichage,self.mode_minimap,destination,True,joueur)
+        if isinstance(destination[0],str) and destination[0][:4] == "tuto":
+            self.runtuto()
+        else:
+            self.run()

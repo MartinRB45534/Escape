@@ -93,7 +93,6 @@ class Labyrinthe:
             else:
                 passe=False
 
-        print(self.matrice_cases[newcoord[0]][newcoord[1]])
         if passe and isinstance(self.matrice_cases[newcoord[0]][newcoord[1]],Teleporteur):
             tel = self.matrice_cases[newcoord[0]][newcoord[1]].teleporte()
         return passe, newcoord, tel

@@ -37,6 +37,7 @@ class Affichage:
         self.text_cour = None
         self.police_cour = None
         self.nb_chars_affichables = 0
+        self.ecran_autres = (630,600)
     def dessine_frame(self,joueur,labyrinthe,entitees,evenements):
         """
         Fonction qui dessine une frame
@@ -62,6 +63,12 @@ class Affichage:
             self.taille_ecran_X = taille_min_ecran_X + 33
             self.taille_ecran_Y = taille_min_ecran_Y + 33
             self.screen = pygame.display.set_mode((self.taille_ecran_X,self.taille_ecran_Y))
+
+        if (self.affiche == MINIMAP or self.affiche == INVENTAIRE or self.affiche == ITEM) and (self.affiche_precedent == LABYRINTHE or self.affiche_precedent == DIALOGUE):
+            self.screen = pygame.display.set_mode(self.ecran_autres)
+        elif (self.affiche_precedent == MINIMAP or self.affiche_precedent == INVENTAIRE or self.affiche_precedent == ITEM) and (self.affiche == LABYRINTHE or self.affiche == DIALOGUE):
+            self.screen = pygame.display.set_mode((self.taille_ecran_X,self.taille_ecran_Y))
+            
 
         self.reset_screen(joueur)
         self.dessine_hud(joueur)

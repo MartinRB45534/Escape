@@ -18,8 +18,9 @@ from Pnjs import *
 from Cailloux import *
 
 class Niveau:
-    def __init__(self,niveau,difficulte,mode_affichage,mode_minimap,debut_niveau=False,joueur=None,labyrinthe=None,entitees=None,evenements=None,horloge_cycle=None):
-        
+    def __init__(self,niveau,difficulte,mode_affichage,mode_minimap,destination=None,debut_niveau=False,joueur=None,labyrinthe=None,entitees=None,evenements=None,horloge_cycle=None):
+
+        self.greater_teleportation = False
         self.mode_affichage = mode_affichage
         self.difficulte = difficulte
         self.mode_minimap = mode_minimap
@@ -101,7 +102,7 @@ class Niveau:
                 self.clees = []
                 self.salles = [Patern((0,0),14,3,self.LARGEUR_CASE,self.LARGEUR_MUR,[[13,1]],[Clee(None,"Premier pas")])]
                 proba_murs = 1
-                self.teleporteurs = [[(3,1),Teleporteur(["tuto1",(12,1)],self.LARGEUR_CASE,self.LARGEUR_MUR)]]
+                self.teleporteurs = [[(13,1),Teleporteur(["tuto2",(4,5)],self.LARGEUR_CASE,self.LARGEUR_MUR)]]
                 
             elif niveau == "tuto2":
                 #niveau labyrinthique sans monstres pour apprendre à se déplacer
@@ -171,8 +172,8 @@ class Niveau:
 
             self.poids=[6,2,1,2]
             #génération du labyrinthe
+            print (niveau)
             self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.arrivee,self.depart,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles,self.teleporteurs)
-            print (self.lab.matrice_cases)
             self.lab.generation(proba_murs,None,None)
 
         else:
@@ -181,9 +182,13 @@ class Niveau:
             self.depart = self.lab.depart
 
 
+        if destination != None:
+            minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap,self.depart,self.arrivee)
+            self.joueur = joueur
+            self.joueur.minimap = minimap
+            self.joueur.position = destination[1]
 
-
-        if joueur == None:
+        elif joueur == None:
             print("halfbadcheck")
             if niveau == 0:
                 inventaire_joueur = Inventaire()
@@ -430,6 +435,7 @@ class Niveau:
         font = pygame.font.SysFont(None, 72)
         self.textWin = font.render("Vous avez gagné!! \(^o^)/", True, (128, 0, 0))
         self.textLose = font.render("Vous avez perdu!! ;o;", True, (0, 128, 128))
+        self.textTel = font.render("Vous allez être redirigés, veuillez patienter",True, (0,0,0))
         
         self.position_screen=(0,0)
 
@@ -483,6 +489,11 @@ class Niveau:
                 self.screen = pygame.display.set_mode((640, 300))
                 self.ecran_fin_niveau(self.textLose)
                 res = 1000
+                run=False
+            if self.greater_teleportation:
+                self.screen = pygame.display.set_mode((640, 300))
+                self.ecran_fin_niveau(self.textTel)
+                res = 0
                 run=False
             pygame.display.update()
         self.fin_niveau()
@@ -799,6 +810,9 @@ class Niveau:
                             if tel != None:
                                 if tel[0] == self.niveau:
                                     agissant.setPosition(tel[1])
+                                else:
+                                    self.greater_teleportation = True
+                                    self.destination = tel
                                 
         elif id_action==ATTAQUER:
             self.affichage.ajout_animation(agissant.getPosition(),0,3,agissant.getRadius()*(self.LARGEUR_CASE+self.LARGEUR_MUR))
