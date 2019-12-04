@@ -16,6 +16,7 @@ from Murs import *
 from Minimap import *
 from Pnjs import *
 from Cailloux import *
+from Fontaine_heal import *
 
 class Niveau:
     def __init__(self,niveau,difficulte,mode_affichage,mode_minimap,joueur=None):
@@ -111,6 +112,9 @@ class Niveau:
             self.entitees=[self.pnj]
 
             self.entitees.append(self.clees[0])
+
+            #test pièges
+            self.speciales = [[[0,4],Fontaine_heal(self.LARGEUR_CASE, self.LARGEUR_MUR, 10, (50,50,120))],[[0,5],Piques(self.LARGEUR_CASE, self.LARGEUR_MUR, 10, (0,0,0))]]
             
         elif niveau == 1:
             #niveau labyrinthique sans monstres pour apprendre à se déplacer
@@ -141,6 +145,7 @@ class Niveau:
         
             monstres=[]
             self.entitees=[]
+            self.speciales = None
 
         elif niveau == 2:
             #niveau monstrueux sans labyrinthe pour apprendre à se battre
@@ -171,7 +176,8 @@ class Niveau:
 
             monstres=[Fatti([5,17]),Fatti([8,25]),Fatti([3,48]),Fatti([5,59])]
             self.entitees=[]
-
+            
+            self.speciales = None
         elif niveau == 3:
             #niveau monstrueux sans labyrinthe pour apprendre à se battre
 
@@ -200,6 +206,8 @@ class Niveau:
         
             monstres=[Slime([5,17]),Fatti([8,25]),Fatti([5,59])]
             self.entitees=[]
+
+            self.speciales = None
 
         elif niveau == 4:
             #niveau monstrueux sans labyrinthe pour apprendre à se battre contre des meutes
@@ -238,6 +246,7 @@ class Niveau:
                     monstres.append(monstre)
             self.entitees=[]
 
+            self.speciales = None
         elif niveau == 5:
             #niveau avec labyrinthe et montres pour apprendre l'utilité des potions
 
@@ -265,9 +274,11 @@ class Niveau:
             #poids permettants de manipuler l'aléatoire
             self.poids=[6,9,1,1]
 
+            self.speciales = None
+
         #génération du labyrinthe
         self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.arrivee[0],self.arrivee[1],self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles)
-        self.lab.generation(proba_murs,None,None)
+        self.lab.generation(self.speciales,proba_murs,None,None)
 
         pygame.display.set_caption("niveau " + str(niveau))
         self.screen = pygame.display.set_mode((FENETRE_X,FENETRE_Y),pygame.RESIZABLE)
@@ -293,6 +304,7 @@ class Niveau:
             positions = self.lab.petit_poucet(20)
             for position in positions:
                 self.entitees.append(Caillou(position))
+            #self.lab.add_special([0,4],"Piques")
         elif niveau == 3:
             self.monstres.append(Runner(self.lab.getMatrice_cases(),5,59,[3,48]))
         elif niveau == 4:
@@ -372,6 +384,8 @@ class Niveau:
             #if move_j or move_m:
             self.redraw()
             self.traitement_evenements()
+            #on actualise les pièges du labyrinthe
+            self.lab.refresh_speciales()
 
             if self.lab.as_gagner(self.joueur.getPosition()):
                 self.ecran_fin_niveau(self.textWin)
@@ -510,6 +524,9 @@ class Niveau:
 
                 agissant.prochaine_action()
 
+                #on exécute les éventuels pièges
+                self.lab.execute_special(agissant)
+                
                 agissant.execute_evenements()
                 if redessiner:
                     self.traitement_action(agissant)

@@ -12,13 +12,14 @@ MUR_VIDE=0
 MUR_PLEIN=1
 
 class Generateur:
-    def __init__(self,matrice_cases,largeur,hauteur,poids,paterns,modeGeneration="Profondeur"):
+    def __init__(self,matrice_cases,largeur,hauteur,poids,paterns,cases_speciales,modeGeneration="Profondeur"):
         self.largeur = largeur
         self.hauteur = hauteur
         self.matrice_cases = matrice_cases
         self.modeGeneration = modeGeneration
-        self.poids=poids
-        self.paterns=paterns
+        self.poids = poids
+        self.paterns = paterns
+        self.cases_speciales = cases_speciales
     def generation(self,proba=None,nbMurs=None,pourcentage=None):
         """
         Fonction qui permet de générer une matrice conformément au paramètres
@@ -32,6 +33,7 @@ class Generateur:
         matrice=None
         
         self.pre_gene_paterns()
+        self.pre_gene_speciales()
         if self.modeGeneration=="Profondeur":
             matrice= self.generation_en_profondeur()
             #on casse les murs conformément aux paramètres
@@ -42,6 +44,14 @@ class Generateur:
         self.post_gene_paterns()
         
         return matrice
+    def pre_gene_speciales(self):
+        """
+        Fonction qui pregenere les cases spéciales
+        Format d'une case spéciale: [coordonnées, objet]
+        """
+        if self.cases_speciales != None:
+            for case in self.cases_speciales:
+                self.matrice_cases[case[0][0]][case[0][1]] = case[1]
     def pre_gene_paterns(self):
         """
         Fonction qui pregenere les paterns
@@ -86,7 +96,7 @@ class Generateur:
             position_x=stack[len(stack)-1][0]
             position_y=stack[len(stack)-1][1]
             #print(position_x,position_y)
-            self.matrice_cases[position_x][position_y].set_Couleur((255,255,255))
+            #self.matrice_cases[position_x][position_y].set_Couleur((255,255,255))
             
             voisins = self.voisins_case(position_x,position_y)
             

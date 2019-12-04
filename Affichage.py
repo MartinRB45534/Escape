@@ -145,7 +145,7 @@ class Affichage:
             taille_x, taille_y = police_default.size("- Appuyer pour continuer -")
             #taille alouée aux texte
             size_y = self.decalage_matrice[1]-10-largeur_bordure_externe-largeur_bordure_interne - taille_y
-            size_x = limite_droite-10-largeur_bordure_externe-largeur_bordure_interne - taille_x
+            size_x = limite_droite-10-largeur_bordure_externe-largeur_bordure_interne #- taille_x
             size = [size_x, size_y]
 
             curseur = [self.decalage_matrice[0]+5+largeur_bordure_interne,5+largeur_bordure_interne]

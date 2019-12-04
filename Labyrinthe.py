@@ -4,17 +4,23 @@ from Constantes import *
 from Resolveur import *
 from Lumiere import *
 from Murs import *
+from Case_speciale import *
+from Piques import *
+from Fontaine_heal import *
+from Teleporteurs import *
 
 
 class Labyrinthe:
-    def __init__(self,largeur,hauteur,arrivee_x,arrivee_y,tailleCase=20,tailleMur=1,poids=[1,1,1,1],patterns=None):
+    def __init__(self,largeur,hauteur,arrivee,depart,tailleCase=20,tailleMur=1,poids=[1,1,1,1],patterns=None,teleporteurs=[],couleur_case=(255,255,255),couleur_mur=(0,0,0)):
         self.largeur = largeur
         self.hauteur = hauteur
 
-        self.arrivee_x=arrivee_x
-        self.arrivee_y=arrivee_y
+        self.arrivee = arrivee
+        self.depart = depart
         
-        self.matrice_cases = [[Case(tailleCase,tailleMur) for i in range(hauteur)]for j in range(largeur)]
+        self.matrice_cases = [[Case(tailleCase,tailleMur,couleur_case,couleur_mur) for i in range(hauteur)]for j in range(largeur)]
+        for teleporteur in teleporteurs:
+            self.matrice_cases[teleporteur[0][0]][teleporteur[0][1]] = teleporteur[1]
         
         #paramètre graphiques
         self.tailleCase = tailleCase
@@ -24,23 +30,29 @@ class Labyrinthe:
 
         self.patterns=patterns
 
-    def generation(self,proba=None,nbMurs=None,pourcentage=None):
+        self.coord_speciales = []
+
+    def generation(self,cases_speciales=None,proba=None,nbMurs=None,pourcentage=None):
         """
         Fonction qui génère la matrice du labyrinthe
             Entrées:
+                -Les cases spéciales sous la forme suivante:[coord_case,objet]
                 -L'éventuelle probabilité pour casser des murs
                 -L'éventuel nombre de murs casser
-                L'éventuelle pourcentage de murs a casser
+                -L'éventuelle pourcentage de murs a casser
             Sorties:
                 rien
         """
         #ini du tableau de case (4 murs pleins)
         #génération en profondeur via l'objet generateur
-        gene=Generateur.Generateur(self.matrice_cases,self.largeur,self.hauteur,self.poids,self.patterns)
+        gene=Generateur.Generateur(self.matrice_cases,self.largeur,self.hauteur,self.poids,self.patterns,cases_speciales)
         self.matrice_cases=gene.generation(proba,nbMurs,pourcentage)
         #on change la couleur de la case d'arrivée
         self.matrice_cases[self.arrivee_x][self.arrivee_y].set_Couleur(ARRIVEE)
-
+        #actualisation coords pièges
+        for case in cases_speciales:
+            self.coord_speciales.append(case[0])
+        
     def peut_passer(self,coord,sens,inventaire=None):
         """
         Fonction qui valide et applique ou non le mouvement de l'entitée
@@ -55,6 +67,7 @@ class Labyrinthe:
         newcoord = coord
         case = self.matrice_cases[coord[0]][coord[1]]
         passe = True
+        tel = None
         
         if sens == GAUCHE and not case.mur_plein(GAUCHE):
             newcoord = (coord[0]-1,coord[1])
@@ -88,7 +101,10 @@ class Labyrinthe:
                     passe = False
             else:
                 passe=False
-        return passe, newcoord
+
+        if passe and isinstance(self.matrice_cases[newcoord[0]][newcoord[1]],Teleporteur):
+            tel = self.matrice_cases[newcoord[0]][newcoord[1]].teleporte()
+        return passe, newcoord, tel
 
     def as_gagner(self,coords):
         """
@@ -101,7 +117,7 @@ class Labyrinthe:
 
         win=False
 
-        if coords[0]==self.arrivee_x and coords[1]==self.arrivee_y:
+        if coords == self.arrivee:
             win=True
         
         return win
@@ -259,7 +275,7 @@ class Labyrinthe:
         resol = Resolveur(self.matrice_cases,self.largeur,self.hauteur,arrivee_x,arrivee_y,depart_x,depart_y,mode)
         solution = resol.resolution()
             
-    def petit_poucet(self,interval):
+    def petit_poucet(self,interval,depart=None,arrivee=None):
         """
         Fonction qui positionne des indices à intervals réguliers
         Entrées:
@@ -267,8 +283,12 @@ class Labyrinthe:
         Sorties:
             -les positions des indices
         """
-        resol = Resolveur(self.matrice_cases,self.largeur,self.hauteur,self.arrivee_x,self.arrivee_y,0,0,"Largeur")
-        chemin = resol.resolution(True,False)
+        if depart == None:
+            depart = self.depart
+        if arrivee == None:
+            arrivee = self.arrivee
+        resol = Resolveur(self.matrice_cases,self.largeur,self.hauteur,arrivee[0],arrivee[1],depart[0],depart[1],"Largeur")
+        chemin = resol.resolution(True,False,False,False,True)
 
         i = 0
         positions_indices = []
@@ -279,6 +299,51 @@ class Labyrinthe:
                 positions_indices.append(position)
             i+=1
         return positions_indices
+    
+    def add_special(self, position, type_case, cooldown = 10, couleur = (0,0,0)):
+        """
+        Fonction qui ajoute une case spéciale dans le labyrinthe
+        après la génération
+        Entrées:
+            -la position de la case spéciale
+            -le type de case sous forme de chaines de charactères
+            éventuellement:
+                -le temps de recharge de la case
+                -la couleur de la case
+        Sorties:
+            Rien
+        """
+        if type_case == "Piques":
+            piege = Piques(self.tailleCase, self.tailleMur, cooldown, couleur)
+            piege.murs = self.matrice_cases[position[0]][position[1]].murs
+            self.matrice_cases[position[0]][position[1]] = piege
+            self.coord_speciales.append([position[0],position[1]])
+        elif type_case == "Fontaine_heal":
+            fontaine = Fontaine_heal(self.tailleCase, self.tailleMur, cooldown, couleur)
+            fontaine.murs = self.matrice_cases[position[0]][position[1]].murs
+            self.matrice_cases[position[0]][position[1]] = fontaine
+            self.coord_speciales.append([position[0],position[1]])
+        else:
+            print("Aucun piège de ce type")
+    def execute_special(self,agissant):
+        """
+        Fonction qui exécute la case spéciale si nécessaire
+        Entrées:
+            -l'agissant qui peut éventuellement subir un piège
+        Sorties:
+            -Rien
+        """
+        position = agissant.getPosition()
+        if (issubclass(type(self.matrice_cases[position[0]][position[1]]), Case_speciale)):
+            self.matrice_cases[position[0]][position[1]].execute(agissant)
+    def refresh_speciales(self):
+        """
+        Fonction qui actualise les pièges
+        """
+        for coords in self.coord_speciales:
+            x = coords[0]
+            y = coords[1]
+            self.matrice_cases[x][y].actualiser_cooldown()
     def getMatrice_cases(self):
         new_mat = [[self.matrice_cases[j][i] for i in range(self.hauteur)]for j in range(self.largeur)]
         return new_mat
