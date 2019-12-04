@@ -5,14 +5,17 @@ from Agissant import *
 
 class Joueur(Agissant):
 
-    def __init__(self,minimap,inventaire,pv,pv_max,degats,vitesse,radius,largeur_vue,hauteur_vue,position,portee_vue=11):
+    def __init__(self,minimap,inventaire,pv,pv_max,degats,vitesse_lab,vitesse_autres,radius,largeur_vue,hauteur_vue,position,portee_vue=11):
         self.minimap = minimap
         self.position = position
         self.inventaire = inventaire
         self.pv=pv
+        self.regeneration=0
         self.pv_max=pv_max
         self.degats=degats
-        self.vitesse=vitesse
+        self.vitesse_lab=vitesse_lab
+        self.vitesse_autres=vitesse_autres
+        self.vitesse=self.vitesse_lab
         self.radius=radius
         #prochaine action
         self.next_action=None
@@ -92,3 +95,6 @@ class Joueur(Agissant):
 
     def utilise_inventaire(self):
         self.inventaire.utilise_item()
+
+    def precise_item(self,screen):
+        self.inventaire.precise_item(screen)

@@ -24,7 +24,7 @@ class Resolveur:
         self.matrice_cases = matrice_cases
         self.modeResolution = modeResolution
         self.cases_visitees=[[False for i in range(hauteur)]for i in range(largeur)]
-    def resolution(self,get_chemin=False,afficher_chemin=True,afficher_seed=False,getMatrice=False):
+    def resolution(self,get_chemin=False,afficher_chemin=True,afficher_seed=False,getMatrice=False,passer_portes=False):
         """
         Fonction qui résoud la matrice
         Entrée:
@@ -38,12 +38,12 @@ class Resolveur:
             le chemin par lequel l'algo est arrivé
         """
         if self.modeResolution=="Profondeur":
-            return self.resolution_en_profondeur(get_chemin,afficher_chemin,afficher_seed,getMatrice)
+            return self.resolution_en_profondeur(get_chemin,afficher_chemin,afficher_seed,getMatrice,passer_portes)
         elif self.modeResolution=="Largeur":
-            return self.resolution_en_largeur(get_chemin,afficher_chemin)
+            return self.resolution_en_largeur(get_chemin,afficher_chemin,passer_portes)
         else:
             print("mode de résolution choisi incompatible")
-    def resolution_en_profondeur(self,get_chemin,afficher_chemin,afficher_seed,getMatrice):
+    def resolution_en_profondeur(self,get_chemin,afficher_chemin,afficher_seed,getMatrice,passer_portes):
         """
         Fonction qui résoud la matrice avec la méthode du parcours en profondeur
         Entrées:
@@ -98,7 +98,7 @@ class Resolveur:
             
             voisins,positions_voisins = self.voisins_case(position_x,position_y)
             
-            directions_explorables = self.directions_utilisables(voisins,positions_voisins,position_x,position_y)
+            directions_explorables = self.directions_utilisables(voisins,positions_voisins,position_x,position_y,passer_portes)
 
             if len(directions_explorables)>0:
                 
@@ -134,7 +134,7 @@ class Resolveur:
         
         return solution
 
-    def resolution_en_largeur(self,get_chemin,afficher_chemin):
+    def resolution_en_largeur(self,get_chemin,afficher_chemin,passer_portes):
         """
         Fonction qui résoud la matrice avec la méthode du parcours en largeur
         Entrées:
@@ -156,8 +156,7 @@ class Resolveur:
         queue=[[depart_x,depart_y]]
         chemins=[Chemin([],0,depart_x,depart_y)]
 
-
-        chemin_courant=chemins[0]
+        chemin_courant = chemins[0]
 
         self.cases_visitees[depart_x][depart_y]=True
 
@@ -180,7 +179,7 @@ class Resolveur:
             #trouver les positions explorables
             voisins,positions_voisins=self.voisins_case(position_x,position_y)
 
-            directions_explorables = self.directions_utilisables(voisins,positions_voisins,position_x,position_y)
+            directions_explorables = self.directions_utilisables(voisins,positions_voisins,position_x,position_y,passer_portes)
 
             for direction in directions_explorables:
                 queue.append(positions_voisins[direction])
@@ -189,11 +188,12 @@ class Resolveur:
                 
                 #on marque la case comme visitée
                 self.cases_visitees[positions_voisins[direction][0]][positions_voisins[direction][1]]=True
-            
-            chemin_courant=chemins[0]
-            #obtenir elt suivant
-            position_x=queue[0][0]
-            position_y=queue[0][1]
+
+            if chemins != []:
+                chemin_courant=chemins[0]
+                #obtenir elt suivant
+                position_x=queue[0][0]
+                position_y=queue[0][1]
 
             #print(chemin_courant.getChemin())
 
@@ -243,7 +243,7 @@ class Resolveur:
         elif direction == GAUCHE:
             x-=1
         return x,y
-    def directions_utilisables(self,voisins,positions_voisins,position_x,position_y):
+    def directions_utilisables(self,voisins,positions_voisins,position_x,position_y,passer_portes):
         """
         Fonction qui prend en entrées:
             les voisins de la case
@@ -260,7 +260,7 @@ class Resolveur:
                 voisin_y=positions_voisins[i][1]
 
                 #on vérifie si la case n'as pas été explorée et si l'on peut passer
-                if (not(self.cases_visitees[voisin_x][voisin_y]) and not(self.matrice_cases[position_x][position_y].mur_plein(i))) or issubclass(type(self.matrice_cases[position_x][position_y].get_mur_dir(i)),Porte):
+                if not(self.cases_visitees[voisin_x][voisin_y]) and (not(self.matrice_cases[position_x][position_y].mur_plein(i)) or (passer_portes and isinstance(self.matrice_cases[position_x][position_y].murs[i],Porte))):
                     directions_utilisables.append(i)
         return directions_utilisables
 
@@ -376,7 +376,7 @@ class Resolveur:
             
             voisins,positions_voisins = self.voisins_case(position_x,position_y)
             
-            directions_explorables = self.directions_utilisables(voisins,positions_voisins,position_x,position_y)
+            directions_explorables = self.directions_utilisables(voisins,positions_voisins,position_x,position_y,False)
 
             if len(directions_explorables)>0 and len(stack) < distance_max-1:
                 
@@ -454,7 +454,7 @@ class Resolveur:
             #trouver les positions explorables
             voisins,positions_voisins=self.voisins_case(position_x,position_y)
 
-            directions_explorables = self.directions_utilisables(voisins,positions_voisins,position_x,position_y)
+            directions_explorables = self.directions_utilisables(voisins,positions_voisins,position_x,position_y,False)
 
             for direction in directions_explorables:
                 if chemin_courant.getPoids()<=distance_max:

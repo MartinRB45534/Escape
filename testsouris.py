@@ -9,7 +9,7 @@ difficulté = HARD
 mode_affichage = distance_max
 mode_minimap = passage
 
-#nombres de niveaux (en excluant 0) que l'on as
+#nombres de niveaux (en excluant 0) que l'on a
 nb_max_niv = 5
 
 
@@ -23,6 +23,16 @@ GREEN = 0, 255, 0
 YELLOW = 255, 255, 0
 BLACK = 0,0,0
 WHITE = 255,255,255
+
+emplacement_Bouton_1 = (10,10)
+
+emplacement_Bouton_2 = (10,40)
+
+emplacement_Bouton_3 = (10,70)
+
+emplacement_Bouton_4 = (10,100)
+
+emplacement_Bouton_5 = (10,130)
 
 xBoutonStart = 50
 yBoutonStart = 10
@@ -39,7 +49,7 @@ def main():
     
 
     
-    fenetre = pygame.display.set_mode((640, 300))
+    fenetre = pygame.display.set_mode((640, 600))
     #ici on prend les images contenues dans les fichiers pour les convertir vers pygame
 
     imgmenutest = pygame.image.load("imgmenutest.png").convert()
@@ -53,28 +63,24 @@ def main():
     yellow_color = YELLOW
     black_color = BLACK
     NIVEXIST= False
-    partieEnCours = False
+    partieEnCours = session.recupere
     while loop:
+        if fenetre.get_width() != 640 or fenetre.get_height() != 600:
+            fenetre = pygame.display.set_mode((640, 600))
         background = pygame.Surface(fenetre.get_size())
         background.fill(BLACK)
         fenetre.blit(background, (0, 0))
-        #si le niveau est crée on évite d'en recréer un à chaque passage de boucle
-        if not(NIVEXIST) :
-            niv = Niveau(niveau,difficulté,mode_affichage,mode_minimap)
-            NIVEXIST = True
-
 
         #Ajout du fond dans la fenêtre
         fenetre.blit(imgmenutest, (0, 0))
 
-
-        start = Bouton(fenetre,xBoutonStart,yBoutonStart,WHITE,BLACK,"START","test",50,100)
+        tuto = Bouton(fenetre,emplacement_Bouton_1[0],emplacement_Bouton_1[1],WHITE,BLACK,"Tutoriel","test",20,130)
+        start = Bouton(fenetre,emplacement_Bouton_2[0],emplacement_Bouton_2[1],WHITE,BLACK,"Nouvelle partie","test",20,130)
         if partieEnCours :
-            reprendre = Bouton(fenetre,xBoutonReprendre,yBoutonReprendre,WHITE,BLACK,"Reprendre","test",50,100)
+            reprendre = Bouton(fenetre,emplacement_Bouton_3[0],emplacement_Bouton_3[1],WHITE,BLACK,"Continuer","test",20,130)
+            quitter = Bouton(fenetre,emplacement_Bouton_4[0],emplacement_Bouton_4[1],WHITE,BLACK,"Quitter","test",20,130)
         else :
-            reglage = Bouton(fenetre,xBoutonReprendre,yBoutonReprendre,WHITE,BLACK,"CommingSoon","test",50,100)
-            
-        quitter = Bouton(fenetre,xBoutonQuitter,yBoutonQuitter,WHITE,BLACK,"Quitter","test",50,100)
+            quitter = Bouton(fenetre,emplacement_Bouton_3[0],emplacement_Bouton_3[1],WHITE,BLACK,"Quitter","test",20,130)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -86,8 +92,11 @@ def main():
                 partieEnCours = True
             elif event.type == pygame.MOUSEBUTTONDOWN and quitter.survolBouton:
                 loop = False
+            elif event.type == pygame.MOUSEBUTTONDOWN and tuto.survolBouton:
+                session.reset_niveau_tuto()
+                session.runtuto()
+
             elif partieEnCours:
-                
                 if event.type == pygame.MOUSEBUTTONDOWN and reprendre.survolBouton:
                     session.run()
             

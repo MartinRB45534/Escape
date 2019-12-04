@@ -4,6 +4,8 @@ class Agissant(Entitee):
     def __init__(self,position,pv,degats,vitesse,radius):
         self.position=position
         self.pv=pv
+        self.pv_max=self.pv
+        self.regeneration=0
         self.degats=degats
         self.radius=radius
         self.vitesse=vitesse
@@ -18,6 +20,11 @@ class Agissant(Entitee):
         self.position_vue=None
         #évévnements auquel est soumi l'agissant
         self.evenements=[]
+    def soigne_toi(self):
+        self.pv+=self.regeneration
+        if self.pv > self.pv_max:
+            self.pv = self.pv_max
+        
     def get_action(self):
         """
         Fonction qui renvoie la prochaine action voulue

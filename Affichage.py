@@ -13,6 +13,8 @@ class Affichage:
     def __init__(self,screen,mode_affichage,LARGEUR_CASE,LARGEUR_MUR,largeur_lab,hauteur_lab):
         #surface ou l'on dessine
         self.screen=screen
+        self.taille_ecran_X = 0
+        self.taille_ecran_Y = 0
         
         self.mode_affichage=mode_affichage
         self.hauteur = hauteur_lab
@@ -22,9 +24,10 @@ class Affichage:
         self.LARGEUR_CASE=LARGEUR_CASE
         self.TAILLE_CASE=LARGEUR_MUR+LARGEUR_CASE
         #decalage de la matrice du labyrinthe sur l'écran (decalage en px)
-        self.hauteur_minimap = 1 * 3 + 11
-        self.largeur_minimap = 1 * 3 + 11
-        self.decalage_matrice=[11,self.hauteur_minimap]
+        self.hauteur_minimap = 1 * 3 + 13
+        self.largeur_minimap = 1 * 3 + 13
+        self.hauteur_HUD = 50
+        self.decalage_matrice=[5,self.hauteur_HUD]
         self.affiche = LABYRINTHE
         self.affiche_precedent = None
         #liste des animations
@@ -34,6 +37,7 @@ class Affichage:
         self.text_cour = None
         self.police_cour = None
         self.nb_chars_affichables = 0
+        self.ecran_autres = (630,600)
     def dessine_frame(self,joueur,labyrinthe,entitees,evenements):
         """
         Fonction qui dessine une frame
@@ -46,6 +50,26 @@ class Affichage:
             -rien
         """
         self.decouvre_joueur(joueur,labyrinthe)
+        
+        self.taille_minimap = joueur.minimap.decouvre(self.position_vue,self.mat_exploree,joueur.position)
+        self.hauteur_minimap = self.taille_minimap[1] * 3 + 13
+        self.largeur_minimap = self.taille_minimap[0] * 3 + 13
+        self.hauteur_HUD = max(100,self.hauteur_minimap)
+        self.decalage_matrice=[5,self.hauteur_HUD]
+
+        taille_min_ecran_X = self.getBottomX(joueur.largeur_vue)
+        taille_min_ecran_Y = self.getBottomY(joueur.hauteur_vue)
+        if self.taille_ecran_X <= taille_min_ecran_X or self.taille_ecran_Y <= taille_min_ecran_Y :
+            self.taille_ecran_X = taille_min_ecran_X + 33
+            self.taille_ecran_Y = taille_min_ecran_Y + 33
+            self.screen = pygame.display.set_mode((self.taille_ecran_X,self.taille_ecran_Y))
+
+        if (self.affiche == MINIMAP or self.affiche == INVENTAIRE or self.affiche == ITEM) and (self.affiche_precedent == LABYRINTHE or self.affiche_precedent == DIALOGUE):
+            self.screen = pygame.display.set_mode(self.ecran_autres)
+        elif (self.affiche_precedent == MINIMAP or self.affiche_precedent == INVENTAIRE or self.affiche_precedent == ITEM) and (self.affiche == LABYRINTHE or self.affiche == DIALOGUE):
+            self.screen = pygame.display.set_mode((self.taille_ecran_X,self.taille_ecran_Y))
+            
+
         self.reset_screen(joueur)
         self.dessine_hud(joueur)
         if self.mode_affichage==distance_max and (self.affiche == LABYRINTHE or self.affiche == DIALOGUE):
@@ -72,7 +96,7 @@ class Affichage:
         #on dessine le cadre autour du labyrinthe pour faire joli
         limite_gauche = self.decalage_matrice[0]
         limite_droite = (self.LARGEUR_MUR+self.LARGEUR_CASE) * (largeur_vue + self.decalage_bord_largeur)
-        limite_haute = self.hauteur_minimap
+        limite_haute = self.hauteur_HUD
         limite_basse = (self.LARGEUR_MUR+self.LARGEUR_CASE) * (hauteur_vue + self.decalage_bord_hauteur)
         pygame.draw.rect(self.screen,(150,150,150),(limite_gauche,limite_haute,limite_droite,limite_basse))
         pygame.draw.rect(self.screen,(50,50,50),(limite_gauche,limite_haute,limite_droite,limite_basse),2)
@@ -99,21 +123,25 @@ class Affichage:
         """
         police_pv=pygame.font.SysFont(None, 20)
         text_pv=police_pv.render("PV:",True,(0,0,0))
-        if (self.affiche == MINIMAP) or (self.affiche == INVENTAIRE):
+        vie = int(100*(joueur.pv/joueur.pv_max))
+        if vie>75:
+            couleur_PV = (158,253,56)
+        elif vie>50:
+            couleur_PV = (243,214,23)
+        elif vie>25:
+            couleur_PV = (244,102,27)
+        else :
+            couleur_PV = (237,0,0)
+        if (self.affiche == MINIMAP) or (self.affiche == INVENTAIRE) or (self.affiche == ITEM):
             self.screen.blit(text_pv,(0,10))
-            #on dessine la barre de vie du joueur
-            pygame.draw.rect(self.screen, pygame.Color(255,0,0),(30,10,int(100*(joueur.pv/joueur.pv_max)),10))
+            #on dessine la barre de vie du joueur 
+            pygame.draw.rect(self.screen,couleur_PV,(30,10,vie,10))
         else:
-            self.screen.blit(text_pv,(joueur.largeur_vue*self.TAILLE_CASE-130+self.decalage_matrice[0],self.getBottomY(joueur.hauteur_vue)+10))
+            self.screen.blit(text_pv,(joueur.largeur_vue*self.TAILLE_CASE-130+self.decalage_matrice[0],self.getBottomY(joueur.hauteur_vue)-20))
             #on dessine la barre de vie du joueur
-            pygame.draw.rect(self.screen, pygame.Color(255,0,0),(joueur.largeur_vue*self.TAILLE_CASE-100+self.decalage_matrice[0],self.getBottomY(joueur.hauteur_vue)+10,int(100*(joueur.pv/joueur.pv_max)),10))
+            pygame.draw.rect(self.screen,couleur_PV,(joueur.largeur_vue*self.TAILLE_CASE-100+self.decalage_matrice[0],self.getBottomY(joueur.hauteur_vue)-20,vie,10))
 
-        #on dessine la minimap
-        self.taille_minimap = joueur.minimap.decouvre(self.position_vue,self.mat_exploree,joueur.position)
-        self.hauteur_minimap = self.taille_minimap[1] * 3 + 11
-        self.largeur_minimap = self.taille_minimap[0] * 3 + 11
-        self.decalage_matrice=[self.largeur_minimap,self.hauteur_minimap]
-        
+        #on dessine la minimap        
         if self.affiche == MINIMAP:
             joueur.affiche_minimap(self.screen)
         elif self.affiche == LABYRINTHE or self.affiche == DIALOGUE:
@@ -121,8 +149,10 @@ class Affichage:
             if self.affiche == DIALOGUE:
                 self.dessine_dialogue(joueur.largeur_vue)
         #on dessine l'inventaire
-        if self.affiche == INVENTAIRE:
+        elif self.affiche == INVENTAIRE:
             joueur.affiche_inventaire(self.screen)
+        elif self.affiche == ITEM:
+            joueur.precise_item(self.screen)
     def dessine_dialogue(self, largeur_vue):
         """
         Fonction qui dessine le dialogue courant
@@ -133,11 +163,11 @@ class Affichage:
             largeur_bordure_externe = 2
             largeur_bordure_interne = 5
             
-            limite_droite = (self.LARGEUR_MUR+self.LARGEUR_CASE) * (largeur_vue + self.decalage_bord_largeur)# + self.decalage_matrice[0]
+            limite_droite = (self.LARGEUR_MUR+self.LARGEUR_CASE) * (largeur_vue + self.decalage_bord_largeur)
             #fond blanc
-            pygame.draw.rect(self.screen, pygame.Color(255,255,255),(self.decalage_matrice[0]+5,5,limite_droite-5,self.decalage_matrice[1]-10))
+            pygame.draw.rect(self.screen, pygame.Color(255,255,255),(self.largeur_minimap+5,5,limite_droite-5,self.decalage_matrice[1]-10))
             #bord noir
-            pygame.draw.rect(self.screen, pygame.Color(0,0,0),(self.decalage_matrice[0]+5,5,limite_droite-5,self.decalage_matrice[1]-10),largeur_bordure_externe)
+            pygame.draw.rect(self.screen, pygame.Color(0,0,0),(self.largeur_minimap+5,5,limite_droite-5,self.decalage_matrice[1]-10),largeur_bordure_externe)
 
             #texte de base à écrire en bas
             police_default = pygame.font.SysFont(None, 15)
@@ -145,10 +175,11 @@ class Affichage:
             taille_x, taille_y = police_default.size("- Appuyer pour continuer -")
             #taille alouée aux texte
             size_y = self.decalage_matrice[1]-10-largeur_bordure_externe-largeur_bordure_interne - taille_y
-            size_x = limite_droite-10-largeur_bordure_externe-largeur_bordure_interne #- taille_x
+            size_x = limite_droite-10-largeur_bordure_externe-largeur_bordure_interne
+
             size = [size_x, size_y]
 
-            curseur = [self.decalage_matrice[0]+5+largeur_bordure_interne,5+largeur_bordure_interne]
+            curseur = [self.largeur_minimap+5+largeur_bordure_interne,5+largeur_bordure_interne]
 
             if self.police_cour == None:
                 self.police_cour = pygame.font.SysFont(None, self.diag_cour.taille_ecriture)
@@ -210,6 +241,7 @@ class Affichage:
         Sortie:
             -le nombre de charactères max sur une ligne
         """
+        
         nb_chars=0
         i=last_char
         taille_px=0
@@ -269,7 +301,19 @@ class Affichage:
             -un entier
         """
         #print(self.decalage_matrice[1]+(self.LARGEUR_MUR+self.LARGEUR_CASE)*(portee_joueur+2))
-        return self.decalage_matrice[1]+(self.LARGEUR_MUR+self.LARGEUR_CASE)*(hauteur_vue)
+        return self.decalage_matrice[1]+(self.LARGEUR_MUR+self.LARGEUR_CASE)*(hauteur_vue) + 30
+    def getBottomX(self,largeur_vue):
+        """
+        Fonction qui renvoie le x correspondant à la droite de l'écran
+        Entrées:
+            -la hauteur de la vue du joueur
+        Sorties:
+            -un entier
+        """
+        if self.largeur_minimap>(self.LARGEUR_MUR+self.LARGEUR_CASE)*(largeur_vue):
+            return self.largeur_minimap + 13
+        else:
+            return (self.LARGEUR_MUR+self.LARGEUR_CASE)*(largeur_vue)+13
     def getConstantes(self,position_joueur,position_screen,largeur,hauteur):
         """
         Fonction qui génère les constantes nécessaires au fonctionnement de l'affichage
@@ -390,7 +434,10 @@ class Affichage:
         Fonction qui "réinitialise la surface"
         """
         if self.affiche_precedent == LABYRINTHE and self.affiche == LABYRINTHE:
-            pygame.draw.rect(self.screen,(125,125,125),(0,self.hauteur_minimap,(self.LARGEUR_MUR+self.LARGEUR_CASE) * joueur.largeur_vue + 30,(self.LARGEUR_MUR+self.LARGEUR_CASE) * joueur.hauteur_vue + 30))
+            pygame.draw.rect(self.screen,(125,125,125),(0,self.hauteur_minimap-3,self.screen.get_width(),self.screen.get_height()+3-self.hauteur_minimap))
+            pygame.draw.rect(self.screen,(125,125,125),(self.largeur_minimap-3,0,self.screen.get_width()+3-self.largeur_minimap,self.hauteur_minimap-3))
+            pygame.draw.rect(self.screen,(125,125,125),(0,0,self.largeur_minimap-3,5))
+            pygame.draw.rect(self.screen,(125,125,125),(0,5,5,self.hauteur_minimap-8))
         else:
             self.screen.fill((125,125,125))
 

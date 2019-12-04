@@ -1,6 +1,7 @@
 import Cases
 import random
 from Constantes import *
+from Teleporteurs import *
 
 #constantes
 HAUT=0
@@ -92,6 +93,7 @@ class Generateur:
     
 
         while len(stack)!=0 :
+            
             #on récupère les coords de la ou l'on es cad la dernière case dans le stack
             position_x=stack[len(stack)-1][0]
             position_y=stack[len(stack)-1][1]
@@ -102,7 +104,8 @@ class Generateur:
             
             murs_generables = self.murs_utilisables(voisins)
 
-            if len(murs_generables)>0:
+
+            if len(murs_generables)>0 and not(isinstance(self.matrice_cases[position_x][position_y],Teleporteur)): #On ne fait pas passer un chemin par un téléporteur
                 
                 #randrange est exclusif
                 num_mur=self.randomPoids(murs_generables)

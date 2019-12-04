@@ -11,7 +11,10 @@ class Minimap:
         for x in range(self.largeur):
             for y in range(self.hauteur):
                 self.matrice_cases[x][y] = Case_minimap(self.matrice_cases[x][y].tailleCase,self.matrice_cases[x][y].tailleMur,self.matrice_cases[x][y].murs,mode_minimap,arrivee == (x,y))
-
+        self.zoom = 3
+        self.position_centre = depart
+        self.decalage = 5
+        
     def dessine_toi(self,screen,position_screen):
         """
         Fonction qui dessine la minimap sur l'écran dans le coin
@@ -57,14 +60,57 @@ class Minimap:
         Sorties:
             Rien
         """
-        position_x=5
-        position_y=30
-        for x in range(self.min_visible[0],self.max_visible[0]+1):
-            for y in range(self.min_visible[1],self.max_visible[1]+1):
-                self.matrice_cases[x][y].affiche_toi(screen,position_x,position_y)
-                position_y+=21
-            position_y=30
-            position_x+=21
+        marge_x = 10
+        marge_y = 30
+        
+        decalage = self.decalage * self.zoom
+        cases_dispo = ((screen.get_width()-20)//decalage,(screen.get_height()-40)//decalage)
+        coin_haut_droit = (self.position_centre[0]-cases_dispo[0]//2,self.position_centre[1]-cases_dispo[1]//2)
+        coin_bas_gauche = (self.position_centre[0]+cases_dispo[0]//2,self.position_centre[1]+cases_dispo[1]//2)
+        if coin_haut_droit[0] < self.min_visible[0]:
+            marge_x += (self.min_visible[0] - coin_haut_droit[0]) * decalage
+            coin_haut_droit = (self.min_visible[0],coin_haut_droit[1])
+        if coin_haut_droit[1] < self.min_visible[1]:
+            marge_y += (self.min_visible[1] - coin_haut_droit[1]) * decalage
+            coin_haut_droit = (coin_haut_droit[0],self.min_visible[1])
+        if coin_bas_gauche[0] > self.max_visible[0]+1:
+            coin_bas_gauche = (self.max_visible[0]+1,coin_bas_gauche[1])
+        if coin_bas_gauche[1] > self.max_visible[1]+1:
+            coin_bas_gauche = (coin_bas_gauche[0],self.max_visible[1]+1)
+
+        position_x = marge_x
+        position_y = marge_y
+        
+        for x in range(coin_haut_droit[0],coin_bas_gauche[0]):
+            for y in range(coin_haut_droit[1],coin_bas_gauche[1]):
+                self.matrice_cases[x][y].affiche_toi(screen,position_x,position_y,self.zoom)
+                position_y+=decalage
+            position_y=marge_y
+            position_x+=decalage
+
+    def va_vers_la_gauche(self):
+        if self.position_centre[0] > self.min_visible[0]:
+            self.position_centre = (self.position_centre[0]-1,self.position_centre[1])
+
+    def va_vers_la_droite(self):
+        if self.position_centre[0] < self.max_visible[0]:
+            self.position_centre = (self.position_centre[0]+1,self.position_centre[1])
+
+    def va_vers_le_haut(self):
+        if self.position_centre[1] > self.min_visible[1]:
+            self.position_centre = (self.position_centre[0],self.position_centre[1]-1)
+
+    def va_vers_le_bas(self):
+        if self.position_centre[1] < self.max_visible[1]:
+            self.position_centre = (self.position_centre[0],self.position_centre[1]+1)
+
+    def rezoom(self):
+        self.zoom += 1
+
+    def dezoom(self):
+        if self.zoom > 1:
+            self.zoom -= 1
+
     def decouvre(self,position_vue,mat_exploree,position_joueur):
         """
         Fonction qui dessine le labyrinthe sur l'écran

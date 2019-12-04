@@ -1,8 +1,10 @@
 from Evenement import *
 bonus_force = 5
-bonus_hauteur_vue = 5
-bonus_largeur_vue = 5
+bonus_force_permanent = 3
+bonus_vue = 5
+bonus_vue_permanent = 3
 bonus_pv = 50
+bonus_soin = 1
 bonus_radius_permanent = 1
 bonus_radius = 3
 temps_effet = 200
@@ -37,6 +39,13 @@ class Effet_potion_soin(Effet_potion):
             self.cible.pv += bonus_pv
             if self.cible.pv > self.cible.pv_max:
                 self.cible.pv = self.cible.pv_max
+
+class Effet_potion_soin_permanente(Effet_potion):
+    
+    def action(self):
+        if not self.utilise :
+            self.utilise = True
+            self.cible.regeneration += bonus_soin
             
 class Effet_potion_force(Effet_potion):
     
@@ -47,22 +56,31 @@ class Effet_potion_force(Effet_potion):
         if self.temps_restant == 0:
             self.cible.degats -= bonus_force
             
+class Effet_potion_force_permanente(Effet_potion):
+    
+    def action(self):
+        if not self.utilise :
+            self.utilise = True
+            self.cible.degats += bonus_force_permanent
+            
 class Effet_potion_vision(Effet_potion):
     
     def action(self):
         if not self.utilise :
             self.utilise = True
-            self.cible.largeur_vue += bonus_largeur_vue
-            self.cible.hauteur_vue += bonus_hauteur_vue
+            self.cible.largeur_vue += bonus_vue
+            self.cible.hauteur_vue += bonus_vue
+            self.cible.portee_vue += 2
         if self.temps_restant == 0:
-            self.cible.largeur_vue -= bonus_largeur_vue
-            self.cible.hauteur_vue -= bonus_hauteur_vue
+            self.cible.largeur_vue -= bonus_vue
+            self.cible.hauteur_vue -= bonus_vue
+            self.cible.portee_vue -= 2
 
 class Effet_potion_visibilite_permanente(Effet_potion):
     
     def action(self):
         if not self.utilise :
             self.utilise = True
-            self.cible.largeur_vue += bonus_largeur_vue
-            self.cible.hauteur_vue += bonus_hauteur_vue
+            self.cible.largeur_vue += bonus_vue_permanent
+            self.cible.hauteur_vue += bonus_vue_permanent
             self.cible.portee_vue += 1
