@@ -99,7 +99,7 @@ class Patern:
                             
                 self.post_generation_case(x_pat,y_pat)
                 if self.vide:
-                    matrice_lab[i][j]=self.matrice_cases[i-coordonnee_x][j-coordonnee_y]
+                    matrice_lab[i][j].murs=self.matrice_cases[i-coordonnee_x][j-coordonnee_y].murs
         self.post_gen_entrees(matrice_lab)
 
     def pre_generation_case(self,x,y):

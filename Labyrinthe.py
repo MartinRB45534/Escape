@@ -4,18 +4,20 @@ from Constantes import *
 from Resolveur import *
 from Lumiere import *
 from Murs import *
+from Teleporteurs import *
 
 
 class Labyrinthe:
-    def __init__(self,largeur,hauteur,arrivee,depart,tailleCase=20,tailleMur=1,poids=[1,1,1,1],patterns=None,couleur_case=(255,255,255),couleur_mur=(0,0,0)):
+    def __init__(self,largeur,hauteur,arrivee,depart,tailleCase=20,tailleMur=1,poids=[1,1,1,1],patterns=None,teleporteurs=[],couleur_case=(255,255,255),couleur_mur=(0,0,0)):
         self.largeur = largeur
         self.hauteur = hauteur
 
         self.arrivee = arrivee
         self.depart = depart
         
-        
         self.matrice_cases = [[Case(tailleCase,tailleMur,couleur_case,couleur_mur) for i in range(hauteur)]for j in range(largeur)]
+        for teleporteur in teleporteurs:
+            self.matrice_cases[teleporteur[0][0]][teleporteur[0][1]] = teleporteur[1]
         
         #paramètre graphiques
         self.tailleCase = tailleCase
@@ -56,6 +58,7 @@ class Labyrinthe:
         newcoord = coord
         case = self.matrice_cases[coord[0]][coord[1]]
         passe = True
+        tel = None
         
         if sens == GAUCHE and not case.mur_plein(GAUCHE):
             newcoord = (coord[0]-1,coord[1])
@@ -89,7 +92,11 @@ class Labyrinthe:
                     passe = False
             else:
                 passe=False
-        return passe, newcoord
+
+        print(self.matrice_cases[newcoord[0]][newcoord[1]])
+        if passe and isinstance(self.matrice_cases[newcoord[0]][newcoord[1]],Teleporteur):
+            tel = self.matrice_cases[newcoord[0]][newcoord[1]].teleporte()
+        return passe, newcoord, tel
 
     def as_gagner(self,coords):
         """
