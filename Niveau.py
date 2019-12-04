@@ -16,6 +16,7 @@ from Murs import *
 from Minimap import *
 from Pnjs import *
 from Cailloux import *
+from Fontaine_heal import *
 
 class Niveau:
     def __init__(self,niveau,difficulte,mode_affichage,mode_minimap,destination=None,debut_niveau=False,joueur=None,labyrinthe=None,entitees=None,evenements=None,horloge_cycle=None):
@@ -174,7 +175,7 @@ class Niveau:
             #génération du labyrinthe
             print (niveau)
             self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.arrivee,self.depart,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles,self.teleporteurs)
-            self.lab.generation(proba_murs,None,None)
+            self.lab.generation(None,proba_murs,None,None)
 
         else:
             self.lab = labyrinthe
@@ -415,15 +416,14 @@ class Niveau:
         self.screen = pygame.display.set_mode((FENETRE_X,FENETRE_Y),pygame.RESIZABLE)
         self.screen.fill((0,0,0))
 
-        
-        #objet qui traite les collisions
-        self.collision=Collision()
-
-        self.plus_lent=self.getPlusLent()
-        #variable qui nous sert a exécuter les actions des entitées
-
-        #objet d'affichage
-        self.affichage=Affichage(self.screen,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR,self.lab.largeur,self.lab.hauteur)
+        #entitées
+        minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap,self.depart,self.arrivee)
+        #si le joueur passe d'un niveau a un autre
+        if joueur!=None:
+            #le joueur est heal entre les niveaux
+            self.joueur=Joueur(minimap,joueur.inventaire,joueur.pv_max,joueur.pv_max,joueur.degats,joueur.vitesse,joueur.radius,joueur.largeur_vue,joueur.hauteur_vue,self.depart)
+        else:
+            self.affichage=Affichage(self.screen,self.mode_affichage,self.LARGEUR_CASE,self.LARGEUR_MUR,self.lab.largeur,self.lab.hauteur)
 
         if niveau == "tuto1":
             self.affichage.affiche = DIALOGUE
@@ -479,6 +479,8 @@ class Niveau:
             #if move_j or move_m:
             self.redraw()
             self.traitement_evenements()
+            #on actualise les pièges du labyrinthe
+            self.lab.refresh_speciales()
 
             if self.lab.as_gagner(self.joueur.getPosition()) and self.affichage.affiche == LABYRINTHE:
                 self.screen = pygame.display.set_mode((640, 300))
@@ -648,6 +650,9 @@ class Niveau:
 
                 agissant.prochaine_action()
 
+                #on exécute les éventuels pièges
+                self.lab.execute_special(agissant)
+                
                 agissant.execute_evenements()
                 if redessiner:
                     self.traitement_action(agissant)

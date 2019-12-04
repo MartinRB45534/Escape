@@ -4,6 +4,9 @@ from Constantes import *
 from Resolveur import *
 from Lumiere import *
 from Murs import *
+from Case_speciale import *
+from Piques import *
+from Fontaine_heal import *
 from Teleporteurs import *
 
 
@@ -27,23 +30,29 @@ class Labyrinthe:
 
         self.patterns=patterns
 
-    def generation(self,proba=None,nbMurs=None,pourcentage=None):
+        self.coord_speciales = []
+
+    def generation(self,cases_speciales=None,proba=None,nbMurs=None,pourcentage=None):
         """
         Fonction qui génère la matrice du labyrinthe
             Entrées:
+                -Les cases spéciales sous la forme suivante:[coord_case,objet]
                 -L'éventuelle probabilité pour casser des murs
                 -L'éventuel nombre de murs casser
-                L'éventuelle pourcentage de murs a casser
+                -L'éventuelle pourcentage de murs a casser
             Sorties:
                 rien
         """
         #ini du tableau de case (4 murs pleins)
         #génération en profondeur via l'objet generateur
-        gene=Generateur.Generateur(self.matrice_cases,self.largeur,self.hauteur,self.poids,self.patterns)
+        gene=Generateur.Generateur(self.matrice_cases,self.largeur,self.hauteur,self.poids,self.patterns,cases_speciales)
         self.matrice_cases=gene.generation(proba,nbMurs,pourcentage)
         #on change la couleur de la case d'arrivée
-        self.matrice_cases[self.arrivee[0]][self.arrivee[1]].set_Couleur(ARRIVEE)
-
+        self.matrice_cases[self.arrivee_x][self.arrivee_y].set_Couleur(ARRIVEE)
+        #actualisation coords pièges
+        for case in cases_speciales:
+            self.coord_speciales.append(case[0])
+        
     def peut_passer(self,coord,sens,inventaire=None):
         """
         Fonction qui valide et applique ou non le mouvement de l'entitée
@@ -290,6 +299,51 @@ class Labyrinthe:
                 positions_indices.append(position)
             i+=1
         return positions_indices
+    
+    def add_special(self, position, type_case, cooldown = 10, couleur = (0,0,0)):
+        """
+        Fonction qui ajoute une case spéciale dans le labyrinthe
+        après la génération
+        Entrées:
+            -la position de la case spéciale
+            -le type de case sous forme de chaines de charactères
+            éventuellement:
+                -le temps de recharge de la case
+                -la couleur de la case
+        Sorties:
+            Rien
+        """
+        if type_case == "Piques":
+            piege = Piques(self.tailleCase, self.tailleMur, cooldown, couleur)
+            piege.murs = self.matrice_cases[position[0]][position[1]].murs
+            self.matrice_cases[position[0]][position[1]] = piege
+            self.coord_speciales.append([position[0],position[1]])
+        elif type_case == "Fontaine_heal":
+            fontaine = Fontaine_heal(self.tailleCase, self.tailleMur, cooldown, couleur)
+            fontaine.murs = self.matrice_cases[position[0]][position[1]].murs
+            self.matrice_cases[position[0]][position[1]] = fontaine
+            self.coord_speciales.append([position[0],position[1]])
+        else:
+            print("Aucun piège de ce type")
+    def execute_special(self,agissant):
+        """
+        Fonction qui exécute la case spéciale si nécessaire
+        Entrées:
+            -l'agissant qui peut éventuellement subir un piège
+        Sorties:
+            -Rien
+        """
+        position = agissant.getPosition()
+        if (issubclass(type(self.matrice_cases[position[0]][position[1]]), Case_speciale)):
+            self.matrice_cases[position[0]][position[1]].execute(agissant)
+    def refresh_speciales(self):
+        """
+        Fonction qui actualise les pièges
+        """
+        for coords in self.coord_speciales:
+            x = coords[0]
+            y = coords[1]
+            self.matrice_cases[x][y].actualiser_cooldown()
     def getMatrice_cases(self):
         new_mat = [[self.matrice_cases[j][i] for i in range(self.hauteur)]for j in range(self.largeur)]
         return new_mat
