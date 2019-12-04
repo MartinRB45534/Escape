@@ -75,7 +75,9 @@ MINIMAP=1
 global INVENTAIRE
 INVENTAIRE=2
 global DIALOGUE
-DIALOGUE = 3
+DIALOGUE=3
+global ITEM
+ITEM=4
 
 global sauvegarde
 sauvegarde = "save.p"

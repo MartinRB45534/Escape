@@ -3,10 +3,11 @@ import pygame
 from Constantes import *
 
 class Case:
-    def __init__(self,tailleCase,tailleMur,couleur=(255,255,255)):
+    def __init__(self,tailleCase,tailleMur,couleur=(255,255,255),couleur_mur=(0,0,0)):
         self.tailleCase=tailleCase
         self.tailleMur=tailleMur
         self.couleur=couleur
+        self.couleur_mur=couleur_mur
         #on sélectionne la classe Mur du fichier Murs (qui est un objet)
         self.murs = [Mur(MUR_PLEIN,tailleMur) for i in range(4)]
     def nb_murs_non_vides(self):
@@ -38,7 +39,7 @@ class Case:
         #on dessine les autres murs
         for i in range(0,len(self.murs)):
             if self.murs[i].get_etat()!=MUR_VIDE:
-                self.murs[i].dessine_toi(screen,x,y,self.tailleCase,i)
+                self.murs[i].dessine_toi(screen,x,y,self.tailleCase,i,self.couleur_mur)
                 
     def casser_mur(self,direction):
         """

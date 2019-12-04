@@ -32,7 +32,7 @@ class Inventaire:
         Fonction qui utilise l'item actuellement sélectionné dans l'inventaire
         En sortie : Rien
         """
-        if self.entree_dico[self.item_courant] != "clee":
+        if self.entree_dico[self.item_courant] != "Clee":
             if self.items[self.entree_dico[self.item_courant]] != []:
                 self.items[self.entree_dico[self.item_courant]][0].utiliser()
                 self.items[self.entree_dico[self.item_courant]].pop()
@@ -66,12 +66,48 @@ class Inventaire:
         return self.items[type_item]
     
     def affiche_toi(self,screen):
-        police_item=pygame.font.SysFont(None, 20)
+        police_titre=pygame.font.SysFont(None,25)
+        police_item=pygame.font.SysFont(None,20)
+        police_default = pygame.font.SysFont(None, 15)
+
+        titre = police_titre.render("Inventaire",True,(255,255,255))
+        screen.blit(titre,(30,40))
+
         for i in range (self.longueur):
             texte=police_item.render(self.entree_dico[i] + " : " + str(len(self.items[self.entree_dico[i]])),True,(255,255,255))
             if i == self.item_courant:
-                pygame.draw.rect(screen,(0,0,0),(3,25*(i+1),255,25))
-            screen.blit(texte,(5,25*(i+1)))
+                pygame.draw.rect(screen,(0,0,0),(3,25*(i+3),255,25))
+            screen.blit(texte,(5,25*(i+3)))
+
+        text_ctrl = police_default.render("- Appuyer sur Entrée pour revenir au labyrinthe -",True,(255,255,255))
+        screen.blit(text_ctrl,(30,25*(i+4)))
+        text_ctrl = police_default.render("- Appuyer sur + pour voir la description de l'item courant -",True,(255,255,255))
+        screen.blit(text_ctrl,(30,25*(i+5)))
+        text_ctrl = police_default.render("- Appuyer sur Espace pour utiliser l'item courant -",True,(255,255,255))
+        screen.blit(text_ctrl,(30,25*(i+6)))
+        
+    def precise_item(self,screen):
+        police_titre=pygame.font.SysFont(None,25)
+        police_item=pygame.font.SysFont(None,20)
+        police_default = pygame.font.SysFont(None, 15)
+        
+        titre = police_titre.render(self.entree_dico[self.item_courant],True,(255,255,255))
+        screen.blit(titre,(30,40))
+        
+        try:
+            type_item = eval(self.entree_dico[self.item_courant])
+            infos = type_item.decrit_toi(type_item)
+        except:
+            infos = ["Cet item n'a pas de description !","Est-ce un item mystère ou un oubli des développeurs ?"]
+
+        for i in range (len(infos)):
+            texte=police_item.render(infos[i],True,(255,255,255))
+            screen.blit(texte,(5,25*(i+3)))
+
+        text_ctrl = police_default.render("- Appuyer sur - pour revenir à l'inventaire -",True,(255,255,255))
+        screen.blit(text_ctrl,(30,25*(i+4)))
+
+        
 
     def vers_la_droite(self):
         self.item_courant += 1
