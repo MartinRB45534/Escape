@@ -1,6 +1,7 @@
 import Cases
 import random
 from Constantes import *
+from Teleporteurs import *
 
 #constantes
 HAUT=0
@@ -94,7 +95,7 @@ class Generateur:
             murs_generables = self.murs_utilisables(voisins)
 
 
-            if len(murs_generables)>0:
+            if len(murs_generables)>0 and not(isinstance(self.matrice_cases[position_x][position_y],Teleporteur)): #On ne fait pas passer un chemin par un téléporteur
                 
                 #randrange est exclusif
                 num_mur=self.randomPoids(murs_generables)

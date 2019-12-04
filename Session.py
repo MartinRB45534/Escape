@@ -5,7 +5,7 @@ import pickle
 
 
 class Session ():
-    def __init__(self,niveau,difficulte,mode_affichage,mode_minimap,nb_niv_max,tuto=False):
+    def __init__(self,niveau,difficulte,mode_affichage,mode_minimap,nb_niv_max):
         try:
             fichier = open(sauvegarde,'rb')
             f = pickle.Unpickler(fichier)
@@ -16,7 +16,6 @@ class Session ():
             self.mode_affichage=self.niv_courant.mode_affichage
             self.mode_minimap=self.niv_courant.mode_minimap
             self.recupere = True
-            self.tuto = False
         except IOError:
             self.niv_courant = Niveau(niveau,difficulte,mode_affichage,mode_minimap)
             #paramètres pour la réinitialisation
@@ -24,7 +23,8 @@ class Session ():
             self.mode_affichage=mode_affichage
             self.mode_minimap=mode_minimap
             self.recupere = False
-            self.tuto = tuto
+        self.joueur = None
+        self.tuto_courant = 1
         #paramètres pourle transfert de niveau
         self.nb_niv_courant=niveau
         self.nb_niv_max=nb_niv_max
@@ -32,27 +32,26 @@ class Session ():
         """
         Fonction qui recommence le niveau courant
         """
-        self.niv_courant = Niveau(self.nb_niv_courant,self.difficulte,self.mode_affichage,self.mode_minimap)
+        self.niv_courant = Niveau(self.nb_niv_courant,self.difficulte,self.mode_affichage,self.mode_minimap,True,self.joueur)
     def reset_niveau_tuto(self):
         """
         Fonction qui recommence le niveau courant
         """
-        self.nb_niv_courant = 1
-        self.niv_courant = Niveau("tuto"+str(self.nb_niv_courant),self.difficulte,self.mode_affichage,self.mode_minimap)
+        self.niv_courant = Niveau("tuto"+str(self.tuto_courant),self.difficulte,self.mode_affichage,self.mode_minimap,True,self.joueur)
     def transfert_niveau(self,joueur):
         """
         Fonction qui transfert les informations d'un niveau a un autre
         Entrées:
             -le niveau
         """
-        self.niv_courant = Niveau(self.nb_niv_courant,self.difficulte,self.mode_affichage,self.mode_minimap,joueur)
+        self.niv_courant = Niveau(self.nb_niv_courant,self.difficulte,self.mode_affichage,self.mode_minimap,True,joueur)
     def transfert_niveau_tuto(self,joueur):
         """
         Fonction qui transfert les informations d'un niveau a un autre
         Entrées:
             -le niveau
         """
-        self.niv_courant = Niveau("tuto"+str(self.nb_niv_courant),self.difficulte,self.mode_affichage,self.mode_minimap,joueur)
+        self.niv_courant = Niveau("tuto"+str(self.tuto_courant),self.difficulte,self.mode_affichage,self.mode_minimap,True,joueur)
     def run(self):
         """
         Fonction qui prend en charge la boucle principale de la session
@@ -71,6 +70,7 @@ class Session ():
                     self.nb_niv_courant+=1
                     if self.nb_niv_courant>self.nb_niv_max:
                         self.nb_niv_courant=1
+                    self.joueur = joueur
                     self.transfert_niveau(joueur)
                 else:
                     self.reset_niveau()
@@ -79,7 +79,7 @@ class Session ():
         """
         Fonction qui parcours les niveaux du tutoriels
         """
-        nb_niv_courant=1
+        self.tuto_courant=1
         pause = False
         fintuto = False
         while not (pause or fintuto):
@@ -88,11 +88,12 @@ class Session ():
             if res != -1:
                 pygame.time.wait(res)
                 if win:
-                    self.nb_niv_courant+=1
-                    #try:
-                    self.transfert_niveau_tuto(joueur)
-                    #except:
-                     #   self.nb_niv_courant=1
-                      #  fintuto = True
+                    self.tuto_courant+=1
+                    self.joueur = joueur
+                    try:
+                        self.transfert_niveau_tuto(joueur)
+                    except:
+                        self.nb_niv_courant=1
+                        fintuto = True
                 else:
-                    self.reset_niveau_tuto()       
+                    self.reset_niveau_tuto()

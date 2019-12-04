@@ -1,6 +1,6 @@
 from Murs import *
-import pygame
 from Constantes import *
+import pygame
 
 class Case:
     def __init__(self,tailleCase,tailleMur,couleur=(255,255,255),couleur_mur=(0,0,0)):

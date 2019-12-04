@@ -55,7 +55,7 @@ def main():
     imgmenutest = pygame.image.load("imgmenutest.png").convert()
     
     #session
-    session = Session(niveau,difficulté,mode_affichage,mode_minimap,nb_max_niv,True)
+    session = Session(niveau,difficulté,mode_affichage,mode_minimap,nb_max_niv)
 
     loop = True
     
