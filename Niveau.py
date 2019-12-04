@@ -117,7 +117,7 @@ class Niveau:
                 self.salles=[Patern((0,0),20,20,self.LARGEUR_CASE,self.LARGEUR_MUR,[[15,19],[16,19],[17,19],[18,19],[19,19],[19,18],[19,17],[19,16],[19,15]],[],False),Patern((20,20),20,20,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[3,0],[2,0],[1,0],[0,0],[0,1],[0,2],[0,3],[0,4]],[],False),Patern((0,0),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,3]]),Patern((15,15),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,1],[0,8],[9,1],[9,8]],self.clees)]
                 self.clees.append(Clee((19,1),"Bonus_1"))
                 proba_murs = 0.1
-                self.teleporteurs = []
+                self.teleporteurs = [[(39,39),Teleporteur(["tuto3",(5,0)],self.LARGEUR_CASE,self.LARGEUR_MUR)]]
 
             elif niveau == "tuto3":
                 #niveau monstrueux sans trop de labyrinthe pour apprendre à se battre
@@ -130,7 +130,7 @@ class Niveau:
                 self.clees = [Clee((0,59),"Bonus_2")]
                 self.salles=[Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,9],[1,9]]),Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0]]),Patern((0,0),4,4,self.LARGEUR_CASE,self.LARGEUR_MUR,[[2,3]],[Clee(None,"Bonus_1")])]
                 proba_murs = 0.3
-                self.teleporteurs = []
+                self.teleporteurs = [[(5,59),Teleporteur(["tuto4",(5,0)],self.LARGEUR_CASE,self.LARGEUR_MUR)]]
 
             elif niveau == "tuto4":
                 #niveau monstrueux sans labyrinthe pour apprendre à se battre
@@ -143,7 +143,7 @@ class Niveau:
                 self.clees = [Clee((0,59),"Bonus_3")]
                 self.salles=[Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,9],[1,9]]),Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0]]),Patern((0,56),4,4,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((0,52),4,4,self.LARGEUR_CASE,self.LARGEUR_MUR,[[1,0],[2,3]],[Clee(None,"Bonus_2"),Clee(None,"Bonus_1")])]
                 proba_murs = 0.2
-                self.teleporteurs = []
+                self.teleporteurs = [[(5,59),Teleporteur(["tuto5",(1,2)],self.LARGEUR_CASE,self.LARGEUR_MUR)]]
 
             elif niveau == "tuto5":
                 #niveau monstrueux sans labyrinthe pour apprendre à se battre contre des meutes
@@ -155,7 +155,7 @@ class Niveau:
                 res = False
                 self.salles=[Patern((0,0),16,16,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((0,1),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[1,0],[2,13]],[Clee(None,"Bonus_3")]),Patern((3,1),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,13],[2,1]]),Patern((6,1),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,1],[2,13]]),Patern((9,1),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,13],[2,1]]),Patern((12,1),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[2,13],[0,1]],[Clee(None,"Bonus_3")])]
                 proba_murs = 0
-                self.teleporteurs = []
+                self.teleporteurs = [[(13,14),Teleporteur(["tuto6",(0,0)],self.LARGEUR_CASE,self.LARGEUR_MUR)]]
 
             elif niveau == "tuto6":
                 #niveau avec labyrinthe et montres pour apprendre l'utilité des potions
@@ -401,7 +401,9 @@ class Niveau:
         else:
             self.evenements = evenements
 
-
+        self.missions=[]
+        if niveau == "tuto3":
+            self.missions.append(["self.mission_bidon_tuto3",'print("Bravo !")'])
 
 
         if horloge_cycle == None:
@@ -480,6 +482,7 @@ class Niveau:
             #if move_j or move_m:
             self.redraw()
             self.traitement_evenements()
+            self.check_missions()
 
             if self.lab.as_gagner(self.joueur.getPosition()) and self.affichage.affiche == LABYRINTHE:
                 self.screen = pygame.display.set_mode((640, 300))
@@ -545,7 +548,7 @@ class Niveau:
     
     def traitement_evenements(self):
         """
-        Fonction qui traite les événements
+        Fonction qui traite les événements à déclenchement temporel
         """
         events_tmps=[self.evenements[i] for i in range(0,len(self.evenements))]
         nbSup=0
@@ -554,6 +557,19 @@ class Niveau:
             #print (events_tmps)
             if events_tmps[i].execute():
                 self.evenements.pop(i-nbSup)
+                nbSup+=1
+
+    def check_missions(self):
+        """
+        Fonction qui traite les événements à déclenchement conditionnel
+        """
+        missions_tmps=[self.missions[i] for i in range(0,len(self.missions))]
+        nbSup=0
+        
+        for i in range(0,len(missions_tmps)):
+            if eval(missions_tmps[i][0]):
+                eval(missions_tmps[i][1])
+                self.missions.pop(i-nbSup)
                 nbSup+=1
                 
                  
@@ -893,3 +909,9 @@ class Niveau:
 
     def __str__(self):
         return "Niveau("+str(self.niveau)+","+str(self.difficulte)+","+str(self.mode_affichage)+","+str(self.mode_minimap)+","+str(self.joueur)+")"
+
+    def mission_bidon_tuto3(self):
+        check = False
+        if self.joueur.position == (5,1):
+            check = True
+        return check
