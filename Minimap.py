@@ -8,6 +8,8 @@ class Minimap:
         self.hauteur = len(self.matrice_cases[0])
         self.min_visible = depart
         self.max_visible = depart
+        self.min_visible_precedent = self.min_visible
+        self.max_visible_precedent = self.max_visible
         for x in range(self.largeur):
             for y in range(self.hauteur):
                 self.matrice_cases[x][y] = Case_minimap(self.matrice_cases[x][y].tailleCase,self.matrice_cases[x][y].tailleMur,self.matrice_cases[x][y].murs,mode_minimap,arrivee == (x,y))
@@ -15,7 +17,7 @@ class Minimap:
         self.position_centre = depart
         self.decalage = 5
         
-    def dessine_toi(self,screen,position_screen):
+    def dessine_toi(self,screen,position_screen,position_joueur,portee_vue,dessine=True):
         """
         Fonction qui dessine la minimap sur l'écran dans le coin
         Entrées:
@@ -24,15 +26,36 @@ class Minimap:
         Sorties:
             Rien
         """
-        position_x=position_screen[0]
-        position_y=position_screen[1]
-        for x in range(self.min_visible[0],self.max_visible[0]+1):
-            for y in range(self.min_visible[1],self.max_visible[1]+1):
-                self.matrice_cases[x][y].dessine_toi(screen,position_x,position_y)
-                position_y+=3
+        if TAILLE_FIXE:
+            position_x=position_screen[0]+3
+            position_y=position_screen[1]+3
+            pygame.draw.rect(screen,(0,0,0),(position_x-3,position_y-3,taille_fixe*6+6,taille_fixe*6+6))
+            for x in range(position_joueur[0]-taille_fixe,position_joueur[0]+taille_fixe):
+                if x in range(self.min_visible[0],self.max_visible[0]+1):
+                    for y in range(position_joueur[1]-taille_fixe,position_joueur[1]+taille_fixe):
+                        if y in range(self.min_visible[1],self.max_visible[1]+1):
+                            self.matrice_cases[x][y].dessine_toi(screen,position_x,position_y)
+                            position_y+=3
+                position_y=position_screen[1]
+                position_x+=3
+            self.min_visible_precedent = self.min_visible
+            self.max_visible_precedent = self.max_visible
+            
+        elif self.min_visible_precedent != self.min_visible or self.max_visible_precedent != self.max_visible or dessine:
+            position_x=position_screen[0]
             position_y=position_screen[1]
-            position_x+=3
+            for x in range(self.min_visible[0],self.max_visible[0]+1):
+                for y in range(self.min_visible[1],self.max_visible[1]+1):
+                    self.matrice_cases[x][y].dessine_toi(screen,position_x,position_y)
+                    position_y+=3
+                position_y=position_screen[1]
+                position_x+=3
+            self.min_visible_precedent = self.min_visible
+            self.max_visible_precedent = self.max_visible
 
+        else:
+            self.redessine_toi(screen,position_screen)
+        
     def redessine_toi(self,screen,position_screen):
         """
         Fonction qui dessine la minimap sur l'écran dans le coin
@@ -46,7 +69,7 @@ class Minimap:
         position_y=position_screen[1]
         for x in range(self.min_visible[0],self.max_visible[0]+1):
             for y in range(self.min_visible[1],self.max_visible[1]+1):
-                if self.matrice_cases[x][y].decouvert != -1 or self.matrice_cases[x][y].decouvert < 3:
+                if (self.matrice_cases[x][y].decouvert != -1 and self.matrice_cases[x][y].decouvert < 3):
                     self.matrice_cases[x][y].dessine_toi(screen,position_x,position_y)
                 position_y+=3
             position_y=position_screen[1]
@@ -128,7 +151,7 @@ class Minimap:
         Sorties:
             Rien
         """
-
+        
         for x in range(len(mat_exploree)):
             for y in range(len(mat_exploree[0])):
                 if mat_exploree[x][y]:
@@ -141,4 +164,7 @@ class Minimap:
                         self.max_visible = (self.max_visible[0],x+position_vue[1])
                     elif x+position_vue[1] < self.min_visible[1] and x+position_vue[1] >= 0:
                         self.min_visible = (self.min_visible[0],x+position_vue[1])
-        return (self.max_visible[0]-self.min_visible[0],self.max_visible[1]-self.min_visible[1])
+        if TAILLE_FIXE:
+            return(taille_fixe*2,taille_fixe*2)
+        else:
+            return (self.max_visible[0]-self.min_visible[0],self.max_visible[1]-self.min_visible[1])

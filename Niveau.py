@@ -101,9 +101,9 @@ class Niveau:
                 self.depart = (1,1)
                 res = False
                 self.clees = []
-                self.salles = [Patern((0,0),14,3,self.LARGEUR_CASE,self.LARGEUR_MUR,[[13,1]],[Clee(None,"Premier pas")])]
+                self.salles = [Patern((0,0),14,3,self.LARGEUR_CASE,self.LARGEUR_MUR,[])]
                 proba_murs = 1
-                self.teleporteurs = [[(13,1),Teleporteur(["tuto2",(4,5)],self.LARGEUR_CASE,self.LARGEUR_MUR)]]
+                self.teleporteurs = [[(13,1),Teleporteur(["tuto2",(0,0)],self.LARGEUR_CASE,self.LARGEUR_MUR)]]
                 
             elif niveau == "tuto2":
                 #niveau labyrinthique sans monstres pour apprendre à se déplacer
