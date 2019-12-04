@@ -48,10 +48,11 @@ class Labyrinthe:
         gene=Generateur.Generateur(self.matrice_cases,self.largeur,self.hauteur,self.poids,self.patterns,cases_speciales)
         self.matrice_cases=gene.generation(proba,nbMurs,pourcentage)
         #on change la couleur de la case d'arrivée
-        self.matrice_cases[self.arrivee_x][self.arrivee_y].set_Couleur(ARRIVEE)
+        self.matrice_cases[self.arrivee[0]][self.arrivee[1]].set_Couleur(ARRIVEE)
         #actualisation coords pièges
-        for case in cases_speciales:
-            self.coord_speciales.append(case[0])
+        if cases_speciales != None:
+            for case in cases_speciales:
+                self.coord_speciales.append(case[0])
         
     def peut_passer(self,coord,sens,inventaire=None):
         """
