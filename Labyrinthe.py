@@ -7,7 +7,7 @@ from Murs import *
 
 
 class Labyrinthe:
-    def __init__(self,largeur,hauteur,arrivee,depart,tailleCase=20,tailleMur=1,poids=[1,1,1,1],patterns=None):
+    def __init__(self,largeur,hauteur,arrivee,depart,tailleCase=20,tailleMur=1,poids=[1,1,1,1],patterns=None,couleur_case=(255,255,255),couleur_mur=(0,0,0)):
         self.largeur = largeur
         self.hauteur = hauteur
 
@@ -15,7 +15,7 @@ class Labyrinthe:
         self.depart = depart
         
         
-        self.matrice_cases = [[Case(tailleCase,tailleMur) for i in range(hauteur)]for j in range(largeur)]
+        self.matrice_cases = [[Case(tailleCase,tailleMur,couleur_case,couleur_mur) for i in range(hauteur)]for j in range(largeur)]
         
         #paramètre graphiques
         self.tailleCase = tailleCase

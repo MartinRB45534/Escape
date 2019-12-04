@@ -116,14 +116,23 @@ class Affichage:
         """
         police_pv=pygame.font.SysFont(None, 20)
         text_pv=police_pv.render("PV:",True,(0,0,0))
-        if (self.affiche == MINIMAP) or (self.affiche == INVENTAIRE):
+        vie = int(100*(joueur.pv/joueur.pv_max))
+        if vie>75:
+            couleur_PV = (158,253,56)
+        elif vie>50:
+            couleur_PV = (243,214,23)
+        elif vie>25:
+            couleur_PV = (244,102,27)
+        else :
+            couleur_PV = (237,0,0)
+        if (self.affiche == MINIMAP) or (self.affiche == INVENTAIRE) or (self.affiche == ITEM):
             self.screen.blit(text_pv,(0,10))
-            #on dessine la barre de vie du joueur
-            pygame.draw.rect(self.screen, pygame.Color(255,0,0),(30,10,int(100*(joueur.pv/joueur.pv_max)),10))
+            #on dessine la barre de vie du joueur 
+            pygame.draw.rect(self.screen,couleur_PV,(30,10,vie,10))
         else:
             self.screen.blit(text_pv,(joueur.largeur_vue*self.TAILLE_CASE-130+self.decalage_matrice[0],self.getBottomY(joueur.hauteur_vue)-20))
             #on dessine la barre de vie du joueur
-            pygame.draw.rect(self.screen, pygame.Color(255,0,0),(joueur.largeur_vue*self.TAILLE_CASE-100+self.decalage_matrice[0],self.getBottomY(joueur.hauteur_vue)-20,int(100*(joueur.pv/joueur.pv_max)),10))
+            pygame.draw.rect(self.screen,couleur_PV,(joueur.largeur_vue*self.TAILLE_CASE-100+self.decalage_matrice[0],self.getBottomY(joueur.hauteur_vue)-20,vie,10))
 
         #on dessine la minimap        
         if self.affiche == MINIMAP:
@@ -133,8 +142,10 @@ class Affichage:
             if self.affiche == DIALOGUE:
                 self.dessine_dialogue(joueur.largeur_vue)
         #on dessine l'inventaire
-        if self.affiche == INVENTAIRE:
+        elif self.affiche == INVENTAIRE:
             joueur.affiche_inventaire(self.screen)
+        elif self.affiche == ITEM:
+            joueur.precise_item(self.screen)
     def dessine_dialogue(self, largeur_vue):
         """
         Fonction qui dessine le dialogue courant

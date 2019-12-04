@@ -543,6 +543,12 @@ class Niveau:
                 self.joueur.inventaire_vers_la_gauche()
             elif keys[pygame.K_SPACE]:
                 self.joueur.utilise_inventaire()
+            elif keys[pygame.K_EQUALS]:
+                self.affichage.affiche = ITEM
+
+        if self.affichage.affiche == ITEM:
+            if keys[pygame.K_MINUS]:
+                self.affichage.affiche = INVENTAIRE
 
         elif self.affichage.affiche == MINIMAP:
             if keys[pygame.K_UP]:

@@ -95,3 +95,6 @@ class Joueur(Agissant):
 
     def utilise_inventaire(self):
         self.inventaire.utilise_item()
+
+    def precise_item(self,screen):
+        self.inventaire.precise_item(screen)
