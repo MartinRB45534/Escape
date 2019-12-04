@@ -145,7 +145,7 @@ class Affichage:
         if self.affiche == MINIMAP:
             joueur.affiche_minimap(self.screen)
         elif self.affiche == LABYRINTHE or self.affiche == DIALOGUE:
-            joueur.redessine_minimap(self.screen,[5,5])
+            joueur.dessine_minimap(self.screen,[5,5],(self.affiche==self.affiche_precedent))
             if self.affiche == DIALOGUE:
                 self.dessine_dialogue(joueur.largeur_vue)
         #on dessine l'inventaire
