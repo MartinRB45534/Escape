@@ -115,7 +115,7 @@ class Niveau:
                 res = False
                 self.clees = [Clee((1,1),"Nord"),Clee((3,18),"Ouest"),Clee((5,35),"Est"),Clee((35,18),"Sud")]
                 self.salles=[Patern((0,0),20,20,self.LARGEUR_CASE,self.LARGEUR_MUR,[[15,19],[16,19],[17,19],[18,19],[19,19],[19,18],[19,17],[19,16],[19,15]],[],False),Patern((20,20),20,20,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[3,0],[2,0],[1,0],[0,0],[0,1],[0,2],[0,3],[0,4]],[],False),Patern((0,0),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,3]]),Patern((15,15),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,1],[0,8],[9,1],[9,8]],self.clees)]
-                self.clees.append(Clee((19,1),"Bonus_1"))
+                self.clee_bonus_1 = Clee((19,1),"Bonus_1")
                 proba_murs = 0.1
                 self.teleporteurs = [[(39,39),Teleporteur(["tuto3",(5,0)],self.LARGEUR_CASE,self.LARGEUR_MUR)]]
 
@@ -173,7 +173,6 @@ class Niveau:
 
             self.poids=[6,2,1,2]
             #génération du labyrinthe
-            print (niveau)
             self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.arrivee,self.depart,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles,self.teleporteurs)
             self.lab.generation(None,proba_murs,None,None)
 
@@ -190,7 +189,6 @@ class Niveau:
             self.joueur.position = destination[1]
 
         elif joueur == None:
-            print("halfbadcheck")
             if niveau == 0:
                 inventaire_joueur = Inventaire()
             #    if difficulte == BEGINNER :
@@ -277,7 +275,7 @@ class Niveau:
                 monstres=[]
                 self.entitees=self.clees
 
-                self.pnj = Pnj_passif((2,3),1000,(190,255,56),[Replique("J'ai peur j'ai peur j'ai peur !J'ai peeeeuuurrr ! ! !",20),Replique("Cet endroit est horrible ! Jevoudrais remonter à la surface, mais avec ce labyrinthe je risque de me perdre, ce serait terrible !",20),Replique("Quelqu'un est passé avant, il a dit que la sortie était en bas à droite et qu'il avait laissé des cailloux sur le chemin, mais je n'ose pas y aller...",20),Replique("Je crois aussi qu'il a parlé de clées, je crois que tu dois les trouver pour ouvrir des portes",20),Replique("L'une d'elle est sur la case de coordonnées (19,1), mais je ne sais pas ce que ça veut dire",20)])
+                self.pnj = Pnj_passif((2,3),1000,(190,255,56),[Replique("J'ai peur j'ai peur j'ai peur !J'ai peeeeuuurrr ! ! !",20),Replique("Cet endroit est horrible ! Jevoudrais remonter à la surface, mais avec ce labyrinthe je risque de me perdre, ce serait terrible !",20),Replique("Quelqu'un est passé avant, il a dit que la sortie était en bas à droite et qu'il avait laissé des cailloux sur le chemin, mais je n'ose pas y aller...",20),Replique("Je crois aussi qu'il a parlé de clées, je crois que tu dois les trouver pour ouvrir des portes",20),Replique("L'une d'elle est sur la case de coordonnées (19,1), mais je ne sais pas ce que ça veut dire",20),Replique("Oooh! Tu fais une carte au fur et à mesure de tes déplacements ? Appuie sur A pour la consulter.",20),Replique("Tu veux bien cartographier tout le niveau et revenir me voir ? Avec ça, je serais plus rassuré.",20)])
                 self.entitees.append(self.pnj)
                 
                 self.cailloux_1 = []
@@ -404,12 +402,22 @@ class Niveau:
 
         self.missions=[]
         if niveau == "tuto2":
-            self.mission_1 = ["self.mission_clee('Nord')","self.petits_cailloux(5,self.joueur.position,(14,16)),self.ajout(self.missions,[self.mission_2])"]
+            self.mission_1 = ["self.pnj.indice_replique == 3","self.petits_cailloux(5,self.joueur.position,(14,16)),self.ajout(self.missions,[self.mission_2])"]
             self.mission_2 = ["self.lab.matrice_cases[14][16].murs[DROITE].etat == MUR_VIDE","self.petits_cailloux(5,self.joueur.position,(3,18)),self.ajout(self.missions,[self.mission_3])"]
             self.mission_3 = ["self.mission_clee('Ouest')","self.petits_cailloux(5,self.joueur.position,(5,35)),self.ajout(self.missions,[self.mission_4])"]
             self.mission_4 = ["self.mission_clee('Est')","self.petits_cailloux(5,self.joueur.position,(35,18)),self.ajout(self.missions,[self.mission_5])"]
             self.mission_5 = ["self.mission_clee('Sud')","self.petits_cailloux(5,self.joueur.position,self.arrivee)"]
             self.missions.append(self.mission_1)
+            
+            self.mission_6 = ["self.pnj.indice_replique == 5","self.ajout(self.entitees,[self.clee_bonus_1])"]
+            self.missions.append(self.mission_6)
+
+            self.mission_7 = ["self.pnj.indice_replique == 6","self.ajout(self.missions,[self.mission_8])"]
+            self.mission_8 = ["self.mission_minimap()","self.ajout(self.missions,[self.mission_9]),self.ajout(self.pnj.repliques,self.repliques_mission_8)"]
+            self.repliques_mission_8 = [Replique("Oh, merci ! Je vais peut-être trouver le courage de traverser ce labyrinthe maintenant",20),Replique("Tu devrais aller à la sortie. C'est une case bleue, elle doit apparaître sur ta carte maintenant que tu l'a vue",20)]
+            self.mission_9 = ["self.pnj.indice_replique == 8","self.joueur.augmente_pv(100)"]
+            self.missions.append(self.mission_7)
+            
 
 
         if horloge_cycle == None:
@@ -968,3 +976,9 @@ class Niveau:
     def ajout(self,recipient,ajouts):
         for ajout in ajouts:
             recipient.append(ajout)
+
+    def affectation(self,receveur,donneur):
+        receveur = donneur
+
+    def incremente(self,somme,ajout):
+        somme += ajout
