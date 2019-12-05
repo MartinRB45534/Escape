@@ -25,6 +25,7 @@ class Monstre(Agissant):
         #id de la meute a laquelle appartient le monstre
         self.id_meute=id_meute
         self.evenements=[]
+        self.drops=[]
         
     def en_vue(self,pos_cible):
         """

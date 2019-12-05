@@ -20,6 +20,7 @@ class Agissant(Entitee):
         self.position_vue=None
         #évévnements auquel est soumi l'agissant
         self.evenements=[]
+        self.drops=[]
     def soigne_toi(self):
         self.pv+=self.regeneration
         if self.pv > self.pv_max:
@@ -82,3 +83,14 @@ class Agissant(Entitee):
         return self.radius
     def getVitesse(self):
         return self.vitesse
+
+    def soigne(self,amount):
+        self.pv+=amount
+        if self.pv>self.pv_max:
+            self.pv=self.pv_max
+
+    def augmente_pv(self,amount):
+        self.pv_max+=amount
+
+    def augmente_regen(self,amount):
+        self.regeneration+=amount
