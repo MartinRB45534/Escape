@@ -17,6 +17,7 @@ from Minimap import *
 from Pnjs import *
 from Cailloux import *
 from Fontaine_heal import *
+from Projectiles import *
 
 class Niveau:
     def __init__(self,niveau,difficulte,mode_affichage,mode_minimap,destination=None,debut_niveau=False,joueur=None,labyrinthe=None,entitees=None,evenements=None,horloge_cycle=None):

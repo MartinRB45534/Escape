@@ -122,7 +122,7 @@ class Affichage:
             -le joueur
         """
         police_pv=pygame.font.SysFont(None, 20)
-        text_pv=police_pv.render("PV:",True,(0,0,0))
+        text_pv=police_pv.render("PV :",True,(0,0,0))
         vie = int(100*(joueur.pv/joueur.pv_max))
         if vie>75:
             couleur_PV = (158,253,56)
@@ -132,14 +132,35 @@ class Affichage:
             couleur_PV = (244,102,27)
         else :
             couleur_PV = (237,0,0)
+
+        police_pm=police_pv
+        text_pm=police_pm.render("PM :",True,(0,0,0))
+        mana = int(100*(abs(joueur.mana)/joueur.mana_max))
+        if mana<0:
+            couleur_PM = (254,27,0)
+        elif mana>75:
+            couleur_PM = (108,2,119)
+        elif mana>50:
+            couleur_PM = (223,115,255)
+        elif mana>25:
+            couleur_PM = (176,242,182)
+        else :
+            couleur_PM = (1,215,88)
+        
         if (self.affiche == MINIMAP) or (self.affiche == INVENTAIRE) or (self.affiche == ITEM):
             self.screen.blit(text_pv,(0,10))
             #on dessine la barre de vie du joueur 
             pygame.draw.rect(self.screen,couleur_PV,(30,10,vie,10))
+            self.screen.blit(text_pm,(0,40))
+            #on dessine la barre de mana du joueur 
+            pygame.draw.rect(self.screen,couleur_PM,(30,40,mana,10))
         else:
             self.screen.blit(text_pv,(joueur.largeur_vue*self.TAILLE_CASE-130+self.decalage_matrice[0],self.getBottomY(joueur.hauteur_vue)-20))
             #on dessine la barre de vie du joueur
             pygame.draw.rect(self.screen,couleur_PV,(joueur.largeur_vue*self.TAILLE_CASE-100+self.decalage_matrice[0],self.getBottomY(joueur.hauteur_vue)-20,vie,10))
+            self.screen.blit(text_pm,(joueur.largeur_vue*self.TAILLE_CASE-130+self.decalage_matrice[0],self.getBottomY(joueur.hauteur_vue)+10))
+            #on dessine la barre de mana du joueur
+            pygame.draw.rect(self.screen,couleur_PM,(joueur.largeur_vue*self.TAILLE_CASE-100+self.decalage_matrice[0],self.getBottomY(joueur.hauteur_vue)+10,mana,10))
 
         #on dessine la minimap        
         if self.affiche == MINIMAP:

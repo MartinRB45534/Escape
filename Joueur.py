@@ -77,7 +77,7 @@ class Joueur(Agissant):
         coordonnées = self.position
 
     def regen_mana(self):
-        self.mana = min(self.mana+self.regeneration_mana,self.max_mana)        
+        self.mana = min(self.mana+self.regeneration_mana,self.mana_max)        
     
     def dessine_toi(self,screen,decalage,LARGEUR_CASE,LARGEUR_MUR,position_screen):
         pygame.draw.rect(screen, pygame.Color(0,255,0),((decalage[0])*(LARGEUR_CASE+LARGEUR_MUR)+LARGEUR_MUR+position_screen[0],(decalage[1])*(LARGEUR_CASE+LARGEUR_MUR)+LARGEUR_MUR+position_screen[1],LARGEUR_CASE-2*LARGEUR_MUR,LARGEUR_CASE-2*LARGEUR_MUR))

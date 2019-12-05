@@ -6,6 +6,7 @@ from Joueur import *
 from Monstres import *
 from Pnjs import *
 from Cailloux import *
+from Projectiles import *
 
 class Collision:
     def __init__(self):

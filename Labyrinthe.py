@@ -8,6 +8,7 @@ from Case_speciale import *
 from Piques import *
 from Fontaine_heal import *
 from Teleporteurs import *
+from Projectiles import *
 
 
 class Labyrinthe:
@@ -65,7 +66,7 @@ class Labyrinthe:
             -un booléen qui indique si l'entitée est passé ou pas
             -les nouvelles coordonnées de l'entitée
         """
-        coord = intrus.getPosition
+        coord = intrus.getPosition()
         newcoord = coord
         case = self.matrice_cases[coord[0]][coord[1]]
         passe = True
