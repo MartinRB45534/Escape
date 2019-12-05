@@ -697,6 +697,14 @@ class Niveau:
         """
         redessiner=False
 
+        projectiles = self.getProjectiles()
+
+        for projectile in projectiles:
+            if self.horloge_cycle % projectile.getVitesse()==0:
+                redessiner=True
+
+                self.traitement_mouvement(projectile)
+
         agissants=self.getAgissants()
         
         self.actualiser_vues_agissants(agissants)
@@ -718,6 +726,8 @@ class Niveau:
                 else:
                     redessiner=self.traitement_action(agissant)
 
+        
+
         self.delete_entitees()
         
         return redessiner
@@ -732,6 +742,17 @@ class Niveau:
                 agissants.append(entitee)
 
         return agissants
+    def getProjectiles(self):
+        """
+        Fonction qui renvoie un tableau contenant les projectiles
+        """
+        projectiles=[]
+
+        for entitee in self.entitees:
+            if issubclass(type(entitee),Projectile):
+                projectiles.append(entitee)
+
+        return projectiles
     def delete_entitees(self):
         """
         Fonction qui supprime les entitees mortes
@@ -889,6 +910,21 @@ class Niveau:
         elif id_action==PARLER:
             succes = self.affichage.add_dialogue(action)
         return succes
+
+    def traitement_mouvement(self,projectile):
+        """
+        Fonction qui déplace un projectile selon sa trajectoire
+        """
+        direction = projectile.direction
+        passe,newcoord,tel=self.lab.peut_passer(projectile.getPosition(),direction)
+        if passe:
+            libre = self.collision.case_libre(agissant,newcoord,self.entitees)
+            if libre:
+                projectile.setPosition(newcoord)
+            else:
+                projectile.setPosition(None)
+        else:
+            projectile.setPosition(None)
     def getPlusLent(self):
         """
         Fonction qui permet d'obtenir la plus grande vitesse
