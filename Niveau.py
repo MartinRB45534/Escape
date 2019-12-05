@@ -212,6 +212,7 @@ class Niveau:
                 
             self.force_joueur = 10
             self.hp_joueur = 200
+            self.mana_joueur = 50
             self.vitesse_joueur_lab=3
             self.vitesse_joueur_autres=6
             minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap,self.depart,self.arrivee)
@@ -220,7 +221,7 @@ class Niveau:
             self.zoom_largeur=13
             self.zoom_hauteur=13
 
-            self.joueur=Joueur(minimap,inventaire_joueur,self.hp_joueur,self.hp_joueur,self.force_joueur,self.vitesse_joueur_lab,self.vitesse_joueur_autres,2,self.zoom_largeur,self.zoom_hauteur,self.depart)
+            self.joueur=Joueur(minimap,inventaire_joueur,self.hp_joueur,self.hp_joueur,0,self.mana_joueur,self.force_joueur,self.vitesse_joueur_lab,self.vitesse_joueur_autres,2,self.zoom_largeur,self.zoom_hauteur,self.depart)
             
         elif debut_niveau:
 
@@ -714,6 +715,7 @@ class Niveau:
                 if issubclass(type(agissant),Joueur):
                     self.action_joueur()
 
+                    agissant.regen_mana()
                 agissant.soigne_toi()
                 
                 agissant=self.actualiser_donnee(agissant)
@@ -879,9 +881,9 @@ class Niveau:
             direction_voulue=action
             if direction_voulue!=None:
                 if issubclass(type(agissant),Joueur):
-                    passe,newcoord,tel=self.lab.peut_passer(agissant.getPosition(),direction_voulue,agissant.inventaire)
+                    passe,newcoord,tel=self.lab.peut_passer(agissant,direction_voulue,agissant.inventaire)
                 else:
-                    passe,newcoord,tel=self.lab.peut_passer(agissant.getPosition(),direction_voulue)
+                    passe,newcoord,tel=self.lab.peut_passer(agissant,direction_voulue)
                 #print(passe)
                 if passe:
                     libre = self.collision.case_libre(agissant,newcoord,self.entitees)
@@ -916,7 +918,7 @@ class Niveau:
         Fonction qui déplace un projectile selon sa trajectoire
         """
         direction = projectile.direction
-        passe,newcoord,tel=self.lab.peut_passer(projectile.getPosition(),direction)
+        passe,newcoord,tel=self.lab.peut_passer(projectile,direction)
         if passe:
             libre = self.collision.case_libre(agissant,newcoord,self.entitees)
             if libre:

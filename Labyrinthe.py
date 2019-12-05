@@ -54,7 +54,7 @@ class Labyrinthe:
             for case in cases_speciales:
                 self.coord_speciales.append(case[0])
         
-    def peut_passer(self,coord,sens,inventaire=None):
+    def peut_passer(self,intrus,sens,inventaire=None):
         """
         Fonction qui valide et applique ou non le mouvement de l'entitée
         Entrées:
@@ -65,18 +65,19 @@ class Labyrinthe:
             -un booléen qui indique si l'entitée est passé ou pas
             -les nouvelles coordonnées de l'entitée
         """
+        coord = intrus.getPosition
         newcoord = coord
         case = self.matrice_cases[coord[0]][coord[1]]
         passe = True
         tel = None
         
-        if sens == GAUCHE and not case.mur_plein(GAUCHE):
+        if sens == GAUCHE and (not case.mur_plein(GAUCHE) or issubclass(type(intrus),Fantome)):
             newcoord = (coord[0]-1,coord[1])
-        elif sens == DROITE and not case.mur_plein(DROITE):
+        elif sens == DROITE and (not case.mur_plein(DROITE) or issubclass(type(intrus),Fantome)):
             newcoord = (coord[0]+1,coord[1])
-        elif sens == BAS and not case.mur_plein(BAS):
+        elif sens == BAS and (not case.mur_plein(BAS) or issubclass(type(intrus),Fantome)):
             newcoord = (coord[0],coord[1]+1)
-        elif sens == HAUT and not case.mur_plein(HAUT):
+        elif sens == HAUT and (not case.mur_plein(HAUT) or issubclass(type(intrus),Fantome)):
             newcoord = (coord[0],coord[1]-1)
         else :
             if inventaire!=None:
@@ -102,6 +103,9 @@ class Labyrinthe:
                     passe = False
             else:
                 passe=False
+
+        if self.matrice_cases[newcoord[0]][newcoord[1]] == None:
+            passe=False
 
         if passe and isinstance(self.matrice_cases[newcoord[0]][newcoord[1]],Teleporteur):
             tel = self.matrice_cases[newcoord[0]][newcoord[1]].teleporte()
