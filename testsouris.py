@@ -93,7 +93,7 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN and quitter.survolBouton:
                 loop = False
             elif event.type == pygame.MOUSEBUTTONDOWN and tuto.survolBouton:
-                session.tuto_courant = 3
+                session.tuto_courant = 1
                 session.reset_niveau_tuto()
                 session.runtuto()
 

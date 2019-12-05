@@ -279,30 +279,31 @@ class Niveau:
 
                 self.pnj = Pnj_passif((2,3),1000,(190,255,56),[Replique("J'ai peur j'ai peur j'ai peur !J'ai peeeeuuurrr ! ! !",20),Replique("Cet endroit est horrible ! Jevoudrais remonter à la surface, mais avec ce labyrinthe je risque de me perdre, ce serait terrible !",20),Replique("Quelqu'un est passé avant, il a dit que la sortie était en bas à droite et qu'il avait laissé des cailloux sur le chemin, mais je n'ose pas y aller...",20),Replique("Je crois aussi qu'il a parlé de clées, je crois que tu dois les trouver pour ouvrir des portes",20),Replique("L'une d'elle est sur la case de coordonnées (19,1), mais je ne sais pas ce que ça veut dire",20)])
                 self.entitees.append(self.pnj)
-
-                positions = self.lab.petit_poucet(5,(0,0),self.clees[0].position)
-                for position in positions:
-                    self.entitees.append(Caillou(position))
-
+                
+                self.cailloux_1 = []
                 positions = self.lab.petit_poucet(5,self.clees[0].position,(14,16))
                 for position in positions:
-                    self.entitees.append(Caillou(position))
+                    self.cailloux_1.append(Caillou(position))
 
+                self.cailloux_2 = []
                 positions = self.lab.petit_poucet(5,(14,16),self.clees[1].position)
                 for position in positions:
-                    self.entitees.append(Caillou(position))
+                    self.cailloux_2.append(Caillou(position))
 
+                self.cailloux_3 = []
                 positions = self.lab.petit_poucet(5,self.clees[1].position,self.clees[2].position)
                 for position in positions:
-                    self.entitees.append(Caillou(position))
+                    self.cailloux_3.append(Caillou(position))
 
+                self.cailloux_4 = []
                 positions = self.lab.petit_poucet(5,self.clees[2].position,self.clees[3].position)
                 for position in positions:
-                    self.entitees.append(Caillou(position))
+                    self.cailloux_4.append(Caillou(position))
 
+                self.cailloux_5 = []
                 positions = self.lab.petit_poucet(5,self.clees[3].position)
                 for position in positions:
-                    self.entitees.append(Caillou(position))
+                    self.cailloux_5.append(Caillou(position))
                     
             elif niveau == "tuto3":
 
@@ -402,8 +403,8 @@ class Niveau:
             self.evenements = evenements
 
         self.missions=[]
-        if niveau == "tuto3":
-            self.missions.append(["self.mission_bidon_tuto3",'print("Bravo !")'])
+        if niveau == "tuto2":
+            self.missions.append(["self.mission_clee('Nord')","self.petits_cailloux(5,self.joueur.position,(14,16))"])
 
 
         if horloge_cycle == None:
@@ -910,8 +911,51 @@ class Niveau:
     def __str__(self):
         return "Niveau("+str(self.niveau)+","+str(self.difficulte)+","+str(self.mode_affichage)+","+str(self.mode_minimap)+","+str(self.joueur)+")"
 
-    def mission_bidon_tuto3(self):
-        check = False
-        if self.joueur.position == (5,1):
-            check = True
+
+    def mission_minimap(self):
+        """
+        Mission qui consiste à découvrir toute la minimap
+        """
+        check = True
+        matrice = self.joueur.minimap.matrice_cases
+        for ligne in matrice:
+            for case in ligne:
+                if case.decouvert == -1:
+                    check = False
         return check
+
+    def mission_monstres(self):
+        """
+        Mission qui consiste à tuer tous les monstres
+        """
+        check = True
+        for entitee in self. entitees:
+            if isinstance(entitee,Monstre):
+                check = False
+        return check
+
+    def mission_position(self,position):
+        """
+        Mission qui consiste à se rendre à une position donnée
+        """
+        return self.joueur.position == position
+
+    def mission_clee(self,nom):
+        """
+        Mission qui consiste à posséder une clé avec un nom donné
+        """
+        check = False
+        if "Clee" in self.joueur.inventaire.entree_dico:
+            clees = self.joueur.inventaire.items["Clee"]
+            for clee in clees:
+                if clee.nom_clee == nom:
+                    check = True
+        return check
+
+    def petits_cailloux(self,distance,position_1,position_2):
+        """
+        Récompense qui ajoute des petits cailloux dans le labyrinthe
+        """
+        positions = self.lab.petit_poucet(distance,position_1,position_2)
+        for position in positions:
+            self.entitees.append(Caillou(position))
