@@ -164,13 +164,13 @@ class Collision:
         if entitees!=None:
             for entitee_bis in entitees:
                 if tuple(entitee_bis.getPosition()) == tuple(position_voulue) and entitee_bis!=entitee:
-                    valide,suppItem = self.collision_entitees(entitee,entitee_bis)
+                    valide,suppItem = self.collision_entitees(entitee,entitee_bis,entitees)
                     libre=libre and valide
                     if suppItem:
                         items_deletes.append(entitee_bis)
             self.supp_items(items_deletes,entitees)
         return libre
-    def collision_entitees(self,entitee1,entitee2):
+    def collision_entitees(self,entitee1,entitee2,entitees):
         """
         Fonction qui gère la collision entre deux entitées
         Entrées:
@@ -191,6 +191,8 @@ class Collision:
             valide=True
         elif issubclass(type(entitee1),Agissant) and issubclass(type(entitee2),Caillou):
             valide = True
+        elif issubclass(type(entitee1),Projectile) and issubclass(type(entitee2),Agissant):
+            valide = attaque_projectile(entitee1,entitee2,entitees)
         return valide,suppItem
     def try_interaction(self,agissant,entitee):
         """
@@ -242,3 +244,17 @@ class Collision:
                     #à modifier quand on pourra jouer avec l'inventaire
                     evenements.append(entitee.recupere())
         return evenements
+
+    def attaque_projectile(self,projectile,cible,entitees):
+        """
+        Fonction qui calcule les effets de l'arrivée d'un projectile sur un agissant
+        """
+        valide = False
+        self.attaque(cible,projectile)
+        if issubclass(type(projectile),Explosif):
+            self.tentative_attaque(projectile.charge,entitees)
+        if cible.pv<=0:
+            valide = True
+            if not issubclass(type(projectile),Perçant):
+                projectile.position = None
+            
