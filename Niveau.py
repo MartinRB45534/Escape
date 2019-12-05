@@ -404,7 +404,12 @@ class Niveau:
 
         self.missions=[]
         if niveau == "tuto2":
-            self.missions.append(["self.mission_clee('Nord')","self.petits_cailloux(5,self.joueur.position,(14,16))"])
+            self.mission_1 = ["self.mission_clee('Nord')","self.petits_cailloux(5,self.joueur.position,(14,16)),self.ajout(self.missions,[self.mission_2])"]
+            self.mission_2 = ["self.lab.matrice_cases[14][16].murs[DROITE].etat == MUR_VIDE","self.petits_cailloux(5,self.joueur.position,(3,18)),self.ajout(self.missions,[self.mission_3])"]
+            self.mission_3 = ["self.mission_clee('Ouest')","self.petits_cailloux(5,self.joueur.position,(5,35)),self.ajout(self.missions,[self.mission_4])"]
+            self.mission_4 = ["self.mission_clee('Est')","self.petits_cailloux(5,self.joueur.position,(35,18)),self.ajout(self.missions,[self.mission_5])"]
+            self.mission_5 = ["self.mission_clee('Sud')","self.petits_cailloux(5,self.joueur.position,self.arrivee)"]
+            self.missions.append(self.mission_1)
 
 
         if horloge_cycle == None:
@@ -959,3 +964,7 @@ class Niveau:
         positions = self.lab.petit_poucet(distance,position_1,position_2)
         for position in positions:
             self.entitees.append(Caillou(position))
+
+    def ajout(self,recipient,ajouts):
+        for ajout in ajouts:
+            recipient.append(ajout)

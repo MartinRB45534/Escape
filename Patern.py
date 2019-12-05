@@ -49,6 +49,7 @@ class Patern:
             for bord in self.contraintes_cases(self.entrees[nb][0],self.entrees[nb][1]):
                 if self.get_voisin_dir(i,j,bord,matrice_lab)==None:
                     print("On ne peut pas ouvrir d'entrée sur l'extérieur du labyrinthe")
+                    matrice_lab[i][j].set_mur(bord,MUR_PLEIN)
                 elif nb < len(self.clees) :
                     matrice_lab[i][j].murs[bord]=Porte(self.taille_mur,self.clees[nb].nom_clee)
                     self.get_voisin_dir(i,j,bord,matrice_lab).murs[self.direction_opposee(bord)]=Porte(self.taille_mur,self.clees[nb].nom_clee)
