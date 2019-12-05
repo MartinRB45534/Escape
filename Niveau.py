@@ -313,8 +313,8 @@ class Niveau:
                 self.pnj = Pnj_passif((5,3),1,(56,255,190),[Replique("Bonjour ! Fais très attention, il y des montres là-bas. Heureusement que je cours plus vite qu'eux !",20),Replique("C'est vraiment dommage, s'il n'y avait pas tous ces monstres, je serais sorti depuis longtemps. Mais j'ai beau être très intelligente et pouvoir trouver la sortie de tous ces labyrinthes en une fraction de seconde, je suis faible.",20),Replique("Tu peux essayer de tuer les monstres en les attaquant avec la touche espace, mais ne fait pas ça trop près de moi. C'est une attaque qui affecte tous les êtres vivants dans son périmètre.",20),Replique("Je peux voir tes armes ? Mais tu as une lance ! Tu peux utiliser les touches WASD pour attaquer dans la direction de ton choix. Cette attaque tape plus loin et plus fort que l'autre, mais dans une seule direction.",20),Replique("Tu peux essayer d'éviter les monstres en les coutournant, car ceux-ci ont une moins bonne vue que toi, mais je préférerais que tu les tues tous. Tu veux bien ?",20)])
                 self.entitees.append(self.pnj)
 
-                self.pnj = Pnj_passif((0,2),100,(0,255,125),[Replique("Qu'est-ce que tu fais là ? Personne ne vient jamais ici d'habitude ! Mais tu as raison. Il faut toujours explorer tout le labyrinthe, écouter toutes les répliques de tout le monde, ne rien négliger. C'est le seul moyen de gagner...",20)])
-                self.entitees.append(self.pnj)
+                self.pnj_bonus = Pnj_passif((0,2),100,(0,255,125),[Replique("Qu'est-ce que tu fais là ? Personne ne vient jamais ici d'habitude ! Mais tu as raison. Il faut toujours explorer tout le labyrinthe, écouter toutes les répliques de tout le monde, ne rien négliger. C'est le seul moyen de gagner...",20)])
+                self.entitees.append(self.pnj_bonus)
                 
                 positions = self.lab.petit_poucet(6,self.depart,self.arrivee)
                 for position in positions:
@@ -415,8 +415,41 @@ class Niveau:
             self.mission_7 = ["self.pnj.indice_replique == 6","self.ajout(self.missions,[self.mission_8])"]
             self.mission_8 = ["self.mission_minimap()","self.ajout(self.missions,[self.mission_9]),self.ajout(self.pnj.repliques,self.repliques_mission_8)"]
             self.repliques_mission_8 = [Replique("Oh, merci ! Je vais peut-être trouver le courage de traverser ce labyrinthe maintenant",20),Replique("Tu devrais aller à la sortie. C'est une case bleue, elle doit apparaître sur ta carte maintenant que tu l'a vue",20)]
-            self.mission_9 = ["self.pnj.indice_replique == 8","self.joueur.augmente_pv(100)"]
+            self.mission_9 = ["self.pnj.indice_replique == 8","self.joueur.augmente_pv(5)"]
             self.missions.append(self.mission_7)
+            
+        elif niveau == "tuto3":
+            self.mission_1 = ["self.mission_minimap()","self.joueur.augmente_pv(5)"]
+            self.missions.append(self.mission_1)
+
+            self.mission_2 = ["self.pnj.indice_replique == 4","self.ajout(self.missions,[self.mission_3])"]
+            self.mission_3 = ["self.mission_monstres()","self.ajout(self.pnj.repliques,self.repliques_mission_3),self.ajout(self.missions,[self.mission_4])"]
+            self.repliques_mission_3 = [Replique("Tu les as tous tués ? Merci beaucoup, tu me sauves la vie !",20),Replique("Il n'y a plus de monstres, on peut y aller maintenant.",20)]
+            self.mission_4 = ["self.pnj.indice_replique == 6","self.joueur.augmente_regen(0.01)"]
+            self.missions.append(self.mission_2)
+            
+        elif niveau == "tuto4":
+            self.mission_1 = ["self.mission_minimap()","self.joueur.augmente_pv(5)"]
+            self.missions.append(self.mission_1)
+
+            self.mission_2 = ["self.mission_monstres()","self.ajout(self.pnj.repliques,self.repliques_mission_2),self.ajout(self.missions,[self.mission_3])"]
+            self.repliques_mission_2 = [Replique("Tu as pensé à tous les tuer sans même que je te demande ? Comme c'est gentil !",20),Replique("Il n'y a plus de monstres, on peut y aller maintenant.",20)]
+            self.mission_3 = ["self.pnj.indice_replique == 7","self.joueur.augmente_regen(0.01)"]
+            self.missions.append(self.mission_2)
+
+        elif niveau == "tuto5":
+            self.mission_1 = ["self.mission_minimap()","self.joueur.augmente_pv(5)"]
+            self.missions.append(self.mission_1)
+
+            self.mission_2 = ["self.mission_monstres()","self.joueur.augmente_regen(0.01)"]
+            self.missions.append(self.mission_2)
+
+        elif niveau == "tuto6":
+            self.mission_1 = ["self.mission_minimap()","self.joueur.augmente_pv(5)"]
+            self.missions.append(self.mission_1)
+
+            self.mission_2 = ["self.mission_monstres()","self.joueur.augmente_regen(0.01)"]
+            self.missions.append(self.mission_2)
             
 
 
@@ -963,6 +996,16 @@ class Niveau:
             for clee in clees:
                 if clee.nom_clee == nom:
                     check = True
+        return check
+
+    def mission_item(self,type_item):
+        """
+        Mission qui consiste à posséder un item d'un type donné
+        """
+        check = False
+        if type_item in self.joueur.inventaire.entree_dico:
+            if len(self.joueur.inventaire.items[type_item])>0:
+                check = True
         return check
 
     def petits_cailloux(self,distance,position_1,position_2):

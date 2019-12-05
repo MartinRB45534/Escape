@@ -95,14 +95,3 @@ class Joueur(Agissant):
 
     def precise_item(self,screen):
         self.inventaire.precise_item(screen)
-
-    def soigne(self,amount):
-        self.pv+=amount
-        if self.pv>self.pv_max:
-            self.pv=self.pv_max
-
-    def augmente_pv(self,amount):
-        self.pv_max+=amount
-
-    def augmente_regen(self,amount):
-        self.regeneration+=amount
