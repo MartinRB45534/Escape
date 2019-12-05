@@ -20,6 +20,7 @@ class Agissant(Entitee):
         self.position_vue=None
         #évévnements auquel est soumi l'agissant
         self.evenements=[]
+        self.drops=[]
     def soigne_toi(self):
         self.pv+=self.regeneration
         if self.pv > self.pv_max:

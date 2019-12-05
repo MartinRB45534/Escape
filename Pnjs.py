@@ -21,6 +21,7 @@ class Pnj_passif(Agissant):
         self.position_joueur=None
         #événements auquels est soumis le pnj
         self.evenements=[]
+        self.drops=[]
         #les répliques du pnj
         self.repliques = repliques
         #nb qui nous indique dans quelle réplique on est

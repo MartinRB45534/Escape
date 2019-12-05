@@ -31,6 +31,7 @@ class Joueur(Agissant):
         self.evenements=None
         #la direction du regard du joueur
         self.dir_regard=HAUT
+        self.drops=[]
 
     def prochaine_action(self):
         pass

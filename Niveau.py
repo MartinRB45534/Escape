@@ -359,15 +359,15 @@ class Niveau:
 
                 self.vitesse_montres=20
 
-                fattis=self.spawn_aleatoire(Fatti,10,10,200,20,20,1,((10,10),(30,30)),0.05,5,0,(0,0,100))
-                slimes=self.spawn_aleatoire(Slime,5,5,50,3,6,1,((15,15),(25,25)),0.15,5,0,(255,100,100))
+                fattis=self.spawn_aleatoire(Fatti,10,10,200,20,20,1,((10,10),(30,30)),0.05,5,0,(0,0,100),[Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_vision(None,self.joueur),Potion_de_vision(None,self.joueur),Potion_de_vision(None,self.joueur),Potion_de_vision(None,self.joueur),Potion_de_vision(None,self.joueur),Potion_de_vision(None,self.joueur),Potion_de_vision(None,self.joueur)])
+                slimes=self.spawn_aleatoire(Slime,5,5,50,3,6,1,((15,15),(25,25)),0.15,5,0,(255,100,100),[Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_vision(None,self.joueur),Potion_de_vision(None,self.joueur),Potion_de_vision(None,self.joueur),Potion_de_vision(None,self.joueur),Potion_de_vision(None,self.joueur)])
 
                 potions_vue=[Potion_de_vision((35,26),self.joueur),Potion_de_vision((27,38),self.joueur),Potion_de_vision((21,19),self.joueur)]
                 potions_combat=[Potion_de_force((i,j),self.joueur)for j in range(5,45,10) for i in range(5,45,10)] + [Potion_de_portee((i,j),self.joueur)for j in range (10,40,10) for i in range (10,40,10)]
                 potions_bonus=[Potion_de_visibilite_permanente((8,23),self.joueur),Potion_de_visibilite_permanente((8,31),self.joueur),Potion_de_portee_permanente((23,37),self.joueur),Potion_de_portee_permanente((7,35),self.joueur),Potion_de_force_permanente((24,13),self.joueur),Potion_de_force_permanente((32,2),self.joueur),Potion_de_soin_permanente((39,0),self.joueur),Potion_de_soin_permanente((37,16),self.joueur),Potion_de_soin((20,20),self.joueur),Potion_de_soin((35,5),self.joueur),Potion_de_soin((5,35),self.joueur)]
                 potions=potions_vue+potions_combat+potions_bonus
 
-                self.pnj = Pnj_passif((3,4),250,(255,200,20),[Replique("Malheureux ! Jamais tu ne sortiras d'ici vivant ! Moi-même, qui ait atteint le plus haut niveau qu'un mage puisse atteindre, j'ai été forcé de fuir face au [insérer le nom du boss final ici] qui garde la sortie !",20),Replique("Mes potions me permettent d'annihiler tous les monstres sur mon passage, de voir au travers des murs de ces labyrinthes et même de les briser, mais elle n'ont pas suffit face au [insérer le nom du boss final ici].",20),Replique("Le plus terrible, c'est que j'ai perdu mes potions dans ma fuite, et qu'elles sont dispersées dans les labyrinthes. Si tu me les ramènes, je te donnerai beaucoup d'argent ! Hélas, je n'ai pas assez pour racheter les potions permanentes, ce sont de vrais trésors qui coutent une fortune. Si tu en trouve, tu peux les garder. D'ailleurs, gardes toutes les potions si ça peut te permettre d'éliminer le [insérer le nom du boss final ici] une bonne fois pour toute.",20)])
+                self.pnj = Pnj_passif((3,4),250,(255,200,20),[Replique("Malheureux ! Jamais tu ne sortiras d'ici vivant ! Moi-même, qui ait atteint le plus haut niveau qu'un mage puisse atteindre, j'ai été forcé de fuir face au [insérer le nom du boss final ici] qui garde la sortie !",20),Replique("Mes potions me permettent d'annihiler tous les monstres sur mon passage, de voir au travers des murs de ces labyrinthes et même de les briser, mais elle n'ont pas suffit face au [insérer le nom du boss final ici].",20),Replique("Le plus terrible, c'est que j'ai perdu mes potions dans ma fuite, et qu'elles sont dispersées dans les labyrinthes. Si tu me les ramènes, je te donnerai beaucoup d'argent ! Hélas, je n'ai pas assez pour racheter les potions permanentes, ce sont de vrais trésors qui coutent une fortune. Si tu en trouve, tu peux les garder. D'ailleurs, gardes toutes les potions si ça peut te permettre d'éliminer le [insérer le nom du boss final ici] une bonne fois pour toute.",20),Replique("Certain de ces monstres ont récupéré mes potions. Elimine-les, s'il te plait.",20)])
                 self.entitees=potions+self.clees
                 self.entitees.append(self.pnj)
                 monstres = fattis + slimes
@@ -425,7 +425,7 @@ class Niveau:
             self.mission_2 = ["self.pnj.indice_replique == 4","self.ajout(self.missions,[self.mission_3])"]
             self.mission_3 = ["self.mission_monstres()","self.ajout(self.pnj.repliques,self.repliques_mission_3),self.ajout(self.missions,[self.mission_4])"]
             self.repliques_mission_3 = [Replique("Tu les as tous tués ? Merci beaucoup, tu me sauves la vie !",20),Replique("Il n'y a plus de monstres, on peut y aller maintenant.",20)]
-            self.mission_4 = ["self.pnj.indice_replique == 6","self.joueur.augmente_regen(0.01)"]
+            self.mission_4 = ["self.pnj.indice_replique == 6","self.joueur.augmente_regen(0.1)"]
             self.missions.append(self.mission_2)
             
         elif niveau == "tuto4":
@@ -434,21 +434,21 @@ class Niveau:
 
             self.mission_2 = ["self.mission_monstres()","self.ajout(self.pnj.repliques,self.repliques_mission_2),self.ajout(self.missions,[self.mission_3])"]
             self.repliques_mission_2 = [Replique("Tu as pensé à tous les tuer sans même que je te demande ? Comme c'est gentil !",20),Replique("Il n'y a plus de monstres, on peut y aller maintenant.",20)]
-            self.mission_3 = ["self.pnj.indice_replique == 7","self.joueur.augmente_regen(0.01)"]
+            self.mission_3 = ["self.pnj.indice_replique == 7","self.joueur.augmente_regen(0.1)"]
             self.missions.append(self.mission_2)
 
         elif niveau == "tuto5":
             self.mission_1 = ["self.mission_minimap()","self.joueur.augmente_pv(5)"]
             self.missions.append(self.mission_1)
 
-            self.mission_2 = ["self.mission_monstres()","self.joueur.augmente_regen(0.01)"]
+            self.mission_2 = ["self.mission_monstres()","self.joueur.augmente_regen(0.1)"]
             self.missions.append(self.mission_2)
 
         elif niveau == "tuto6":
             self.mission_1 = ["self.mission_minimap()","self.joueur.augmente_pv(5)"]
             self.missions.append(self.mission_1)
 
-            self.mission_2 = ["self.mission_monstres()","self.joueur.augmente_regen(0.01)"]
+            self.mission_2 = ["self.mission_monstres()","self.joueur.augmente_regen(0.1)"]
             self.missions.append(self.mission_2)
             
 
@@ -740,6 +740,9 @@ class Niveau:
         for i in range(0,len(self.entitees)):
             if issubclass(type(self.entitees[i-nbSupp]),Agissant):
                 if self.entitees[i-nbSupp].pv<=0:
+                    for new_item in self.entitees[i-nbSupp].drops:
+                        new_item.position = self.entitees[i-nbSupp].position
+                        self.entitees.append(new_item)
                     self.entitees.pop(i-nbSupp)
                     nbSupp+=1
             elif issubclass(type(self.entitees[i-nbSupp]),Item) or issubclass(type(self.entitees[i-nbSupp]),Potion):
@@ -916,7 +919,7 @@ class Niveau:
         """
         self.affichage.dessine_frame(self.joueur,self.lab,self.entitees,self.evenements)
 
-    def spawn_aleatoire(self,monstre,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,perimetre,proba,max_meute,premiere_meute,couleur=(255,0,0)):
+    def spawn_aleatoire(self,monstre,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,perimetre,proba,max_meute,premiere_meute,couleur=(255,0,0),drops=[]):
         """
         Fonction qui génére des monstres aléatoirement
         Entrées :
@@ -938,6 +941,8 @@ class Niveau:
                     if taille_meute == max_meute :
                         nb_meute += 1
                         taille_meute = 0
+        for drop in drops:
+            res[random.randint(0,len(res)-1)].drops.append(drop)
         return res
 
     def ppcm(self,vitesses):
