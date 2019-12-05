@@ -4,7 +4,7 @@ bonus_force_permanent = 3
 bonus_vue = 5
 bonus_vue_permanent = 3
 bonus_pv = 50
-bonus_soin = 1
+bonus_soin = 0,5
 bonus_radius_permanent = 1
 bonus_radius = 3
 temps_effet = 200
@@ -36,9 +36,7 @@ class Effet_potion_soin(Effet_potion):
     def action(self):
         if not self.utilise :
             self.utilise = True
-            self.cible.pv += bonus_pv
-            if self.cible.pv > self.cible.pv_max:
-                self.cible.pv = self.cible.pv_max
+            self.cible.soigne(bonus_pv)
 
 class Effet_potion_soin_permanente(Effet_potion):
     
