@@ -3,12 +3,14 @@ from Resolveur import *
 from Agissant import *
 
 class Monstre(Agissant):
-    def __init__(self,position,id_meute,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,couleur):
+    def __init__(self,position,id_meute,largeur_vue,hauteur_vue,pv,mana_max,degats,vitesse,radius,couleur):
         self.position=position
         self.largeur_vue=largeur_vue
         self.hauteur_vue=hauteur_vue
         self.pv=pv
         self.pv_max=self.pv
+        self.mana=0
+        self.mana_max=mana_max
         self.regeneration=0
         self.degats=degats
         self.vitesse=vitesse
@@ -235,7 +237,7 @@ class Monstre(Agissant):
 
 class Slime(Monstre):
     def __init__(self,position,id_meute=0,largeur_vue=5,hauteur_vue=5,pv=50,degats=3,vitesse=6,radius=1,couleur=(255,100,100)):
-        Monstre.__init__(self,position,id_meute,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,couleur)
+        Monstre.__init__(self,position,id_meute,largeur_vue,hauteur_vue,pv,0,degats,vitesse,radius,couleur)
 
     def cherche(self,vue,position_lab):
         """
@@ -256,7 +258,7 @@ class Slime(Monstre):
 
 class Fatti(Monstre):
     def __init__(self,position,id_meute=0,largeur_vue=10,hauteur_vue=10,pv=200,degats=20,vitesse=20,radius=1,couleur=(0,0,100)):
-        Monstre.__init__(self,position,id_meute,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,couleur)
+        Monstre.__init__(self,position,id_meute,largeur_vue,hauteur_vue,pv,0,degats,vitesse,radius,couleur)
         
     def cherche(self,vue,position_lab):
         """
@@ -275,7 +277,7 @@ class Runner(Monstre):
         self.mat_lab = mat_lab
         self.largeur_lab = len(mat_lab)
         self.hauteur_lab = len(mat_lab[0])
-        Monstre.__init__(self,position,id_meute,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,couleur)
+        Monstre.__init__(self,position,id_meute,largeur_vue,hauteur_vue,pv,0,degats,vitesse,radius,couleur)
         self.fin_lab=[fin_lab_x,fin_lab_y]
     def cherche(self,vue,position_lab):
         """

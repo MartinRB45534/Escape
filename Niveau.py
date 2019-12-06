@@ -104,7 +104,7 @@ class Niveau:
                 self.clees = []
                 self.salles = [Patern((0,0),14,3,self.LARGEUR_CASE,self.LARGEUR_MUR,[])]
                 proba_murs = 1
-                self.teleporteurs = [[(13,1),Teleporteur(["tuto2",(0,0)],self.LARGEUR_CASE,self.LARGEUR_MUR)]]
+                self.teleporteurs = [[(13,1),Teleporteur(["tuto2",(0,0)],self.LARGEUR_CASE,self.LARGEUR_MUR,(255,255,255))]]
                 
             elif niveau == "tuto2":
                 #niveau labyrinthique sans monstres pour apprendre à se déplacer
@@ -118,7 +118,7 @@ class Niveau:
                 self.salles=[Patern((0,0),20,20,self.LARGEUR_CASE,self.LARGEUR_MUR,[[15,19],[16,19],[17,19],[18,19],[19,19],[19,18],[19,17],[19,16],[19,15]],[],False),Patern((20,20),20,20,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[3,0],[2,0],[1,0],[0,0],[0,1],[0,2],[0,3],[0,4]],[],False),Patern((0,0),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,3]]),Patern((15,15),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,1],[0,8],[9,1],[9,8]],self.clees)]
                 self.clee_bonus_1 = Clee((19,1),"Bonus_1")
                 proba_murs = 0.1
-                self.teleporteurs = [[(39,39),Teleporteur(["tuto3",(5,0)],self.LARGEUR_CASE,self.LARGEUR_MUR)]]
+                self.teleporteurs = [[(39,39),Teleporteur(["tuto3",(5,0)],self.LARGEUR_CASE,self.LARGEUR_MUR,ARRIVEE)]]
 
             elif niveau == "tuto3":
                 #niveau monstrueux sans trop de labyrinthe pour apprendre à se battre
@@ -131,7 +131,7 @@ class Niveau:
                 self.clees = [Clee((0,59),"Bonus_2")]
                 self.salles=[Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,9],[1,9]]),Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0]]),Patern((0,0),4,4,self.LARGEUR_CASE,self.LARGEUR_MUR,[[2,3]],[Clee(None,"Bonus_1")])]
                 proba_murs = 0.3
-                self.teleporteurs = [[(5,59),Teleporteur(["tuto4",(5,0)],self.LARGEUR_CASE,self.LARGEUR_MUR)]]
+                self.teleporteurs = [[(5,59),Teleporteur(["tuto4",(5,0)],self.LARGEUR_CASE,self.LARGEUR_MUR,ARRIVEE)]]
 
             elif niveau == "tuto4":
                 #niveau monstrueux sans labyrinthe pour apprendre à se battre
@@ -144,7 +144,7 @@ class Niveau:
                 self.clees = [Clee((0,59),"Bonus_3")]
                 self.salles=[Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,9],[1,9]]),Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0]]),Patern((0,56),4,4,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((0,52),4,4,self.LARGEUR_CASE,self.LARGEUR_MUR,[[1,0],[2,3]],[Clee(None,"Bonus_2"),Clee(None,"Bonus_1")])]
                 proba_murs = 0.2
-                self.teleporteurs = [[(5,59),Teleporteur(["tuto5",(1,2)],self.LARGEUR_CASE,self.LARGEUR_MUR)]]
+                self.teleporteurs = [[(5,59),Teleporteur(["tuto5",(1,2)],self.LARGEUR_CASE,self.LARGEUR_MUR,ARRIVEE)]]
 
             elif niveau == "tuto5":
                 #niveau monstrueux sans labyrinthe pour apprendre à se battre contre des meutes
@@ -156,7 +156,7 @@ class Niveau:
                 res = False
                 self.salles=[Patern((0,0),16,16,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((0,1),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[1,0],[2,13]],[Clee(None,"Bonus_3")]),Patern((3,1),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,13],[2,1]]),Patern((6,1),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,1],[2,13]]),Patern((9,1),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,13],[2,1]]),Patern((12,1),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[2,13],[0,1]],[Clee(None,"Bonus_3")])]
                 proba_murs = 0
-                self.teleporteurs = [[(13,14),Teleporteur(["tuto6",(0,0)],self.LARGEUR_CASE,self.LARGEUR_MUR)]]
+                self.teleporteurs = [[(13,14),Teleporteur(["tuto6",(0,0)],self.LARGEUR_CASE,self.LARGEUR_MUR,ARRIVEE)]]
 
             elif niveau == "tuto6":
                 #niveau avec labyrinthe et montres pour apprendre l'utilité des potions
@@ -170,7 +170,22 @@ class Niveau:
                 self.salles=[Patern((0,0),11,11,self.LARGEUR_CASE,self.LARGEUR_MUR,[[10,1]]),Patern((0,30),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[8,0],[9,0],[9,1]]),Patern((8,27),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[3,0],[0,4]],[Clee(None,"Bonus_2"),Clee(None,"Bonus_3")]),Patern((30,0),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,8],[0,9],[1,9]]),Patern((27,8),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[3,4],[4,0]],[Clee(None,"Bonus_1"),Clee(None,"Bonus_3")]),Patern((35,35),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,4],[0,3],[0,2],[0,1],[1,0],[2,0],[3,0],[4,0]],self.clees),Patern((24,5),3,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[1,9]]),Patern((5,19),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[2,0]]),Patern((15,35),10,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[5,0]],[Clee(None,"Porte_7_niveau_6_tutoriel")]),Patern((35,15),5,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,5]],[Clee(None,"Porte_3_niveau_6_tutoriel")])]
                 self.clees = self.clees + [Clee((5,6),"Bonus_4"),Clee((28,37),"Bonus_5"),Clee((38,17),"Bonus_6")]
                 proba_murs = 0.2
-                self.teleporteurs = []
+                self.teleporteurs = [[(39,39),Teleporteur(["tuto7",(20,20)],self.LARGEUR_CASE,self.LARGEUR_MUR,ARRIVEE)]]
+
+            elif niveau == "tuto7":
+                #niveau téléportation (et pièges)
+
+                self.CASES_X = 40
+                self.CASES_Y = 40
+                self.arrivee = (0,0)
+                self.depart = (20,20)
+                res = False
+                self.clees = []
+                self.salles = [Patern((16,16),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((0,0),16,9,self.LARGEUR_CASE,self.LARGEUR_MUR,[[1,8]],[Clee((None),"Cheat code")],False),Patern((5,6),8,24,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((12,3),10,9,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((8,4),7,7,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((9,16),4,16,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((17,27),15,2,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((15,30),1,2,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((32,25),6,6,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,2],[0,3]]),Patern((14,25),3,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[2,2],[2,3],[1,4]]),Patern((14,32),4,4,self.LARGEUR_CASE,self.LARGEUR_MUR,[[1,0]]),Patern((2,31),6,6,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((20,30),8,6,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((26,3),10,21,self.LARGEUR_CASE,self.LARGEUR_MUR,[])]
+                proba_murs = 0.3
+                self.teleporteurs_officiels = [[(23,23),Teleporteur(["tuto7",(39,39)],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(23,16),Teleporteur(["tuto7",(26,23)],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(28,23),Teleporteur(["tuto7",(20,20)],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(16,16),Teleporteur(["tuto7",(12,3)],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(12,11),Teleporteur(["tuto7",(10,13)],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(5,29),Teleporteur(["tuto7",(2,36)],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(7,31),Teleporteur(["tuto7",(27,35)],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(20,30),Teleporteur(["tuto7",(20,20)],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(16,23),Teleporteur(["tuto7",(10,16)],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(11,31),Teleporteur(["tuto7",(8,4)],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(8,10),Teleporteur(["tuto7",(37,27)],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(14,35),Teleporteur(["tuto7",(20,20)],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(14,13),Teleporteur(["tuto7",(15,0)],self.LARGEUR_CASE,self.LARGEUR_MUR)]]
+                self.teleporteurs_officieux = [[(32,35),Teleporteur(["tuto7",(20,20)],self.LARGEUR_CASE,self.LARGEUR_MUR,(255,255,255))],[(11,35),Teleporteur(["tuto7",(20,20)],self.LARGEUR_CASE,self.LARGEUR_MUR,(255,255,255))],[(2,12),Teleporteur(["tuto7",(20,20)],self.LARGEUR_CASE,self.LARGEUR_MUR,(255,255,255))],[(3,6),Teleporteur(["tuto7",(20,20)],self.LARGEUR_CASE,self.LARGEUR_MUR,(255,255,255))]]
+                self.teleporteurs = self.teleporteurs_officiels + self.teleporteurs_officieux
 
             self.poids=[6,2,1,2]
             #génération du labyrinthe
@@ -210,6 +225,8 @@ class Niveau:
                 inventaire_joueur = Inventaire([Clee(None,"Bonus_1"),Clee(None,"Bonus_2"),Clee(None,"Bonus_3")])
             elif niveau == "tuto6":
                 inventaire_joueur = Inventaire([Clee(None,"Bonus_1"),Clee(None,"Bonus_2"),Clee(None,"Bonus_3")])
+            elif niveau == "tuto7":
+                inventaire_joueur = Inventaire([Clee(None,"Bonus_1"),Clee(None,"Bonus_2"),Clee(None,"Bonus_3")])
                 
             self.force_joueur = 10
             self.hp_joueur = 200
@@ -222,14 +239,13 @@ class Niveau:
             self.zoom_largeur=13
             self.zoom_hauteur=13
 
-            self.joueur=Joueur(minimap,inventaire_joueur,self.hp_joueur,self.hp_joueur,0,self.mana_joueur,self.force_joueur,self.vitesse_joueur_lab,self.vitesse_joueur_autres,2,self.zoom_largeur,self.zoom_hauteur,self.depart)
+            self.joueur=Joueur(minimap,inventaire_joueur,self.hp_joueur,self.hp_joueur,self.mana_joueur,self.force_joueur,self.vitesse_joueur_lab,self.vitesse_joueur_autres,2,self.zoom_largeur,self.zoom_hauteur,self.depart)
             
         elif debut_niveau:
-            
-            print("check")
 
             minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap,self.depart,self.arrivee)
-            self.joueur = Joueur(minimap,joueur.inventaire,joueur.pv_max,joueur.pv_max,joueur.mana,joueur.mana_max,joueur.degats,joueur.vitesse_lab,joueur.vitesse_autres,joueur.radius,joueur.largeur_vue,joueur.hauteur_vue,self.depart)
+            self.joueur = Joueur(minimap,joueur.inventaire,joueur.pv_max,joueur.pv_max,joueur.mana_max,joueur.degats,joueur.vitesse_lab,joueur.vitesse_autres,joueur.radius,joueur.largeur_vue,joueur.hauteur_vue,self.depart)
+            self.joueur.mana = joueur.mana
 
         else:
 
@@ -380,6 +396,41 @@ class Niveau:
                 for position in positions:
                     self.entitees.append(Caillou(position))
 
+            elif niveau == "tuto7":
+
+                self.vitesse_monstres=20
+
+                equipe_1 = self.spawn_aleatoire(Fatti,10,10,200,20,20,1,((5,6),(7,29)),0.05,1,0,(0,0,100),[Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur)])
+                equipe_2_fatti = self.spawn_aleatoire(Fatti,10,10,200,20,20,1,((26,3),(35,23)),0.05,1,0,(0,0,100),[Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur)])
+                equipe_2_slime = self.spawn_aleatoire(Slime,5,5,50,3,6,1,((26,3),(35,23)),0.15,1,0,(255,100,100),[Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur)])
+                equipe_2 = equipe_2_fatti + equipe_2_slime
+                equipe_3_fatti = self.spawn_aleatoire(Fatti,10,10,200,20,20,1,((15,6),(21,11)),0.05,1,0,(0,0,100),[Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur)])
+                equipe_3_slime = self.spawn_aleatoire(Slime,5,5,50,3,6,1,((16,4),(21,11)),0.15,1,0,(255,100,100),[Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur)])
+                equipe_3 = equipe_3_fatti + equipe_3_slime
+                equipe_4_fatti = self.spawn_aleatoire(Fatti,10,10,200,20,20,1,((20,30),(26,34)),0.05,1,0,(0,0,100),[Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur)])
+                equipe_4_slime = self.spawn_aleatoire(Slime,5,5,50,3,6,1,((20,30),(26,34)),0.15,1,0,(255,100,100),[Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur)])
+                equipe_4 = equipe_4_fatti + equipe_4_slime
+                equipe_5_fatti = self.spawn_aleatoire(Fatti,10,10,200,20,20,1,((0,9),(4,30)),0.05,1,0,(0,0,100),[Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur)])
+                equipe_5_slime = self.spawn_aleatoire(Slime,5,5,50,3,6,1,((0,9),(4,30)),0.15,1,0,(255,100,100),[Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur)])
+                equipe_5 = equipe_5_fatti + equipe_5_slime
+                equipe_6_fatti = self.spawn_aleatoire(Fatti,10,10,200,20,20,1,((13,12),(25,15)),0.04,1,0,(0,0,100),[Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur)])
+                equipe_6_slime = self.spawn_aleatoire(Slime,5,5,50,3,6,1,((13,12),(25,15)),0.12,1,0,(255,100,100),[Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur)])
+                equipe_6 = equipe_6_fatti + equipe_6_slime
+                equipe_7_fatti = self.spawn_aleatoire(Fatti,10,10,200,20,20,1,((8,32),(13,37)),0.05,1,0,(0,0,100),[Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur)])
+                equipe_7_slime = self.spawn_aleatoire(Slime,5,5,50,3,6,1,((8,32),(13,37)),0.15,1,0,(255,100,100),[Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur)])
+                equipe_7 = equipe_7_fatti + equipe_7_slime
+                equipe_8_fatti = self.spawn_aleatoire(Fatti,10,10,200,20,20,1,((36,0),(39,24)),0.05,1,0,(0,0,100),[Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur)])
+                equipe_8_slime = self.spawn_aleatoire(Slime,5,5,50,3,6,1,((36,0),(39,24)),0.15,1,0,(255,100,100),[Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur)])
+                equipe_8 = equipe_8_fatti + equipe_8_slime
+                equipe_9 = self.spawn_aleatoire(Slime,5,5,50,3,6,1,((14,25),(16,29)),1,15,0,(255,100,100),[Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur)])
+                equipe_10 = self.spawn_aleatoire(Slime,5,5,50,3,6,1,((9,16),(13,31)),0.15,1,0,(255,100,100),[Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_force(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur),Potion_de_portee(None,self.joueur)])
+                
+                
+                self.pnj = Pnj_passif((21,20),250,(255,200,20),[Replique("Tu vois ces cases bleues autour de toi ? Mais non, il n'y a pas plusieurs sorties, ce sont des téléporteurs.",20),Replique("J'en ai placé de partout pour échapper aux monstres. Tu peux les utiliser, mais pas eux.",20),Replique("Fais attention, il y a aussi des pièges. Ce n'est pas moi qui les ai placés...",20),Replique("Essaye d'emprunter le téléporteur en haut à droite. De toute façon, tu devras bien le faire un jour pour sortir d'ici.",20)])
+                monstres = equipe_1 + equipe_2 + equipe_3 + equipe_4 + equipe_5 + equipe_6 + equipe_7 + equipe_8 + equipe_9 + equipe_10
+                self.entitees=[]
+                self.entitees.append(self.pnj)
+
             self.monstres = monstres
 
             self.entitees.append(self.joueur)
@@ -454,6 +505,23 @@ class Niveau:
 
             self.mission_2 = ["self.mission_monstres()","self.joueur.augmente_regen(0.1)"]
             self.missions.append(self.mission_2)
+
+            self.mission_3 = ["self.mission_drops()","self.joueur.augmente_mana(5)"]
+            self.missions.append(self.mission_3)
+
+        elif niveau == "tuto7":
+            self.mission_1 = ["self.mission_minimap()","self.joueur.augmente_pv(5)"]
+            self.missions.append(self.mission_1)
+
+            self.mission_2 = ["self.mission_monstres()","self.joueur.augmente_regen(0.1)"]
+            self.missions.append(self.mission_2)
+
+            self.mission_3 = ["self.mission_drops()","self.joueur.augmente_mana(5)"]
+            self.missions.append(self.mission_3)
+
+            self.mission_4 = ["self.mission_position((39,39))","self.ajout(self.pnj.repliques,self.repliques_mission_4)"]
+            self.repliques_mission_4 = [Replique("Tu as remarqué ? Il y a des téléporteurs cachés qui te ramènent ici. N'oublie pas leur position si tu ne veux pas te faire avoir à nouveau.",20)]
+            self.missions.append(self.mission_4)
             
 
 
@@ -474,8 +542,10 @@ class Niveau:
             self.chaine = "Les meutes"
         elif niveau == "tuto6":
             self.chaine = "Le magicien"
+        elif niveau == "tuto7":
+            self.chaine = "Téléportation !"
         else:
-            self.chaine = "niveau " + str(niveau)
+            self.chaine = "Niveau " + str(niveau)
 
 
         pygame.display.set_caption(self.chaine)
@@ -987,14 +1057,15 @@ class Niveau:
         nb_meute = premiere_meute
         taille_meute = 0
         res = []
-        for i in range (perimetre[0][0],perimetre[1][0]):
-            for j in range (perimetre[0][1],perimetre[1][1]):
-                if random.random() <= proba :
-                    res.append(monstre((i,j),nb_meute,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,couleur))
-                    taille_meute += 1
-                    if taille_meute == max_meute :
-                        nb_meute += 1
-                        taille_meute = 0
+        while res == []:
+            for i in range (perimetre[0][0],perimetre[1][0]):
+                for j in range (perimetre[0][1],perimetre[1][1]):
+                    if random.random() <= proba :
+                        res.append(monstre((i,j),nb_meute,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,couleur))
+                        taille_meute += 1
+                        if taille_meute == max_meute :
+                            nb_meute += 1
+                            taille_meute = 0
         for drop in drops:
             res[random.randint(0,len(res)-1)].drops.append(drop)
         return res
@@ -1037,6 +1108,17 @@ class Niveau:
         for entitee in self. entitees:
             if isinstance(entitee,Monstre):
                 check = False
+        return check
+
+    def mission_drops(self):
+        """
+        Mission qui consiste à tuer tous les monstres avec des drops
+        """
+        check = True
+        for entitee in self. entitees:
+            if isinstance(entitee,Monstre):
+                if entitee.drops != []:
+                    check = False
         return check
 
     def mission_position(self,position):

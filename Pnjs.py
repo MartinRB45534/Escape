@@ -7,6 +7,8 @@ class Pnj_passif(Agissant):
         self.position=position
         self.pv=pv
         self.pv_max=self.pv
+        self.mana=0
+        self.mana_max=0
         self.regeneration=0
         self.couleur=couleur
         self.vitesse = 1

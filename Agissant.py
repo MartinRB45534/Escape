@@ -1,10 +1,12 @@
 from Entitee import *
 from Evenement import *
 class Agissant(Entitee):
-    def __init__(self,position,pv,degats,vitesse,radius):
+    def __init__(self,position,pv,mana,mana_max,degats,vitesse,radius):
         self.position=position
         self.pv=pv
         self.pv_max=self.pv
+        self.mana=mana
+        self.mana_max=mana_max
         self.regeneration=0
         self.degats=degats
         self.radius=radius
@@ -22,7 +24,7 @@ class Agissant(Entitee):
         self.evenements=[]
         self.drops=[]
     def soigne_toi(self):
-        self.pv+=self.regeneration
+        self.pv+=self.regeneration+min(self.mana,0)
         if self.pv > self.pv_max:
             self.pv = self.pv_max
         
@@ -94,3 +96,6 @@ class Agissant(Entitee):
 
     def augmente_regen(self,amount):
         self.regeneration+=amount
+
+    def augmente_mana(self,amount):
+        self.mana_max+=amount

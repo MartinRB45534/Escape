@@ -5,14 +5,14 @@ from Agissant import *
 
 class Joueur(Agissant):
 
-    def __init__(self,minimap,inventaire,pv,pv_max,mana,mana_max,degats,vitesse_lab,vitesse_autres,radius,largeur_vue,hauteur_vue,position,portee_vue=11):
+    def __init__(self,minimap,inventaire,pv,pv_max,mana_max,degats,vitesse_lab,vitesse_autres,radius,largeur_vue,hauteur_vue,position,portee_vue=11):
         self.minimap = minimap
         self.position = position
         self.inventaire = inventaire
         self.pv=pv
         self.regeneration=0
         self.pv_max=pv_max
-        self.mana=mana
+        self.mana=0
         self.mana_max=mana_max
         self.regeneration_mana=1
         self.degats=degats
