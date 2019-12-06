@@ -225,9 +225,11 @@ class Niveau:
             self.joueur=Joueur(minimap,inventaire_joueur,self.hp_joueur,self.hp_joueur,0,self.mana_joueur,self.force_joueur,self.vitesse_joueur_lab,self.vitesse_joueur_autres,2,self.zoom_largeur,self.zoom_hauteur,self.depart)
             
         elif debut_niveau:
+            
+            print("check")
 
             minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap,self.depart,self.arrivee)
-            self.joueur = Joueur(minimap,joueur.inventaire,joueur.pv_max,joueur.pv_max,joueur.degats,joueur.vitesse_lab,joueur.vitesse_autres,joueur.radius,joueur.largeur_vue,joueur.hauteur_vue,self.depart)
+            self.joueur = Joueur(minimap,joueur.inventaire,joueur.pv_max,joueur.pv_max,joueur.mana,joueur.mana_max,joueur.degats,joueur.vitesse_lab,joueur.vitesse_autres,joueur.radius,joueur.largeur_vue,joueur.hauteur_vue,self.depart)
 
         else:
 
@@ -460,10 +462,23 @@ class Niveau:
         else:
             self.horloge_cycle = horloge_cycle
 
+        if niveau == "tuto1":
+            self.chaine = "Atterrissage difficile !"
+        elif niveau == "tuto2":
+            self.chaine = "Premiers pas"
+        elif niveau == "tuto3":
+            self.chaine = "Les attaques"
+        elif niveau == "tuto4":
+            self.chaine = "Les monstres"
+        elif niveau == "tuto5":
+            self.chaine = "Les meutes"
+        elif niveau == "tuto6":
+            self.chaine = "Le magicien"
+        else:
+            self.chaine = "niveau " + str(niveau)
 
 
-
-        pygame.display.set_caption("niveau " + str(niveau))
+        pygame.display.set_caption(self.chaine)
         self.screen = pygame.display.set_mode((FENETRE_X,FENETRE_Y),pygame.RESIZABLE)
         self.screen.fill((0,0,0))
 
@@ -485,8 +500,8 @@ class Niveau:
 
         #texte de fin
         font = pygame.font.SysFont(None, 72)
-        self.textWin = font.render("Vous avez gagné!! \(^o^)/", True, (128, 0, 0))
-        self.textLose = font.render("Vous avez perdu!! ;o;", True, (0, 128, 128))
+        self.textWin = font.render("Vous avez gagné ! ! \(^o^)/", True, (128, 0, 0))
+        self.textLose = font.render("Vous avez perdu ! ! ;o;", True, (0, 128, 128))
         self.textTel = font.render("Vous allez être redirigés, veuillez patienter",True, (0,0,0))
         
         self.position_screen=(0,0)

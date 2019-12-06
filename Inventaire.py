@@ -71,20 +71,20 @@ class Inventaire:
         police_default = pygame.font.SysFont(None, 15)
 
         titre = police_titre.render("Inventaire",True,(255,255,255))
-        screen.blit(titre,(30,40))
+        screen.blit(titre,(30,70))
 
         for i in range (self.longueur):
             texte=police_item.render(self.entree_dico[i] + " : " + str(len(self.items[self.entree_dico[i]])),True,(255,255,255))
             if i == self.item_courant:
-                pygame.draw.rect(screen,(0,0,0),(3,25*(i+3),255,25))
-            screen.blit(texte,(5,25*(i+3)))
+                pygame.draw.rect(screen,(0,0,0),(3,25*(i+3)+30,255,25))
+            screen.blit(texte,(5,25*(i+3)+30))
 
         text_ctrl = police_default.render("- Appuyer sur Entrée pour revenir au labyrinthe -",True,(255,255,255))
-        screen.blit(text_ctrl,(30,25*(i+4)))
+        screen.blit(text_ctrl,(30,25*(i+4)+30))
         text_ctrl = police_default.render("- Appuyer sur + pour voir la description de l'item courant -",True,(255,255,255))
-        screen.blit(text_ctrl,(30,25*(i+5)))
+        screen.blit(text_ctrl,(30,25*(i+5)+30))
         text_ctrl = police_default.render("- Appuyer sur Espace pour utiliser l'item courant -",True,(255,255,255))
-        screen.blit(text_ctrl,(30,25*(i+6)))
+        screen.blit(text_ctrl,(30,25*(i+6)+30))
         
     def precise_item(self,screen):
         police_titre=pygame.font.SysFont(None,25)
@@ -92,7 +92,7 @@ class Inventaire:
         police_default = pygame.font.SysFont(None, 15)
         
         titre = police_titre.render(self.entree_dico[self.item_courant],True,(255,255,255))
-        screen.blit(titre,(30,40))
+        screen.blit(titre,(30,70))
         
         try:
             type_item = eval(self.entree_dico[self.item_courant])
@@ -102,10 +102,10 @@ class Inventaire:
 
         for i in range (len(infos)):
             texte=police_item.render(infos[i],True,(255,255,255))
-            screen.blit(texte,(5,25*(i+3)))
+            screen.blit(texte,(5,25*(i+3)+30))
 
         text_ctrl = police_default.render("- Appuyer sur - pour revenir à l'inventaire -",True,(255,255,255))
-        screen.blit(text_ctrl,(30,25*(i+4)))
+        screen.blit(text_ctrl,(30,25*(i+4)+30))
 
         
 
