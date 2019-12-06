@@ -35,8 +35,8 @@ class Collision:
                         if mat_explorable[x][y]:
                             succes=True
                             self.attaque(agissant,attaquant)
-                        else:
-                            print(mat_explorable[x][y])
+                        #else:
+                            #print(mat_explorable[x][y])
         return succes
     def tentative_interaction(self,agissant,entitees):
         """

@@ -84,7 +84,7 @@ class Minimap:
             Rien
         """
         marge_x = 10
-        marge_y = 30
+        marge_y = 60
         
         decalage = self.decalage * self.zoom
         cases_dispo = ((screen.get_width()-20)//decalage,(screen.get_height()-40)//decalage)

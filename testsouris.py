@@ -65,6 +65,7 @@ def main():
     NIVEXIST= False
     partieEnCours = session.recupere
     while loop:
+        pygame.display.set_caption("Menu")
         if fenetre.get_width() != 640 or fenetre.get_height() != 600:
             fenetre = pygame.display.set_mode((640, 600))
         background = pygame.Surface(fenetre.get_size())
@@ -93,7 +94,7 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN and quitter.survolBouton:
                 loop = False
             elif event.type == pygame.MOUSEBUTTONDOWN and tuto.survolBouton:
-                session.tuto_courant = 3
+                session.tuto_courant = 7
                 session.reset_niveau_tuto()
                 session.runtuto()
 
