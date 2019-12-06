@@ -612,6 +612,8 @@ class Niveau:
                     
             self.actions_entitees()
 
+            #avant de redessiner l'écran on trie les entitées (ça influe sur l'affichage)
+            self.trie_entitees()
             #si on détecte un mouvement on redessine l'écran
             #if move_j or move_m:
             self.redraw()
@@ -858,7 +860,16 @@ class Niveau:
                 if self.entitees[i-nbSupp].position==None:
                     self.entitees.pop(i-nbSupp)
                     nbSupp+=1
-        
+    def trie_entitees(self):
+        """
+        Fonction qui trie les entitees selon l'endroit où on veut les afficher
+        """
+        new_entitees = []
+        for type_entitee in [Cailloux,Item,Monstre,Projectile,Joueur]:
+            for entitee in self.entitees:
+                if isinstance(type(entitee),type_entitee):
+                    new_entitees.append(entitee)
+        self.entitees = new_entitees
     def actualiser_vues_agissants(self,agissants):
         """
         Fonction qui actualise la vue de touts les agissants (meutes inclues)
