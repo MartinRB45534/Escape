@@ -865,9 +865,9 @@ class Niveau:
         Fonction qui trie les entitees selon l'endroit où on veut les afficher
         """
         new_entitees = []
-        for type_entitee in [Cailloux,Item,Monstre,Projectile,Joueur]:
+        for type_entitee in [Caillou,Item,Pnj_passif,Monstre,Projectile,Joueur]:
             for entitee in self.entitees:
-                if isinstance(type(entitee),type_entitee):
+                if issubclass(type(entitee),type_entitee):
                     new_entitees.append(entitee)
         self.entitees = new_entitees
     def actualiser_vues_agissants(self,agissants):
