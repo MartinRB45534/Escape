@@ -207,12 +207,6 @@ class Niveau:
         elif joueur == None:
             if niveau == 0:
                 inventaire_joueur = Inventaire()
-            #    if difficulte == BEGINNER :
-            #    elif difficulte == EASY :
-            #    elif difficulte == AVERAGE :
-            #    elif difficulte == HARD :
-            #    elif difficulte == INSANE :
-            #    elif difficulte == IMPOSSIBLE :
             elif niveau == "tuto1":
                 inventaire_joueur = Inventaire([Clee(None,"Premier pas")])
             elif niveau == "tuto2":
@@ -711,7 +705,7 @@ class Niveau:
                  
     def action_joueur(self):
         """
-        Fonction qui exécute la partie du code ou le jpueur demande à agir
+        Fonction qui exécute la partie du code ou le joueur demande à agir
         et qui renvoie rien
         """
                     
@@ -720,7 +714,7 @@ class Niveau:
         #on récupère toutes les touches préssés sous forme de booléen
         keys=pygame.key.get_pressed()
         
-        if keys[pygame.K_a]:
+        if keys[pygame.K_q]:
             self.affichage.affiche = MINIMAP
             self.joueur.vitesse = self.joueur.vitesse_autres
         elif keys[pygame.K_i]:
@@ -769,6 +763,16 @@ class Niveau:
                 self.joueur.va_vers_la_gauche()
             elif keys[pygame.K_SPACE]:
                 self.joueur.attaque()
+            elif keys[pygame.K_SPACE]:
+                self.joueur.attaque()
+            elif keys[pygame.K_w]:
+                self.joueur.attaque_lourde(HAUT)
+            elif keys[pygame.K_a]:
+                self.joueur.attaque_lourde(GAUCHE)
+            elif keys[pygame.K_s]:
+                self.joueur.attaque_lourde(BAS)
+            elif keys[pygame.K_d]:
+                self.joueur.attaque_lourde(DROITE)
             elif keys[pygame.K_x]:
                 self.joueur.tentative_interaction()
 
@@ -802,6 +806,7 @@ class Niveau:
             if self.horloge_cycle % agissant.getVitesse()==0:
                 if issubclass(type(agissant),Joueur):
                     self.action_joueur()
+
 
                     agissant.regen_mana()
                 agissant.soigne_toi()
@@ -865,7 +870,7 @@ class Niveau:
         Fonction qui trie les entitees selon l'endroit où on veut les afficher
         """
         new_entitees = []
-        for type_entitee in [Cailloux,Item,Monstre,Projectile,Joueur]:
+        for type_entitee in [Caillou,Item,Monstre,Projectile,Joueur]:
             for entitee in self.entitees:
                 if isinstance(type(entitee),type_entitee):
                     new_entitees.append(entitee)

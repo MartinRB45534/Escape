@@ -79,6 +79,12 @@ DIALOGUE=3
 global ITEM
 ITEM=4
 
+global LIGHT
+LIGHT = 0
+global HEAVY
+HEAVY = 1
+
+
 global sauvegarde
 sauvegarde = "save.p"
 
