@@ -10,10 +10,21 @@ bonus_radius = 3
 temps_effet = 200
 
 class Effet_potion(Evenement):
-    def __init__(self,temps_restant,cible):
+    def __init__(self,temps_restant,cible,utilise=False):
         self.temps_restant = temps_restant
         self.cible = cible
         self.utilise = False
+    def getCopie(self):
+        """
+        Fonction qui copie un item
+        Entrées:
+            Rien
+        Sorties:
+            -une copie de l'item indépendante de l'objet qui l'as générée
+        """
+        copie = Effet_potion(self.temps_restant, self.cible,self.utilise)
+        
+        return copie
        
 class Effet_potion_portee(Effet_potion):
     

@@ -106,3 +106,15 @@ class Joueur(Agissant):
 
     def precise_item(self,screen):
         self.inventaire.precise_item(screen)
+
+    def getCopie(self):
+        """
+        Fonction qui copie le joueur
+        Entrées:
+            Rien
+        Sorties:
+            -une copie du joueur indépendante de l'objet qui l'as générée
+        """
+        copie = Joueur(self.minimap.getCopie(self.position), self.inventaire.getCopie(), self.pv, self.pv_max, self.mana_max, self.degats, self.vitesse_lab, self.vitesse_autres, self.radius,self.largeur_vue, self.hauteur_vue, self.position, self.portee_vue)
+
+        return copie

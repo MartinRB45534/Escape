@@ -118,3 +118,19 @@ class Inventaire:
         self.item_courant -= 1
         if self.item_courant < 0:
             self.item_courant = self.longueur-1
+    def getCopie(self):
+        """
+        Fonction qui copie l'inventaire
+        Entrées:
+            Rien
+        Sorties:
+            -une copie de l'inventaire indépendante de l'objet qui l'as générée
+        """
+        copie_items = []
+        for nom_item in self.items:
+            for i in range(len(self.items[nom_item])):
+                copie_items.append(self.items[nom_item][i].getCopie())
+
+        copie = Inventaire(copie_items)
+
+        return copie

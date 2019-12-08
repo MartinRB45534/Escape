@@ -89,6 +89,6 @@ global sauvegarde
 sauvegarde = "save.p"
 
 global TAILLE_FIXE
-TAILLE_FIXE = False
+TAILLE_FIXE = True
 global taille_fixe
 taille_fixe = 10

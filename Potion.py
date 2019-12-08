@@ -13,9 +13,6 @@ class Potion(Item):
         self.couleur = (255,255,0)
         self.effet=None
 
-    #def récupère(self):
-    #    """méthode appelée quand le joueur récupère la potion, qui la place dans l'inventaire"""
-
     def recupere(self):
         """méthode appelée quand le joueur récupère la potion, qui l'utilise instantannément"""
         self.position = None
@@ -31,6 +28,19 @@ class Potion(Item):
     def decrit_toi(cls):
         """Fonction qui décrit les effets de l'item"""
         print("À surdéfinir !")
+
+    def getCopie(self):
+        """
+        Fonction qui copie un item
+        Entrées:
+            Rien
+        Sorties:
+            -une copie de l'item indépendante de l'objet qui l'as générée
+        """
+        copie = Potion(self.position, self.cible)
+        copie.effet = self.effet.getCopie()
+        
+        return copie
 
 class Potion_de_portee(Potion):
 

@@ -236,14 +236,15 @@ class Niveau:
             self.joueur=Joueur(minimap,inventaire_joueur,self.hp_joueur,self.hp_joueur,self.mana_joueur,self.force_joueur,self.vitesse_joueur_lab,self.vitesse_joueur_autres,2,self.zoom_largeur,self.zoom_hauteur,self.depart)
             
         elif debut_niveau:
-
             minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap,self.depart,self.arrivee)
             self.joueur = Joueur(minimap,joueur.inventaire,joueur.pv_max,joueur.pv_max,joueur.mana_max,joueur.degats,joueur.vitesse_lab,joueur.vitesse_autres,joueur.radius,joueur.largeur_vue,joueur.hauteur_vue,self.depart)
             self.joueur.mana = joueur.mana
 
         else:
-
             self.joueur = joueur
+        
+        #on récupère une copie du joueur ou cas ou il perd
+        self.precedent_joueur = self.joueur.getCopie()
 
 
 
@@ -630,17 +631,21 @@ class Niveau:
                 res = 0
                 run=False
             pygame.display.update()
-        self.fin_niveau()
+        self.fin_niveau(self.as_perdu())
         return res,self.lab.as_gagner(self.joueur.getPosition()),self.joueur
 
-    def fin_niveau(self):
+    def fin_niveau(self, as_perdu):
         """
         Fonction qui gère la fin du niveau
+        Entrées:
+            -un booéen indiquant si le joueur as perdu (comme vous d'ailleurs)
         """
         #on met fin a tout les événements
         for evenement in self.evenements:
             evenement.temps_restant=0
             evenement.action()
+        if as_perdu:
+            self.joueur = self.precedent_joueur
     def generation_meutes(self):
         """
         Fonction qui génère les meutes
