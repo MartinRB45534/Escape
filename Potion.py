@@ -6,8 +6,6 @@ from Effets import *
 class Potion(Item):
     
     def __init__(self,position=None,cible=None):
-        """fonction qui crée une potion
-           à utiliser quand la potion spawn sur la map"""
         self.position = position
         self.cible = cible
         self.couleur = (255,255,0)
@@ -49,6 +47,7 @@ class Potion_de_portee(Potion):
         self.effet = Effet_potion_portee(temps_effet,self.cible)
 
     def __str__(self):
+        """Pour la clé dans le dictionnaire de l'inventaire"""
         return("Potion_de_portee")
 
     def decrit_toi(cls):
@@ -62,6 +61,7 @@ class Potion_de_portee_permanente(Potion):
         self.effet = Effet_potion_portee_permanente(temps_effet,self.cible)
 
     def __str__(self):
+        """Pour la clé dans le dictionnaire de l'inventaire"""
         return("Potion_de_portee_permanente")
 
     def decrit_toi(cls):
@@ -75,6 +75,7 @@ class Potion_de_soin(Potion):
         self.effet = Effet_potion_soin(temps_effet,self.cible)
 
     def __str__(self):
+        """Pour la clé dans le dictionnaire de l'inventaire"""
         return("Potion_de_soin")
 
     def decrit_toi(cls):
@@ -88,6 +89,7 @@ class Potion_de_soin_permanente(Potion):
         self.effet = Effet_potion_soin_permanente(temps_effet,self.cible)
 
     def __str__(self):
+        """Pour la clé dans le dictionnaire de l'inventaire"""
         return("Potion_de_soin_permanente")
 
     def decrit_toi(cls):
@@ -101,6 +103,7 @@ class Potion_de_force(Potion):
         self.effet = Effet_potion_force(temps_effet,self.cible)
 
     def __str__(self):
+        """Pour la clé dans le dictionnaire de l'inventaire"""
         return("Potion_de_force")
 
     def decrit_toi(cls):
@@ -114,6 +117,7 @@ class Potion_de_force_permanente(Potion):
         self.effet = Effet_potion_force_permanente(temps_effet,self.cible)
 
     def __str__(self):
+        """Pour la clé dans le dictionnaire de l'inventaire"""
         return("Potion_de_force_permanente")
 
     def decrit_toi(cls):
@@ -127,6 +131,7 @@ class Potion_de_vision(Potion):
         self.effet = Effet_potion_vision(temps_effet,self.cible)
 
     def __str__(self):
+        """Pour la clé dans le dictionnaire de l'inventaire"""
         return("Potion_de_vision")
 
     def decrit_toi(cls):
@@ -140,6 +145,7 @@ class Potion_de_visibilite_permanente(Potion):
         self.effet = Effet_potion_visibilite_permanente(temps_effet,self.cible)
 
     def __str__(self):
+        """Pour la clé dans le dictionnaire de l'inventaire"""
         return("Potion_de_visibilité_permanente")
 
     def decrit_toi(cls):

@@ -322,7 +322,7 @@ class Affichage:
             -un entier
         """
         #print(self.decalage_matrice[1]+(self.LARGEUR_MUR+self.LARGEUR_CASE)*(portee_joueur+2))
-        return self.decalage_matrice[1]+(self.LARGEUR_MUR+self.LARGEUR_CASE)*(hauteur_vue) + 30
+        return self.decalage_matrice[1]+(self.LARGEUR_MUR+self.LARGEUR_CASE)*(hauteur_vue) + 60
     def getBottomX(self,largeur_vue):
         """
         Fonction qui renvoie le x correspondant à la droite de l'écran
