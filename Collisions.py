@@ -93,37 +93,15 @@ class Collision:
 
         new_position_vue=position_vue
         mat_attaque=None
+
+        resol = Resolveur(vue_attaquant,len(vue_attaquant),len(vue_attaquant[0]),-1,-1,position_attaquant[0]-position_vue[0],position_attaquant[1]-position_vue[1])
+
         if issubclass(type(attaquant),Joueur):
-            position_attaquant_dans_vue=[position_attaquant[0]-position_vue[0],position_attaquant[1]-position_vue[1]]
-            
-            if not(vue_attaquant[position_attaquant_dans_vue[0]][position_attaquant_dans_vue[1]].mur_plein(attaquant.dir_regard)):
-                nb_cases=1
-                mat_attaque=[[]]
-                while nb_cases<=attaquant.radius:
-                    if attaquant.dir_regard==HAUT and vue_attaquant[position_attaquant_dans_vue[0]][position_attaquant_dans_vue[1]-nb_cases+1]!=None and not(vue_attaquant[position_attaquant_dans_vue[0]][position_attaquant_dans_vue[1]-nb_cases+1].mur_plein(attaquant.dir_regard)):
-                        mat_attaque[0].append(True)
-                    elif attaquant.dir_regard==DROITE and vue_attaquant[position_attaquant_dans_vue[0]+nb_cases-1][position_attaquant_dans_vue[1]]!=None and not(vue_attaquant[position_attaquant_dans_vue[0]+nb_cases-1][position_attaquant_dans_vue[1]].mur_plein(attaquant.dir_regard)):
-                        mat_attaque.append([True])
-                    elif attaquant.dir_regard==BAS and vue_attaquant[position_attaquant_dans_vue[0]][position_attaquant_dans_vue[1]+nb_cases-1]!=None and not(vue_attaquant[position_attaquant_dans_vue[0]][position_attaquant_dans_vue[1]+nb_cases-1].mur_plein(attaquant.dir_regard)):
-                        mat_attaque[0].append(True)
-                    elif attaquant.dir_regard==GAUCHE and vue_attaquant[position_attaquant_dans_vue[0]-nb_cases+1][position_attaquant_dans_vue[1]]!=None and not(vue_attaquant[position_attaquant_dans_vue[0]-nb_cases+1][position_attaquant_dans_vue[1]].mur_plein(attaquant.dir_regard)):
-                        mat_attaque.append([True])
-                    nb_cases+=1
-                #on actualise la position de la vue
-                if attaquant.dir_regard==HAUT:
-                    new_position_vue=[position_attaquant[0],position_attaquant[1]-attaquant.radius]
-                elif attaquant.dir_regard==DROITE:
-                    new_position_vue=position_attaquant
-                    mat_attaque.pop(0)
-                elif attaquant.dir_regard==BAS:
-                    new_position_vue=position_attaquant
-                elif attaquant.dir_regard==GAUCHE:
-                    new_position_vue=[position_attaquant[0]-attaquant.radius,position_attaquant[1]]
-                    mat_attaque.pop(0)
-            else:
-                mat_attaque=[[]]
+            if attaquant.mode_attaque == HEAVY:
+                 mat_attaque = resol.resolution_undirectionnelle_limitee(False,attaquant.radius,attaquant.dir_regard)
+            elif attaquant.mode_attaque == LIGHT:
+                mat_attaque = resol.resolution_en_largeur_distance_limitée(False,False,False,True,attaquant.radius)
         elif issubclass(type(attaquant),Monstre):
-            resol=Resolveur(vue_attaquant,len(vue_attaquant),len(vue_attaquant[0]),-1,-1,position_attaquant[0]-position_vue[0],position_attaquant[1]-position_vue[1])
             #on récupère la matrice accesible par l'attaque
             mat_attaque=resol.resolution_en_largeur_distance_limitée(False,False,False,True,attaquant.radius)
             
@@ -138,7 +116,13 @@ class Collision:
         Sorties:
             Rien
         """
-        victime.pv-=attaquant.degats
+        if not(issubclass(type(attaquant),Joueur)):
+            victime.pv-=attaquant.degats
+        else:
+            if attaquant.mode_attaque == HEAVY:
+                victime.pv-=attaquant.degats*2
+            elif attaquant.mode_attaque == LIGHT:
+                victime.pv-=attaquant.degats
     def attaque_mutuelle(self,entitee1,entitee2):
         """
         La Fonction qui applique des dégats d'une attaque affectant les deux entitées

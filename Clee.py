@@ -17,3 +17,14 @@ class Clee(Item):
     def decrit_toi(cls):
         """Fonction qui décrit les effets de l'item"""
         return(["Une clée.","Sert à ouvrir une ou plusieurs portes."])
+    def getCopie(self):
+        """
+        Fonction qui copie un item
+        Entrées:
+            Rien
+        Sorties:
+            -une copie de l'item indépendante de l'objet qui l'as générée
+        """
+        copie = Clee(self.position, self.nom_clee)
+
+        return copie

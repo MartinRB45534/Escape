@@ -79,10 +79,16 @@ DIALOGUE=3
 global ITEM
 ITEM=4
 
+global LIGHT
+LIGHT = 0
+global HEAVY
+HEAVY = 1
+
+
 global sauvegarde
 sauvegarde = "save.p"
 
 global TAILLE_FIXE
-TAILLE_FIXE = False
+TAILLE_FIXE = True
 global taille_fixe
 taille_fixe = 10

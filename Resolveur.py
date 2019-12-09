@@ -480,6 +480,52 @@ class Resolveur:
 
             
         return solution
+    def resolution_undirectionnelle_limitee(self,afficher_chemin,distance_max,direction):
+        """
+        Fonction qui affiche la matrice an allant dans une direction tout en restant à une certaine distance du joueur
+        Entrées:
+            Un booléen indiquant si l'on veut afficher le chemin ou pas
+            la distance maximal du résolveur
+            la direction vers laquelle on se dirige
+        Sorties:
+            la matrice indiquant ou est passer le résolveur
+        """
+        #position dans la matrice
+        position_x=self.depart_x
+        position_y=self.depart_y
+
+
+        self.cases_visitees[self.depart_x][self.depart_y] = True
+
+        fini = False
+
+        nb_cases = 0
+
+        while not(fini) and nb_cases <= distance_max:
+            #on affiche le chemin
+            if afficher_chemin:
+                self.matrice_cases[position_x][position_y].set_Couleur((255,0,0))
+
+            if not(self.matrice_cases[position_x][position_y].mur_plein(direction)) :
+                #on marque la case comme visitée
+                self.cases_visitees[position_x][position_y]=True       
+
+                #on obtient la position suivante
+                voisins,positions_voisins=self.voisins_case(position_x,position_y)
+
+                position_x = positions_voisins[direction][0]
+                position_y = positions_voisins[direction][1]
+                
+                nb_cases += 1
+            else:
+                fini = True
+                
+            #print(chemin_courant.getChemin())
+        
+        solution=self.cases_visitees
+
+        return solution
+
 
 class Chemin():
     def __init__(self,chemin_precedent,poids_precedent,position_x,position_y):

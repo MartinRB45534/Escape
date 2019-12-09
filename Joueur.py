@@ -35,37 +35,41 @@ class Joueur(Agissant):
         #la direction du regard du joueur
         self.dir_regard=HAUT
         self.drops=[]
+        self.mode_attaque=None
 
     def prochaine_action(self):
         pass
     def va_vers_la_gauche(self):
         """fonction qui demande d'aller vers la gauche"""
-        self.dir_regard=GAUCHE
         self.next_action=GAUCHE
         self.id_next=BOUGER
 
     def va_vers_la_droite(self):
         """fonction qui demande d'aller vers la droite"""
-        self.dir_regard=DROITE
         self.next_action=DROITE
         self.id_next=BOUGER
 
     def va_vers_le_haut(self):
         """fonction qui demande d'aller vers le haut"""
-        self.dir_regard=HAUT
         self.next_action=HAUT
         self.id_next=BOUGER
 
     def va_vers_le_bas(self):
         """fonction qui demande d'aller vers le bas"""
-        self.dir_regard=BAS
         self.next_action=BAS
         self.id_next=BOUGER
     def attaque(self):
-        """fonction qui demande d'attaquer"""
+        """fonction qui demande de faire une attaque légère"""
 
-        self.next_action=None
+        self.mode_attaque=LIGHT
         self.id_next=ATTAQUER
+        
+    def attaque_lourde(self, direction):
+        """fonction qui demande de faire une attaque lourde"""
+        self.dir_regard = direction
+        self.mode_attaque=HEAVY
+        self.id_next=ATTAQUER
+        
     def tentative_interaction(self):
         """Fonction qui essaie d'interagir"""
         self.next_action = None
@@ -102,3 +106,15 @@ class Joueur(Agissant):
 
     def precise_item(self,screen):
         self.inventaire.precise_item(screen)
+
+    def getCopie(self):
+        """
+        Fonction qui copie le joueur
+        Entrées:
+            Rien
+        Sorties:
+            -une copie du joueur indépendante de l'objet qui l'as générée
+        """
+        copie = Joueur(self.minimap.getCopie(self.position), self.inventaire.getCopie(), self.pv, self.pv_max, self.mana_max, self.degats, self.vitesse_lab, self.vitesse_autres, self.radius,self.largeur_vue, self.hauteur_vue, self.position, self.portee_vue)
+
+        return copie

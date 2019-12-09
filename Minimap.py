@@ -16,6 +16,9 @@ class Minimap:
         self.zoom = 3
         self.position_centre = depart
         self.decalage = 5
+
+        self.mode_minimap = mode_minimap
+        self.arrivee = arrivee
         
     def dessine_toi(self,screen,position_screen,position_joueur,portee_vue,dessine=True):
         """
@@ -168,3 +171,18 @@ class Minimap:
             return(taille_fixe*2,taille_fixe*2)
         else:
             return (self.max_visible[0]-self.min_visible[0],self.max_visible[1]-self.min_visible[1])
+    def getCopie(self, position_joueur):
+        """
+        Fonction qui copie la minimap
+        Entrées:
+            -la position du joueur
+        Sorties:
+            -une copie de la minimap indépendante de l'objet qui l'as générée
+        """
+        copie = Minimap(self.matrice_cases, self.mode_minimap, position_joueur, self.arrivee)
+        #set des contantes non pris en charge par l'initialisation
+        copie.zoom = self.zoom
+        copie.decalage = self.decalage
+
+        return copie
+
