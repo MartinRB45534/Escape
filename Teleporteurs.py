@@ -25,6 +25,7 @@ class Teleporteur_global(Teleporteur_local):
         self.coord_cible = coord_cible
         self.niveau_cible = niveau_cible
         self.cooldown = cooldown
+        self.compteur_interne = 0
 
     def getNiveau_cible(self):
         """

@@ -96,9 +96,9 @@ class Niveau:
                 self.arrivee = (self.CASES_X-1,self.CASES_Y-1)
                 #variables correspondants a la largeur et la hauteur du zoom
 
-            elif int(niveau) == niveau:
-                self.CASES_X = 20 + 10*niveau
-                self.CASES_Y = 20 + 10*niveau
+            elif not(isinstance(niveau,str)) and int(niveau) == niveau:
+                self.CASES_X = 20 + 10*int(niveau)
+                self.CASES_Y = 20 + 10*int(niveau)
                 self.arrivee = (self.CASES_X-1,self.CASES_Y-1)
                 self.depart = (0,0)
                 res = False
@@ -205,11 +205,12 @@ class Niveau:
                 self.teleporteurs_officieux = [[(32,35),Teleporteur_local([20,20],self.LARGEUR_CASE,self.LARGEUR_MUR,(255,255,255))],[(11,35),Teleporteur_local((20,20),self.LARGEUR_CASE,self.LARGEUR_MUR,(255,255,255))],[(2,12),Teleporteur_local((20,20),self.LARGEUR_CASE,self.LARGEUR_MUR,(255,255,255))],[(3,6),Teleporteur_local([20,20],self.LARGEUR_CASE,self.LARGEUR_MUR,(255,255,255))]]
                 self.fontaines = [[[20,20],Fontaine_heal(self.LARGEUR_CASE,self.LARGEUR_MUR,0,(20,20,125))]]
                 self.cases_speciales = self.teleporteurs_officiels + self.teleporteurs_officieux + self.fontaines
-
+            
             self.poids=[6,2,1,2]
             #génération du labyrinthe
             self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.arrivee,self.depart,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles,self.cases_speciales)
             self.lab.generation(None,proba_murs,None,None)
+            
 
         else:
             self.lab = labyrinthe
@@ -226,7 +227,7 @@ class Niveau:
         elif joueur == None:
             if niveau == 0:
                 inventaire_joueur = Inventaire()
-            elif int(niveau) == niveau:
+            elif not(isinstance(niveau,str)) and int(niveau) == niveau:
                 inventaire_joueur = Inventaire()
             elif niveau == "tuto1":
                 inventaire_joueur = Inventaire([Clee(None,"Premier pas")])
@@ -293,7 +294,7 @@ class Niveau:
                 for position in positions:
                     self.entitees.append(Caillou(position))
 
-            elif int(niveau) == niveau:
+            elif not(isinstance(niveau,str)) and int(niveau) == niveau:
                 self.vitesse_monstres=20
 
                 easy_drops = [Potion_de_force,Potion_de_vision,Potion_de_portee]
@@ -499,7 +500,7 @@ class Niveau:
             self.evenements = evenements
 
         self.missions=[]
-        if int(niveau) == niveau:
+        if not(isinstance(niveau,str)) and int(niveau) == niveau:
             self.mission_1 = ["self.mission_monstres()","self.joueur.augmente_regen(0.1),self.ajout(self.missions,[self.mission_1],self.ajout(self.entitees,self.monstres),self.ajout(self.meutes,self.generation_meutes()"]
             self.mission_2 = ["self.mission_minimap()","self.joueur.augmente_pv(5)"]
             
