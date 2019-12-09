@@ -12,7 +12,7 @@ from Projectiles import *
 
 
 class Labyrinthe:
-    def __init__(self,largeur,hauteur,arrivee,depart,tailleCase=20,tailleMur=1,poids=[1,1,1,1],patterns=None,teleporteurs=[],couleur_case=(255,255,255),couleur_mur=(0,0,0)):
+    def __init__(self,largeur,hauteur,arrivee,depart,tailleCase=20,tailleMur=1,poids=[1,1,1,1],patterns=None,cases_speciales=[],couleur_case=(255,255,255),couleur_mur=(0,0,0)):
         self.largeur = largeur
         self.hauteur = hauteur
 
@@ -20,8 +20,12 @@ class Labyrinthe:
         self.depart = depart
         
         self.matrice_cases = [[Case(tailleCase,tailleMur,couleur_case,couleur_mur) for i in range(hauteur)]for j in range(largeur)]
-        for teleporteur in teleporteurs:
-            self.matrice_cases[teleporteur[0][0]][teleporteur[0][1]] = teleporteur[1]
+
+        self.coord_speciales = []
+
+        for speciale in cases_speciales:
+            self.matrice_cases[speciale[0][0]][speciale[0][1]] = speciale[1]
+            self.coord_speciales.append(speciale[0])
         
         #paramètre graphiques
         self.tailleCase = tailleCase
@@ -31,7 +35,6 @@ class Labyrinthe:
 
         self.patterns=patterns
 
-        self.coord_speciales = []
 
     def generation(self,cases_speciales=None,proba=None,nbMurs=None,pourcentage=None):
         """
@@ -108,9 +111,7 @@ class Labyrinthe:
         if self.matrice_cases[newcoord[0]][newcoord[1]] == None:
             passe=False
 
-        if passe and isinstance(self.matrice_cases[newcoord[0]][newcoord[1]],Teleporteur):
-            tel = self.matrice_cases[newcoord[0]][newcoord[1]].teleporte()
-        return passe, newcoord, tel
+        return passe, newcoord
 
     def as_gagner(self,coords):
         """
@@ -337,11 +338,18 @@ class Labyrinthe:
         Entrées:
             -l'agissant qui peut éventuellement subir un piège
         Sorties:
-            -Rien
+            -les éventuelles informations complémentaires
         """
         position = agissant.getPosition()
+        info_comp = None
+        
         if (issubclass(type(self.matrice_cases[position[0]][position[1]]), Case_speciale)):
             self.matrice_cases[position[0]][position[1]].execute(agissant)
+            if (issubclass(type(self.matrice_cases[position[0]][position[1]]), Teleporteur_global)):
+                info_comp = self.matrice_cases[position[0]][position[1]].getNiveau_cible()
+
+                
+        return info_comp
     def refresh_speciales(self):
         """
         Fonction qui actualise les pièges
