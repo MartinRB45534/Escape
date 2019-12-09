@@ -12,16 +12,20 @@ from Projectiles import *
 
 
 class Labyrinthe:
-    def __init__(self,largeur,hauteur,arrivee,depart,tailleCase=20,tailleMur=1,poids=[1,1,1,1],patterns=None,teleporteurs=[],couleur_case=(255,255,255),couleur_mur=(0,0,0)):
+    def __init__(self,largeur,hauteur,arrivee,depart,tailleCase=20,tailleMur=1,poids=[1,1,1,1],patterns=None,cases_speciales=[],couleur_case=(255,255,255),couleur_mur=(0,0,0)):
         self.largeur = largeur
         self.hauteur = hauteur
 
         self.arrivee = arrivee
         self.depart = depart
+
+        self.coord_speciales = []
         
         self.matrice_cases = [[Case(tailleCase,tailleMur,couleur_case,couleur_mur) for i in range(hauteur)]for j in range(largeur)]
-        for teleporteur in teleporteurs:
-            self.matrice_cases[teleporteur[0][0]][teleporteur[0][1]] = teleporteur[1]
+        for case_speciale in cases_speciales:
+            self.matrice_cases[case_speciale[0][0]][case_speciale[0][1]] = case_speciale[1]
+            if not issubclass(type(case_speciale[1]),Teleporteur):
+                self.coord_speciales.append(case_speciale[0])
         
         #paramètre graphiques
         self.tailleCase = tailleCase
@@ -31,7 +35,6 @@ class Labyrinthe:
 
         self.patterns=patterns
 
-        self.coord_speciales = []
 
     def generation(self,cases_speciales=None,proba=None,nbMurs=None,pourcentage=None):
         """
