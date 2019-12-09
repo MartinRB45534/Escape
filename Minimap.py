@@ -86,8 +86,14 @@ class Minimap:
         Sorties:
             Rien
         """
+        police_titre=pygame.font.SysFont(None,25)
+        police_default = pygame.font.SysFont(None, 15)
+
+        titre = police_titre.render("Minimap",True,(255,255,255))
+        screen.blit(titre,(30,70))
+        
         marge_x = 10
-        marge_y = 60
+        marge_y = 90
         
         decalage = self.decalage * self.zoom
         cases_dispo = ((screen.get_width()-20)//decalage,(screen.get_height()-40)//decalage)
@@ -113,6 +119,11 @@ class Minimap:
                 position_y+=decalage
             position_y=marge_y
             position_x+=decalage
+
+        text_ctrl = police_default.render("- Appuyer sur Entrée pour revenir au labyrinthe -",True,(255,255,255))
+        screen.blit(text_ctrl,(30,position_y+decalage*(coin_bas_gauche[1]-coin_haut_droit[1])+30))
+        text_ctrl = police_default.render("- Utilisez les touches directionnelles pour naviguer la minimap -",True,(255,255,255))
+        screen.blit(text_ctrl,(30,position_y+decalage*(coin_bas_gauche[1]-coin_haut_droit[1])+55))
 
     def va_vers_la_gauche(self):
         if self.position_centre[0] > self.min_visible[0]:
