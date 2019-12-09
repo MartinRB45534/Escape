@@ -109,7 +109,7 @@ class Session ():
         """
         Fonction qui téléporte le joueur entre les niveaux
         """
-        self.niv_courant = Niveau(destination,self.difficulte,self.mode_affichage,self.mode_minimap,destination,True,joueur)
+        self.niv_courant = Niveau(destination[0],self.difficulte,self.mode_affichage,self.mode_minimap,destination,True,joueur)
         self.joueur = joueur
         if isinstance(destination[0],str) and destination[0][:4] == "tuto":
             self.tuto_courant = int(destination[0][4:])

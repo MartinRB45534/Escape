@@ -217,7 +217,6 @@ class Niveau:
             self.arrivee = self.lab.arrivee
             self.depart = self.lab.depart
 
-
         if destination != None:
             minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap,self.depart,self.arrivee)
             self.joueur = joueur
@@ -265,7 +264,7 @@ class Niveau:
 
         else:
             self.joueur = joueur
-        
+
         #on récupère une copie du joueur ou cas ou il perd
         self.precedent_joueur = self.joueur.getCopie()
 
@@ -685,6 +684,7 @@ class Niveau:
                 run=False
             pygame.display.update()
         self.fin_niveau(self.as_perdu())
+
         return res,self.lab.as_gagner(self.joueur.getPosition()),self.joueur
 
     def fin_niveau(self, as_perdu):
@@ -1060,7 +1060,7 @@ class Niveau:
                                 self.evenements.append(evenement)
                             if info_comp != None:
                                 self.greater_teleportation = True
-                                self.destination = info_comp
+                                self.destination = [info_comp,newcoord]
                                 
         elif id_action==ATTAQUER:
             self.affichage.ajout_animation(agissant.getPosition(),0,3,agissant.getRadius()*(self.LARGEUR_CASE+self.LARGEUR_MUR))
