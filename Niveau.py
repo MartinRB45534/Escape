@@ -96,6 +96,17 @@ class Niveau:
                 self.arrivee = (self.CASES_X-1,self.CASES_Y-1)
                 #variables correspondants a la largeur et la hauteur du zoom
 
+            elif int(niveau) == niveau:
+                self.CASES_X = 20 + 10*niveau
+                self.CASES_Y = 20 + 10*niveau
+                self.arrivee = (self.CASES_X-1,self.CASES_Y-1)
+                self.depart = (0,0)
+                res = False
+                self.clees = []
+                self.salles = [Patern((0,0),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,3]]),Patern((self.CASES_X-5,self.CASES_Y-5),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,1]])]
+                proba_murs = 1/(niveau+1)
+                self.cases_speciales = []
+
             elif niveau == "tuto1":
                 self.CASES_X = 15
                 self.CASES_Y = 3
@@ -216,6 +227,8 @@ class Niveau:
         elif joueur == None:
             if niveau == 0:
                 inventaire_joueur = Inventaire()
+            elif int(niveau) == niveau:
+                inventaire_joueur = Inventaire()
             elif niveau == "tuto1":
                 inventaire_joueur = Inventaire([Clee(None,"Premier pas")])
             elif niveau == "tuto2":
@@ -283,6 +296,34 @@ class Niveau:
                 for position in positions:
                     self.entitees.append(Caillou(position))
 
+            elif int(niveau) == niveau:
+                self.vitesse_monstres=20
+
+                easy_drops = [Potion_de_force,Potion_de_vision,Potion_de_portee]
+                hard_drops = [Potion_de_force_permanente,Potion_de_visibilite_permanente,Potion_de_portee_permanente,Potion_de_soin_permanente]
+                self.drops = []
+                for i in range(niveau):
+                    self.drops.append(easy_drops[random.randrange(0,3)](None,self.joueur))
+                self.drops.append(Potion_de_soin(None,self.joueur))
+                monstres=self.spawn_aleatoire(Fatti,10,10,200,20,20,1,((10,10),(self.CASES_X-10,self.CASES_Y-10)),min(0.02*niveau,0.15),niveau,0,(0,0,100),self.drops + [hard_drops[random.randrange(0,4)](None,self.joueur)])
+
+                if niveau > 8:
+                    self.drops = []
+                    for i in range(niveau):
+                        self.drops.append(easy_drops[random.randrange(0,3)](None,self.joueur))
+                    self.drops.append(Potion_de_soin(None,self.joueur))
+                    monstres_1=self.spawn_aleatoire(Slime,5,5,50,3,6,1,((20,20),(self.CASES_X-20,self.CASES_Y-20)),min(0.04*niveau,0.5),niveau,0,(0,0,100),self.drops + [hard_drops[random.randrange(0,4)](None,self.joueur)])
+                    monstres = monstres + monstres_1
+
+                if niveau > 14:
+                    self.drops = []
+                    for i in range(niveau):
+                        self.drops.append(easy_drops[random.randrange(0,3)](None,self.joueur))
+                    self.drops.append(Potion_de_soin(None,self.joueur))
+                    monstres_1=self.spawn_aleatoire(Runner,15,15,75,10,10,1,((25,25),(self.CASES_X-25,self.CASES_Y-25)),min(0.01*niveau,0.25),niveau,0,(255,0,0),self.drops + [hard_drops[random.randrange(0,4)](None,self.joueur)])
+                    monstres = monstres + monstres_1
+                
+                self.entitees=self.clees
 
             elif niveau == "tuto1":
                 self.vitesse_monstres=20
@@ -461,7 +502,11 @@ class Niveau:
             self.evenements = evenements
 
         self.missions=[]
-        if niveau == "tuto2":
+        if int(niveau) == niveau:
+            self.mission_1 = ["self.mission_monstres()","self.joueur.augmente_regen(0.1),self.ajout(self.missions,[self.mission_1],self.ajout(self.entitees,self.monstres),self.ajout(self.meutes,self.generation_meutes()"]
+            self.mission_2 = ["self.mission_minimap()","self.joueur.augmente_pv(5)"]
+            
+        elif niveau == "tuto2":
             self.mission_1 = ["self.pnj.indice_replique == 3","self.petits_cailloux(5,self.joueur.position,(14,16)),self.ajout(self.missions,[self.mission_2])"]
             self.mission_2 = ["self.lab.matrice_cases[14][16].murs[DROITE].etat == MUR_VIDE","self.petits_cailloux(5,self.joueur.position,(3,18)),self.ajout(self.missions,[self.mission_3])"]
             self.mission_3 = ["self.mission_clee('Ouest')","self.petits_cailloux(5,self.joueur.position,(5,35)),self.ajout(self.missions,[self.mission_4])"]
@@ -1092,7 +1137,10 @@ class Niveau:
             for i in range (perimetre[0][0],perimetre[1][0]):
                 for j in range (perimetre[0][1],perimetre[1][1]):
                     if random.random() <= proba :
-                        res.append(monstre((i,j),nb_meute,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,couleur))
+                        if monstre == Runner:
+                            res.append(monstre(self.lab.getMatrice_cases,self.arrivee[0],self.arrivee[1],(i,j),nb_meute,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,couleur))
+                        else:
+                            res.append(monstre((i,j),nb_meute,largeur_vue,hauteur_vue,pv,degats,vitesse,radius,couleur))
                         taille_meute += 1
                         if taille_meute == max_meute :
                             nb_meute += 1
