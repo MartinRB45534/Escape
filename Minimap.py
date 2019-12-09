@@ -150,9 +150,8 @@ class Minimap:
 
     def decouvre(self,position_vue,mat_exploree,position_joueur):
         """
-        Fonction qui dessine le labyrinthe sur l'écran
+        Fonction qui decouvre la minimap
         Entrées:
-            l'écran, la surface sur laquelle on dessine(objet pygame)
             la position du joueur
             la position que l'on prend pour 0,0 sur l'écran (ex: un décalage de 20px sur la droite se traduit par (x+20,y))
             la position de la vue dans le labyrinthe
