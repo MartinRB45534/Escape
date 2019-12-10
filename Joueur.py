@@ -34,7 +34,7 @@ class Joueur(Agissant):
         self.portee_vue=portee_vue
         self.evenements=None
         #la direction du regard du joueur
-        self.dir_regard=HAUT
+        self.dir_regard = None
         self.drops=[]
         self.mode_attaque=None
         
