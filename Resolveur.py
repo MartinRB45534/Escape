@@ -502,13 +502,14 @@ class Resolveur:
         nb_cases = 0
 
         while not(fini) and nb_cases <= distance_max:
+            #on marque la case comme visitée
+            self.cases_visitees[position_x][position_y]=True
+            
             #on affiche le chemin
             if afficher_chemin:
                 self.matrice_cases[position_x][position_y].set_Couleur((255,0,0))
 
             if not(self.matrice_cases[position_x][position_y].mur_plein(direction)) :
-                #on marque la case comme visitée
-                self.cases_visitees[position_x][position_y]=True       
 
                 #on obtient la position suivante
                 voisins,positions_voisins=self.voisins_case(position_x,position_y)

@@ -99,6 +99,34 @@ class Skin_clee(Skin):
         else:
             screen.blit(self.skin,position)
 
+class Skin_lance(Skin):
+    def __init__(self,nom_fichier):
+        try:
+            haut = pygame.image.load("haut_" + nom_fichier)
+            bas = pygame.image.load("bas_" + nom_fichier)
+            droite = pygame.image.load("droite_" + nom_fichier)
+            gauche = pygame.image.load("gauche_" + nom_fichier)
+            self.skins = [haut,droite,bas,gauche]
+        except:
+            self.skins = None
+            print ("L'animation d'attaque directionnelle n'a pas pu être chargée.")
+
+    def dessine_toi(self,screen,position,direction):
+        if self.skins != None:
+            screen.blit(self.skins[direction],position)
+
+class Skin_stomp(Skin):
+    def __init__(self,nom_fichier):
+        try:
+            self.skin = pygame.image.load(nom_fichier)
+        except:
+            self.skins = None
+            print ("L'animation d'attaque directionnelle n'a pas pu être chargée.")
+
+    def dessine_toi(self,screen,position):
+        if self.skin != None:
+            screen.blit(self.skin,position)
+            
 global SKIN_VIDE
 SKIN_VIDE = Skin_mur("mur_vide.png",(255,255,255))
 global SKIN_PLEIN
@@ -138,3 +166,11 @@ global SKIN_POTION_SUPER_VISION
 SKIN_POTION_SUPER_VISION = Skin_potion("super_vision.png")
 global SKIN_CLEE
 SKIN_CLEE = Skin_clee("clee.png")
+global SKIN_LANCE_1
+SKIN_LANCE_1 = Skin_lance("lance_1.png")
+global SKIN_LANCE_2
+SKIN_LANCE_2 = Skin_lance("lance_2.png")
+global SKIN_STOMP_1
+SKIN_STOMP_1 = Skin_stomp("stomp_1.png")
+global SKIN_STOMP_2
+SKIN_STOMP_2 = Skin_stomp("stomp_2.png")

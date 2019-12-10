@@ -20,6 +20,7 @@ class Monstre(Agissant):
         self.next_action=None
         #id de l'action que l'on veut faire
         self.id_next=None
+        self.mode_attaque = LIGHT
         #paramètres de la vue
         self.vue=None
         self.position_vue=None

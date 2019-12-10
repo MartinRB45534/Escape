@@ -1,23 +1,17 @@
-import pygame
 from Evenement import *
+from Skin import *
 
 class Animation(Evenement):
-    def __init__(self,temps_restant,position_lab,radius,surface):
+    def __init__(self,temps_restant,position_lab,surface):
         self.temps_restant=temps_restant
         self.temps_initial=temps_restant
         self.position_lab=position_lab
         self.position_pixel=None
-        #radius est en pixels
-        self.radius_max=radius
         self.surface=surface
     def setPosition(self,new_position):
         self.position_pixel=new_position
     def getPosition(self):
         return self.position_lab
-    def setRadius(self,new_radius):
-        self.radius=new_radius
-    def getRadius(self):
-        return self.radius
     def execute(self):
         """
         Fonction qui exécute un tic de l'animation(1 frame = 1 tic)
@@ -32,7 +26,7 @@ class Animation(Evenement):
             self.action()
         return (self.temps_restant<=0)
 
-class Attaque(Animation):
+class Attaque_omnidirectionnelle(Animation):
     def action(self):
         """
         Fonction qui exécute l'animation d'attaque
@@ -41,6 +35,28 @@ class Attaque(Animation):
         Sorties:
             Rien
         """
-        radius=int(self.radius_max*(self.temps_initial/(self.temps_initial+self.temps_restant)))
-        pygame.draw.circle(self.surface,(194,54,22),self.position_pixel,radius,1)
+        if self.temps_restant%2 == 0:
+            SKIN_STOMP_1.dessine_toi(self.surface,self.position_pixel)
+        else:
+            SKIN_STOMP_2.dessine_toi(self.surface,self.position_pixel)
         
+class Attaque_unidirectionnelle(Animation):
+    def __init__(self,temps_restant,position_lab,direction,surface):
+        self.temps_restant=temps_restant
+        self.temps_initial=temps_restant
+        self.position_lab=position_lab
+        self.position_pixel=None
+        self.surface=surface
+        self.direction=direction
+    def action(self):
+        """
+        Fonction qui exécute l'animation d'attaque
+        Entrées:
+            Rien
+        Sorties:
+            Rien
+        """
+        if self.temps_restant%2 == 0:
+            SKIN_LANCE_1.dessine_toi(self.surface,self.position_pixel,self.direction)
+        else:
+            SKIN_LANCE_2.dessine_toi(self.surface,self.position_pixel,self.direction)

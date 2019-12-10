@@ -35,9 +35,7 @@ class Collision:
                         if mat_explorable[x][y]:
                             succes=True
                             self.attaque(agissant,attaquant)
-                        #else:
-                            #print(mat_explorable[x][y])
-        return succes
+        return succes, mat_explorable
     def tentative_interaction(self,agissant,entitees):
         """
         Fonction qui effectue une interaction entre un agissant et
@@ -96,14 +94,11 @@ class Collision:
 
         resol = Resolveur(vue_attaquant,len(vue_attaquant),len(vue_attaquant[0]),-1,-1,position_attaquant[0]-position_vue[0],position_attaquant[1]-position_vue[1])
 
-        if issubclass(type(attaquant),Joueur):
-            if attaquant.mode_attaque == HEAVY:
-                 mat_attaque = resol.resolution_undirectionnelle_limitee(False,attaquant.radius,attaquant.dir_regard)
-            elif attaquant.mode_attaque == LIGHT:
-                mat_attaque = resol.resolution_en_largeur_distance_limitée(False,False,False,True,attaquant.radius)
-        elif issubclass(type(attaquant),Monstre):
-            #on récupère la matrice accesible par l'attaque
-            mat_attaque=resol.resolution_en_largeur_distance_limitée(False,False,False,True,attaquant.radius)
+
+        if attaquant.mode_attaque == HEAVY:
+            mat_attaque = resol.resolution_undirectionnelle_limitee(False,attaquant.radius,attaquant.dir_regard)
+        elif attaquant.mode_attaque == LIGHT:
+            mat_attaque = resol.resolution_en_largeur_distance_limitée(False,False,False,True,attaquant.radius)
             
             
         return mat_attaque,new_position_vue
