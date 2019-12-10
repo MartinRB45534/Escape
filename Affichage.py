@@ -377,7 +377,7 @@ class Affichage:
                     if mat_exploree[x][y]:
                         entitee.dessine_toi(self.screen,[x,y],self.LARGEUR_CASE,self.LARGEUR_MUR,position_screen)
         
-    def ajout_animation(self,position_anim,type_anim,temps,radius):
+    def ajout_animation(self,position_anim,type_anim,mat_anim,direction):
         """
         Fonction qui ajoute une animation a exécuter
         Entrées:
@@ -388,15 +388,26 @@ class Affichage:
             -le radius en cases
         """
         new_animation=None
-        if type_anim==0:
-            #la position en pixels sera déterminée que lorsque
-            #qu'on voudra la dessiner
-            new_animation=Attaque(temps,position_anim,radius,self.screen)
+        if type_anim == LIGHT:
+            for x in range(len(mat_anim)):
+                for y in range(len(mat_anim[0])):
+                    if mat_anim[x][y]:
+                        position = (position_anim[0] + x - len(mat_anim) // 2,position_anim[1] + y - len(mat_anim[0]) // 2)
+                        new_animation=Attaque_omnidirectionnelle(3,position,self.screen)
+                        self.animations.append(new_animation)
+                        #la position en pixels sera déterminée que lorsque
+                        #qu'on voudra la dessiner
+        elif type_anim == HEAVY:
+            for x in range(len(mat_anim)):
+                for y in range(len(mat_anim[0])):
+                    if mat_anim[x][y]:
+                        position = (position_anim[0] + x - len(mat_anim) // 2,position_anim[1] + y - len(mat_anim[0]) // 2)
+                        new_animation=Attaque_unidirectionnelle(3,position,direction,self.screen)
+                        self.animations.append(new_animation)
+                        #la position en pixels sera déterminée que lorsque
+                        #qu'on voudra la dessiner
         else:
             print("le type d'animation choisi est invalide")
-
-        if new_animation!=None:
-            self.animations.append(new_animation)
 
     def dessine_animations(self,position_joueur,largeur_vue,hauteur_vue):
         """
@@ -409,8 +420,8 @@ class Affichage:
         for animation in self.animations:
             position_lab_anim=animation.getPosition()
             if self.est_dans_vue(position_lab_anim,position_joueur,largeur_vue,hauteur_vue):
-                position_anim_x=(self.LARGEUR_CASE+self.LARGEUR_MUR)*(position_lab_anim[0]-position_joueur[0]+largeur_vue//2)+round((self.LARGEUR_CASE+self.LARGEUR_MUR)*0.5)+self.decalage[0]
-                position_anim_y=(self.LARGEUR_CASE+self.LARGEUR_MUR)*(position_lab_anim[1]-position_joueur[1]+hauteur_vue//2)+round((self.LARGEUR_CASE+self.LARGEUR_MUR)*0.5)+self.decalage[1]
+                position_anim_x=(self.LARGEUR_CASE+self.LARGEUR_MUR)*(position_lab_anim[0]-position_joueur[0]+largeur_vue//2)+self.decalage[0]
+                position_anim_y=(self.LARGEUR_CASE+self.LARGEUR_MUR)*(position_lab_anim[1]-position_joueur[1]+hauteur_vue//2)+self.decalage[1]
 
                 position_anim=[position_anim_x,position_anim_y]
 

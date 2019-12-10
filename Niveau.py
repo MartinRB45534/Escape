@@ -1065,8 +1065,9 @@ class Niveau:
                                 self.destination = [info_comp,agissant.getPosition()]
                                 
         elif id_action==ATTAQUER:
-            self.affichage.ajout_animation(agissant.getPosition(),0,3,agissant.getRadius()*(self.LARGEUR_CASE+self.LARGEUR_MUR))
-            succes=self.collision.tentative_attaque(agissant,self.entitees)
+            succes,mat_attaque=self.collision.tentative_attaque(agissant,self.entitees)
+            direction=agissant.dir_regard
+            self.affichage.ajout_animation(agissant.getPosition(),agissant.mode_attaque,mat_attaque,direction)
         elif id_action==INTERAGIR:
             succes = self.collision.tentative_interaction(agissant,self.entitees)
         elif id_action==PARLER:
