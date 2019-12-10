@@ -1,7 +1,8 @@
 from Labyrinthe import *
 from Constantes import *
-import pygame
+from Skin import *
 from Agissant import *
+import pygame
 
 class Joueur(Agissant):
 
@@ -36,27 +37,32 @@ class Joueur(Agissant):
         self.dir_regard=HAUT
         self.drops=[]
         self.mode_attaque=None
+        
 
     def prochaine_action(self):
         pass
     def va_vers_la_gauche(self):
         """fonction qui demande d'aller vers la gauche"""
         self.next_action=GAUCHE
+        self.dir_regard = GAUCHE
         self.id_next=BOUGER
 
     def va_vers_la_droite(self):
         """fonction qui demande d'aller vers la droite"""
         self.next_action=DROITE
+        self.dir_regard = DROITE
         self.id_next=BOUGER
 
     def va_vers_le_haut(self):
         """fonction qui demande d'aller vers le haut"""
         self.next_action=HAUT
+        self.dir_regard = HAUT
         self.id_next=BOUGER
 
     def va_vers_le_bas(self):
         """fonction qui demande d'aller vers le bas"""
         self.next_action=BAS
+        self.dir_regard = BAS
         self.id_next=BOUGER
     def attaque(self):
         """fonction qui demande de faire une attaque légère"""
@@ -84,7 +90,7 @@ class Joueur(Agissant):
         self.mana = min(self.mana+self.regeneration_mana,self.mana_max)        
     
     def dessine_toi(self,screen,decalage,LARGEUR_CASE,LARGEUR_MUR,position_screen):
-        pygame.draw.rect(screen, pygame.Color(0,255,0),((decalage[0])*(LARGEUR_CASE+LARGEUR_MUR)+LARGEUR_MUR+position_screen[0],(decalage[1])*(LARGEUR_CASE+LARGEUR_MUR)+LARGEUR_MUR+position_screen[1],LARGEUR_CASE-2*LARGEUR_MUR,LARGEUR_CASE-2*LARGEUR_MUR))
+        SKIN_JOUEUR.dessine_toi(screen,((decalage[0])*(LARGEUR_CASE+LARGEUR_MUR)+LARGEUR_MUR+position_screen[0],(decalage[1])*(LARGEUR_CASE+LARGEUR_MUR)+LARGEUR_MUR+position_screen[1]),self.dir_regard)
 
     def dessine_minimap(self,screen,position_screen,dessine):
         self.minimap.dessine_toi(screen,position_screen,self.position,self.portee_vue,dessine)

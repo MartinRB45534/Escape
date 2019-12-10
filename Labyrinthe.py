@@ -18,8 +18,6 @@ class Labyrinthe:
 
         self.arrivee = arrivee
         self.depart = depart
-
-        self.coord_speciales = []
         
         self.matrice_cases = [[Case(tailleCase,tailleMur,couleur_case,couleur_mur) for i in range(hauteur)]for j in range(largeur)]
 
