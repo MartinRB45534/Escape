@@ -2,6 +2,7 @@ import pygame
 from Evenement import *
 from Item import *
 from Effets import *
+from Skin import *
 
 class Potion(Item):
     
@@ -54,6 +55,10 @@ class Potion_de_portee(Potion):
         """Fonction qui décrit les effets de l'item"""
         return(["Une potion de portée.","Augmente la portée de {} pendant {} secondes.".format(bonus_radius,temps_effet),"Il est possible de la vendre au magicien."])
 
+    def dessine_toi(self,screen,decalage,LARGEUR_CASE,LARGEUR_MUR,position_screen):
+        SKIN_POTION_PORTEE.dessine_toi(screen,((decalage[0]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[0],(decalage[1]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[1]))
+
+
 class Potion_de_portee_permanente(Potion):
 
     def __init__(self,position,cible):
@@ -67,6 +72,9 @@ class Potion_de_portee_permanente(Potion):
     def decrit_toi(cls):
         """Fonction qui décrit les effets de l'item"""
         return(["Une potion de portée permanente","Augmente la portée de {} définitivement.".format(bonus_radius_permanent),"Ne peut pas être vendue."])
+
+    def dessine_toi(self,screen,decalage,LARGEUR_CASE,LARGEUR_MUR,position_screen):
+        SKIN_POTION_SUPER_PORTEE.dessine_toi(screen,((decalage[0]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[0],(decalage[1]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[1]))
         
 class Potion_de_soin(Potion):
 
@@ -82,6 +90,9 @@ class Potion_de_soin(Potion):
         """Fonction qui décrit les effets de l'item"""
         return(["Une potion de soin.","Soigne jusqu'à {} PV.".format(bonus_pv),"Ne peut pas soigner au-delà des PV max.","Il est possible de la vendre au magicien."])
 
+    def dessine_toi(self,screen,decalage,LARGEUR_CASE,LARGEUR_MUR,position_screen):
+        SKIN_POTION_SOIN.dessine_toi(screen,((decalage[0]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[0],(decalage[1]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[1]))
+
 class Potion_de_soin_permanente(Potion):
 
     def __init__(self,position,cible):
@@ -95,6 +106,9 @@ class Potion_de_soin_permanente(Potion):
     def decrit_toi(cls):
         """Fonction qui décrit les effets de l'item"""
         return(["Une potion de soin permanente","Augmente la régénération de {} définitivement.".format(bonus_soin),"Ne peut pas être vendue."])
+
+    def dessine_toi(self,screen,decalage,LARGEUR_CASE,LARGEUR_MUR,position_screen):
+        SKIN_POTION_SUPER_SOIN.dessine_toi(screen,((decalage[0]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[0],(decalage[1]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[1]))
 
 class Potion_de_force(Potion):
 
@@ -110,6 +124,9 @@ class Potion_de_force(Potion):
         """Fonction qui décrit les effets de l'item"""
         return(["Une potion de force.","Augmente la force de {} pendant {} secondes.".format(bonus_force,temps_effet),"(La force représente les dégats infligés lors d'une attaque.)","Il est possible de la vendre au magicien."])
 
+    def dessine_toi(self,screen,decalage,LARGEUR_CASE,LARGEUR_MUR,position_screen):
+        SKIN_POTION_FORCE.dessine_toi(screen,((decalage[0]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[0],(decalage[1]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[1]))
+
 class Potion_de_force_permanente(Potion):
 
     def __init__(self,position,cible):
@@ -123,6 +140,9 @@ class Potion_de_force_permanente(Potion):
     def decrit_toi(cls):
         """Fonction qui décrit les effets de l'item"""
         return(["Une potion de force permanente","Augmente la force de {} définitivement.".format(bonus_force_permanent),"(La force représente les dégats infligés lors d'une attaque.)","Ne peut pas être vendue."])
+
+    def dessine_toi(self,screen,decalage,LARGEUR_CASE,LARGEUR_MUR,position_screen):
+        SKIN_POTION_SUPER_FORCE.dessine_toi(screen,((decalage[0]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[0],(decalage[1]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[1]))
         
 class Potion_de_vision(Potion):
 
@@ -138,6 +158,9 @@ class Potion_de_vision(Potion):
         """Fonction qui décrit les effets de l'item"""
         return(["Une potion de vision.","Augmente le champ de vision de {} pendant {} secondes.".format(bonus_vue,temps_effet),"Il est possible de la vendre au magicien."])
 
+    def dessine_toi(self,screen,decalage,LARGEUR_CASE,LARGEUR_MUR,position_screen):
+        SKIN_POTION_VISION.dessine_toi(screen,((decalage[0]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[0],(decalage[1]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[1]))
+
 class Potion_de_visibilite_permanente(Potion):
 
     def __init__(self,position,cible):
@@ -152,3 +175,5 @@ class Potion_de_visibilite_permanente(Potion):
         """Fonction qui décrit les effets de l'item"""
         return(["Une potion de vision permanente","Augmente le champ de vision de {} définitivement.".format(bonus_vue_permanent),"Ne peut pas être vendue."])
 
+    def dessine_toi(self,screen,decalage,LARGEUR_CASE,LARGEUR_MUR,position_screen):
+        SKIN_POTION_SUPER_VISION.dessine_toi(screen,((decalage[0]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[0],(decalage[1]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[1]))

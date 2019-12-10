@@ -9,7 +9,8 @@ class Skin:
             bas = pygame.image.load("bas_" + nom_fichier)
             droite = pygame.image.load("droite_" + nom_fichier)
             gauche = pygame.image.load("gauche_" + nom_fichier)
-            self.skins = [haut,droite,bas,gauche]
+            immobile = pygame.image.load("immobile_" + nom_fichier)
+            self.skins = [haut,droite,bas,gauche,immobile]
         except:
             self.skins = None
             self.couleur = couleur
@@ -17,10 +18,23 @@ class Skin:
     def dessine_toi(self,screen,position,direction):
         if self.skins == None:
             pygame.draw.rect(screen,self.couleur,(position[0],position[1],19,19))
+        elif direction == None:
+            screen.blit(self.skins[4],position)
         else:
             screen.blit(self.skins[direction],position)
 
 class Skin_mur(Skin):
+
+    def __init__(self,nom_fichier,couleur=(0,0,0)):
+        try:
+            haut = pygame.image.load("haut_" + nom_fichier)
+            bas = pygame.image.load("bas_" + nom_fichier)
+            droite = pygame.image.load("droite_" + nom_fichier)
+            gauche = pygame.image.load("gauche_" + nom_fichier)
+            self.skins = [haut,droite,bas,gauche]
+        except:
+            self.skins = None
+            self.couleur = couleur
 
     def dessine_toi(self,screen,position,direction):
         if self.skins == None:
@@ -56,6 +70,35 @@ class Skin_case(Skin):
         else:
             screen.blit(self.skin,position)
 
+class Skin_potion(Skin):
+    def __init__(self,nom_fichier,couleur=(255,255,0)):
+        try:
+            self.skin = pygame.image.load("potion_" + nom_fichier)
+        except:
+            self.skin = None
+            self.couleur = couleur
+
+    def dessine_toi(self,screen,position):
+        if self.skin == None:
+            pygame.draw.rect(screen,self.couleur,(position[0],position[1],19,19))
+        else:
+            screen.blit(self.skin,position)
+
+class Skin_clee(Skin):
+    def __init__(self,nom_fichier,couleur=(249,202,36)):
+        try:
+            self.skin = pygame.image.load(nom_fichier)
+        except:
+            self.skin = None
+            self.couleur = couleur
+
+    def dessine_toi(self,screen,position):
+        if self.skin == None:
+            rayon=5
+            pygame.draw.circle(screen,self.couleur,(position[0] + 10,position[1] + 10),rayon)
+        else:
+            screen.blit(self.skin,position)
+
 global SKIN_VIDE
 SKIN_VIDE = Skin_mur("mur_vide.png",(255,255,255))
 global SKIN_PLEIN
@@ -71,3 +114,27 @@ SKIN_CASES = [Skin_case("case.png",(255,255,255))]
 
 global SKIN_JOUEUR
 SKIN_JOUEUR = Skin("joueur.png",(0,255,0))
+global SKIN_FATTI
+SKIN_FATTI = Skin("fatti.png",(0,0,100))
+global SKIN_SLIME
+SKIN_SLIME = Skin("slime.png",(255,100,100))
+global SKIN_RUNNER
+SKIN_RUNNER = Skin("runner.png",(255,0,0))
+global SKIN_POTION_SOIN
+SKIN_POTION_SOIN = Skin_potion("soin.png")
+global SKIN_POTION_PORTEE
+SKIN_POTION_PORTEE = Skin_potion("portee.png")
+global SKIN_POTION_FORCE
+SKIN_POTION_FORCE = Skin_potion("force.png")
+global SKIN_POTION_VISION
+SKIN_POTION_VISION = Skin_potion("vision.png")
+global SKIN_POTION_SUPER_SOIN
+SKIN_POTION_SUPER_SOIN = Skin_potion("super_soin.png")
+global SKIN_POTION_SUPER_PORTEE
+SKIN_POTION_SUPER_PORTEE = Skin_potion("super_portee.png")
+global SKIN_POTION_SUPER_FORCE
+SKIN_POTION_SUPER_FORCE = Skin_potion("super_force.png")
+global SKIN_POTION_SUPER_VISION
+SKIN_POTION_SUPER_VISION = Skin_potion("super_vision.png")
+global SKIN_CLEE
+SKIN_CLEE = Skin_clee("clee.png")
