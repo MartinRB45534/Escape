@@ -1,5 +1,5 @@
 from Cases import *
-from Murs import *
+from Mur_minimap import *
 
 class Case_minimap(Case):
     def __init__(self,tailleCase,tailleMur,murs,mode_minimap,arrivee=False):
@@ -22,7 +22,8 @@ class Case_minimap(Case):
             print ("Valeur de mode_minimap incorrecte.")
         Case.__init__(self,tailleCase,tailleMur)
         self.couleur = self.non_vu
-        self.murs = murs
+        for i in range(len(self.murs)):
+            self.murs[i] = Mur_minimap(murs[i].get_etat(),1)
         
     def dessine_toi(self,screen,x,y):
         """
