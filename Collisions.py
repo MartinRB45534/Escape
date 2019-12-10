@@ -96,7 +96,7 @@ class Collision:
 
 
         if attaquant.mode_attaque == HEAVY:
-            mat_attaque = resol.resolution_undirectionnelle_limitee(False,attaquant.radius,attaquant.dir_regard)
+            mat_attaque = resol.resolution_undirectionnelle_limitee(False,attaquant.radius*2,attaquant.dir_regard)
         elif attaquant.mode_attaque == LIGHT:
             mat_attaque = resol.resolution_en_largeur_distance_limitée(False,False,False,True,attaquant.radius)
             

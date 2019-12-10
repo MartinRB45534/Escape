@@ -392,7 +392,7 @@ class Affichage:
             for x in range(len(mat_anim)):
                 for y in range(len(mat_anim[0])):
                     if mat_anim[x][y]:
-                        position = (position_anim[0] + x - len(mat_anim) // 2,position_anim[1] + y - len(mat_anim[0]) // 2)
+                        position = (position_anim[0] + x,position_anim[1] + y)
                         new_animation=Attaque_omnidirectionnelle(3,position,self.screen)
                         self.animations.append(new_animation)
                         #la position en pixels sera déterminée que lorsque
@@ -401,7 +401,7 @@ class Affichage:
             for x in range(len(mat_anim)):
                 for y in range(len(mat_anim[0])):
                     if mat_anim[x][y]:
-                        position = (position_anim[0] + x - len(mat_anim) // 2,position_anim[1] + y - len(mat_anim[0]) // 2)
+                        position = (position_anim[0] + x,position_anim[1] + y)
                         new_animation=Attaque_unidirectionnelle(3,position,direction,self.screen)
                         self.animations.append(new_animation)
                         #la position en pixels sera déterminée que lorsque

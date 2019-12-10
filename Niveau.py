@@ -216,9 +216,9 @@ class Niveau:
             self.lab = labyrinthe
             self.arrivee = self.lab.arrivee
             self.depart = self.lab.depart
-            
+
         if destination != None:
-            minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap,joueur.getPosition(),self.arrivee)
+            minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap,self.depart,self.arrivee)
             self.joueur = joueur
             self.joueur.minimap = minimap
         elif joueur == None:
@@ -241,10 +241,10 @@ class Niveau:
             elif niveau == "tuto7":
                 inventaire_joueur = Inventaire([Clee(None,"Bonus_1"),Clee(None,"Bonus_2"),Clee(None,"Bonus_3")])
                 
-            self.force_joueur = 10
-            self.hp_joueur = 200
+            self.force_joueur = 5
+            self.hp_joueur = 100
             self.mana_joueur = 50
-            self.vitesse_joueur_lab=3
+            self.vitesse_joueur_lab=4
             self.vitesse_joueur_autres=6
             minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap,self.depart,self.arrivee)
 
@@ -261,10 +261,7 @@ class Niveau:
             self.joueur.regeneration = joueur.regeneration
 
         else:
-            minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap,self.depart,self.arrivee)
             self.joueur = joueur
-            self.joueur.minimap = minimap
-
 
         #on récupère une copie du joueur ou cas ou il perd
         self.precedent_joueur = self.joueur.getCopie()
@@ -662,7 +659,6 @@ class Niveau:
 
             #avant de redessiner l'écran on trie les entitées (ça influe sur l'affichage)
             self.trie_entitees()
-            
             #on redessine l'écran
             self.redraw()
             self.traitement_evenements()
@@ -686,7 +682,7 @@ class Niveau:
                 run=False
             pygame.display.update()
         self.fin_niveau(self.as_perdu())
-        
+
         return res,self.lab.as_gagner(self.joueur.getPosition()),self.joueur
 
     def fin_niveau(self, as_perdu):
@@ -1062,12 +1058,12 @@ class Niveau:
                                 self.evenements.append(evenement)
                             if info_comp != None:
                                 self.greater_teleportation = True
-                                self.destination = [info_comp,agissant.getPosition()]
+                                self.destination = info_comp
                                 
         elif id_action==ATTAQUER:
             succes,mat_attaque=self.collision.tentative_attaque(agissant,self.entitees)
             direction=agissant.dir_regard
-            self.affichage.ajout_animation(agissant.getPosition(),agissant.mode_attaque,mat_attaque,direction)
+            self.affichage.ajout_animation(agissant.position_vue,agissant.mode_attaque,mat_attaque,direction)
         elif id_action==INTERAGIR:
             succes = self.collision.tentative_interaction(agissant,self.entitees)
         elif id_action==PARLER:
