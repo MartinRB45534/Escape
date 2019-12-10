@@ -216,9 +216,9 @@ class Niveau:
             self.lab = labyrinthe
             self.arrivee = self.lab.arrivee
             self.depart = self.lab.depart
-
+            
         if destination != None:
-            minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap,self.depart,self.arrivee)
+            minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap,joueur.getPosition(),self.arrivee)
             self.joueur = joueur
             self.joueur.minimap = minimap
         elif joueur == None:
@@ -261,7 +261,10 @@ class Niveau:
             self.joueur.regeneration = joueur.regeneration
 
         else:
+            minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap,self.depart,self.arrivee)
             self.joueur = joueur
+            self.joueur.minimap = minimap
+
 
         #on récupère une copie du joueur ou cas ou il perd
         self.precedent_joueur = self.joueur.getCopie()
@@ -659,6 +662,7 @@ class Niveau:
 
             #avant de redessiner l'écran on trie les entitées (ça influe sur l'affichage)
             self.trie_entitees()
+            
             #on redessine l'écran
             self.redraw()
             self.traitement_evenements()
@@ -682,7 +686,7 @@ class Niveau:
                 run=False
             pygame.display.update()
         self.fin_niveau(self.as_perdu())
-
+        
         return res,self.lab.as_gagner(self.joueur.getPosition()),self.joueur
 
     def fin_niveau(self, as_perdu):
@@ -1058,7 +1062,7 @@ class Niveau:
                                 self.evenements.append(evenement)
                             if info_comp != None:
                                 self.greater_teleportation = True
-                                self.destination = info_comp
+                                self.destination = [info_comp,agissant.getPosition()]
                                 
         elif id_action==ATTAQUER:
             succes,mat_attaque=self.collision.tentative_attaque(agissant,self.entitees)
