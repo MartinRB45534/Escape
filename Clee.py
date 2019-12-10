@@ -1,4 +1,5 @@
 from Item import *
+from Skin import *
 import pygame
 
 class Clee(Item):
@@ -11,8 +12,7 @@ class Clee(Item):
         return ("Clee")
     
     def dessine_toi(self,screen,decalage,LARGEUR_CASE,LARGEUR_MUR,position_screen):
-        rayon=int((LARGEUR_CASE+LARGEUR_MUR)*0.25)
-        pygame.draw.circle(screen,(249,202,36),(int((decalage[0]+0.5)*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[0],int((decalage[1]+0.5)*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[1]),rayon)
+        SKIN_CLEE.dessine_toi(screen,((decalage[0])*(LARGEUR_CASE+LARGEUR_MUR)+LARGEUR_MUR+position_screen[0],(decalage[1])*(LARGEUR_CASE+LARGEUR_MUR)+LARGEUR_MUR+position_screen[1]))
 
     def decrit_toi(cls):
         """Fonction qui décrit les effets de l'item"""

@@ -26,6 +26,7 @@ class Monstre(Agissant):
         self.position_joueur=None
         #id de la meute a laquelle appartient le monstre
         self.id_meute=id_meute
+        self.dir_regard=None
         self.evenements=[]
         self.drops=[]
         
@@ -130,6 +131,7 @@ class Monstre(Agissant):
                 prochaine_action=BOUGER
                 position_suivante=chemin[1]
                 direction_voulue=self.direction_suivante(chemin[0],chemin[1])
+                self.dir_regard = direction_voulue
             else:
                 prochaine_action=ATTAQUER
         return prochaine_action,direction_voulue
@@ -250,11 +252,14 @@ class Slime(Monstre):
         """
         directions=self.directions_utilisables(self.position[0],self.position[1],vue,position_lab)
         if len(directions)>0:
-            return directions[random.randrange(0,len(directions))]
+            direction_voulue = directions[random.randrange(0,len(directions))]
         else:
-            return None
-    
+            direction_voulue = None
+        self.dir_regard = direction_voulue
+        return direction_voulue
 
+    def dessine_toi(self,screen,decalage,LARGEUR_CASE,LARGEUR_MUR,position_screen):
+        SKIN_SLIME.dessine_toi(screen,((decalage[0]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[0],(decalage[1]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[1]),self.dir_regard)
 
 class Fatti(Monstre):
     def __init__(self,position,id_meute=0,largeur_vue=10,hauteur_vue=10,pv=200,degats=20,vitesse=20,radius=1,couleur=(0,0,100)):
@@ -269,8 +274,12 @@ class Fatti(Monstre):
         Elle renvoie:
             la direction de la prochaine position voulue par le monstre
         """
-        
+
+        self.dir_regard = None
         return None
+
+    def dessine_toi(self,screen,decalage,LARGEUR_CASE,LARGEUR_MUR,position_screen):
+        SKIN_FATTI.dessine_toi(screen,((decalage[0]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[0],(decalage[1]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[1]),self.dir_regard)
 
 class Runner(Monstre):
     def __init__(self,mat_lab,fin_lab_x,fin_lab_y,position,id_meute=0,largeur_vue=15,hauteur_vue=15,pv=75,degats=10,vitesse=10,radius=1,couleur=(255,0,0)):
@@ -301,6 +310,10 @@ class Runner(Monstre):
             if len(chemin)>5:
                 position_suivante=chemin[1]
                 direction_voulue=self.direction_suivante(chemin[0],chemin[1])
+
+        self.dir_regard = direction_voulue
         
         return direction_voulue
                 
+    def dessine_toi(self,screen,decalage,LARGEUR_CASE,LARGEUR_MUR,position_screen):
+        SKIN_RUNNER.dessine_toi(screen,((decalage[0]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[0],(decalage[1]*(LARGEUR_CASE+LARGEUR_MUR))+LARGEUR_MUR+position_screen[1]),self.dir_regard)
