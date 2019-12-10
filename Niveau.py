@@ -48,21 +48,21 @@ class Niveau:
                     res = True
                     #self.salles=[Patern((8,8),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR)]
                     proba_murs = 0.5
-                    self.teleporteurs = []
+                    self.cases_speciales = []
                 elif difficulte == EASY :
                     self.CASES_X = 20
                     self.CASES_Y = 20
                     res = False
                     #self.salles=[Patern((14,14),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
                     proba_murs = 0.4
-                    self.teleporteurs = []
+                    self.cases_speciales = []
                 elif difficulte == AVERAGE :
                     self.CASES_X = 40
                     self.CASES_Y = 40
                     res = False
                     #self.salles=[Patern((17,17),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR)]
                     proba_murs = 0.3
-                    self.teleporteurs = []
+                    self.cases_speciales = []
                 elif difficulte == HARD :
                     self.CASES_X = 60
                     self.CASES_Y = 60
@@ -72,14 +72,14 @@ class Niveau:
                     #self.salles[0].pre_gen_entrees_x(0,0,39)
                     #self.salles[0].pre_gen_entrees_x(1,0,39)
                     proba_murs = 0.2
-                    self.teleporteurs = []
+                    self.cases_speciales = []
                 elif difficulte == INSANE :
                     self.CASES_X = 100
                     self.CASES_Y = 100
                     res = False
                     #self.salles=[Patern((49,30),2,40,self.LARGEUR_CASE,self.LARGEUR_MUR)]
                     proba_murs = 0.1
-                    self.teleporteurs = []
+                    self.cases_speciales = []
                 elif difficulte == IMPOSSIBLE :
                     self.CASES_X = 1000
                     self.CASES_Y = 1000
@@ -96,9 +96,9 @@ class Niveau:
                 self.arrivee = (self.CASES_X-1,self.CASES_Y-1)
                 #variables correspondants a la largeur et la hauteur du zoom
 
-            elif int(niveau) == niveau:
-                self.CASES_X = 20 + 10*niveau
-                self.CASES_Y = 20 + 10*niveau
+            elif not(isinstance(niveau,str)) and int(niveau) == niveau:
+                self.CASES_X = 20 + 10*int(niveau)
+                self.CASES_Y = 20 + 10*int(niveau)
                 self.arrivee = (self.CASES_X-1,self.CASES_Y-1)
                 self.depart = (0,0)
                 res = False
@@ -116,7 +116,7 @@ class Niveau:
                 self.clees = []
                 self.salles = [Patern((0,0),14,3,self.LARGEUR_CASE,self.LARGEUR_MUR,[])]
                 proba_murs = 1
-                self.teleporteurs = [[(13,1),Teleporteur(["tuto2",(0,0)],self.LARGEUR_CASE,self.LARGEUR_MUR,(255,255,255))]]
+                self.teleporteurs = [[(13,1),Teleporteur_global((0,0),"tuto2",self.LARGEUR_CASE,self.LARGEUR_MUR,(255,255,255))]]
                 self.cases_speciales = self.teleporteurs
                 
             elif niveau == "tuto2":
@@ -131,7 +131,7 @@ class Niveau:
                 self.salles=[Patern((0,0),20,20,self.LARGEUR_CASE,self.LARGEUR_MUR,[[15,19],[16,19],[17,19],[18,19],[19,19],[19,18],[19,17],[19,16],[19,15]],[],False),Patern((20,20),20,20,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[3,0],[2,0],[1,0],[0,0],[0,1],[0,2],[0,3],[0,4]],[],False),Patern((0,0),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,3]]),Patern((15,15),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,1],[0,8],[9,1],[9,8]],self.clees)]
                 self.clee_bonus_1 = Clee((19,1),"Bonus_1")
                 proba_murs = 0.1
-                self.teleporteurs = [[(39,39),Teleporteur(["tuto3",(5,0)],self.LARGEUR_CASE,self.LARGEUR_MUR,ARRIVEE)]]
+                self.teleporteurs = [[(39,39),Teleporteur_global([5,0],"tuto3",self.LARGEUR_CASE,self.LARGEUR_MUR,ARRIVEE)]]
                 self.cases_speciales = self.teleporteurs
 
             elif niveau == "tuto3":
@@ -145,7 +145,7 @@ class Niveau:
                 self.clees = [Clee((0,59),"Bonus_2")]
                 self.salles=[Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,9],[1,9]]),Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0]]),Patern((0,0),4,4,self.LARGEUR_CASE,self.LARGEUR_MUR,[[2,3]],[Clee(None,"Bonus_1")])]
                 proba_murs = 0.3
-                self.teleporteurs = [[(5,59),Teleporteur(["tuto4",(5,0)],self.LARGEUR_CASE,self.LARGEUR_MUR,ARRIVEE)]]
+                self.teleporteurs = [[(5,59),Teleporteur_global([5,0],"tuto4",self.LARGEUR_CASE,self.LARGEUR_MUR,ARRIVEE)]]
                 self.cases_speciales = self.teleporteurs
 
             elif niveau == "tuto4":
@@ -159,7 +159,7 @@ class Niveau:
                 self.clees = [Clee((0,59),"Bonus_3")]
                 self.salles=[Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,9],[1,9]]),Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0]]),Patern((0,56),4,4,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((0,52),4,4,self.LARGEUR_CASE,self.LARGEUR_MUR,[[1,0],[2,3]],[Clee(None,"Bonus_2"),Clee(None,"Bonus_1")])]
                 proba_murs = 0.2
-                self.teleporteurs = [[(5,59),Teleporteur(["tuto5",(1,2)],self.LARGEUR_CASE,self.LARGEUR_MUR,ARRIVEE)]]
+                self.teleporteurs = [[(5,59),Teleporteur_global([1,2],"tuto5",self.LARGEUR_CASE,self.LARGEUR_MUR,ARRIVEE)]]
                 self.cases_speciales = self.teleporteurs
 
             elif niveau == "tuto5":
@@ -172,7 +172,7 @@ class Niveau:
                 res = False
                 self.salles=[Patern((0,0),16,16,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((0,1),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[1,0],[2,13]],[Clee(None,"Bonus_3")]),Patern((3,1),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,13],[2,1]]),Patern((6,1),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,1],[2,13]]),Patern((9,1),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,13],[2,1]]),Patern((12,1),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[2,13],[0,1]],[Clee(None,"Bonus_3")])]
                 proba_murs = 0
-                self.teleporteurs = [[(13,14),Teleporteur(["tuto6",(0,0)],self.LARGEUR_CASE,self.LARGEUR_MUR,ARRIVEE)]]
+                self.teleporteurs = [[(13,14),Teleporteur_global([0,0],"tuto6",self.LARGEUR_CASE,self.LARGEUR_MUR,ARRIVEE)]]
                 self.cases_speciales = self.teleporteurs
 
             elif niveau == "tuto6":
@@ -187,7 +187,7 @@ class Niveau:
                 self.salles=[Patern((0,0),11,11,self.LARGEUR_CASE,self.LARGEUR_MUR,[[10,1]]),Patern((0,30),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[8,0],[9,0],[9,1]]),Patern((8,27),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[3,0],[0,4]],[Clee(None,"Bonus_2"),Clee(None,"Bonus_3")]),Patern((30,0),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,8],[0,9],[1,9]]),Patern((27,8),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[3,4],[4,0]],[Clee(None,"Bonus_1"),Clee(None,"Bonus_3")]),Patern((35,35),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,4],[0,3],[0,2],[0,1],[1,0],[2,0],[3,0],[4,0]],self.clees),Patern((24,5),3,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[1,9]]),Patern((5,19),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[2,0]]),Patern((15,35),10,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[5,0]],[Clee(None,"Porte_7_niveau_6_tutoriel")]),Patern((35,15),5,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,5]],[Clee(None,"Porte_3_niveau_6_tutoriel")])]
                 self.clees = self.clees + [Clee((5,6),"Bonus_4"),Clee((28,37),"Bonus_5"),Clee((38,17),"Bonus_6")]
                 proba_murs = 0.2
-                self.teleporteurs = [[(39,39),Teleporteur(["tuto7",(20,20)],self.LARGEUR_CASE,self.LARGEUR_MUR,ARRIVEE)]]
+                self.teleporteurs = [[(39,39),Teleporteur_global([20,20],"tuto7",self.LARGEUR_CASE,self.LARGEUR_MUR,ARRIVEE)]]
                 self.cases_speciales = self.teleporteurs
 
             elif niveau == "tuto7":
@@ -201,22 +201,21 @@ class Niveau:
                 self.clees = []
                 self.salles = [Patern((16,16),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((0,0),16,9,self.LARGEUR_CASE,self.LARGEUR_MUR,[[1,8]],[Clee((None),"Cheat code")],False),Patern((5,6),8,24,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((12,3),10,9,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((8,4),7,7,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((9,16),4,16,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((17,27),15,2,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((15,30),1,2,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((32,25),6,6,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,2],[0,3]]),Patern((14,25),3,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[2,2],[2,3],[1,4]]),Patern((14,32),4,4,self.LARGEUR_CASE,self.LARGEUR_MUR,[[1,0]]),Patern((2,31),6,6,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((20,30),8,6,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((26,3),10,21,self.LARGEUR_CASE,self.LARGEUR_MUR,[])]
                 proba_murs = 0.3
-                self.teleporteurs_officiels = [[(23,23),Teleporteur(["tuto7",(39,39)],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(23,16),Teleporteur(["tuto7",(26,23)],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(28,23),Teleporteur(["tuto7",(20,20)],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(16,16),Teleporteur(["tuto7",(12,3)],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(12,11),Teleporteur(["tuto7",(10,13)],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(5,29),Teleporteur(["tuto7",(2,36)],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(7,31),Teleporteur(["tuto7",(27,35)],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(20,30),Teleporteur(["tuto7",(20,20)],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(16,23),Teleporteur(["tuto7",(10,16)],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(11,31),Teleporteur(["tuto7",(8,4)],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(8,10),Teleporteur(["tuto7",(37,27)],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(14,35),Teleporteur(["tuto7",(20,20)],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(14,13),Teleporteur(["tuto7",(15,0)],self.LARGEUR_CASE,self.LARGEUR_MUR)]]
-                self.teleporteurs_officieux = [[(32,35),Teleporteur(["tuto7",(20,20)],self.LARGEUR_CASE,self.LARGEUR_MUR,(255,255,255))],[(11,35),Teleporteur(["tuto7",(20,20)],self.LARGEUR_CASE,self.LARGEUR_MUR,(255,255,255))],[(2,12),Teleporteur(["tuto7",(20,20)],self.LARGEUR_CASE,self.LARGEUR_MUR,(255,255,255))],[(3,6),Teleporteur(["tuto7",(20,20)],self.LARGEUR_CASE,self.LARGEUR_MUR,(255,255,255))]]
-                self.teleporteurs = self.teleporteurs_officiels + self.teleporteurs_officieux
-                self.pieges = [[(15,31),Piques(self.LARGEUR_CASE,self.LARGEUR_MUR)],[(3,4),Piques(self.LARGEUR_CASE,self.LARGEUR_MUR)],[(5,9),Piques(self.LARGEUR_CASE,self.LARGEUR_MUR)],[(36,7),Piques(self.LARGEUR_CASE,self.LARGEUR_MUR)],[(8,25),Piques(self.LARGEUR_CASE,self.LARGEUR_MUR)]]
-                self.cases_speciales = self.teleporteurs + self.pieges + [[(2,21),Fontaine_heal(self.LARGEUR_CASE,self.LARGEUR_MUR)]]
-                
+                self.teleporteurs_officiels = [[(23,23),Teleporteur_local([39,39],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(23,16),Teleporteur_local([26,23],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(28,23),Teleporteur_local((20,20),self.LARGEUR_CASE,self.LARGEUR_MUR)],[(16,16),Teleporteur_local((12,3),self.LARGEUR_CASE,self.LARGEUR_MUR)],[(12,11),Teleporteur_local((10,13),self.LARGEUR_CASE,self.LARGEUR_MUR)],[(5,29),Teleporteur_local((2,36),self.LARGEUR_CASE,self.LARGEUR_MUR)],[(7,31),Teleporteur_local((27,35),self.LARGEUR_CASE,self.LARGEUR_MUR)],[(20,30),Teleporteur_local((20,20),self.LARGEUR_CASE,self.LARGEUR_MUR)],[(16,23),Teleporteur_local((10,16),self.LARGEUR_CASE,self.LARGEUR_MUR)],[(11,31),Teleporteur_local((8,4),self.LARGEUR_CASE,self.LARGEUR_MUR)],[(8,10),Teleporteur_local((37,27),self.LARGEUR_CASE,self.LARGEUR_MUR)],[(14,35),Teleporteur_local((20,20),self.LARGEUR_CASE,self.LARGEUR_MUR)],[(14,13),Teleporteur_local((15,0),self.LARGEUR_CASE,self.LARGEUR_MUR)]]
+                self.teleporteurs_officieux = [[(32,35),Teleporteur_local([20,20],self.LARGEUR_CASE,self.LARGEUR_MUR,(255,255,255))],[(11,35),Teleporteur_local((20,20),self.LARGEUR_CASE,self.LARGEUR_MUR,(255,255,255))],[(2,12),Teleporteur_local((20,20),self.LARGEUR_CASE,self.LARGEUR_MUR,(255,255,255))],[(3,6),Teleporteur_local([20,20],self.LARGEUR_CASE,self.LARGEUR_MUR,(255,255,255))]]
+                self.fontaines = [[[20,20],Fontaine_heal(self.LARGEUR_CASE,self.LARGEUR_MUR,0,(20,20,125))]]
+                self.cases_speciales = self.teleporteurs_officiels + self.teleporteurs_officieux + self.fontaines
+            
             self.poids=[6,2,1,2]
             #génération du labyrinthe
             self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.arrivee,self.depart,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles,self.cases_speciales)
             self.lab.generation(None,proba_murs,None,None)
+            
 
         else:
             self.lab = labyrinthe
             self.arrivee = self.lab.arrivee
             self.depart = self.lab.depart
-
 
         if destination != None:
             minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap,self.depart,self.arrivee)
@@ -227,7 +226,7 @@ class Niveau:
         elif joueur == None:
             if niveau == 0:
                 inventaire_joueur = Inventaire()
-            elif int(niveau) == niveau:
+            elif not(isinstance(niveau,str)) and int(niveau) == niveau:
                 inventaire_joueur = Inventaire()
             elif niveau == "tuto1":
                 inventaire_joueur = Inventaire([Clee(None,"Premier pas")])
@@ -265,11 +264,9 @@ class Niveau:
 
         else:
             self.joueur = joueur
-        
+
         #on récupère une copie du joueur ou cas ou il perd
         self.precedent_joueur = self.joueur.getCopie()
-
-
 
 
         if entitees == None:
@@ -296,7 +293,7 @@ class Niveau:
                 for position in positions:
                     self.entitees.append(Caillou(position))
 
-            elif int(niveau) == niveau:
+            elif not(isinstance(niveau,str)) and int(niveau) == niveau:
                 self.vitesse_monstres=20
 
                 easy_drops = [Potion_de_force,Potion_de_vision,Potion_de_portee]
@@ -502,7 +499,7 @@ class Niveau:
             self.evenements = evenements
 
         self.missions=[]
-        if int(niveau) == niveau:
+        if not(isinstance(niveau,str)) and int(niveau) == niveau:
             self.mission_1 = ["self.mission_monstres()","self.joueur.augmente_regen(0.1),self.ajout(self.missions,[self.mission_1],self.ajout(self.entitees,self.monstres),self.ajout(self.meutes,self.generation_meutes()"]
             self.mission_2 = ["self.mission_minimap()","self.joueur.augmente_pv(5)"]
             
@@ -664,11 +661,11 @@ class Niveau:
 
             #avant de redessiner l'écran on trie les entitées (ça influe sur l'affichage)
             self.trie_entitees()
-            #si on détecte un mouvement on redessine l'écran
-            #if move_j or move_m:
+            #on redessine l'écran
             self.redraw()
             self.traitement_evenements()
             self.check_missions()
+            self.lab.refresh_speciales()
 
             if self.lab.as_gagner(self.joueur.getPosition()) and self.affichage.affiche == LABYRINTHE:
                 self.screen = pygame.display.set_mode((640, 300))
@@ -687,6 +684,7 @@ class Niveau:
                 run=False
             pygame.display.update()
         self.fin_niveau(self.as_perdu())
+
         return res,self.lab.as_gagner(self.joueur.getPosition()),self.joueur
 
     def fin_niveau(self, as_perdu):
@@ -774,7 +772,7 @@ class Niveau:
         #on récupère toutes les touches préssés sous forme de booléen
         keys=pygame.key.get_pressed()
         
-        if keys[pygame.K_q]:
+        if keys[pygame.K_a]:
             self.affichage.affiche = MINIMAP
             self.joueur.vitesse = self.joueur.vitesse_autres
         elif keys[pygame.K_i]:
@@ -825,9 +823,9 @@ class Niveau:
                 self.joueur.attaque()
             elif keys[pygame.K_SPACE]:
                 self.joueur.attaque()
-            elif keys[pygame.K_w]:
+            elif keys[pygame.K_z]:
                 self.joueur.attaque_lourde(HAUT)
-            elif keys[pygame.K_a]:
+            elif keys[pygame.K_q]:
                 self.joueur.attaque_lourde(GAUCHE)
             elif keys[pygame.K_s]:
                 self.joueur.attaque_lourde(BAS)
@@ -1043,9 +1041,9 @@ class Niveau:
             direction_voulue=action
             if direction_voulue!=None:
                 if issubclass(type(agissant),Joueur):
-                    passe,newcoord,tel=self.lab.peut_passer(agissant,direction_voulue,agissant.inventaire)
+                    passe,newcoord=self.lab.peut_passer(agissant,direction_voulue,agissant.inventaire)
                 else:
-                    passe,newcoord,tel=self.lab.peut_passer(agissant,direction_voulue)
+                    passe,newcoord = self.lab.peut_passer(agissant,direction_voulue)
                 #print(passe)
                 if passe:
                     libre = self.collision.case_libre(agissant,newcoord,self.entitees)
@@ -1054,17 +1052,15 @@ class Niveau:
                         succes=True
                         #print(succes)
                         agissant.setPosition(newcoord)
+                        info_comp = self.lab.execute_special(agissant)
                         if agissant == self.joueur:
                             nouveaux_evenements = self.collision.visite_case(newcoord,agissant,self.entitees)
                             self.lab.matrice_cases[newcoord[0]][newcoord[1]].passage = True
                             for evenement in nouveaux_evenements :
                                 self.evenements.append(evenement)
-                            if tel != None:
-                                if tel[0] == self.niveau:
-                                    agissant.setPosition(tel[1])
-                                else:
-                                    self.greater_teleportation = True
-                                    self.destination = tel
+                            if info_comp != None:
+                                self.greater_teleportation = True
+                                self.destination = [info_comp,newcoord]
                                 
         elif id_action==ATTAQUER:
             self.affichage.ajout_animation(agissant.getPosition(),0,3,agissant.getRadius()*(self.LARGEUR_CASE+self.LARGEUR_MUR))

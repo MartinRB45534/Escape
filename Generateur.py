@@ -104,8 +104,8 @@ class Generateur:
             
             murs_generables = self.murs_utilisables(voisins)
 
-
-            if len(murs_generables)>0 and not(isinstance(self.matrice_cases[position_x][position_y],Teleporteur)): #On ne fait pas passer un chemin par un téléporteur
+            #On ne fait pas passer un chemin par un téléporteur
+            if len(murs_generables)>0 and not(issubclass(type(self.matrice_cases[position_x][position_y]),Teleporteur_local)): 
                 
                 #randrange est exclusif
                 num_mur=self.randomPoids(murs_generables)
