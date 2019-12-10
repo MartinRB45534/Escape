@@ -120,13 +120,27 @@ class Skin_stomp(Skin):
         try:
             self.skin = pygame.image.load(nom_fichier)
         except:
-            self.skins = None
+            self.skin = None
             print ("L'animation d'attaque directionnelle n'a pas pu être chargée.")
 
     def dessine_toi(self,screen,position):
         if self.skin != None:
             screen.blit(self.skin,position)
-            
+
+class Skin_caillou(Skin):
+    def __init__(self,nom_fichier):
+        try:
+            self.skin = pygame.image.load(nom_fichier)
+        except:
+            self.skin = None
+            self.couleur = (0,0,0)
+
+    def dessine_toi(self,screen,position):
+        if self.skin == None:
+            pygame.draw.circle(screen, self.couleur,(int(0.5*LARGEUR_CASE+LARGEUR_MUR)+position[0],int(0.5*LARGEUR_CASE+LARGEUR_MUR)+position[1]),1)
+        else:
+            screen.blit(self.skin,position)
+
 global SKIN_VIDE
 SKIN_VIDE = Skin_mur("mur_vide.png",(255,255,255))
 global SKIN_PLEIN
@@ -174,3 +188,5 @@ global SKIN_STOMP_1
 SKIN_STOMP_1 = Skin_stomp("stomp_1.png")
 global SKIN_STOMP_2
 SKIN_STOMP_2 = Skin_stomp("stomp_2.png")
+global SKIN_CAILLOU
+SKIN_CAILLOU = Skin_caillou("caillou.png")
