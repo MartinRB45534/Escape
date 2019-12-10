@@ -1,5 +1,6 @@
 from Murs import *
 from Constantes import *
+from Skin import *
 import pygame
 
 class Case:
@@ -10,6 +11,11 @@ class Case:
         self.couleur_mur=couleur_mur
         #on sélectionne la classe Mur du fichier Murs (qui est un objet)
         self.murs = [Mur(MUR_PLEIN,tailleMur) for i in range(4)]
+        if self.couleur == (255,255,255):
+            self.skin = 0
+        else:
+            self.skin = len(SKIN_CASES)
+            SKIN_CASES.append(Skin_case("case.png",self.couleur))
     def nb_murs_non_vides(self):
         pass
     def nb_murs_pleins(self):
@@ -30,7 +36,7 @@ class Case:
             l'écran, la surface sur laquelle on dessine(objet pygame)
             la position de la case
         """
-        pygame.draw.rect(screen,self.couleur,(x,y,self.tailleCase,self.tailleCase))
+        SKIN_CASES[self.skin].dessine_toi(screen,(x,y))
         #on dessine les murs vides en premiers pour éviter les bugs graphiques
 
         for i in range(0,len(self.murs)):
@@ -83,6 +89,8 @@ class Case:
 
     def set_Couleur(self,couleur):
         self.couleur=couleur
+        self.skin = len(SKIN_CASES)
+        SKIN_CASES.append(Skin_case("case.png",self.couleur))
     def toString(self):
         return "haut "+str(self.murs[0].get_etat())+" droite "+str(self.murs[1].get_etat())+" bas "+str(self.murs[2].get_etat())+" gauche "+str(self.murs[3].get_etat())+"  "
 #case=Case(5,52)

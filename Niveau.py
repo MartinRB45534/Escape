@@ -29,16 +29,16 @@ class Niveau:
         self.niveau = niveau
         if self.mode_affichage == voir_tout :
             self.LARGEUR_CASE = 20
-            self.LARGEUR_MUR = 1
+            self.LARGEUR_MUR = 2
         elif self.mode_affichage == aveugle :
             self.LARGEUR_CASE = 20
-            self.LARGEUR_MUR = 1
+            self.LARGEUR_MUR = 2
         elif self.mode_affichage == parcours_en_profondeur :
             self.LARGEUR_CASE = 20
-            self.LARGEUR_MUR = 1
+            self.LARGEUR_MUR = 2
         elif self.mode_affichage == distance_max :
             self.LARGEUR_CASE = 20
-            self.LARGEUR_MUR = 1
+            self.LARGEUR_MUR = 2
 
         if labyrinthe == None:
             if niveau == 0:
@@ -221,8 +221,6 @@ class Niveau:
             minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap,self.depart,self.arrivee)
             self.joueur = joueur
             self.joueur.minimap = minimap
-            self.joueur.position = destination[1]
-
         elif joueur == None:
             if niveau == 0:
                 inventaire_joueur = Inventaire()
@@ -1060,7 +1058,7 @@ class Niveau:
                                 self.evenements.append(evenement)
                             if info_comp != None:
                                 self.greater_teleportation = True
-                                self.destination = [info_comp,newcoord]
+                                self.destination = info_comp
                                 
         elif id_action==ATTAQUER:
             self.affichage.ajout_animation(agissant.getPosition(),0,3,agissant.getRadius()*(self.LARGEUR_CASE+self.LARGEUR_MUR))

@@ -1,12 +1,14 @@
-import pygame
 from Constantes import *
 from Clee import *
 from Inventaire import *
+from Skin import *
+import pygame
 
 class Mur:
     def __init__(self,etat,tailleMur):
         self.etat = etat
         self.tailleMur = tailleMur
+
     def dessine_toi(self,screen,case_x,case_y,tailleCase,direction,couleur=(0,0,0)):
         """
         Fonction qui dessine l'objet
@@ -16,15 +18,11 @@ class Mur:
             la position du mur par rapport à la case (Bas Haut....)
             éventuellement la couleur du mur
         """
-        if self.etat==MUR_PLEIN or self.etat==MUR_VIDE:
-            if direction==HAUT:
-                pygame.draw.line(screen,couleur,(case_x-self.tailleMur//2,case_y),(case_x+tailleCase+self.tailleMur//2,case_y),self.tailleMur)
-            elif direction==DROITE:
-                pygame.draw.line(screen,couleur,(case_x+tailleCase,case_y-self.tailleMur//2),(case_x+tailleCase,case_y+tailleCase+self.tailleMur//2),self.tailleMur)
-            elif direction==BAS:
-                pygame.draw.line(screen,couleur,(case_x-self.tailleMur//2,case_y+tailleCase),(case_x+tailleCase+self.tailleMur//2,case_y+tailleCase),self.tailleMur)
-            else:
-                pygame.draw.line(screen,couleur,(case_x,case_y-self.tailleMur//2),(case_x,case_y+tailleCase+self.tailleMur//2),self.tailleMur)
+        if self.etat==MUR_PLEIN:
+            SKIN_PLEIN.dessine_toi(screen,(case_x,case_y),direction)
+        elif self.etat==MUR_VIDE:
+            SKIN_VIDE.dessine_toi(screen,(case_x,case_y),direction)
+
     def set_etat(self,new):
         self.etat=new
     def get_etat(self):
@@ -79,16 +77,8 @@ class Porte(Mur):
             éventuellement la couleur du mur
         """
         if self.etat==MUR_PLEIN:
-            couleur=(225, 95, 65)
-        if self.etat==MUR_PLEIN or self.etat==MUR_VIDE:
-            if direction==HAUT:
-                pygame.draw.line(screen,couleur,(case_x-self.tailleMur//2,case_y),(case_x+tailleCase+self.tailleMur//2,case_y),self.tailleMur)
-            elif direction==DROITE:
-                pygame.draw.line(screen,couleur,(case_x+tailleCase,case_y-self.tailleMur//2),(case_x+tailleCase,case_y+tailleCase+self.tailleMur//2),self.tailleMur)
-            elif direction==BAS:
-                pygame.draw.line(screen,couleur,(case_x-self.tailleMur//2,case_y+tailleCase),(case_x+tailleCase+self.tailleMur//2,case_y+tailleCase),self.tailleMur)
-            else:
-                pygame.draw.line(screen,couleur,(case_x,case_y-self.tailleMur//2),(case_x,case_y+tailleCase+self.tailleMur//2),self.tailleMur)
-        
+            SKIN_PLEIN_PORTE.dessine_toi(screen,(case_x,case_y),direction)
+        elif self.etat==MUR_VIDE:
+            SKIN_VIDE_PORTE.dessine_toi(screen,(case_x,case_y),direction)
 
         
