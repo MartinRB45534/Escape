@@ -87,12 +87,12 @@ class Niveau:
                     res = False
                     self.salles=[]
                     proba_murs = 0
-                    self.teleporteurs = []
+                self.teleporteurs = [[ [4,4], Teleporteur_local((10,10),self.LARGEUR_CASE,self.LARGEUR_MUR,ARRIVEE) ], [ [14,14], Teleporteur_local((0,0),self.LARGEUR_CASE,self.LARGEUR_MUR,ARRIVEE) ]]
                 self.cases_speciales = self.teleporteurs
 
                 self.clees = [Clee((3,3),"goodooKey")]
                 
-                self.salles=[Patern((0,0),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[9,9]],self.clees)]
+                self.salles=[Patern((0,0),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[9,9]],self.clees),Patern((10,10),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,0]],self.clees)]
                 self.depart = (0,0)
                 self.arrivee = (self.CASES_X-1,self.CASES_Y-1)
                 #variables correspondants a la largeur et la hauteur du zoom
@@ -217,6 +217,10 @@ class Niveau:
             self.lab = labyrinthe
             self.arrivee = self.lab.arrivee
             self.depart = self.lab.depart
+        #test pour les portes fermantees
+        if niveau == 0:
+            self.lab.getMatrice_cases()[9][9].get_murs()[BAS] = Porte(self.LARGEUR_MUR,"goodooKey",True)
+            self.lab.getMatrice_cases()[9][10].get_murs()[HAUT] = Porte(self.LARGEUR_MUR,"goodooKey",True)
 
         if destination != None:
             minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap,self.depart,self.arrivee)
@@ -274,12 +278,12 @@ class Niveau:
                 
                 self.vitesse_montres=20
             
-                monstres=[Slime([10,13]),Fatti([15,12])]
+                monstres=[]
 
                 self.entitees = self.clees
 
                 #pnj d'expérimentation
-                self.pnj = Pnj_passif([4,4],100,(125,255,125),[Replique("Teswwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwt",20)])
+                self.pnj = Pnj_passif([5,5],100,(125,255,125),[Replique("Teswwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwt",20)])
                 self.entitees.append(self.pnj)
 
                 potions_vue=[Potion_de_vision((35,26),self.joueur),Potion_de_vision((27,38),self.joueur),Potion_de_vision((21,19),self.joueur),Potion_de_visibilite_permanente((8,7),self.joueur)]

@@ -4,7 +4,7 @@ from Constantes import *
 from Bouton import *
 from Session import *
 
-niveau = 1
+niveau = 0
 difficulté = HARD
 mode_affichage = distance_max
 mode_minimap = passage
@@ -94,7 +94,7 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN and quitter.survolBouton:
                 loop = False
             elif event.type == pygame.MOUSEBUTTONDOWN and tuto.survolBouton:
-                session.tuto_courant = 1
+                session.tuto_courant = 6
                 session.reset_niveau_tuto()
                 session.runtuto()
 

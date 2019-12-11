@@ -90,19 +90,30 @@ class Labyrinthe:
                 if sens == GAUCHE and type(case.get_mur_gauche())==Porte:
                     if case.get_mur_gauche().tentative_ouverture(inventaire):
                         newcoord = (coord[0]-1,coord[1])
-                        self.casser_mur(sens,coord[0],coord[1])
+                        #on ouvre la porte qui est dans l'autre case
+                        next_case = self.matrice_cases[coord[0]-1][coord[1]]
+                        next_case.get_mur_droit().tentative_ouverture(inventaire)
+                        
                 elif sens == DROITE and type(case.get_mur_droit())==Porte:
                     if case.get_mur_droit().tentative_ouverture(inventaire):
                         newcoord = (coord[0]+1,coord[1])
-                        self.casser_mur(sens,coord[0],coord[1])
+                        #on ouvre la porte qui est dans l'autre case
+                        next_case = self.matrice_cases[coord[0]+1][coord[1]]
+                        next_case.get_mur_gauche().tentative_ouverture(inventaire)
+                        
                 elif sens == BAS and type(case.get_mur_bas())==Porte:
                     if case.get_mur_bas().tentative_ouverture(inventaire):
                         newcoord = (coord[0],coord[1]+1)
-                        self.casser_mur(sens,coord[0],coord[1])
+                        #on ouvre la porte qui est dans l'autre case
+                        next_case = self.matrice_cases[coord[0]][coord[1]+1]
+                        next_case.get_mur_haut().tentative_ouverture(inventaire)
+                        
                 elif sens == HAUT and type(case.get_mur_haut())==Porte:
                     if case.get_mur_haut().tentative_ouverture(inventaire):
                         newcoord = (coord[0],coord[1]-1)
-                        self.casser_mur(sens,coord[0],coord[1])
+                        #on ouvre la porte qui est dans l'autre case
+                        next_case = self.matrice_cases[coord[0]][coord[1]-1]
+                        next_case.get_mur_bas().tentative_ouverture(inventaire)
                 else:
                     passe = False
             else:
@@ -361,24 +372,4 @@ class Labyrinthe:
     def getMatrice_cases(self):
         new_mat = [[self.matrice_cases[j][i] for i in range(self.hauteur)]for j in range(self.largeur)]
         return new_mat
-
-    def casser_mur(self,direction,position_x,position_y):
-        """
-        Fonction qui casse un mur spécifique
-        Entrées:
-            la direction du mur
-            la position de la case
-        Sorites:Rien
-        """
-        #on casse les murs de la case et de la case d'en face
-        self.matrice_cases[position_x][position_y].casser_mur(direction)
-
-        if direction==HAUT:
-            self.matrice_cases[position_x][position_y-1].casser_mur(BAS)
-        elif direction==DROITE:
-            self.matrice_cases[position_x+1][position_y].casser_mur(GAUCHE)
-        elif direction==BAS:
-            self.matrice_cases[position_x][position_y+1].casser_mur(HAUT)
-        elif direction==GAUCHE:
-            self.matrice_cases[position_x-1][position_y].casser_mur(DROITE)
 
