@@ -16,8 +16,6 @@ class Case:
         else:
             self.skin = len(SKIN_CASES)
             SKIN_CASES.append(Skin_case("case.png",self.couleur))
-    def nb_murs_non_vides(self):
-        pass
     def nb_murs_pleins(self):
         """
         Fonction qui renvoie le nombre de murs pleins dans la case

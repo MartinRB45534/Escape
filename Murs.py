@@ -29,22 +29,25 @@ class Mur:
         return self.etat
 
 class Porte(Mur):
-    def __init__(self,tailleMur,nom_clee):
+    def __init__(self,tailleMur,nom_clee,fermante = False):
         self.tailleMur=tailleMur
         self.nom_clee=nom_clee
         self.etat=MUR_PLEIN
+        #booléen indiquant si la porte se referme lorsqu'on l'ouvre
+        self.fermante = fermante
 
     def bonne_clee(self,clee_a_verifier):
         """
         Fonction qui vérifie si la clée est la bonne
-        Entrées:
+        Entrée:
             -la clee a tester
-        Sorties:
+        Sortie:
             -un booléen indiquant si la porte s'est ouverte
         """
         if str(self.nom_clee)==str(clee_a_verifier.nom_clee):
             ouverte=True
-            self.etat=MUR_VIDE
+            if not(self.fermante):
+                self.etat=MUR_VIDE
         else:
             ouverte=False
 
@@ -55,7 +58,7 @@ class Porte(Mur):
         Fonction qui simule une tentative d'ouverture par une entitée
         Entrée:
             -l'inventaire de l'entitée
-        Sorties:
+        Sortie:
             -un booléen indiquant si l'entitée peut passer
         """
         #on récupère toute les clées de l'inventaire
@@ -70,6 +73,7 @@ class Porte(Mur):
     def dessine_toi(self,screen,case_x,case_y,tailleCase,direction,couleur=(0,0,0)):
         """
         Fonction qui dessine l'objet
+        Entrées:
             l'écran, la surface sur laquelle on dessine(objet pygame)
             la position de la case sur laquelle est le mur
             la taille de la case en px
@@ -81,4 +85,4 @@ class Porte(Mur):
         elif self.etat==MUR_VIDE:
             SKIN_VIDE_PORTE.dessine_toi(screen,(case_x,case_y),direction)
 
-        
+    
