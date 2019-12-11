@@ -22,6 +22,7 @@ from Projectiles import *
 class Niveau:
     def __init__(self,niveau,difficulte,mode_affichage,mode_minimap,destination=None,debut_niveau=False,joueur=None,labyrinthe=None,entitees=None,evenements=None,horloge_cycle=None):
 
+        print(niveau)
         self.greater_teleportation = False
         self.mode_affichage = mode_affichage
         self.difficulte = difficulte
@@ -241,8 +242,8 @@ class Niveau:
             elif niveau == "tuto7":
                 inventaire_joueur = Inventaire([Clee(None,"Bonus_1"),Clee(None,"Bonus_2"),Clee(None,"Bonus_3")])
                 
-            self.force_joueur = 5
-            self.hp_joueur = 100
+            self.force_joueur = 10
+            self.hp_joueur = 200
             self.mana_joueur = 50
             self.vitesse_joueur_lab=4
             self.vitesse_joueur_autres=6

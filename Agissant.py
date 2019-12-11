@@ -33,6 +33,7 @@ class Agissant(Entitee):
         Fonction qui renvoie la prochaine action voulue
         ainsi que l'id qui indique ce que l'on veut faire(attaquer déplacer)
         """
+        self.id_last=self.id_next
         id_renvoie=self.id_next
         next_action_renvoie=self.next_action
 

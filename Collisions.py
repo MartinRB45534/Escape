@@ -35,6 +35,10 @@ class Collision:
                         if mat_explorable[x][y]:
                             succes=True
                             self.attaque(agissant,attaquant)
+
+        #On ne veut pas afficher l'animation d'attaque sur la case de l'attaquant
+        mat_explorable[attaquant.getPosition()[0]-position_vue[0]][attaquant.getPosition()[1]-position_vue[1]] = False
+        
         return succes, mat_explorable
     def tentative_interaction(self,agissant,entitees):
         """

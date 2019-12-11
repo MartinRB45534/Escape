@@ -141,6 +141,20 @@ class Skin_caillou(Skin):
         else:
             screen.blit(self.skin,position)
 
+class Skin_pnj(Skin):
+    def __init__(self,nom_fichier,couleur=(255,255,255)):
+        try:
+            self.skin = pygame.image.load(str(couleur) + nom_fichier)
+        except:
+            self.skin = None
+            self.couleur = couleur
+
+    def dessine_toi(self,screen,position):
+        if self.skin == None:
+            pygame.draw.rect(screen,self.couleur,(position[0],position[1],19,19))
+        else:
+            screen.blit(self.skin,position)
+
 global SKIN_VIDE
 SKIN_VIDE = Skin_mur("mur_vide.png",(255,255,255))
 global SKIN_PLEIN
@@ -154,8 +168,13 @@ SKIN_PLEIN_PORTE = Skin_mur("porte_plein.png",(0,0,0))
 global SKIN_CASES
 SKIN_CASES = [Skin_case("case.png",(255,255,255))]
 
+global SKIN_PNJS
+SKIN_PNJS = []
+
 global SKIN_JOUEUR
 SKIN_JOUEUR = Skin("joueur.png",(0,255,0))
+global SKIN_ATTAQUE_JOUEUR
+SKIN_ATTAQUE_JOUEUR = Skin("attaque_joueur.png",(0,255,0))
 global SKIN_FATTI
 SKIN_FATTI = Skin("fatti.png",(0,0,100))
 global SKIN_SLIME
@@ -180,10 +199,10 @@ global SKIN_POTION_SUPER_VISION
 SKIN_POTION_SUPER_VISION = Skin_potion("super_vision.png")
 global SKIN_CLEE
 SKIN_CLEE = Skin_clee("clee.png")
-global SKIN_LANCE_1
-SKIN_LANCE_1 = Skin_lance("lance_1.png")
-global SKIN_LANCE_2
-SKIN_LANCE_2 = Skin_lance("lance_2.png")
+global SKIN_MANCHE_LANCE
+SKIN_MANCHE_LANCE = Skin_lance("manche_lance.png")
+global SKIN_POINTE_LANCE
+SKIN_POINTE_LANCE = Skin_lance("pointe_lance.png")
 global SKIN_STOMP_1
 SKIN_STOMP_1 = Skin_stomp("stomp_1.png")
 global SKIN_STOMP_2

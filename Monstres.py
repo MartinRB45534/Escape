@@ -239,7 +239,7 @@ class Monstre(Agissant):
 
 
 class Slime(Monstre):
-    def __init__(self,position,id_meute=0,largeur_vue=5,hauteur_vue=5,pv=50,degats=3,vitesse=6,radius=1,couleur=(255,100,100)):
+    def __init__(self,position,id_meute=0,largeur_vue=5,hauteur_vue=5,pv=50,degats=2,vitesse=8,radius=1,couleur=(255,100,100)):
         Monstre.__init__(self,position,id_meute,largeur_vue,hauteur_vue,pv,0,degats,vitesse,radius,couleur)
 
     def cherche(self,vue,position_lab):
