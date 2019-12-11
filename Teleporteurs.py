@@ -8,6 +8,11 @@ class Teleporteur_local(Case_speciale):
         self.coord_cible = coord_cible
         self.cooldown = cooldown
         self.compteur_interne = 0
+        if self.couleur == (255,255,255):
+            self.skin = 0
+        else:
+            self.skin = len(SKIN_CASES)
+            SKIN_CASES.append(Skin_case("case.png",self.couleur))
 
     def execute(self,entitee):
         """

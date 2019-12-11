@@ -156,6 +156,8 @@ SKIN_CASES = [Skin_case("case.png",(255,255,255))]
 
 global SKIN_JOUEUR
 SKIN_JOUEUR = Skin("joueur.png",(0,255,0))
+global SKIN_ATTAQUE_JOUEUR
+SKIN_ATTAQUE_JOUEUR = Skin("attaque_joueur.png",(0,255,0))
 global SKIN_FATTI
 SKIN_FATTI = Skin("fatti.png",(0,0,100))
 global SKIN_SLIME
@@ -180,10 +182,10 @@ global SKIN_POTION_SUPER_VISION
 SKIN_POTION_SUPER_VISION = Skin_potion("super_vision.png")
 global SKIN_CLEE
 SKIN_CLEE = Skin_clee("clee.png")
-global SKIN_LANCE_1
-SKIN_LANCE_1 = Skin_lance("lance_1.png")
-global SKIN_LANCE_2
-SKIN_LANCE_2 = Skin_lance("lance_2.png")
+global SKIN_MANCHE_LANCE
+SKIN_MANCHE_LANCE = Skin_lance("manche_lance.png")
+global SKIN_POINTE_LANCE
+SKIN_POINTE_LANCE = Skin_lance("pointe_lance.png")
 global SKIN_STOMP_1
 SKIN_STOMP_1 = Skin_stomp("stomp_1.png")
 global SKIN_STOMP_2

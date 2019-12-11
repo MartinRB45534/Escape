@@ -56,7 +56,22 @@ class Attaque_unidirectionnelle(Animation):
         Sorties:
             Rien
         """
-        if self.temps_restant%2 == 0:
-            SKIN_LANCE_1.dessine_toi(self.surface,self.position_pixel,self.direction)
-        else:
-            SKIN_LANCE_2.dessine_toi(self.surface,self.position_pixel,self.direction)
+        SKIN_MANCHE_LANCE.dessine_toi(self.surface,self.position_pixel,self.direction)
+
+class Attaque_unidirectionnelle_fin(Animation):
+    def __init__(self,temps_restant,position_lab,direction,surface):
+        self.temps_restant=temps_restant
+        self.temps_initial=temps_restant
+        self.position_lab=position_lab
+        self.position_pixel=None
+        self.surface=surface
+        self.direction=direction
+    def action(self):
+        """
+        Fonction qui exécute l'animation d'attaque
+        Entrées:
+            Rien
+        Sorties:
+            Rien
+        """
+        SKIN_POINTE_LANCE.dessine_toi(self.surface,self.position_pixel,self.direction)

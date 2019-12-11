@@ -384,8 +384,8 @@ class Affichage:
             -position de l'animation en cases
             -le type de l'animation:
                 -0=>Attaque 'classique'
-            -le temps que l'animation va prendre
-            -le radius en cases
+            -la matrice des cases touchées
+            -la direction de l'attaque
         """
         new_animation=None
         if type_anim == LIGHT:
@@ -393,19 +393,36 @@ class Affichage:
                 for y in range(len(mat_anim[0])):
                     if mat_anim[x][y]:
                         position = (position_anim[0] + x,position_anim[1] + y)
-                        new_animation=Attaque_omnidirectionnelle(3,position,self.screen)
+                        new_animation=Attaque_omnidirectionnelle(4,position,self.screen)
                         self.animations.append(new_animation)
                         #la position en pixels sera déterminée que lorsque
                         #qu'on voudra la dessiner
         elif type_anim == HEAVY:
+            nb_anim = 0
             for x in range(len(mat_anim)):
                 for y in range(len(mat_anim[0])):
                     if mat_anim[x][y]:
+                        nb_anim += 1
+            nb_anims = 0
+            for x in range(len(mat_anim)):
+                for y in range(len(mat_anim[0])):
+                    if mat_anim[x][y]:
+                        nb_anims += 1
                         position = (position_anim[0] + x,position_anim[1] + y)
-                        new_animation=Attaque_unidirectionnelle(3,position,direction,self.screen)
+                        if direction == GAUCHE or direction == HAUT:
+                            if nb_anims == 1:
+                                new_animation=Attaque_unidirectionnelle_fin(max(nb_anim,4),position,direction,self.screen)
+                            else:
+                                new_animation=Attaque_unidirectionnelle(max(nb_anim,4),position,direction,self.screen)
+                        else:
+                            if nb_anims == nb_anim:
+                                new_animation=Attaque_unidirectionnelle_fin(max(nb_anim,4),position,direction,self.screen)
+                            else:
+                                new_animation=Attaque_unidirectionnelle(max(nb_anim,4),position,direction,self.screen)
                         self.animations.append(new_animation)
                         #la position en pixels sera déterminée que lorsque
                         #qu'on voudra la dessiner
+                        
         else:
             print("le type d'animation choisi est invalide")
 
@@ -420,8 +437,8 @@ class Affichage:
         for animation in self.animations:
             position_lab_anim=animation.getPosition()
             if self.est_dans_vue(position_lab_anim,position_joueur,largeur_vue,hauteur_vue):
-                position_anim_x=(self.LARGEUR_CASE+self.LARGEUR_MUR)*(position_lab_anim[0]-position_joueur[0]+largeur_vue//2)+self.decalage[0]
-                position_anim_y=(self.LARGEUR_CASE+self.LARGEUR_MUR)*(position_lab_anim[1]-position_joueur[1]+hauteur_vue//2)+self.decalage[1]
+                position_anim_x=(self.LARGEUR_CASE+self.LARGEUR_MUR)*(position_lab_anim[0]-position_joueur[0]+largeur_vue//2)+self.decalage[0]+2
+                position_anim_y=(self.LARGEUR_CASE+self.LARGEUR_MUR)*(position_lab_anim[1]-position_joueur[1]+hauteur_vue//2)+self.decalage[1]+2
 
                 position_anim=[position_anim_x,position_anim_y]
 
