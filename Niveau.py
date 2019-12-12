@@ -22,7 +22,6 @@ from Projectiles import *
 class Niveau:
     def __init__(self,niveau,difficulte,mode_affichage,mode_minimap,destination=None,debut_niveau=False,joueur=None,labyrinthe=None,entitees=None,evenements=None,horloge_cycle=None):
 
-        print(niveau)
         self.greater_teleportation = False
         self.mode_affichage = mode_affichage
         self.difficulte = difficulte
@@ -87,8 +86,9 @@ class Niveau:
                     res = False
                     self.salles=[]
                     proba_murs = 0
-                self.teleporteurs = [[ [4,4], Teleporteur_local((10,10),self.LARGEUR_CASE,self.LARGEUR_MUR,ARRIVEE) ], [ [14,14], Teleporteur_local((0,0),self.LARGEUR_CASE,self.LARGEUR_MUR,ARRIVEE) ]]
+                self.teleporteurs = [[ [4,4], Teleporteur_local((10,10),self.LARGEUR_CASE,self.LARGEUR_MUR) ], [ [14,14], Teleporteur_local((0,0),self.LARGEUR_CASE,self.LARGEUR_MUR) ]]
                 self.cases_speciales = self.teleporteurs
+                self.cases_inaccessibles = []
 
                 self.clees = [Clee((3,3),"goodooKey")]
                 
@@ -107,6 +107,7 @@ class Niveau:
                 self.salles = [Patern((0,0),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,3]]),Patern((self.CASES_X-5,self.CASES_Y-5),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,1]])]
                 proba_murs = 1/(niveau+1)
                 self.cases_speciales = []
+                self.cases_inaccessibles = []
 
             elif niveau == "tuto1":
                 self.CASES_X = 15
@@ -117,8 +118,9 @@ class Niveau:
                 self.clees = []
                 self.salles = [Patern((0,0),14,3,self.LARGEUR_CASE,self.LARGEUR_MUR,[])]
                 proba_murs = 1
-                self.teleporteurs = [[(13,1),Teleporteur_global((0,0),"tuto2",self.LARGEUR_CASE,self.LARGEUR_MUR,(255,255,255))]]
+                self.teleporteurs = [[(13,1),Teleporteur_global((0,0),"tuto2",self.LARGEUR_CASE,self.LARGEUR_MUR,False,(255,255,255))]]
                 self.cases_speciales = self.teleporteurs
+                self.cases_inaccessibles = []
                 
             elif niveau == "tuto2":
                 #niveau labyrinthique sans monstres pour apprendre à se déplacer
@@ -132,8 +134,9 @@ class Niveau:
                 self.salles=[Patern((0,0),20,20,self.LARGEUR_CASE,self.LARGEUR_MUR,[[15,19],[16,19],[17,19],[18,19],[19,19],[19,18],[19,17],[19,16],[19,15]],[],False),Patern((20,20),20,20,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[3,0],[2,0],[1,0],[0,0],[0,1],[0,2],[0,3],[0,4]],[],False),Patern((0,0),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,3]]),Patern((15,15),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,1],[0,8],[9,1],[9,8]],self.clees)]
                 self.clee_bonus_1 = Clee((19,1),"Bonus_1")
                 proba_murs = 0.1
-                self.teleporteurs = [[(39,39),Teleporteur_global([5,0],"tuto3",self.LARGEUR_CASE,self.LARGEUR_MUR,ARRIVEE)]]
+                self.teleporteurs = [[(39,39),Teleporteur_global([5,0],"tuto3",self.LARGEUR_CASE,self.LARGEUR_MUR,False,ARRIVEE)]]
                 self.cases_speciales = self.teleporteurs
+                self.cases_inaccessibles = []
 
             elif niveau == "tuto3":
                 #niveau monstrueux sans trop de labyrinthe pour apprendre à se battre
@@ -146,8 +149,9 @@ class Niveau:
                 self.clees = [Clee((0,59),"Bonus_2")]
                 self.salles=[Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,9],[1,9]]),Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0]]),Patern((0,0),4,4,self.LARGEUR_CASE,self.LARGEUR_MUR,[[2,3]],[Clee(None,"Bonus_1")])]
                 proba_murs = 0.3
-                self.teleporteurs = [[(5,59),Teleporteur_global([5,0],"tuto4",self.LARGEUR_CASE,self.LARGEUR_MUR,ARRIVEE)]]
+                self.teleporteurs = [[(5,59),Teleporteur_global([5,0],"tuto4",self.LARGEUR_CASE,self.LARGEUR_MUR,False,ARRIVEE)]]
                 self.cases_speciales = self.teleporteurs
+                self.cases_inaccessibles = []
 
             elif niveau == "tuto4":
                 #niveau monstrueux sans labyrinthe pour apprendre à se battre
@@ -160,8 +164,9 @@ class Niveau:
                 self.clees = [Clee((0,59),"Bonus_3")]
                 self.salles=[Patern((4,0),2,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,9],[1,9]]),Patern((1,13),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((1,25),6,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((2,40),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0],[5,7]]),Patern((4,52),5,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[[4,0]]),Patern((0,56),4,4,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((0,52),4,4,self.LARGEUR_CASE,self.LARGEUR_MUR,[[1,0],[2,3]],[Clee(None,"Bonus_2"),Clee(None,"Bonus_1")])]
                 proba_murs = 0.2
-                self.teleporteurs = [[(5,59),Teleporteur_global([1,2],"tuto5",self.LARGEUR_CASE,self.LARGEUR_MUR,ARRIVEE)]]
+                self.teleporteurs = [[(5,59),Teleporteur_global([1,2],"tuto5",self.LARGEUR_CASE,self.LARGEUR_MUR,False,ARRIVEE)]]
                 self.cases_speciales = self.teleporteurs
+                self.cases_inaccessibles = []
 
             elif niveau == "tuto5":
                 #niveau monstrueux sans labyrinthe pour apprendre à se battre contre des meutes
@@ -173,8 +178,9 @@ class Niveau:
                 res = False
                 self.salles=[Patern((0,0),16,16,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((0,1),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[1,0],[2,13]],[Clee(None,"Bonus_3")]),Patern((3,1),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,13],[2,1]]),Patern((6,1),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,1],[2,13]]),Patern((9,1),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,13],[2,1]]),Patern((12,1),3,15,self.LARGEUR_CASE,self.LARGEUR_MUR,[[2,13],[0,1]],[Clee(None,"Bonus_3")])]
                 proba_murs = 0
-                self.teleporteurs = [[(13,14),Teleporteur_global([0,0],"tuto6",self.LARGEUR_CASE,self.LARGEUR_MUR,ARRIVEE)]]
+                self.teleporteurs = [[(13,14),Teleporteur_global([0,0],"tuto6",self.LARGEUR_CASE,self.LARGEUR_MUR,False,ARRIVEE)]]
                 self.cases_speciales = self.teleporteurs
+                self.cases_inaccessibles = []
 
             elif niveau == "tuto6":
                 #niveau avec labyrinthe et montres pour apprendre l'utilité des potions
@@ -188,8 +194,9 @@ class Niveau:
                 self.salles=[Patern((0,0),11,11,self.LARGEUR_CASE,self.LARGEUR_MUR,[[10,1]]),Patern((0,30),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[8,0],[9,0],[9,1]]),Patern((8,27),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[3,0],[0,4]],[Clee(None,"Bonus_2"),Clee(None,"Bonus_3")]),Patern((30,0),10,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,8],[0,9],[1,9]]),Patern((27,8),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[3,4],[4,0]],[Clee(None,"Bonus_1"),Clee(None,"Bonus_3")]),Patern((35,35),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,4],[0,3],[0,2],[0,1],[1,0],[2,0],[3,0],[4,0]],self.clees),Patern((24,5),3,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[1,9]]),Patern((5,19),5,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[2,0]]),Patern((15,35),10,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[5,0]],[Clee(None,"Porte_7_niveau_6_tutoriel")]),Patern((35,15),5,10,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,5]],[Clee(None,"Porte_3_niveau_6_tutoriel")])]
                 self.clees = self.clees + [Clee((5,6),"Bonus_4"),Clee((28,37),"Bonus_5"),Clee((38,17),"Bonus_6")]
                 proba_murs = 0.2
-                self.teleporteurs = [[(39,39),Teleporteur_global([20,20],"tuto7",self.LARGEUR_CASE,self.LARGEUR_MUR,ARRIVEE)]]
+                self.teleporteurs = [[(39,39),Teleporteur_global([20,20],"tuto7",self.LARGEUR_CASE,self.LARGEUR_MUR,False,ARRIVEE)]]
                 self.cases_speciales = self.teleporteurs
+                self.cases_inaccessibles = []
 
             elif niveau == "tuto7":
                 #niveau téléportation (et pièges)
@@ -202,14 +209,15 @@ class Niveau:
                 self.clees = []
                 self.salles = [Patern((16,16),8,8,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((0,0),16,9,self.LARGEUR_CASE,self.LARGEUR_MUR,[[1,8]],[Clee((None),"Cheat code")],False),Patern((5,6),8,24,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((12,3),10,9,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((8,4),7,7,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((9,16),4,16,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((17,27),15,2,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((15,30),1,2,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((32,25),6,6,self.LARGEUR_CASE,self.LARGEUR_MUR,[[0,2],[0,3]]),Patern((14,25),3,5,self.LARGEUR_CASE,self.LARGEUR_MUR,[[2,2],[2,3],[1,4]]),Patern((14,32),4,4,self.LARGEUR_CASE,self.LARGEUR_MUR,[[1,0]]),Patern((2,31),6,6,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((20,30),8,6,self.LARGEUR_CASE,self.LARGEUR_MUR,[]),Patern((26,3),10,21,self.LARGEUR_CASE,self.LARGEUR_MUR,[])]
                 proba_murs = 0.3
-                self.teleporteurs_officiels = [[(23,23),Teleporteur_local([39,39],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(23,16),Teleporteur_local([26,23],self.LARGEUR_CASE,self.LARGEUR_MUR)],[(28,23),Teleporteur_local((20,20),self.LARGEUR_CASE,self.LARGEUR_MUR)],[(16,16),Teleporteur_local((12,3),self.LARGEUR_CASE,self.LARGEUR_MUR)],[(12,11),Teleporteur_local((10,13),self.LARGEUR_CASE,self.LARGEUR_MUR)],[(5,29),Teleporteur_local((2,36),self.LARGEUR_CASE,self.LARGEUR_MUR)],[(7,31),Teleporteur_local((27,35),self.LARGEUR_CASE,self.LARGEUR_MUR)],[(20,30),Teleporteur_local((20,20),self.LARGEUR_CASE,self.LARGEUR_MUR)],[(16,23),Teleporteur_local((10,16),self.LARGEUR_CASE,self.LARGEUR_MUR)],[(11,31),Teleporteur_local((8,4),self.LARGEUR_CASE,self.LARGEUR_MUR)],[(8,10),Teleporteur_local((37,27),self.LARGEUR_CASE,self.LARGEUR_MUR)],[(14,35),Teleporteur_local((20,20),self.LARGEUR_CASE,self.LARGEUR_MUR)],[(14,13),Teleporteur_local((15,0),self.LARGEUR_CASE,self.LARGEUR_MUR)]]
-                self.teleporteurs_officieux = [[(32,35),Teleporteur_local([20,20],self.LARGEUR_CASE,self.LARGEUR_MUR,(255,255,255))],[(11,35),Teleporteur_local((20,20),self.LARGEUR_CASE,self.LARGEUR_MUR,(255,255,255))],[(2,12),Teleporteur_local((20,20),self.LARGEUR_CASE,self.LARGEUR_MUR,(255,255,255))],[(3,6),Teleporteur_local([20,20],self.LARGEUR_CASE,self.LARGEUR_MUR,(255,255,255))]]
-                self.fontaines = [[[20,20],Fontaine_heal(self.LARGEUR_CASE,self.LARGEUR_MUR,0,(20,20,125))]]
+                self.teleporteurs_officiels = [[(23,23),Teleporteur_local([39,39],self.LARGEUR_CASE,self.LARGEUR_MUR,True)],[(23,16),Teleporteur_local([26,23],self.LARGEUR_CASE,self.LARGEUR_MUR,True)],[(28,23),Teleporteur_local((20,20),self.LARGEUR_CASE,self.LARGEUR_MUR,True)],[(16,16),Teleporteur_local((12,3),self.LARGEUR_CASE,self.LARGEUR_MUR,True)],[(12,11),Teleporteur_local((10,13),self.LARGEUR_CASE,self.LARGEUR_MUR,True)],[(5,29),Teleporteur_local((2,36),self.LARGEUR_CASE,self.LARGEUR_MUR,True)],[(7,31),Teleporteur_local((27,35),self.LARGEUR_CASE,self.LARGEUR_MUR,True)],[(20,30),Teleporteur_local((20,20),self.LARGEUR_CASE,self.LARGEUR_MUR,True)],[(16,23),Teleporteur_local((10,16),self.LARGEUR_CASE,self.LARGEUR_MUR,True)],[(11,31),Teleporteur_local((8,4),self.LARGEUR_CASE,self.LARGEUR_MUR,True)],[(8,10),Teleporteur_local((37,27),self.LARGEUR_CASE,self.LARGEUR_MUR,True)],[(14,35),Teleporteur_local((20,20),self.LARGEUR_CASE,self.LARGEUR_MUR,True)],[(14,13),Teleporteur_local((15,0),self.LARGEUR_CASE,self.LARGEUR_MUR,True)]]
+                self.teleporteurs_officieux = [[(32,35),Teleporteur_local([20,20],self.LARGEUR_CASE,self.LARGEUR_MUR,True,(255,255,255))],[(11,35),Teleporteur_local((20,20),self.LARGEUR_CASE,self.LARGEUR_MUR,True,(255,255,255))],[(2,12),Teleporteur_local((20,20),self.LARGEUR_CASE,self.LARGEUR_MUR,True,(255,255,255))],[(3,6),Teleporteur_local([20,20],self.LARGEUR_CASE,self.LARGEUR_MUR,True,(255,255,255))]]
+                self.fontaines = [[[20,20],Fontaine_heal(self.LARGEUR_CASE,self.LARGEUR_MUR,0,False,(20,20,125))]]
                 self.cases_speciales = self.teleporteurs_officiels + self.teleporteurs_officieux + self.fontaines
+                self.cases_inaccessibles = [(39,39),(26,23),(26,22),(27,22),(27,23),(12,3),(13,3),(14,3),(10,13),(11,13),(9,13),(10,12),(11,12),(9,12),(10,14),(9,14),(11,14),(27,35),(26,35),(27,34),(26,34),(10,16),(9,16),(11,16),(10,17),(9,17),(11,17),(8,4),(9,4),(8,5),(9,5),(37,27),(37,28),(37,26),(36,27),(36,28),(36,26)]
             
             self.poids=[6,2,1,2]
             #génération du labyrinthe
-            self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.arrivee,self.depart,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles,self.cases_speciales)
+            self.lab=Labyrinthe(self.CASES_X,self.CASES_Y,self.arrivee,self.depart,self.LARGEUR_CASE,self.LARGEUR_MUR,self.poids,self.salles,self.cases_speciales,self.cases_inaccessibles)
             self.lab.generation(None,proba_murs,None,None)
             
 
@@ -250,7 +258,7 @@ class Niveau:
             self.hp_joueur = 200
             self.mana_joueur = 50
             self.vitesse_joueur_lab=4
-            self.vitesse_joueur_autres=6
+            self.vitesse_joueur_autres=12
             minimap = Minimap(self.lab.getMatrice_cases(),mode_minimap,self.depart,self.arrivee)
 
             #variables correspondants a la largeur et la hauteur du zoom

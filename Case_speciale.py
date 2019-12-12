@@ -1,8 +1,8 @@
 from Cases import *
 
 class Case_speciale(Case):
-    def __init__(self,tailleCase,tailleMur,cooldown = 10,couleur=(0,0,0)):
-        Case.__init__(self,tailleCase,tailleMur,couleur)
+    def __init__(self,tailleCase,tailleMur,cooldown = 10,no_monster=False,couleur=(0,0,0)):
+        Case.__init__(self,tailleCase,tailleMur,no_monster,couleur)
         self.cooldown = cooldown
         self.compteur_interne = 0
     def passage(self,entitee):

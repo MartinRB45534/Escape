@@ -9,17 +9,18 @@ from Piques import *
 from Fontaine_heal import *
 from Teleporteurs import *
 from Projectiles import *
+from Monstres import *
 
 
 class Labyrinthe:
-    def __init__(self,largeur,hauteur,arrivee,depart,tailleCase=20,tailleMur=1,poids=[1,1,1,1],patterns=None,cases_speciales=[],couleur_case=(255,255,255),couleur_mur=(0,0,0)):
+    def __init__(self,largeur,hauteur,arrivee,depart,tailleCase=20,tailleMur=1,poids=[1,1,1,1],patterns=None,cases_speciales=[],cases_inaccessibles=[],couleur_case=(255,255,255),couleur_mur=(0,0,0)):
         self.largeur = largeur
         self.hauteur = hauteur
 
         self.arrivee = arrivee
         self.depart = depart
         
-        self.matrice_cases = [[Case(tailleCase,tailleMur,couleur_case,couleur_mur) for i in range(hauteur)]for j in range(largeur)]
+        self.matrice_cases = [[Case(tailleCase,tailleMur,((i,j) in cases_inaccessibles),couleur_case,couleur_mur) for i in range(hauteur)]for j in range(largeur)]
 
         self.coord_speciales = []
 
@@ -120,6 +121,8 @@ class Labyrinthe:
                 passe=False
 
         if self.matrice_cases[newcoord[0]][newcoord[1]] == None:
+            passe=False
+        elif self.matrice_cases[newcoord[0]][newcoord[1]].no_monster and issubclass(type(intrus),Monstre):
             passe=False
 
         return passe, newcoord

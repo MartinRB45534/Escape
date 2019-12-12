@@ -39,10 +39,13 @@ class Pnj_passif(Agissant):
             Rien
         """
         self.id_next = PARLER
-        self.repliques[self.indice_replique].position_replique = 0
-        self.next_action = self.repliques[self.indice_replique]
-        if self.indice_replique < len(self.repliques) -1:
+        if self.indice_replique < len(self.repliques):
+            self.repliques[self.indice_replique].position_replique = 0
+            self.next_action = self.repliques[self.indice_replique]
             self.indice_replique += 1
+        else:
+            self.repliques[len(self.repliques)-1].position_replique = 0
+            self.next_action = self.repliques[len(self.repliques)-1]
         
     def prochaine_action(self):
         """
