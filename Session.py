@@ -57,7 +57,7 @@ class Session ():
         Fonction qui prend en charge la boucle principale de la session
         """
         pause = False
-        while self.nb_niv_courant<=self.nb_niv_max and not pause:
+        while (self.nb_niv_courant == "demo" or self.nb_niv_courant<=self.nb_niv_max) and not pause:
             res,win,joueur = self.niv_courant.run()
             fichier = open(sauvegarde,'wb')
             f = pickle.Pickler(fichier)
@@ -68,7 +68,10 @@ class Session ():
                 if self.niv_courant.greater_teleportation:
                     self.teleporte(joueur,self.niv_courant.destination)
                     pause = True
-            if res != -1:
+            if self.nb_niv_courant == "demo":
+                pygame.time.wait(res)
+                pause = True
+            elif res != -1:
                 pygame.time.wait(res)
                 if win:
                     self.nb_niv_courant+=1
