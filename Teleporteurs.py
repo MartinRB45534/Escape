@@ -3,8 +3,8 @@ from Constantes import *
 import pygame
 
 class Teleporteur_local(Case_speciale):
-    def __init__(self,coord_cible,tailleCase,tailleMur,couleur=(43,250,250),couleur_mur=(0,0,0),cooldown = 0):
-        Case.__init__(self,tailleCase,tailleMur,couleur,couleur_mur)
+    def __init__(self,coord_cible,tailleCase,tailleMur,no_monster=False,couleur=(43,250,250),couleur_mur=(0,0,0),cooldown = 0):
+        Case.__init__(self,tailleCase,tailleMur,no_monster,couleur,couleur_mur)
         self.coord_cible = coord_cible
         self.cooldown = cooldown
         self.compteur_interne = 0
@@ -25,8 +25,8 @@ class Teleporteur_local(Case_speciale):
         entitee.position = self.coord_cible
 
 class Teleporteur_global(Teleporteur_local):
-    def __init__(self,coord_cible,niveau_cible,tailleCase,tailleMur,couleur=(43,250,250),couleur_mur=(0,0,0),cooldown = 0):
-        Case.__init__(self,tailleCase,tailleMur,couleur,couleur_mur)
+    def __init__(self,coord_cible,niveau_cible,tailleCase,tailleMur,no_monster=False,couleur=(43,250,250),couleur_mur=(0,0,0),cooldown = 0):
+        Case.__init__(self,tailleCase,tailleMur,no_monster,couleur,couleur_mur)
         self.coord_cible = coord_cible
         self.niveau_cible = niveau_cible
         self.cooldown = cooldown

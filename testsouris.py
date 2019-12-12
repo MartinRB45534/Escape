@@ -52,7 +52,7 @@ def main():
     fenetre = pygame.display.set_mode((640, 600))
     #ici on prend les images contenues dans les fichiers pour les convertir vers pygame
 
-    imgmenutest = pygame.image.load("imgmenutest.png").convert()
+    imgmenutest = pygame.image.load("images/imgmenutest.png").convert()
     
     #session
     session = Session(niveau,difficulté,mode_affichage,mode_minimap,nb_max_niv)
@@ -94,7 +94,7 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN and quitter.survolBouton:
                 loop = False
             elif event.type == pygame.MOUSEBUTTONDOWN and tuto.survolBouton:
-                session.tuto_courant = 1
+                session.tuto_courant = 7
                 session.reset_niveau_tuto()
                 session.runtuto()
 

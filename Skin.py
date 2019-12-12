@@ -5,11 +5,11 @@ class Skin:
 
     def __init__(self,nom_fichier,couleur=(0,0,0)):
         try:
-            haut = pygame.image.load("haut_" + nom_fichier)
-            bas = pygame.image.load("bas_" + nom_fichier)
-            droite = pygame.image.load("droite_" + nom_fichier)
-            gauche = pygame.image.load("gauche_" + nom_fichier)
-            immobile = pygame.image.load("immobile_" + nom_fichier)
+            haut = pygame.image.load("images/haut_" + nom_fichier)
+            bas = pygame.image.load("images/bas_" + nom_fichier)
+            droite = pygame.image.load("images/droite_" + nom_fichier)
+            gauche = pygame.image.load("images/gauche_" + nom_fichier)
+            immobile = pygame.image.load("images/immobile_" + nom_fichier)
             self.skins = [haut,droite,bas,gauche,immobile]
         except:
             self.skins = None
@@ -27,10 +27,10 @@ class Skin_mur(Skin):
 
     def __init__(self,nom_fichier,couleur=(0,0,0)):
         try:
-            haut = pygame.image.load("haut_" + nom_fichier)
-            bas = pygame.image.load("bas_" + nom_fichier)
-            droite = pygame.image.load("droite_" + nom_fichier)
-            gauche = pygame.image.load("gauche_" + nom_fichier)
+            haut = pygame.image.load("images/haut_" + nom_fichier)
+            bas = pygame.image.load("images/bas_" + nom_fichier)
+            droite = pygame.image.load("images/droite_" + nom_fichier)
+            gauche = pygame.image.load("images/gauche_" + nom_fichier)
             self.skins = [haut,droite,bas,gauche]
         except:
             self.skins = None
@@ -59,7 +59,7 @@ class Skin_mur(Skin):
 class Skin_case(Skin):
     def __init__(self,nom_fichier,couleur=(255,255,255)):
         try:
-            self.skin = pygame.image.load(str(couleur) + nom_fichier)
+            self.skin = pygame.image.load("images/" + str(couleur) + nom_fichier)
         except:
             self.skin = None
             self.couleur = couleur
@@ -73,7 +73,7 @@ class Skin_case(Skin):
 class Skin_potion(Skin):
     def __init__(self,nom_fichier,couleur=(255,255,0)):
         try:
-            self.skin = pygame.image.load("potion_" + nom_fichier)
+            self.skin = pygame.image.load("images/potion_" + nom_fichier)
         except:
             self.skin = None
             self.couleur = couleur
@@ -87,7 +87,7 @@ class Skin_potion(Skin):
 class Skin_clee(Skin):
     def __init__(self,nom_fichier,couleur=(249,202,36)):
         try:
-            self.skin = pygame.image.load(nom_fichier)
+            self.skin = pygame.image.load("images/" + nom_fichier)
         except:
             self.skin = None
             self.couleur = couleur
@@ -102,10 +102,10 @@ class Skin_clee(Skin):
 class Skin_lance(Skin):
     def __init__(self,nom_fichier):
         try:
-            haut = pygame.image.load("haut_" + nom_fichier)
-            bas = pygame.image.load("bas_" + nom_fichier)
-            droite = pygame.image.load("droite_" + nom_fichier)
-            gauche = pygame.image.load("gauche_" + nom_fichier)
+            haut = pygame.image.load("images/haut_" + nom_fichier)
+            bas = pygame.image.load("images/bas_" + nom_fichier)
+            droite = pygame.image.load("images/droite_" + nom_fichier)
+            gauche = pygame.image.load("images/gauche_" + nom_fichier)
             self.skins = [haut,droite,bas,gauche]
         except:
             self.skins = None
@@ -118,10 +118,10 @@ class Skin_lance(Skin):
 class Skin_stomp(Skin):
     def __init__(self,nom_fichier):
         try:
-            self.skin = pygame.image.load(nom_fichier)
+            self.skin = pygame.image.load("images/" + nom_fichier)
         except:
             self.skin = None
-            print ("L'animation d'attaque directionnelle n'a pas pu être chargée.")
+            print ("L'animation d'attaque non-directionnelle n'a pas pu être chargée.")
 
     def dessine_toi(self,screen,position):
         if self.skin != None:
@@ -130,7 +130,7 @@ class Skin_stomp(Skin):
 class Skin_caillou(Skin):
     def __init__(self,nom_fichier):
         try:
-            self.skin = pygame.image.load(nom_fichier)
+            self.skin = pygame.image.load("images/" + nom_fichier)
         except:
             self.skin = None
             self.couleur = (0,0,0)
@@ -144,7 +144,7 @@ class Skin_caillou(Skin):
 class Skin_pnj(Skin):
     def __init__(self,nom_fichier,couleur=(255,255,255)):
         try:
-            self.skin = pygame.image.load(str(couleur) + nom_fichier)
+            self.skin = pygame.image.load("images/" + str(couleur) + nom_fichier)
         except:
             self.skin = None
             self.couleur = couleur

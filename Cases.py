@@ -4,11 +4,12 @@ from Skin import *
 import pygame
 
 class Case:
-    def __init__(self,tailleCase,tailleMur,couleur=(255,255,255),couleur_mur=(0,0,0)):
+    def __init__(self,tailleCase,tailleMur,no_monster=False,couleur=(255,255,255),couleur_mur=(0,0,0)):
         self.tailleCase=tailleCase
         self.tailleMur=tailleMur
         self.couleur=couleur
         self.couleur_mur=couleur_mur
+        self.no_monster = no_monster
         #on sélectionne la classe Mur du fichier Murs (qui est un objet)
         self.murs = [Mur(MUR_PLEIN,tailleMur) for i in range(4)]
         if self.couleur == (255,255,255):
