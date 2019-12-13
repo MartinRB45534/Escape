@@ -26,7 +26,7 @@ class Affichage:
         #decalage de la matrice du labyrinthe sur l'écran (decalage en px)
         self.hauteur_minimap = 1 * 3 + 13
         self.largeur_minimap = 1 * 3 + 13
-        self.hauteur_HUD = 50
+        self.hauteur_HUD = 100
         self.decalage_matrice=[5,self.hauteur_HUD]
         self.affiche = LABYRINTHE
         self.affiche_precedent = None
@@ -186,17 +186,17 @@ class Affichage:
             
             limite_droite = (self.LARGEUR_MUR+self.LARGEUR_CASE) * (largeur_vue + self.decalage_bord_largeur)
             #fond blanc
-            pygame.draw.rect(self.screen, pygame.Color(255,255,255),(self.largeur_minimap+5,5,limite_droite-5,self.decalage_matrice[1]-10))
+            pygame.draw.rect(self.screen, pygame.Color(255,255,255),(self.largeur_minimap+5,5,290,90))
             #bord noir
-            pygame.draw.rect(self.screen, pygame.Color(0,0,0),(self.largeur_minimap+5,5,limite_droite-5,self.decalage_matrice[1]-10),largeur_bordure_externe)
+            pygame.draw.rect(self.screen, pygame.Color(0,0,0),(self.largeur_minimap+5,5,290,90),largeur_bordure_externe)
 
             #texte de base à écrire en bas
             police_default = pygame.font.SysFont(None, 15)
             text_next = police_default.render("- Appuyer sur Entrée pour continuer -",True,(0,0,0))
             taille_x, taille_y = police_default.size("- Appuyer pour continuer -")
             #taille alouée aux texte
-            size_y = self.decalage_matrice[1]-10-largeur_bordure_externe-largeur_bordure_interne - taille_y
-            size_x = limite_droite-10-largeur_bordure_externe-largeur_bordure_interne
+            size_y = 90 - taille_y
+            size_x = 290
 
             size = [size_x, size_y]
 
@@ -331,8 +331,8 @@ class Affichage:
         Sorties:
             -un entier
         """
-        if self.largeur_minimap>(self.LARGEUR_MUR+self.LARGEUR_CASE)*(largeur_vue):
-            return self.largeur_minimap + 13
+        if self.largeur_minimap + 300 >(self.LARGEUR_MUR+self.LARGEUR_CASE)*(largeur_vue):
+            return self.largeur_minimap + 300
         else:
             return (self.LARGEUR_MUR+self.LARGEUR_CASE)*(largeur_vue)+13
     def getConstantes(self,position_joueur,position_screen,largeur,hauteur):
