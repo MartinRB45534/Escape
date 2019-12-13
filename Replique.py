@@ -4,23 +4,23 @@ class Replique ():
         self.taille_ecriture=taille_ecriture
         #compteur interne déterminant ou l'on en est dans la réplique
         self.position_replique=0
-    def get_contenu(self,nb_chars):
+    def get_contenu(self,nb_lignes):
         """
         Fonction qui renvoie la suite de la réplique
         Entrées:
-            -le nombre de caractères que l'on veut
+            -le nombre de lignes que l'on veut
         Sorties:
-            -les prochains charactères de la chaine
+            -les prochains lignes de la chaine
         """
-        chaine = ""
+        contenu = ""
         if self.position_replique < len(self.contenu):
-            if not(self.position_replique+nb_chars < len(self.contenu)):
-                nb_chars -= (self.position_replique+nb_chars-len(self.contenu))
-            chaine=self.contenu[self.position_replique : self.position_replique+nb_chars]
+            if not(self.position_replique + nb_lignes < len(self.contenu)):
+                nb_lignes -= (self.position_replique + nb_lignes - len(self.contenu))
+            contenu=self.contenu[self.position_replique : self.position_replique+nb_lignes]
 
-            self.position_replique+=nb_chars
+            self.position_replique+=nb_lignes
                 
-        return chaine
+        return contenu
     def est_fini(self):
         """
         Fonction qui indique si la réplique est finie
