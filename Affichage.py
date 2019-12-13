@@ -207,31 +207,21 @@ class Affichage:
             largeur_police, hauteur_police = self.police_cour.size("a")
 
             if self.text_cour == None:
-                self.nb_chars_affichables = (self.taille_max_colonne(self.diag_cour,self.police_cour,size_y)-1)*self.taille_max_ligne(self.diag_cour.contenu,self.police_cour,size_x,0)
-                self.text_cour = self.diag_cour.get_contenu(self.nb_chars_affichables)
+                self.nb_lignes_affichables = self.taille_max_colonne(self.diag_cour,self.police_cour,size_y)
+                self.text_cour = self.diag_cour.get_contenu(self.nb_lignes_affichables)
 
             #on essaie d'empêcher un potentiel soft lock
-            if self.nb_chars_affichables <= 0:
+            if self.nb_lignes_affichables <= 0:
                 self.diag_cour = None
                 self.police_cour = None
                 self.affiche = LABYRINTHE
                 self.text_cour = None
                 
             else:
-                last_char = 0
-                for y in range(0,self.taille_max_colonne(self.diag_cour,self.police_cour,size_y)):
-                    #extraction du texte a afficher sur la ligne
-                    nb_chars = self.taille_max_ligne(self.text_cour,self.police_cour,size_x,last_char)
-                    if last_char < len(self.text_cour):
-                        if not(last_char+nb_chars < len(self.text_cour)):
-                            nb_chars -= (last_char+nb_chars)-len(self.text_cour)
-                        text_ligne = self.text_cour[last_char:last_char+nb_chars]
-                    else:
-                        text_ligne = None
+                for i in range(len(self.text_cour)):
                     #affichage du texte
-                    text_dialogue = self.police_cour.render(text_ligne,True,(0,0,0))
+                    text_dialogue = self.police_cour.render(self.text_cour[i],True,(0,0,0))
                     self.screen.blit(text_dialogue,curseur)
-                    last_char += nb_chars
                     curseur[1] += hauteur_police
 
                 self.screen.blit(text_next, curseur)
@@ -246,7 +236,7 @@ class Affichage:
         Sortie:
             -le nombre de charactères max sur une colonne
         """
-        largeur,hauteur = police.size(replique.contenu[0])
+        largeur,hauteur = police.size(replique.contenu[0][0])
         
         return int(taille_y/hauteur)
 
@@ -267,8 +257,8 @@ class Affichage:
         i=last_char
         taille_px=0
 
-        while i<len(contenu) and taille_px<=taille_x:
-            largeur,hauteur = police.size(contenu[i])
+        while i<len(contenu[0]) and taille_px<=taille_x:
+            largeur,hauteur = police.size(contenu[0][i])
             taille_px += largeur
             nb_chars += 1
             i += 1
