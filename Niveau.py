@@ -359,7 +359,7 @@ class Niveau:
                 monstres=[]
                 self.entitees=self.clees
 
-                self.pnj = Pnj_passif((1,0),1000,(125,255,125),[Replique("Tu as déjà découvert comment te déplacer ? Essaies les touches directionnelles !",20),Replique("Tu devrais chercher la sortie de cette grotte. La porte au bout du couloir me semble suspecte.",20)])
+                self.pnj = Pnj_passif((1,0),1000,(125,255,125),[Replique("Tu as déjà découvert comment te déplacer ?   Essaies les touches directionnelles !",20),Replique("Tu devrais chercher la sortie de cette grotte.   La porte au bout du couloir me semble           suspecte.",20)])
                 self.entitees.append(self.pnj)
 
             elif niveau == "tuto2":
@@ -369,7 +369,7 @@ class Niveau:
                 monstres=[]
                 self.entitees=self.clees
 
-                self.pnj = Pnj_passif((2,3),1000,(190,255,56),[Replique("J'ai peur j'ai peur j'ai peur !J'ai peeeeuuurrr ! ! !",20),Replique("Cet endroit est horrible ! Jevoudrais remonter à la surface, mais avec ce labyrinthe je risque de me perdre, ce serait terrible !",20),Replique("Quelqu'un est passé avant, il a dit que la sortie était en bas à droite et qu'il avait laissé des cailloux sur le chemin, mais je n'ose pas y aller...",20),Replique("Je crois aussi qu'il a parlé de clées, je crois que tu dois les trouver pour ouvrir des portes",20),Replique("L'une d'elle est sur la case de coordonnées (19,1), mais je ne sais pas ce que ça veut dire",20),Replique("Oooh! Tu fais une carte au fur et à mesure de tes déplacements ? Appuie sur A pour la consulter.",20),Replique("Tu veux bien cartographier tout le niveau et revenir me voir ? Avec ça, je serais plus rassuré.",20)])
+                self.pnj = Pnj_passif((2,3),1000,(190,255,56),[Replique("J'ai peur j'ai peur j'ai peur !                             J'ai peeeeuuurrr ! ! !",20),Replique("Cet endroit est horrible ! Je veux remonter à   la surface, mais avec ce labyrinthe je risque  de me perdre, ce serait terrible !",20),Replique("Quelqu'un est passé avant, il a dit que la        sortie était en bas à droite et qu'il avait laissédes cailloux sur le chemin, mais je n'ose pas y aller...",20),Replique("Je crois aussi qu'il a parlé de clées, je crois  qu'il faut les trouver pour ouvrir des portes.",20),Replique("L'une d'elle est sur la case de coordonnées    (19,1), mais je ne sais pas ce que ça veut        dire...",20),Replique("Oooh! Tu fais une carte au fur et à mesure detes déplacements ? Appuie sur A pour la        consulter.",20),Replique("Tu veux bien cartographier tout le niveau et    revenir me voir ? Avec ça, je serais plus        rassuré.",20)])
                 self.entitees.append(self.pnj)
                 
                 self.cailloux_1 = []
@@ -404,10 +404,10 @@ class Niveau:
                 monstres=[Fatti([5,17]),Fatti([5,28]),Fatti([3,43]),Fatti([5,59])]
                 self.entitees=self.clees
 
-                self.pnj = Pnj_passif((5,3),1,(56,255,190),[Replique("Bonjour ! Fais très attention, il y des montres là-bas. Heureusement que je cours plus vite qu'eux !",20),Replique("C'est vraiment dommage, s'il n'y avait pas tous ces monstres, je serais sorti depuis longtemps. Mais j'ai beau être très intelligente et pouvoir trouver la sortie de tous ces labyrinthes en une fraction de seconde, je suis faible.",20),Replique("Tu peux essayer de tuer les monstres en les attaquant avec la touche espace, mais ne fait pas ça trop près de moi. C'est une attaque qui affecte tous les êtres vivants dans son périmètre.",20),Replique("Je peux voir tes armes ? Mais tu as une lance ! Tu peux utiliser les touches WASD pour attaquer dans la direction de ton choix. Cette attaque tape plus loin et plus fort que l'autre, mais dans une seule direction.",20),Replique("Tu peux essayer d'éviter les monstres en les coutournant, car ceux-ci ont une moins bonne vue que toi, mais je préférerais que tu les tues tous. Tu veux bien ?",20)])
+                self.pnj = Pnj_passif((5,3),1,(56,255,190),[Replique("Bonjour ! Fais très attention, il y des montres là-bas. Heureusement que je cours plus vite   qu'eux !",20),Replique("Ces labyrinthes sont ridiculement faciles,      seul un idiot s'y perdrait, mais les monstres  sont dangeureux !",20),Replique("Tu peux attaquer les monstres avec la touche espace, mais ne fait pas ça trop près de moi. C'est une attaque de zone qui me tuerait         aussi.",20),Replique("Je peux voir tes armes ? Mais tu as une         lance ! Utilise les touches WASD pour une      attaque plus puissante dans la direction de    ton choix.",20),Replique("Tu peux essayer d'éviter les monstres en les  coutournant, car ceux-ci ont une moins           bonne vue que toi, mais je préférerais que tu  les tues tous. Tu veux bien ?",20)])
                 self.entitees.append(self.pnj)
 
-                self.pnj_bonus = Pnj_passif((0,2),100,(0,255,125),[Replique("Qu'est-ce que tu fais là ? Personne ne vient jamais ici d'habitude ! Mais tu as raison. Il faut toujours explorer tout le labyrinthe, écouter toutes les répliques de tout le monde, ne rien négliger. C'est le seul moyen de gagner...",20)])
+                self.pnj_bonus = Pnj_passif((0,2),100,(0,255,125),[Replique("Qu'est-ce que tu fais là ? Personne ne vient    jamais ici d'habitude !",20),Replique("Mais tu as raison. Il faut toujours explorer     tout le labyrinthe, écouter toutes les répliquesde tous les PNJs, ne rien négliger.",20),Replique("C'est le seul moyen de gagner...",20)])
                 self.entitees.append(self.pnj_bonus)
                 
                 positions = self.lab.petit_poucet(6,self.depart,self.arrivee)
@@ -421,7 +421,7 @@ class Niveau:
                 monstres=[Slime([5,17]),Fatti([8,25]),Runner(self.lab.getMatrice_cases(),5,59,[3,48]),Fatti([5,59])]
                 self.entitees=self.clees
 
-                self.pnj = Pnj_passif((5,3),1,(56,255,190),[Replique("Eh bah, je suis contente d'avoir survécu.",20),Replique("Ici, les monstres sont différents. Tu devrais aller voir chaque salle puis revenir pour que je t'explique",20),Replique("Tu as vu le premier ? C'est un slime ! Il est presque aveugle, mais il se déplace et attaque très vite. Enfin, il ne te fais pas beaucoup de dégats et il meure vite aussi. Au fait, j'ai analysé ses mouvements et il semblerait qu'il se déplace totalement au hasard ! Ce n'est pas comme ça qu'on trouve quelques chose dans un labyrinthe...",20),Replique("Tu as vu le monstre suivant ? C'est le même qu'au niveau précédent, un fatti. Il est lent et ne bouge pas tant qu'il ne t'a pas repéré, mais évite de le laisser te taper, il fait très mal.",20),Replique("La salle suivante était vide ? Normal, elle était habitée par un runner. Il s'est précipité jusqu'à la sortie pour t'attendre.",20),Replique("Un fatti sur la sortie et un runner juste à côté, voilà un combo qui les rend très dangereux.",20)])
+                self.pnj = Pnj_passif((5,3),1,(56,255,190),[Replique("Eh bah, je suis contente d'avoir survécu.",20),Replique("Ici, les monstres sont différents. Tu devrais   aller voir chaque salle puis revenir pour que  je t'explique.",20),Replique("Tu as vu le premier ? C'est un slime !             Il est faible, ne voit pas très loin, se déplace   au hasard pour te trouver et agit très vite.",20),Replique("Tu as vu le monstre suivant ? C'est un fatti.   Il est lent et ne bouge pas tant qu'il ne t'a pas repéré, mais il est très fort.",20),Replique("La salle suivante est vide ? Normal, elle était  habitée par un runner. Il s'est précipité           jusqu'à la sortie pour t'attendre.",20),Replique("Un fatti sur la sortie et un runner juste à côté,voilà un combo qui les rend très dangereux.",20)])
                 self.entitees.append(self.pnj)
 
                 positions = self.lab.petit_poucet(7,self.depart,self.arrivee)
@@ -442,7 +442,7 @@ class Niveau:
                     for monstre in meutenumerote:
                         monstres.append(monstre)
 
-                self.pnj = Pnj_passif((2,2),1,(56,255,190),[Replique("Ces monstres ont l'air différents, c'est comme s'ils communiquaient ! Tu vois les trois qui n'étaient pas dans ton champ de vision au départ ? Ils ne te voyaient pas, donc ils n'auraient pas du pouvoir venir jusqu'ici. Mais l'autre qui te voyait leur a révélé ta position ! D'ailleurs, as-tu remarqué que tu ne peux ni te battre, ni te déplacer quand tu parles à quelqu'un ?",20)])
+                self.pnj = Pnj_passif((2,2),1,(56,255,190),[Replique("Le comportement de ces monstres est            étrange, c'est comme s'ils communiquaient !",20),Replique("Tu vois les trois que tu ne voyais pas au        départ ? Ils ne te voyaient pas non plus,         pourtant ils savaient que tu étais là et ils sontvenus.",20),Replique("C'est probablement l'autre qui te voyait qui     leur a révélé ta position !",20),Replique("D'ailleurs, as-tu remarqué que tu ne peux ni   te battre, ni te déplacer quand tu parles à       quelqu'un ?",20)])
                 self.entitees=[self.pnj]
 
                 positions = self.lab.petit_poucet(8,self.depart,self.arrivee)
@@ -461,7 +461,7 @@ class Niveau:
                 potions_bonus=[Potion_de_visibilite_permanente((8,23),self.joueur),Potion_de_visibilite_permanente((8,31),self.joueur),Potion_de_portee_permanente((23,37),self.joueur),Potion_de_portee_permanente((7,35),self.joueur),Potion_de_force_permanente((24,13),self.joueur),Potion_de_force_permanente((32,2),self.joueur),Potion_de_soin_permanente((39,0),self.joueur),Potion_de_soin_permanente((37,16),self.joueur),Potion_de_soin((20,20),self.joueur),Potion_de_soin((35,5),self.joueur),Potion_de_soin((5,35),self.joueur)]
                 potions=potions_vue+potions_combat+potions_bonus
 
-                self.pnj = Pnj_passif((3,4),250,(255,200,20),[Replique("Malheureux ! Jamais tu ne sortiras d'ici vivant ! Moi-même, qui ait atteint le plus haut niveau qu'un mage puisse atteindre, j'ai été forcé de fuir face au [insérer le nom du boss final ici] qui garde la sortie !",20),Replique("Mes potions me permettent d'annihiler tous les monstres sur mon passage, de voir au travers des murs de ces labyrinthes et même de les briser, mais elle n'ont pas suffit face au [insérer le nom du boss final ici].",20),Replique("Le plus terrible, c'est que j'ai perdu mes potions dans ma fuite, et qu'elles sont dispersées dans les labyrinthes. Si tu me les ramènes, je te donnerai beaucoup d'argent ! Hélas, je n'ai pas assez pour racheter les potions permanentes, ce sont de vrais trésors qui coutent une fortune. Si tu en trouve, tu peux les garder. D'ailleurs, gardes toutes les potions si ça peut te permettre d'éliminer le [insérer le nom du boss final ici] une bonne fois pour toute.",20),Replique("Certain de ces monstres ont récupéré mes potions. Elimine-les, s'il te plait.",20)])
+                self.pnj = Pnj_passif((3,4),250,(255,200,20),[Replique("Malheureux ! Jamais tu ne sortiras d'ici          vivant !",20),Replique("Moi-même, qui ait atteint le plus haut niveau   qu'un mage puisse atteindre, j'ai été forcé de  fuir face au boss final qui garde la sortie !",20),Replique("Mes potions me permettent d'annihiler tous    les monstres sur mon passage, de voir au     travers des murs de ces labyrinthes et même de les briser !",20),Replique("Mais elles n'ont pas suffit face à lui...",20),Replique("Le plus terrible, c'est que j'ai perdu mes         potions dans ma fuite, et qu'elles sont            dispersées dans les labyrinthes. Si tu me les ramènes, je te donnerai beaucoup d'argent !",20),Replique("Hélas, je n'ai pas assez pour racheter les       potions permanentes, ce sont de vrais trésorsqui coutent une fortune. Si tu en trouve, tu      peux les garder.",20),Replique("D'ailleurs, gardes toutes les potions si ça      peut te permettre d'éliminer le boss final une  bonne fois pour toute.",20),Replique("Certain de ces monstres ont récupéré mes     potions. Elimine-les, s'il te plait.",20)])
                 self.entitees=potions+self.clees
                 self.entitees.append(self.pnj)
                 monstres = fattis + slimes
@@ -554,7 +554,7 @@ class Niveau:
 
             self.mission_7 = ["self.pnj.indice_replique == 6","self.ajout(self.missions,[self.mission_8])"]
             self.mission_8 = ["self.mission_minimap()","self.ajout(self.missions,[self.mission_9]),self.ajout(self.pnj.repliques,self.repliques_mission_8)"]
-            self.repliques_mission_8 = [Replique("Oh, merci ! Je vais peut-être trouver le courage de traverser ce labyrinthe maintenant",20),Replique("Tu devrais aller à la sortie. C'est une case bleue, elle doit apparaître sur ta carte maintenant que tu l'a vue",20)]
+            self.repliques_mission_8 = [Replique("Oh, merci ! Je vais peut-être trouver le            courage de traverser ce labyrinthe                  maintenant !",20),Replique("Tu devrais aller à la sortie. C'est une case     bleue, elle doit apparaître sur ta carte             puisque tu l'a vue.",20)]
             self.mission_9 = ["self.pnj.indice_replique == 8","self.joueur.augmente_pv(5)"]
             self.missions.append(self.mission_7)
             
@@ -564,7 +564,7 @@ class Niveau:
 
             self.mission_2 = ["self.pnj.indice_replique == 4","self.ajout(self.missions,[self.mission_3])"]
             self.mission_3 = ["self.mission_monstres()","self.ajout(self.pnj.repliques,self.repliques_mission_3),self.ajout(self.missions,[self.mission_4])"]
-            self.repliques_mission_3 = [Replique("Tu les as tous tués ? Merci beaucoup, tu me sauves la vie !",20),Replique("Il n'y a plus de monstres, on peut y aller maintenant.",20)]
+            self.repliques_mission_3 = [Replique("Tu les as tous tués ? Merci beaucoup, tu me   sauves la vie !",20),Replique("Il n'y a plus de monstres, on peut y aller         maintenant.",20)]
             self.mission_4 = ["self.pnj.indice_replique == 6","self.joueur.augmente_regen(0.1)"]
             self.missions.append(self.mission_2)
             
@@ -573,7 +573,7 @@ class Niveau:
             self.missions.append(self.mission_1)
 
             self.mission_2 = ["self.mission_monstres()","self.ajout(self.pnj.repliques,self.repliques_mission_2),self.ajout(self.missions,[self.mission_3])"]
-            self.repliques_mission_2 = [Replique("Tu as pensé à tous les tuer sans même que je te demande ? Comme c'est gentil !",20),Replique("Il n'y a plus de monstres, on peut y aller maintenant.",20)]
+            self.repliques_mission_2 = [Replique("Tu as pensé à tous les tuer sans même que   je te demande ? Comme c'est gentil !",20),Replique("Il n'y a plus de monstres, on peut y aller         maintenant.",20)]
             self.mission_3 = ["self.pnj.indice_replique == 7","self.joueur.augmente_regen(0.1)"]
             self.missions.append(self.mission_2)
 
@@ -651,7 +651,7 @@ class Niveau:
 
         if niveau == "tuto1":
             self.affichage.affiche = DIALOGUE
-            self.affichage.diag_cour = Replique("Tu va bien ? Quand je    t'ai vu tomber de là-hautj'ai cru que tu allais       mourir...            Bon, je te laisse te         reposer. N'hésite pas à revenir me parler avec  la touche x.",20)
+            self.affichage.diag_cour = Replique("Tu va bien ? Quand je t'ai vu tomber de           là-haut j'ai cru que tu allais mourir...              Bon, je te laisse te reposer. N'hésite pas à      revenir me parler avec  la touche x.",20)
             
 
 
