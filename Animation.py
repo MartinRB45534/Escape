@@ -5,8 +5,11 @@ class Animation(Evenement):
     def __init__(self,temps_restant,position_lab,surface):
         self.temps_restant=temps_restant
         self.temps_initial=temps_restant
+        #position dans le labyrinthe
         self.position_lab=position_lab
+        #position sur l'écran
         self.position_pixel=None
+        #surface sur laquelle on dessine l'animation
         self.surface=surface
     def setPosition(self,new_position):
         self.position_pixel=new_position
@@ -35,6 +38,7 @@ class Attaque_omnidirectionnelle(Animation):
         Sorties:
             Rien
         """
+        #on alterne entre deux animations
         if self.temps_restant%2 == 0:
             SKIN_STOMP_1.dessine_toi(self.surface,self.position_pixel)
         else:
@@ -44,9 +48,13 @@ class Attaque_unidirectionnelle(Animation):
     def __init__(self,temps_restant,position_lab,direction,surface):
         self.temps_restant=temps_restant
         self.temps_initial=temps_restant
+        #position dans le labyrinthe
         self.position_lab=position_lab
+        #position sur l'écran
         self.position_pixel=None
+        #surface sur laquelle on dessine l'animation
         self.surface=surface
+        #direction de l'attaque
         self.direction=direction
     def action(self):
         """
@@ -62,9 +70,13 @@ class Attaque_unidirectionnelle_fin(Animation):
     def __init__(self,temps_restant,position_lab,direction,surface):
         self.temps_restant=temps_restant
         self.temps_initial=temps_restant
+        #position dans le labyrinthe
         self.position_lab=position_lab
+        #position sur l'écran
         self.position_pixel=None
+        #surface sur laquelle on dessine l'animation
         self.surface=surface
+        #direction de l'attaque
         self.direction=direction
     def action(self):
         """

@@ -28,7 +28,7 @@ class Labyrinthe:
             self.matrice_cases[speciale[0][0]][speciale[0][1]] = speciale[1]
             self.coord_speciales.append(speciale[0])
         
-        #paramètre graphiques
+        #paramètres graphiques
         self.tailleCase = tailleCase
         self.tailleMur = tailleMur
         #poids servants à la génération du labyrinthe
@@ -162,6 +162,7 @@ class Labyrinthe:
         """
 
         if mode_affichage == voir_tout :
+            #on voit tout de manière bourrin
             joueur_x = position_joueur[0]
             joueur_y = position_joueur[1]
 
@@ -185,6 +186,7 @@ class Labyrinthe:
                 position_x+=self.tailleCase+self.tailleMur
                 
         elif mode_affichage == parcours_en_profondeur :
+            #on voit tout ce qui est accesible
             joueur_x = position_joueur[0]
             joueur_y = position_joueur[1]
 
@@ -207,6 +209,7 @@ class Labyrinthe:
                 position_x+=self.tailleCase+self.tailleMur
 
         elif mode_affichage == distance_max :
+            #on voit tout ce qui est accesible à une certaine distance
             joueur_x = position_joueur[0]
             joueur_y = position_joueur[1]
 
@@ -230,6 +233,7 @@ class Labyrinthe:
         
 
         elif mode_affichage == aveugle :
+            #on ne voit peut de choses
             self.dessine_case(screen,position_joueur,position_screen,largeur,hauteur,position_joueur)
 
             lumiere_droite = Lumiere(position_joueur,DROITE,self)
@@ -243,6 +247,21 @@ class Labyrinthe:
             lumiere_bas.avance(screen,position_joueur,position_screen,largeur,hauteur)
 
     def dessine_case(self,screen,position_joueur,position_screen,largeur,hauteur,position):
+        """
+        Fonction qui dessine une case sur l'écran
+        Entrées:
+            l'écran, la surface sur laquelle on dessine(objet pygame)
+            la position du joueur
+            la position sur l'écran
+            la largeur en cases
+            la hauteur en cases
+            le mode d'affichage
+            la largueur de la case
+            la largeur des murs
+            la mposition de la case
+        Sorties:
+            Rien
+        """
         joueur_x = position_joueur[0]
         joueur_y = position_joueur[1]
 
@@ -359,6 +378,7 @@ class Labyrinthe:
         
         if (issubclass(type(self.matrice_cases[position[0]][position[1]]), Case_speciale)):
             self.matrice_cases[position[0]][position[1]].execute(agissant)
+            #on informe le niveau qu'il est finit (le joueur est parti)
             if (issubclass(type(self.matrice_cases[position[0]][position[1]]), Teleporteur_global)):
                 info_comp = self.matrice_cases[position[0]][position[1]].getNiveau_cible()
 
@@ -366,13 +386,14 @@ class Labyrinthe:
         return info_comp
     def refresh_speciales(self):
         """
-        Fonction qui actualise les pièges
+        Fonction qui actualise les cases spéciales
         """
         for coords in self.coord_speciales:
             x = coords[0]
             y = coords[1]
             self.matrice_cases[x][y].actualiser_cooldown()
     def getMatrice_cases(self):
+        #on obtient une copie indépendante du labyrinthe
         new_mat = [[self.matrice_cases[j][i] for i in range(self.hauteur)]for j in range(self.largeur)]
         return new_mat
 

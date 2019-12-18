@@ -15,6 +15,7 @@ class Resolveur:
     def __init__(self,matrice_cases,largeur,hauteur,arrivee_x,arrivee_y,depart_x=0,depart_y=0,modeResolution="Profondeur"):
         self.largeur = largeur
         self.hauteur = hauteur
+        
         self.arrivee_x = arrivee_x
         self.arrivee_y = arrivee_y
 
@@ -74,16 +75,6 @@ class Resolveur:
         stack=[[depart_x,depart_y]]
 
         self.cases_visitees[depart_x][depart_y]=True
-        
-        #schéma boucle
-        #récupérer les positions utilisables
-                #si on as des positions utilisables
-
-                #trouver la nouvelle position
-                #aller à la nouvelle position
-                #marquer la position
-
-                #sinon revenir en arrière
 
         solution=None
         
@@ -160,12 +151,6 @@ class Resolveur:
 
         self.cases_visitees[depart_x][depart_y]=True
 
-        #schéma boucle
-        #traiter elt
-            #enlever position dans queue
-            #ajouter les positions explorables à la queue
-        #obtenir elt suivant
-            #récuperer premier elt queue
         
         while len(queue)!=0 and (position_x!=self.arrivee_x or position_y!=self.arrivee_y):
 
@@ -182,6 +167,7 @@ class Resolveur:
             directions_explorables = self.directions_utilisables(voisins,positions_voisins,position_x,position_y,passer_portes)
 
             for direction in directions_explorables:
+                #on ajoute toutes les directions explorables
                 queue.append(positions_voisins[direction])
                 new_chemin=Chemin(chemin_courant.getChemin(),chemin_courant.getPoids(),positions_voisins[direction][0],positions_voisins[direction][1])
                 chemins.append(new_chemin)
@@ -197,7 +183,7 @@ class Resolveur:
 
             #print(chemin_courant.getChemin())
 
-                
+        #on affiche la bonne solution 
         if afficher_chemin and len(chemins)>0:
             for i in chemins[0].getChemin():
                 self.matrice_cases[i[0]][i[1]].set_Couleur((0,0,255))
@@ -249,7 +235,7 @@ class Resolveur:
             les voisins de la case
             les positions des voisins
             la position de la case
-            le chemin deja explorée
+            le chemin deja exploré
         et qui renvoie les directions ou l'on peut passer
         """
         directions_utilisables=[]
@@ -352,16 +338,6 @@ class Resolveur:
         stack=[[depart_x,depart_y]]
 
         self.cases_visitees[depart_x][depart_y]=True
-        
-        #schéma boucle
-        #récupérer les positions utilisables
-                #si on as des positions utilisables
-
-                #trouver la nouvelle position
-                #aller à la nouvelle position
-                #marquer la position
-
-                #sinon revenir en arrière
 
         solution=None
         
@@ -457,6 +433,7 @@ class Resolveur:
             directions_explorables = self.directions_utilisables(voisins,positions_voisins,position_x,position_y,False)
 
             for direction in directions_explorables:
+                #on ajoute le chemin ssi on est à la bonne distance du pts de départ
                 if chemin_courant.getPoids()<=distance_max:
                     queue.append(positions_voisins[direction])
                     new_chemin=Chemin(chemin_courant.getChemin(),chemin_courant.getPoids(),positions_voisins[direction][0],positions_voisins[direction][1])
@@ -530,13 +507,8 @@ class Resolveur:
 
 class Chemin():
     def __init__(self,chemin_precedent,poids_precedent,position_x,position_y):
-        #print("init chemin precedent: "+str(chemin_precedent)+" position suivante "+str(position_x)+" "+str(position_y))
-        #if chemin_precedent!=None:
         self.chemin=chemin_precedent
         self.chemin.append([position_x,position_y])
-        #print(self.chemin)
-        #else:
-        #    self.chemin=[[position_x,position_y]]
         self.poids=poids_precedent+1
 
     def getChemin(self):
