@@ -5,16 +5,24 @@ from Agissant import *
 class Monstre(Agissant):
     def __init__(self,position,id_meute,largeur_vue,hauteur_vue,pv,mana_max,degats,vitesse,radius,couleur):
         self.position=position
+        
         self.largeur_vue=largeur_vue
         self.hauteur_vue=hauteur_vue
+        
         self.pv=pv
         self.pv_max=self.pv
+        
         self.mana=0
         self.mana_max=mana_max
+        
         self.regeneration=0
+        
         self.degats=degats
+        
         self.vitesse=vitesse
+        
         self.radius=radius
+        
         self.couleur=couleur
         #prochaine action
         self.next_action=None
@@ -129,11 +137,13 @@ class Monstre(Agissant):
         position_suivante=None
         if chemin!=None:
             if len(chemin)>2:
+                #on doit toujours atteindre le joueur
                 prochaine_action=BOUGER
                 position_suivante=chemin[1]
                 direction_voulue=self.direction_suivante(chemin[0],chemin[1])
                 self.dir_regard = direction_voulue
             else:
+                #on attaque le joueur
                 prochaine_action=ATTAQUER
         return prochaine_action,direction_voulue
 

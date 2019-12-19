@@ -15,6 +15,11 @@ class Skin:
             self.skins = None
             self.couleur = couleur
 
+    def resize(self,dimensions):
+        if self.skins != None:
+            for i in range(len(self.skins)):
+                self.skins[i] = pygame.transform.smoothscale(self.skins[i],dimensions)
+                
     def dessine_toi(self,screen,position,direction):
         if self.skins == None:
             pygame.draw.rect(screen,self.couleur,(position[0],position[1],19,19))
@@ -35,7 +40,7 @@ class Skin_mur(Skin):
         except:
             self.skins = None
             self.couleur = couleur
-
+    
     def dessine_toi(self,screen,position,direction):
         if self.skins == None:
             if direction==HAUT:
@@ -157,8 +162,10 @@ class Skin_pnj(Skin):
 
 global SKIN_VIDE
 SKIN_VIDE = Skin_mur("mur_vide.png",(255,255,255))
+#SKIN_VIDE.resize((38,38))
 global SKIN_PLEIN
 SKIN_PLEIN = Skin_mur("mur_plein.png",(0,0,0))
+#SKIN_PLEIN.resize((38,38))
 
 global SKIN_VIDE_PORTE
 SKIN_VIDE_PORTE = Skin_mur("porte_vide.png",(225,95,65))
@@ -173,10 +180,13 @@ SKIN_PNJS = []
 
 global SKIN_JOUEUR
 SKIN_JOUEUR = Skin("joueur.png",(0,255,0))
+#SKIN_JOUEUR.resize((38,38))
 global SKIN_ATTAQUE_JOUEUR
 SKIN_ATTAQUE_JOUEUR = Skin("attaque_joueur.png",(0,255,0))
+#SKIN_ATTAQUE_JOUEUR.resize((38,38))
 global SKIN_FATTI
 SKIN_FATTI = Skin("fatti.png",(0,0,100))
+#SKIN_FATTI.resize((38,38))
 global SKIN_SLIME
 SKIN_SLIME = Skin("slime.png",(255,100,100))
 global SKIN_RUNNER
@@ -199,6 +209,7 @@ global SKIN_POTION_SUPER_VISION
 SKIN_POTION_SUPER_VISION = Skin_potion("super_vision.png")
 global SKIN_CLEE
 SKIN_CLEE = Skin_clee("clee.png")
+#SKIN_CLEE.resize((38,38))
 global SKIN_MANCHE_LANCE
 SKIN_MANCHE_LANCE = Skin_lance("manche_lance.png")
 global SKIN_POINTE_LANCE

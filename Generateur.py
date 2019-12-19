@@ -56,6 +56,7 @@ class Generateur:
     def pre_gene_paterns(self):
         """
         Fonction qui pregenere les paterns
+        (on génère le squelette)
         """
         if self.paterns != None:
             for patern in self.paterns :
@@ -64,6 +65,7 @@ class Generateur:
     def post_gene_paterns(self):
         """
         Fonction qui postgenere les paterns
+        (on remplie les patterns)
         """
         if self.paterns != None:
             for patern in self.paterns :
@@ -97,8 +99,6 @@ class Generateur:
             #on récupère les coords de la ou l'on es cad la dernière case dans le stack
             position_x=stack[len(stack)-1][0]
             position_y=stack[len(stack)-1][1]
-            #print(position_x,position_y)
-            #self.matrice_cases[position_x][position_y].set_Couleur((255,255,255))
             
             voisins = self.voisins_case(position_x,position_y)
             
@@ -252,13 +252,12 @@ class Generateur:
         ou selon un nombre défini en entrée
         ou un pourcentage
         """
-        if proba!=None or nbMurs!=None or pourcentage!=None:
-            if proba!=None:
-                self.casser_murs_selon_proba(proba)
-            elif nbMurs!=None:
-                self.casser_murs(nbMurs)
-            elif pourcentage!=None:
-                self.casser_murs(int(pourcentage/100*self.nb_murs_total()))
+        if proba!=None:
+            self.casser_murs_selon_proba(proba)
+        elif nbMurs!=None:
+            self.casser_murs(nbMurs)
+        elif pourcentage!=None:
+            self.casser_murs(int(pourcentage/100*self.nb_murs_total()))
         else:
             print("mauvaise utilisation de la fonction, on ne sait que faire")
 
@@ -365,6 +364,7 @@ class Generateur:
         for direction in range(0,len(voisins)):
             if voisins[direction]!=None:
                 direction_inverse=self.direction_opposee(direction)
+                #on vérifie qu'on peut aussi casser le mur d'en face
                 if voisins[direction].mur_plein(direction_inverse) and voisins[direction].get_murs()[direction_inverse].get_etat()!=INTOUCHABLE:
                     murs_utilisables.append(direction)
         return murs_utilisables

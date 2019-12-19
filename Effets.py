@@ -29,6 +29,10 @@ class Effet_potion(Evenement):
 class Effet_potion_portee(Effet_potion):
     
     def action(self):
+        """
+        Fonction qui ajoute les buffs au début
+        et les retire ensuite
+        """
         if not self.utilise :
             self.utilise = True
             self.cible.radius += bonus_radius
@@ -38,6 +42,9 @@ class Effet_potion_portee(Effet_potion):
 class Effet_potion_portee_permanente(Effet_potion):
     
     def action(self):
+        """
+        Fonction qui exécute la potion
+        """
         if not self.utilise :
             self.utilise = True
             self.cible.radius += bonus_radius_permanent
@@ -45,6 +52,9 @@ class Effet_potion_portee_permanente(Effet_potion):
 class Effet_potion_soin(Effet_potion):
     
     def action(self):
+        """
+        Fonction qui exécute la potion
+        """
         if not self.utilise :
             self.utilise = True
             self.cible.soigne(bonus_pv)
@@ -52,6 +62,9 @@ class Effet_potion_soin(Effet_potion):
 class Effet_potion_soin_permanente(Effet_potion):
     
     def action(self):
+        """
+        Fonction qui exécute la potion
+        """
         if not self.utilise :
             self.utilise = True
             self.cible.regeneration += bonus_soin
@@ -59,6 +72,10 @@ class Effet_potion_soin_permanente(Effet_potion):
 class Effet_potion_force(Effet_potion):
     
     def action(self):
+        """
+        Fonction qui ajoute les buffs au début
+        et les retire ensuite
+        """
         if not self.utilise :
             self.utilise = True
             self.cible.degats += bonus_force
@@ -66,8 +83,11 @@ class Effet_potion_force(Effet_potion):
             self.cible.degats -= bonus_force
             
 class Effet_potion_force_permanente(Effet_potion):
-    
+
     def action(self):
+        """
+        Fonction qui exécute la potion
+        """
         if not self.utilise :
             self.utilise = True
             self.cible.degats += bonus_force_permanent
@@ -75,6 +95,10 @@ class Effet_potion_force_permanente(Effet_potion):
 class Effet_potion_vision(Effet_potion):
     
     def action(self):
+        """
+        Fonction qui ajoute les buffs au début
+        et les retire ensuite
+        """
         if not self.utilise :
             self.utilise = True
             self.cible.largeur_vue += bonus_vue
@@ -88,6 +112,9 @@ class Effet_potion_vision(Effet_potion):
 class Effet_potion_visibilite_permanente(Effet_potion):
     
     def action(self):
+        """
+        Fonction qui exécute la potion
+        """
         if not self.utilise :
             self.utilise = True
             self.cible.largeur_vue += bonus_vue_permanent
