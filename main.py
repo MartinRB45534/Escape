@@ -4,7 +4,7 @@ from Constantes import *
 from Bouton import *
 from Session import *
 
-niveau = "demo"
+niveau = 1
 difficulté = HARD
 mode_affichage = distance_max
 mode_minimap = voir_tout
