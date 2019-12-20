@@ -19,6 +19,7 @@ class Minimap:
 
         self.mode_minimap = mode_minimap
         self.arrivee = arrivee
+        self.accessible = True
         
     def dessine_toi(self,screen,position_screen,position_joueur,portee_vue,dessine=True):
         """
@@ -125,21 +126,21 @@ class Minimap:
         text_ctrl = police_default.render("- Utilisez les touches directionnelles pour naviguer la minimap -",True,(255,255,255))
         screen.blit(text_ctrl,(30,position_y+decalage*(coin_bas_gauche[1]-coin_haut_droit[1])+55))
 
-    def va_vers_la_gauche(self):
-        if self.position_centre[0] > self.min_visible[0]:
-            self.position_centre = (self.position_centre[0]-1,self.position_centre[1])
+    def deplace_toi(self,direction):
+        if direction == GAUCHE:
+            if self.position_centre[0] > self.min_visible[0]:
+                self.position_centre = (self.position_centre[0]-1,self.position_centre[1])
+        if direction == DROITE:
+            if self.position_centre[0] < self.max_visible[0]:
+                self.position_centre = (self.position_centre[0]+1,self.position_centre[1])
 
-    def va_vers_la_droite(self):
-        if self.position_centre[0] < self.max_visible[0]:
-            self.position_centre = (self.position_centre[0]+1,self.position_centre[1])
+        if direction == HAUT:
+            if self.position_centre[1] > self.min_visible[1]:
+                self.position_centre = (self.position_centre[0],self.position_centre[1]-1)
 
-    def va_vers_le_haut(self):
-        if self.position_centre[1] > self.min_visible[1]:
-            self.position_centre = (self.position_centre[0],self.position_centre[1]-1)
-
-    def va_vers_le_bas(self):
-        if self.position_centre[1] < self.max_visible[1]:
-            self.position_centre = (self.position_centre[0],self.position_centre[1]+1)
+        if direction == BAS:
+            if self.position_centre[1] < self.max_visible[1]:
+                self.position_centre = (self.position_centre[0],self.position_centre[1]+1)
 
     def rezoom(self):
         self.zoom += 1

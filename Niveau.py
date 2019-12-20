@@ -832,15 +832,16 @@ class Niveau:
         #on récupère toutes les touches préssés sous forme de booléen
         keys=pygame.key.get_pressed()
         
-        if keys[pygame.K_a]:
-            self.affichage.affiche = MINIMAP
-            self.joueur.vitesse = self.joueur.vitesse_autres
+        if keys[pygame.K_q]:
+            self.joueur.consulte_minimap()
         elif keys[pygame.K_i]:
-            self.affichage.affiche = INVENTAIRE
-            self.joueur.vitesse = self.joueur.vitesse_autres
-        elif keys[pygame.K_RETURN] and (self.affichage.affiche == INVENTAIRE or self.affichage.affiche == MINIMAP):
-            self.affichage.affiche = LABYRINTHE
-            self.joueur.vitesse = self.joueur.vitesse_lab
+            self.joueur.consulte_inventaire()
+        elif keys[pygame.K_RETURN]:
+            self.joueur.revient()
+        if keys[pygame.K_EQUALS]:
+            self.joueur.precise()
+        if keys[pygame.K_MINUS]:
+            self.joueur.postcise()
 
         if self.affichage.affiche == INVENTAIRE:
             if keys[pygame.K_RIGHT]:
@@ -849,26 +850,16 @@ class Niveau:
                 self.joueur.inventaire_vers_la_gauche()
             elif keys[pygame.K_SPACE]:
                 self.joueur.utilise_inventaire()
-            elif keys[pygame.K_EQUALS]:
-                self.affichage.affiche = ITEM
-
-        if self.affichage.affiche == ITEM:
-            if keys[pygame.K_MINUS]:
-                self.affichage.affiche = INVENTAIRE
 
         elif self.affichage.affiche == MINIMAP:
             if keys[pygame.K_UP]:
-                self.joueur.minimap.va_vers_le_haut()
+                self.joueur.minimap_vers_le_haut()
             elif keys[pygame.K_DOWN]:
-                self.joueur.minimap.va_vers_le_bas()
+                self.joueur.minimap_vers_le_bas()
             elif keys[pygame.K_RIGHT]:
-                self.joueur.minimap.va_vers_la_droite()
+                self.joueur.minimap_vers_la_droite()
             elif keys[pygame.K_LEFT]:
-                self.joueur.minimap.va_vers_la_gauche()
-            elif keys[pygame.K_EQUALS]:
-                self.joueur.minimap.rezoom()
-            elif keys[pygame.K_MINUS]:
-                self.joueur.minimap.dezoom()
+                self.joueur.minimap_vers_la_gauche()
 
         elif self.affichage.affiche == LABYRINTHE:
             if keys[pygame.K_UP]:
@@ -883,9 +874,9 @@ class Niveau:
                 self.joueur.attaque()
             elif keys[pygame.K_SPACE]:
                 self.joueur.attaque()
-            elif keys[pygame.K_z]:
+            elif keys[pygame.K_w]:
                 self.joueur.attaque_lourde(HAUT)
-            elif keys[pygame.K_q]:
+            elif keys[pygame.K_a]:
                 self.joueur.attaque_lourde(GAUCHE)
             elif keys[pygame.K_s]:
                 self.joueur.attaque_lourde(BAS)
@@ -893,12 +884,6 @@ class Niveau:
                 self.joueur.attaque_lourde(DROITE)
             elif keys[pygame.K_x]:
                 self.joueur.tentative_interaction()
-
-        elif self.affichage.affiche == DIALOGUE:
-            self.joueur.vitesse = self.joueur.vitesse_autres
-            if keys[pygame.K_RETURN]:
-                self.affichage.pass_replique()
-                self.joueur.vitesse = self.joueur.vitesse_lab
 
 
     def actions_entitees(self):
@@ -921,12 +906,12 @@ class Niveau:
         self.actualiser_vues_agissants(agissants)
         
         for agissant in agissants:
+            if issubclass(type(agissant),Joueur):
+                self.action_joueur()
+
             if self.horloge_cycle % agissant.getVitesse()==0:
-                if issubclass(type(agissant),Joueur):
-                    self.action_joueur()
 
-
-                    agissant.regen_mana()
+#                    agissant.regen_mana()
                 agissant.soigne_toi()
                 
                 agissant=self.actualiser_donnee(agissant)
@@ -1130,6 +1115,39 @@ class Niveau:
             succes = self.collision.tentative_interaction(agissant,self.entitees)
         elif id_action==PARLER:
             succes = self.affichage.add_dialogue(action)
+        elif id_action==CONSULTER_MINIMAP:
+            self.affichage.affiche = MINIMAP
+            agissant.vitesse = agissant.vitesse_autres
+        elif id_action==CONSULTER_INVENTAIRE:
+            self.affichage.affiche = INVENTAIRE
+            agissant.vitesse = agissant.vitesse_autres
+        elif id_action==PRECISION:
+            if self.affichage.affiche == INVENTAIRE:
+                self.affichage.affiche = ITEM
+            elif self.affichage.affiche == MINIMAP:
+                agissant.minimap.rezoom()
+        elif id_action==POSTCISION:
+            if self.affichage.affiche == ITEM:
+                self.affichage.affiche = INVENTAIRE
+            elif self.affichage.affiche == MINIMAP:
+                agissant.minimap.dezoom()
+        elif id_action==RETOUR:
+            if self.affichage.affiche == DIALOGUE:
+                if self.affichage.pass_replique():
+                    agissant.vitesse = agissant.vitesse_lab
+            else:
+                self.affichage.affiche = LABYRINTHE
+                agissant.vitesse = agissant.vitesse_lab
+        elif id_action==BOUGER_MINIMAP:
+            direction_voulue=action
+            agissant.minimap.deplace_toi(direction_voulue)
+        elif id_action==BOUGER_INVENTAIRE:
+            direction_voulue=action
+            agissant.inventaire.deplace_toi(direction_voulue)
+        elif id_action==UTILISER:
+            if self.affichage.affiche == INVENTAIRE:
+                agissant.inventaire.utilise_item()
+            
         return succes
 
     def traitement_mouvement(self,projectile):

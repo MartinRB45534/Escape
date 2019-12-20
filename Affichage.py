@@ -293,7 +293,9 @@ class Affichage:
                 self.diag_cour = None
                 self.police_cour = None
                 self.affiche = LABYRINTHE
+                res = True
             self.text_cour = None
+        return res
     def dialogue_finit(self):
         """
         Fonction qui teste si le dialogue est finit
