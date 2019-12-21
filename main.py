@@ -7,7 +7,7 @@ from Session import *
 niveau = 1
 difficulté = HARD
 mode_affichage = distance_max
-mode_minimap = voir_tout
+mode_minimap = passage
 
 #nombres de niveaux (en excluant 0) que l'on a
 nb_max_niv = 100
