@@ -1,116 +1,177 @@
 import pygame
-from Niveau import *
-from Constantes import *
-from Bouton import *
-from Session import *
-
-niveau = 1
-difficulté = HARD
-mode_affichage = distance_max
-mode_minimap = voir_tout
-
-#nombres de niveaux (en excluant 0) que l'on a
-nb_max_niv = 100
-
-
-
 
 pygame.init()
 clock = pygame.time.Clock()
 
-CIEL = 0, 200, 255
-GREEN = 0, 255, 0
-YELLOW = 255, 255, 0
-BLACK = 0,0,0
-WHITE = 255,255,255
+screen = pygame.display.set_mode((1350, 690))
 
-emplacement_Bouton_1 = (10,10)
+from Général import *
+#print("Importation : check")
 
-emplacement_Bouton_2 = (10,40)
+global controleur
 
-emplacement_Bouton_3 = (10,70)
+run = True
 
-emplacement_Bouton_4 = (10,100)
-
-emplacement_Bouton_5 = (10,130)
-
-xBoutonStart = 50
-yBoutonStart = 10
-
-xBoutonReprendre = 250
-yBoutonReprendre = 10
-
-xBoutonQuitter = 450
-yBoutonQuitter = 10
-
-
+def quitte(): #À améliorer !
+    run = False
 
 def main():
-    
+    global controleur
+    controleur = Controleur() #Un objet qui permet d'accéder à tout et n'importe quoi. Il possède les dictionnaires des labyrinthes et des entitées.
+    #print("Controleur : check")
+    controleur.jeu(screen)
+    while run == True :
+        #Pour l'instant c'est un jeu rudimentaire, le joueur est le seul agissant et teste ses différents skills.
+        agissants,items,labs,esprits = controleur.get_agissants_items_labs_esprits()
+        
+        #Découvrons le déroulé d'un tour avec main-sama :
+        #On débute le tour
+        for agissant in agissants :
+            controleur.make_vue(agissant)
+            agissant.debut_tour()
+        for item in items :
+            item.debut_tour()
+        for lab in labs:
+            lab.debut_tour()
+        for esprit in esprits:
+            esprit.debut_tour()
 
-    
-    fenetre = pygame.display.set_mode((640, 600))
-    #ici on prend les images contenues dans les fichiers pour les convertir vers pygame
+        #On a quelques effets supplémentaires...
+        for agissant in agissants :
+            agissant.post_decision()
 
-    imgmenutest = pygame.image.load("images/imgmenutest.png").convert()
-    
-    #session
-    session = Session(niveau,difficulté,mode_affichage,mode_minimap,nb_max_niv)
+        #Les agissants méritent leur nom :
+        for agissant in agissants :
+            while agissant.latence <= 0 and agissant.skill_courant != None : #Certains peuvent jouer plusieurs fois par tour !
+                controleur.fait_agir(agissant)
+                agissant.on_action()
 
-    loop = True
-    
-    green_color = GREEN
-    yellow_color = YELLOW
-    black_color = BLACK
-    NIVEXIST= False
-    partieEnCours = session.recupere
-    while loop:
-        pygame.display.set_caption("Menu")
-        if fenetre.get_width() != 640 or fenetre.get_height() != 600:
-            fenetre = pygame.display.set_mode((640, 600))
-        background = pygame.Surface(fenetre.get_size())
-        background.fill(BLACK)
-        fenetre.blit(background, (0, 0))
+        #Il faudra aussi déplacer les items !
 
-        #Ajout du fond dans la fenêtre
-        fenetre.blit(imgmenutest, (0, 0))
+        #On agit sur les actions (principalement des boosts sur les attaques, puis les attaques elles-mêmes sont lancées)
+        for agissant in agissants :
+            agissant.post_action()
 
-        tuto = Bouton(fenetre,emplacement_Bouton_1[0],emplacement_Bouton_1[1],WHITE,BLACK,"Tutoriel","test",20,130)
-        start = Bouton(fenetre,emplacement_Bouton_2[0],emplacement_Bouton_2[1],WHITE,BLACK,"Nouvelle partie","test",20,130)
-        if partieEnCours :
-            reprendre = Bouton(fenetre,emplacement_Bouton_3[0],emplacement_Bouton_3[1],WHITE,BLACK,"Continuer","test",20,130)
-            quitter = Bouton(fenetre,emplacement_Bouton_4[0],emplacement_Bouton_4[1],WHITE,BLACK,"Quitter","test",20,130)
-        else :
-            quitter = Bouton(fenetre,emplacement_Bouton_3[0],emplacement_Bouton_3[1],WHITE,BLACK,"Quitter","test",20,130)
+        #Le lab agit sur les actions (principalement sur les attaques, pour protéger les occupants de certaines cases)
+        for lab in labs:
+            lab.post_action()
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                loop = False
-            # si clic, le jeu se lance
-            elif event.type == pygame.MOUSEBUTTONDOWN and start.survolBouton:
-                session.reset_niveau()
-                session.run()
-                partieEnCours = True
-            elif event.type == pygame.MOUSEBUTTONDOWN and quitter.survolBouton:
-                loop = False
-            elif event.type == pygame.MOUSEBUTTONDOWN and tuto.survolBouton:
-                session.tuto_courant = 1
-                session.reset_niveau_tuto()
-                session.runtuto()
+        #Les agissants agissent sur les attaques (s'en protègent, puis les subissent)
+        for agissant in agissants :
+            agissant.pre_attack()
 
-            elif partieEnCours:
-                if event.type == pygame.MOUSEBUTTONDOWN and reprendre.survolBouton:
-                    session.run()
-            
-                
+        #On termine le tour
+        for agissant in agissants :
+            agissant.fin_tour()
+        for item in items :
+            item.fin_tour()
+        for lab in labs:
+            lab.fin_tour()
+        for esprit in esprits:
+            esprit.fin_tour()
 
         # Actualisation de l'affichage
         pygame.display.flip()
         # 10 fps
-        clock.tick(10)
+        #clock.tick(20)
 
     pygame.quit()
-    
-main()
 
+def init_duel(esprit1,esprit2,niveau_1=1,niveau_2=1,tailles_lab=(20,20),vide=True,vue=False):
+    global controleur
+    controleur = Controleur() #Un objet qui permet d'accéder à tout et n'importe quoi. Il possède les dictionnaires des labyrinthes et des entitées.
+    #print("Controleur : check")
+    controleur.duel(esprit1,esprit2,niveau_1,niveau_2,tailles_lab,vide,vue,screen)
+    return reprend_duel()
+
+def reprend_duel():
+    global controleur
+    res = None
+    run = True
+    while run :
+        agissants,items,labs,esprits = controleur.get_agissants_items_labs_esprits()
+        
+        #Découvrons le déroulé d'un tour avec main-sama :
+        #On débute le tour
+        for agissant in agissants :
+            controleur.make_vue(agissant)
+            agissant.debut_tour()
+        for item in items :
+            item.debut_tour()
+        for lab in labs:
+            lab.debut_tour()
+        for esprit in esprits:
+            esprit.debut_tour()
+
+        #On a quelques effets supplémentaires...
+        for agissant in agissants :
+            agissant.post_decision()
+
+        #Les agissants méritent leur nom :
+        for agissant in agissants :
+            while agissant.latence <= 0 and agissant.skill_courant != None : #Certains peuvent jouer plusieurs fois par tour !
+                controleur.fait_agir(agissant)
+                agissant.on_action()
+
+        #Il faudra aussi déplacer les items !
+
+        #On agit sur les actions (principalement des boosts sur les attaques, puis les attaques elles-mêmes sont lancées)
+        for agissant in agissants :
+            agissant.post_action()
+
+        #Le lab agit sur les actions (principalement sur les attaques, pour protéger les occupants de certaines cases)
+        for lab in labs:
+            lab.post_action()
+
+        #Les agissants agissent sur les attaques (s'en protègent, puis les subissent)
+        for agissant in agissants :
+            agissant.pre_attack()
+
+        #On termine le tour
+        for agissant in agissants :
+            agissant.fin_tour()
+        for item in items :
+            item.fin_tour()
+        for lab in labs:
+            lab.fin_tour()
+        for esprit in esprits:
+            esprit.fin_tour()
+
+        
+        pygame.display.flip()
+
+        if len(esprits) == 1 :
+            res = esprits[0].nom
+            survivants = agissants
+            run = False
+        elif controleur.nb_tours >= 2000:
+            res = "match nul"
+            survivants = agissants
+            run = False
+
+        #Pas d'affichage
+
+    print(res,controleur.nb_tours)
+    del controleur
+    return res,survivants
+
+def multiduel(esprit1,esprit2,niveau_1=1,niveau_2=1,tailles_lab=(20,20),vide=True):
+
+    score1 = 0
+    score2 = 0
+    nul = 0
+    while True:
+        res, survivants = init_duel(esprit1,esprit2,niveau_1,niveau_2,tailles_lab,vide)
+        if res == "1":
+            score1 += 1
+        elif res == "2":
+            score2 += 1
+        elif res == "match nul":
+            nul += 1
+        print((score1,nul,score2))
+        print(survivants)
+
+#print("On run !")
+#main()
+multiduel(Esprit_defensif,Esprit_bourrin,1,1,(5,5),True)
     
